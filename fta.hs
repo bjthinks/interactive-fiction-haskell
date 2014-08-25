@@ -2,16 +2,27 @@ import System.Console.Haskeline
 import Control.Monad.Trans
 import Control.Monad.Trans.Maybe
 import Control.Monad.State
+import Control.Monad.RWS
 
-type GameState = Int
+type GameState = ()
+startState :: GameState
+startState = ()
 
-mainloop :: StateT GameState (MaybeT (InputT IO)) ()
-mainloop = do
-  line <- lift $ MaybeT $ getInputLine "> "
-  liftIO $ putStrLn line
-  y <- get
-  put (y + 1)
-  liftIO $ print y
-  mainloop
+type MoveInput = String
+type MoveOutput = String
+type GameMonad = RWS MoveInput MoveOutput GameState
 
-main = runInputT defaultSettings $ runMaybeT $ execStateT mainloop 0
+parrot :: GameMonad ()
+parrot = do
+  tell "You typed: "
+  ask >>= tell
+  tell "\n"
+
+mainloop :: GameState -> MaybeT (InputT IO) ()
+mainloop state = do
+  line <- MaybeT $ getInputLine "> "
+  let (newState, response) = execRWS parrot line state
+  liftIO $ putStr response
+  mainloop newState
+
+main = runInputT defaultSettings $ runMaybeT $ mainloop startState
