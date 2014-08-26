@@ -13,4 +13,6 @@ mainloop state = do
   liftIO $ putStr response
   mainloop newState
 
-main = runInputT defaultSettings $ runMaybeT $ mainloop startState
+main = do
+  let (state, _) = execRWS buildWorld "" startState
+  runInputT defaultSettings $ runMaybeT $ mainloop state
