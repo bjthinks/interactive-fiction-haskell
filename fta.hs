@@ -4,6 +4,8 @@ import System.Console.Haskeline
 import Control.Monad.Trans.Maybe
 import Control.Monad.RWS
 
+import Defs
+import BuildWorld
 import Game
 
 mainloop :: GameState -> MaybeT (InputT IO) ()
