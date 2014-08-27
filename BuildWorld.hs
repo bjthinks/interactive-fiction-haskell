@@ -14,3 +14,8 @@ buildWorld = do
   setName player "Player"
   setDescription player "You look disheveled."
   move player root
+
+  blet <- newThing
+  setName blet "Blet"
+  setDescription blet "It's a blet. It defies description."
+  move blet root
