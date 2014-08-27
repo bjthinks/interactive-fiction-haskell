@@ -1,6 +1,7 @@
 module Game where
 
 import Data.List
+import Data.Char
 import Control.Monad.RWS
 
 import Defs
@@ -12,20 +13,25 @@ nl = tell "\n"
 handleInput :: GameMonad ()
 handleInput = do
   line <- ask
-  case parseInput line of
+  stuffRefs <- visibleStuff
+  stuffNames <- mapM getName stuffRefs
+  let stuff = zip (map (map toLower) stuffNames) stuffRefs
+  case parseInput stuff (map toLower line) of
     Left err -> tell "I didn't understand that." >> nl
     Right verb -> doVerb verb
 
 doVerb :: Verb -> GameMonad ()
 doVerb Blank = return ()
-doVerb Look = look
+doVerb (Look x) = look x
 
-look :: GameMonad ()
-look = do
-  maybeHere <- getLocation 1
-  case maybeHere of
+look :: Maybe Ref -> GameMonad ()
+look arg = do
+  maybeThing <- case arg of
+    Nothing -> getLocation 1
+    Just ref -> return (Just ref)
+  case maybeThing of
     Nothing -> tell "You are adrift in the void. There is nothing here but black emptiness."
-    Just here -> lookAt here
+    Just at -> lookAt at
 
 lookAt :: Ref -> GameMonad ()
 lookAt it = do

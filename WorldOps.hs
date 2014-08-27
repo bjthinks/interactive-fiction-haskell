@@ -5,7 +5,8 @@ module WorldOps(newThing,
                 getContents',
                 setName,
                 setDescription,
-                move) where
+                move,
+                visibleStuff) where
 
 import Data.Maybe
 import qualified Data.Map as M
@@ -78,3 +79,12 @@ move objRef destRef = do
   -- Change object's location to new one
   obj <- getThing objRef
   setThing objRef $ obj { location = Just destRef }
+
+visibleStuff :: GameMonad [Ref]
+visibleStuff = do
+  maybeHere <- getLocation 1
+  case maybeHere of
+    Nothing -> return []
+    Just here -> do
+      cs <- getContents' here
+      return (here : filter (/= 1) cs)

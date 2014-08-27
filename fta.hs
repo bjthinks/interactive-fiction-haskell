@@ -17,4 +17,6 @@ mainloop state = do
 
 main = do
   let (state, _) = execRWS buildWorld "" startState
-  runInputT defaultSettings $ runMaybeT $ mainloop state
+  let (state', response) = execRWS handleInput "look" state
+  liftIO $ putStr response
+  runInputT defaultSettings $ runMaybeT $ mainloop state'
