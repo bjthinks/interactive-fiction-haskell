@@ -29,14 +29,12 @@ look = do
 
 lookAt :: Ref -> GameMonad ()
 lookAt it = do
-  name <- getName it
-  desc <- getDescription it
+  getName it >>= tell >> nl
+  getDescription it >>= tell >> nl
   contents <- getContents' it
   -- You don't see yourself
   let others = filter (/= 1) contents
-  tell name >> nl
-  tell desc >> nl
   when (others /= []) $ do
     tell "Contents: "
     items <- mapM getName others
-    tell (intercalate ", " items) >> nl
+    tell (intercalate ", " items ++ ".") >> nl
