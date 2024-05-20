@@ -5,6 +5,7 @@ import Text.Parsec.String
 
 data Verb = Blank
           | Look (Maybe Int)
+          | Inventory
           deriving Show
 
 type MyParser = Parsec String [(String,Int)]
@@ -35,11 +36,16 @@ look = do
   n <- maybeNoun
   return (Look n)
 
+inventory :: MyParser Verb
+inventory = do
+  string "inventory"
+  return Inventory
+
 blank :: MyParser Verb
 blank = return Blank
 
 verb :: MyParser Verb
-verb = look <|> blank
+verb = look <|> inventory <|> blank
 
 input :: MyParser Verb
 input = do

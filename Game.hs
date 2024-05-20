@@ -24,6 +24,7 @@ handleInput = do
 doVerb :: Verb -> GameMonad ()
 doVerb Blank = return ()
 doVerb (Look x) = look x
+doVerb Inventory = inventory
 
 look :: Maybe Ref -> GameMonad ()
 look arg = do
@@ -42,13 +43,22 @@ lookAt it = do
   -- You don't see yourself
   let others = filter (/= 1) contents
   when (others /= []) $ do
-    tell "Contents: "
-    items <- mapM getName others
-    tell $ case items of
-      [x] -> x
-      [x,y] -> x ++ " and " ++ y
-      xs -> list3 items
-    tell "." >> nl
-    where
-      list3 [x,y] = x ++ ", and " ++ y
-      list3 (x:xs) = x ++ ", " ++ list3 xs
+    names <- mapM getName others
+    tell $ "Contents: " ++ humanFriendlyList names ++ "."
+    nl
+
+humanFriendlyList :: [String] -> String
+humanFriendlyList [] = "nothing"
+humanFriendlyList [x] = x
+humanFriendlyList [x,y] = x ++ " and " ++ y
+humanFriendlyList xs = list3 xs
+  where
+    list3 [x,y] = x ++ ", and " ++ y
+    list3 (x:xs) = x ++ ", " ++ list3 xs
+
+inventory :: GameMonad ()
+inventory = do
+  contents <- getContents' 1
+  names <- mapM getName contents
+  tell $ "You are carrying: " ++ humanFriendlyList names ++ "."
+  nl
