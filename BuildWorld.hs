@@ -19,3 +19,6 @@ buildWorld = do
 
   desk <- newThing "Desk" "A cheap IKEA desk with a drawer."
   move desk house
+
+  book <- newThing "Calculus Book" "This is a multivariable calculus textbook."
+  move book player

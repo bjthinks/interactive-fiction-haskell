@@ -88,4 +88,4 @@ visibleStuff = do
     Nothing -> return []
     Just here -> do
       cs <- getContents' here
-      return (here : filter (/= 1) cs)
+      return (here : cs)
