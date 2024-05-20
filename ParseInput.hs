@@ -6,9 +6,17 @@ import Text.Parsec.String
 data Verb = Blank
           | Look (Maybe Int)
           | Inventory
+          | Get Int
           deriving Show
 
 type MyParser = Parsec String [(String,Int)]
+
+this :: (String,Int) -> MyParser Int
+this (n,r) = string n >> return r
+
+them :: [(String,Int)] -> MyParser Int
+them [] = parserFail "I don\'t know what that is."
+them (n:ns) = this n <|> them ns
 
 tryThis :: (String,Int) -> MyParser (Maybe Int)
 tryThis (n,r) = string n >> return (Just r)
@@ -42,11 +50,20 @@ inventory = do
   string "inventory"
   return Inventory
 
+get :: MyParser Verb
+get = do
+  string "get "
+  spaces
+  -- Refactor the following two lines as new noun function
+  names <- getState
+  n <- them names
+  return $ Get n
+
 blank :: MyParser Verb
 blank = return Blank
 
 verb :: MyParser Verb
-verb = look <|> inventory <|> blank
+verb = look <|> inventory <|> get <|> blank
 
 input :: MyParser Verb
 input = do
