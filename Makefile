@@ -1,5 +1,5 @@
-fta: *.hs
-	ghc --make fta && touch fta
+ifh: *.hs
+	ghc --make ifh && touch ifh
 
 clean:
-	rm -f *.hi *.o *~ fta
+	rm -f *.hi *.o *~ ifh
