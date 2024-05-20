@@ -8,6 +8,7 @@ buildWorld = do
 
   house <- newThing "House" "This is your house. It looks pretty ordinary."
 
+  -- For now, player must be the second thing created.
   player <- newThing "Player" "You look normal."
   move player house
 

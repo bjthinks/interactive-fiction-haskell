@@ -1,4 +1,6 @@
-module WorldOps(newThing,
+module WorldOps(getPlayer,
+                setPlayer,
+                newThing,
                 getName,
                 getDescription,
                 getLocation,
@@ -14,6 +16,12 @@ import Control.Monad
 import Control.Monad.RWS
 
 import Defs
+
+getPlayer :: GameMonad Ref
+getPlayer = return 1
+
+setPlayer :: Ref -> GameMonad ()
+setPlayer = error "setPlayer is not implemented yet"
 
 newThing :: String -> String -> GameMonad Ref
 newThing n d = do
@@ -89,7 +97,8 @@ visibleStuff = do
 
 visibleStuffInRoom :: GameMonad [Ref]
 visibleStuffInRoom = do
-  maybeHere <- getLocation 1
+  player <- getPlayer
+  maybeHere <- getLocation player
   case maybeHere of
     Nothing -> return []
     Just here -> do
@@ -97,4 +106,6 @@ visibleStuffInRoom = do
       return (here : cs)
 
 visibleStuffInInventory :: GameMonad [Ref]
-visibleStuffInInventory = getContents' 1
+visibleStuffInInventory = do
+  player <- getPlayer
+  getContents' player

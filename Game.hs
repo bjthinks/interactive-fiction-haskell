@@ -29,7 +29,9 @@ doVerb Inventory = inventory
 look :: Maybe Ref -> GameMonad ()
 look arg = do
   maybeThing <- case arg of
-    Nothing -> getLocation 1
+    Nothing -> do
+      player <- getPlayer
+      getLocation player
     Just ref -> return (Just ref)
   case maybeThing of
     Nothing -> tell "You are adrift in the void. There is nothing here but black emptiness." >> nl
@@ -41,7 +43,8 @@ lookAt it = do
   getDescription it >>= tell >> nl
   contents <- getContents' it
   -- You don't see yourself
-  let others = filter (/= 1) contents
+  player <- getPlayer
+  let others = filter (/= player) contents
   when (others /= []) $ do
     names <- mapM getName others
     tell $ "Contents: " ++ humanFriendlyList names ++ "."
@@ -58,7 +61,8 @@ humanFriendlyList xs = list3 xs
 
 inventory :: GameMonad ()
 inventory = do
-  contents <- getContents' 1
+  player <- getPlayer
+  contents <- getContents' player
   names <- mapM getName contents
   tell $ "You are carrying: " ++ humanFriendlyList names ++ "."
   nl
