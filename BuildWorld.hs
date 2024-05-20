@@ -6,10 +6,10 @@ import WorldOps
 buildWorld :: GameMonad ()
 buildWorld = do
 
-  house <- newThing "House" "This is your house. It looks pretty ordinary."
-
-  -- For now, player must be the second thing created.
   player <- newThing "Player" "You look normal."
+  setPlayer player
+
+  house <- newThing "House" "This is your house. It looks pretty ordinary."
   move player house
 
   blet <- newThing "Blet" "It's a blet. It defies description."

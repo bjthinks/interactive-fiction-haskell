@@ -18,10 +18,17 @@ import Control.Monad.RWS
 import Defs
 
 getPlayer :: GameMonad Ref
-getPlayer = return 1
+getPlayer = do
+  s <- get
+  let maybePlayer = player s
+  case maybePlayer of
+    Just p -> return p
+    Nothing -> error "Internal error: player not set"
 
 setPlayer :: Ref -> GameMonad ()
-setPlayer = error "setPlayer is not implemented yet"
+setPlayer p = do
+  s <- get
+  put $ s { player = Just p }
 
 newThing :: String -> String -> GameMonad Ref
 newThing n d = do

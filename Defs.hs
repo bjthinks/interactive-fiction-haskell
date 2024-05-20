@@ -13,10 +13,12 @@ data Thing = Thing {
 
 type Ref = Int
 data GameState = GameState { things :: M.Map Ref Thing,
-                             nextThing :: Ref }
+                             nextThing :: Ref,
+                             player :: Maybe Ref }
                deriving Show
 startState = GameState { things = M.empty,
-                         nextThing = 0 }
+                         nextThing = 0,
+                         player = Nothing }
 type MoveInput = String
 type MoveOutput = String
 type GameMonad = RWS MoveInput MoveOutput GameState
