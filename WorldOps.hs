@@ -10,6 +10,7 @@ module WorldOps(newThing,
 
 import Data.Maybe
 import qualified Data.Map as M
+import Control.Monad
 import Control.Monad.RWS
 
 import Defs

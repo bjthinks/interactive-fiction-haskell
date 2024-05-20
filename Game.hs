@@ -2,6 +2,7 @@ module Game where
 
 import Data.List
 import Data.Char
+import Control.Monad
 import Control.Monad.RWS
 
 import Defs
