@@ -47,5 +47,8 @@ lookAt it = do
     tell $ case items of
       [x] -> x
       [x,y] -> x ++ " and " ++ y
-      xs -> intercalate ", " items
+      xs -> list3 items
     tell "." >> nl
+    where
+      list3 [x,y] = x ++ ", and " ++ y
+      list3 (x:xs) = x ++ ", " ++ list3 xs
