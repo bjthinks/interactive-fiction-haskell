@@ -15,14 +15,14 @@ import Control.Monad.RWS
 
 import Defs
 
-newThing :: GameMonad Ref
-newThing = do
+newThing :: String -> String -> GameMonad Ref
+newThing n d = do
   s <- get
   let i = nextThing s
       t = Thing { location = Nothing,
                   contents = [],
-                  name = "",
-                  description = "" }
+                  name = n,
+                  description = d }
       s' = s { things = M.insert i t (things s),
                nextThing = i + 1 }
   put s'

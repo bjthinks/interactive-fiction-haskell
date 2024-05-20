@@ -6,26 +6,16 @@ import WorldOps
 buildWorld :: GameMonad ()
 buildWorld = do
 
-  root <- newThing
-  setName root "Root"
-  setDescription root "This room is filled with a vague aura of power."
+  house <- newThing "House" "This is your house. It looks pretty ordinary."
 
-  player <- newThing
-  setName player "Player"
-  setDescription player "You look disheveled."
-  move player root
+  player <- newThing "Player" "You look normal."
+  move player house
 
-  blet <- newThing
-  setName blet "Blet"
-  setDescription blet "It's a blet. It defies description."
-  move blet root
+  blet <- newThing "Blet" "It's a blet. It defies description."
+  move blet house
 
-  foo <- newThing
-  setName foo "Foo"
-  setDescription foo "This Foo looks like it could also be a Bar."
-  move foo root
+  foo <- newThing "Foo" "This Foo looks like it could also be a Bar."
+  move foo house
 
-  desk <- newThing
-  setName desk "Desk"
-  setDescription desk "A cheap IKEA desk with a drawer."
-  move desk root
+  desk <- newThing "Desk" "A cheap IKEA desk with a drawer."
+  move desk house
