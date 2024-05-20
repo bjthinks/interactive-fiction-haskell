@@ -24,3 +24,8 @@ buildWorld = do
   setName foo "Foo"
   setDescription foo "This Foo looks like it could also be a Bar."
   move foo root
+
+  desk <- newThing
+  setName desk "Desk"
+  setDescription desk "A cheap IKEA desk with a drawer."
+  move desk root

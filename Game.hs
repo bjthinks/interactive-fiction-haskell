@@ -44,4 +44,8 @@ lookAt it = do
   when (others /= []) $ do
     tell "Contents: "
     items <- mapM getName others
-    tell (intercalate ", " items ++ ".") >> nl
+    tell $ case items of
+      [x] -> x
+      [x,y] -> x ++ " and " ++ y
+      xs -> intercalate ", " items
+    tell "." >> nl
