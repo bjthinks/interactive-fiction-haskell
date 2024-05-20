@@ -1,4 +1,4 @@
-module Game where
+module Verbs where
 
 import Data.List
 import Data.Char

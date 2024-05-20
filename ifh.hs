@@ -6,7 +6,7 @@ import Control.Monad.RWS
 
 import Defs
 import BuildWorld
-import Game
+import Verbs
 
 mainloop :: GameState -> MaybeT (InputT IO) ()
 mainloop state = do
