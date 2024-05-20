@@ -83,9 +83,18 @@ move objRef destRef = do
 
 visibleStuff :: GameMonad [Ref]
 visibleStuff = do
+  roomStuff <- visibleStuffInRoom
+  invStuff <- visibleStuffInInventory
+  return $ roomStuff ++ invStuff
+
+visibleStuffInRoom :: GameMonad [Ref]
+visibleStuffInRoom = do
   maybeHere <- getLocation 1
   case maybeHere of
     Nothing -> return []
     Just here -> do
       cs <- getContents' here
       return (here : cs)
+
+visibleStuffInInventory :: GameMonad [Ref]
+visibleStuffInInventory = getContents' 1
