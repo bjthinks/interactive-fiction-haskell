@@ -32,6 +32,7 @@ noun = do
 look :: MyParser Verb
 look = do
   string "look"
+  -- TODO FIXME: zero spaces between look and noun shouldn't work
   spaces
   n <- maybeNoun
   return (Look n)
