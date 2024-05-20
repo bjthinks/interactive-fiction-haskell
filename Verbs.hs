@@ -25,6 +25,7 @@ doVerb :: Verb -> GameMonad ()
 doVerb Blank = return ()
 doVerb (Look x) = look x
 doVerb Inventory = inventory
+doVerb (Get x) = getItem x
 
 look :: Maybe Ref -> GameMonad ()
 look arg = do
@@ -66,3 +67,25 @@ inventory = do
   names <- mapM getName contents
   tell $ "You are carrying: " ++ humanFriendlyList names ++ "."
   nl
+
+isGettable :: Ref -> GameMonad Bool
+isGettable x = do
+  player <- getPlayer
+  maybeLoc <- getLocation player
+  case maybeLoc of
+    Nothing -> return False
+    Just loc -> do
+      items <- getContents' loc
+      return $ elem x $ filter (/= player) items
+
+getItem :: Ref -> GameMonad ()
+getItem x = do
+  canGet <- isGettable x
+  case canGet of
+    False -> tell "You can\'t pick that up." >> nl
+    True -> do
+      player <- getPlayer
+      move x player
+      name <- getName x
+      tell $ "You pick up the " ++ name ++ "."
+      nl
