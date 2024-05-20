@@ -19,3 +19,8 @@ buildWorld = do
   setName blet "Blet"
   setDescription blet "It's a blet. It defies description."
   move blet root
+
+  foo <- newThing
+  setName foo "Foo"
+  setDescription foo "This Foo looks like it could also be a Bar."
+  move foo root
