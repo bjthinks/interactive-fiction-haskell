@@ -30,7 +30,7 @@ look arg = do
     Nothing -> getLocation 1
     Just ref -> return (Just ref)
   case maybeThing of
-    Nothing -> tell "You are adrift in the void. There is nothing here but black emptiness."
+    Nothing -> tell "You are adrift in the void. There is nothing here but black emptiness." >> nl
     Just at -> lookAt at
 
 lookAt :: Ref -> GameMonad ()
