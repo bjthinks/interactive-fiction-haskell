@@ -3,6 +3,7 @@ module WorldOps(getPlayer,
                 newThing,
                 newRoom,
                 newObject,
+                newExit,
                 getName,
                 getDescription,
                 getLocation,
@@ -59,6 +60,12 @@ newObject name desc loc = do
   t <- newThing name
   setDescription t desc
   move t loc
+  return t
+
+newExit :: String -> Ref -> Ref -> GameMonad Ref
+newExit name src dest = do
+  t <- newThing name
+  connect t src dest
   return t
 
 getThing :: Ref -> GameMonad Thing
