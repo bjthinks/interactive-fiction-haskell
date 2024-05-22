@@ -23,12 +23,8 @@ handleInput = do
 
 doVerb :: Verb -> GameMonad ()
 doVerb Blank = return ()
-doVerb (Look x) = look x
-doVerb Inventory = inventory
-doVerb (Get x) = getItem x
 
-look :: Maybe Ref -> GameMonad ()
-look arg = do
+doVerb (Look arg) = do
   maybeThing <- case arg of
     Nothing -> do
       player <- getPlayer
@@ -37,6 +33,24 @@ look arg = do
   case maybeThing of
     Nothing -> tell "You are adrift in the void. There is nothing here but black emptiness." >> nl
     Just at -> lookAt at
+
+doVerb Inventory = do
+  player <- getPlayer
+  contents <- getContents' player
+  names <- mapM getName contents
+  tell $ "You are carrying: " ++ humanFriendlyList names ++ "."
+  nl
+
+doVerb (Get x) = do
+  canGet <- isGettable x
+  case canGet of
+    False -> tell "You can\'t pick that up." >> nl
+    True -> do
+      player <- getPlayer
+      move x player
+      name <- getName x
+      tell $ "You pick up the " ++ name ++ "."
+      nl
 
 lookAt :: Ref -> GameMonad ()
 lookAt it = do
@@ -60,14 +74,6 @@ humanFriendlyList xs = list3 xs
     list3 [x,y] = x ++ ", and " ++ y
     list3 (x:xs) = x ++ ", " ++ list3 xs
 
-inventory :: GameMonad ()
-inventory = do
-  player <- getPlayer
-  contents <- getContents' player
-  names <- mapM getName contents
-  tell $ "You are carrying: " ++ humanFriendlyList names ++ "."
-  nl
-
 isGettable :: Ref -> GameMonad Bool
 isGettable x = do
   player <- getPlayer
@@ -77,15 +83,3 @@ isGettable x = do
     Just loc -> do
       items <- getContents' loc
       return $ elem x $ filter (/= player) items
-
-getItem :: Ref -> GameMonad ()
-getItem x = do
-  canGet <- isGettable x
-  case canGet of
-    False -> tell "You can\'t pick that up." >> nl
-    True -> do
-      player <- getPlayer
-      move x player
-      name <- getName x
-      tell $ "You pick up the " ++ name ++ "."
-      nl
