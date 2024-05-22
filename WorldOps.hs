@@ -37,7 +37,9 @@ newThing n d = do
       t = Thing { location = Nothing,
                   contents = [],
                   name = n,
-                  description = d }
+                  description = d,
+                  exits = [],
+                  destination = Nothing }
       s' = s { things = M.insert i t (things s),
                nextThing = i + 1 }
   put s'

@@ -3,15 +3,19 @@ module Defs where
 import qualified Data.Map as M
 import Control.Monad.RWS
 
+type Ref = Int
+
 data Thing = Thing {
   name :: String,
   description :: String,
-  -- Typically, rooms have no location, but other things do
-  location :: Maybe Int,
-  contents :: [Int]
+  -- Typically, rooms have no location, but objects do
+  location :: Maybe Ref,
+  contents :: [Ref],
+  -- Typically, exits go somewhere, but other things don't
+  exits :: [Ref],
+  destination :: Maybe Ref
   } deriving Show
 
-type Ref = Int
 data GameState = GameState { things :: M.Map Ref Thing,
                              nextThing :: Ref,
                              player :: Maybe Ref }
