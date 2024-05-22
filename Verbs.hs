@@ -31,7 +31,7 @@ doVerb (Look arg) = do
       getLocation player
     Just ref -> return (Just ref)
   case maybeThing of
-    Nothing -> tell "You are adrift in the void. There is nothing here but black emptiness." >> nl
+    Nothing -> tell "You are dead." >> nl
     Just at -> lookAt at
 
 doVerb Inventory = do
