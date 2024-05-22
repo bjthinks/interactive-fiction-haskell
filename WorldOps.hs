@@ -6,7 +6,6 @@ module WorldOps(getPlayer,
                 getDescription,
                 getLocation,
                 getContents',
-                setName,
                 setDescription,
                 move,
                 visibleStuff) where
@@ -74,11 +73,6 @@ setThing :: Ref -> Thing -> GameMonad ()
 setThing i t = do
   s <- get
   put $ s { things = M.insert i t (things s) }
-
-setName :: Ref -> String -> GameMonad ()
-setName i n = do
-  t <- getThing i
-  setThing i $ t { name = n }
 
 setDescription :: Ref -> String -> GameMonad ()
 setDescription i d = do
