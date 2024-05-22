@@ -55,8 +55,8 @@ inventory = do
 
 getItem :: MyParser Verb
 getItem = do
-  string "take "
-  spaces
+  string "take"
+  many1 space
   -- Refactor the following two lines as new noun function
   names <- getState
   ref <- them names
@@ -64,8 +64,8 @@ getItem = do
 
 dropItem :: MyParser Verb
 dropItem = do
-  string "drop "
-  spaces
+  string "drop"
+  many1 space
   -- Refactor the following two lines as new noun function
   names <- getState
   ref <- them names
