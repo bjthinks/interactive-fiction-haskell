@@ -2,35 +2,36 @@ module ParseInput(Verb(..),parseInput) where
 
 import Text.Parsec
 import Text.Parsec.String
+import Defs
 
 data Verb = Blank
-          | Look (Maybe Int)
+          | Look (Maybe Ref)
           | Inventory
-          | Get Int
+          | Get Ref
           deriving Show
 
-type MyParser = Parsec String [(String,Int)]
+type MyParser = Parsec String [(String,Ref)]
 
-this :: (String,Int) -> MyParser Int
+this :: (String,Ref) -> MyParser Ref
 this (n,r) = string n >> return r
 
-them :: [(String,Int)] -> MyParser Int
+them :: [(String,Ref)] -> MyParser Ref
 them [] = parserFail "I don\'t know what that is."
 them (n:ns) = this n <|> them ns
 
-tryThis :: (String,Int) -> MyParser (Maybe Int)
+tryThis :: (String,Ref) -> MyParser (Maybe Ref)
 tryThis (n,r) = string n >> return (Just r)
 
-tryThem :: [(String,Int)] -> MyParser (Maybe Int)
+tryThem :: [(String,Ref)] -> MyParser (Maybe Ref)
 tryThem [] = return Nothing
 tryThem (n:ns) = tryThis n <|> tryThem ns
 
-maybeNoun :: MyParser (Maybe Int)
+maybeNoun :: MyParser (Maybe Ref)
 maybeNoun = do
   names <- getState
   tryThem names
 
-noun :: MyParser Int
+noun :: MyParser Ref
 noun = do
   n <- maybeNoun
   case n of
@@ -42,8 +43,8 @@ look = do
   string "look"
   -- TODO FIXME: zero spaces between look and noun shouldn't work
   spaces
-  n <- maybeNoun
-  return (Look n)
+  ref <- maybeNoun
+  return (Look ref)
 
 inventory :: MyParser Verb
 inventory = do
@@ -56,8 +57,8 @@ get = do
   spaces
   -- Refactor the following two lines as new noun function
   names <- getState
-  n <- them names
-  return $ Get n
+  ref <- them names
+  return $ Get ref
 
 blank :: MyParser Verb
 blank = return Blank
@@ -65,13 +66,13 @@ blank = return Blank
 verb :: MyParser Verb
 verb = look <|> inventory <|> get <|> blank
 
-input :: MyParser Verb
-input = do
+parseLine :: MyParser Verb
+parseLine = do
   spaces
   v <- verb
   spaces
   eof
   return v
 
-parseInput :: [(String,Int)] -> String -> Either ParseError Verb
-parseInput names = runParser input names ""
+parseInput :: [(String,Ref)] -> String -> Either ParseError Verb
+parseInput names = runParser parseLine names ""
