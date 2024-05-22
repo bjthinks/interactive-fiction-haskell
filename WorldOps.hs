@@ -122,7 +122,7 @@ connect :: Ref -> Ref -> Ref -> GameMonad ()
 connect exit src dest = do
   disconnect exit
   srcThing <- getThing src
-  setThing src $ srcThing { exits = src : (exits srcThing) }
+  setThing src $ srcThing { exits = exit : (exits srcThing) }
   exitThing <- getThing exit
   setThing exit $ exitThing { path = Just (src,dest) }
 
