@@ -18,7 +18,7 @@ handleInput = do
   stuffNames <- mapM getName stuffRefs
   let stuff = zip (map (map toLower) stuffNames) stuffRefs
   case parseInput stuff (map toLower line) of
-    Left err -> tell "I didn't understand that." >> nl
+    Left err -> tell (show err) >> nl
     Right verb -> doVerb verb
 
 doVerb :: Verb -> GameMonad ()
