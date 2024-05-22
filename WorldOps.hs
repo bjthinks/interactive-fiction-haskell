@@ -123,6 +123,7 @@ move objRef destRef = do
 disconnect :: Ref -> GameMonad ()
 disconnect exit = do
   exitThing <- getThing exit
+  -- TODO: use when, like in moveNowhere
   case (path exitThing) of
     Nothing -> return ()
     Just (src,_) -> do
