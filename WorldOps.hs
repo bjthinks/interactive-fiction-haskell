@@ -1,6 +1,7 @@
 module WorldOps(getPlayer,
                 setPlayer,
-                newThing,
+                newRoom,
+                newObject,
                 getName,
                 getDescription,
                 getLocation,
@@ -30,20 +31,33 @@ setPlayer p = do
   s <- get
   put $ s { player = Just p }
 
-newThing :: String -> String -> GameMonad Ref
-newThing n d = do
+newThing :: String -> GameMonad Ref
+newThing n = do
   s <- get
   let i = nextThing s
       t = Thing { location = Nothing,
                   contents = [],
                   name = n,
-                  description = d,
+                  description = "",
                   exits = [],
                   destination = Nothing }
       s' = s { things = M.insert i t (things s),
                nextThing = i + 1 }
   put s'
   return i
+
+newRoom :: String -> String -> GameMonad Ref
+newRoom name desc = do
+  t <- newThing name
+  setDescription t desc
+  return t
+
+newObject :: String -> String -> Ref -> GameMonad Ref
+newObject name desc loc = do
+  t <- newThing name
+  setDescription t desc
+  move t loc
+  return t
 
 getThing :: Ref -> GameMonad Thing
 getThing i = fmap (fromJust . M.lookup i . things) get
