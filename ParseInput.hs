@@ -55,7 +55,7 @@ inventory = do
 
 getItem :: MyParser Verb
 getItem = do
-  string "get "
+  string "take "
   spaces
   -- Refactor the following two lines as new noun function
   names <- getState
@@ -84,7 +84,7 @@ blank :: MyParser Verb
 blank = return Blank
 
 verb :: MyParser Verb
-verb = look <|> inventory <|> {-getItem <|>-} dropItem <|> goExit <|> blank
+verb = look <|> inventory <|> getItem <|> dropItem <|> goExit <|> blank
 
 parseLine :: MyParser Verb
 parseLine = do
