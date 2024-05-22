@@ -80,6 +80,11 @@ lookAt it = do
     names <- mapM getName others
     tell $ "Contents: " ++ humanFriendlyList names ++ "."
     nl
+  exits <- getExits it
+  when (exits /= []) $ do
+    exitNames <- mapM getName exits
+    tell $ "Exits: " ++ humanFriendlyList exitNames ++ "."
+    nl
 
 humanFriendlyList :: [String] -> String
 humanFriendlyList [] = "nothing"
