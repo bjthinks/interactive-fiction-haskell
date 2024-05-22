@@ -9,6 +9,7 @@ module WorldOps(getPlayer,
                 getLocation,
                 getContents',
                 getExits,
+                getPath,
                 setDescription,
                 move,
                 disconnect,
@@ -80,6 +81,7 @@ getDescription = getProperty description
 getLocation    = getProperty location
 getContents'   = getProperty contents
 getExits       = getProperty exits
+getPath        = getProperty path
 
 setThing :: Ref -> Thing -> GameMonad ()
 setThing i t = do
