@@ -1,5 +1,6 @@
 module WorldOps(getPlayer,
                 setPlayer,
+                newThing,
                 newRoom,
                 newObject,
                 getName,
