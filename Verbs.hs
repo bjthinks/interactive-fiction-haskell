@@ -52,6 +52,22 @@ doVerb (Get x) = do
       tell $ "You pick up the " ++ name ++ "."
       nl
 
+doVerb (Drop x) = do
+  player <- getPlayer
+  inv <- getContents' player
+  let haveIt = elem x inv
+  case haveIt of
+    False -> tell "You\'re not carrying that." >> nl
+    True -> do
+      loc <- getLocation player
+      case loc of
+        Nothing -> tell "You can\'t drop things while you are dead."
+        Just room -> do
+          move x room
+          name <- getName x
+          tell $ "You drop the " ++ name ++ "."
+          nl
+
 lookAt :: Ref -> GameMonad ()
 lookAt it = do
   getName it >>= tell >> nl
