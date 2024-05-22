@@ -8,6 +8,8 @@ module WorldOps(getPlayer,
                 getContents',
                 setDescription,
                 move,
+                disconnect,
+                connect,
                 visibleStuff) where
 
 import Data.Maybe
@@ -105,6 +107,24 @@ move objRef destRef = do
   -- Change object's location to new one
   obj <- getThing objRef
   setThing objRef $ obj { location = Just destRef }
+
+disconnect :: Ref -> GameMonad ()
+disconnect exit = do
+  exitThing <- getThing exit
+  case (path exitThing) of
+    Nothing -> return ()
+    Just (src,_) -> do
+      srcThing <- getThing src
+      setThing src $ srcThing { exits = filter (/= exit) (exits srcThing) }
+      setThing exit $ exitThing { path = Nothing }
+
+connect :: Ref -> Ref -> Ref -> GameMonad ()
+connect exit src dest = do
+  disconnect exit
+  srcThing <- getThing src
+  setThing src $ srcThing { exits = src : (exits srcThing) }
+  exitThing <- getThing exit
+  setThing exit $ exitThing { path = Just (src,dest) }
 
 visibleStuff :: GameMonad [Ref]
 visibleStuff = do
