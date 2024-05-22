@@ -153,7 +153,8 @@ visibleStuffInRoom = do
     Nothing -> return []
     Just here -> do
       cs <- getContents' here
-      return (here : cs)
+      es <- getExits here
+      return (here : cs ++ es)
 
 visibleStuffInInventory :: GameMonad [Ref]
 visibleStuffInInventory = do

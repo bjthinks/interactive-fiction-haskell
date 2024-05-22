@@ -2,6 +2,7 @@ module Verbs where
 
 import Data.List
 import Data.Char
+import Data.Maybe
 import Control.Monad
 import Control.Monad.RWS
 
@@ -71,7 +72,15 @@ doVerb (Drop x) = do
 lookAt :: Ref -> GameMonad ()
 lookAt it = do
   getName it >>= tell >> nl
-  getDescription it >>= tell >> nl
+  desc <- getDescription it
+  when (desc /= "") $ tell desc >> nl
+  path <- getPath it
+  when (isJust path) $ do
+    let (src,dest) = fromJust path
+    srcName <- getName src
+    destName <- getName dest
+    tell $ "This is a way to go from " ++ srcName ++ " to " ++ destName ++ "."
+    nl
   contents <- getContents' it
   -- You don't see yourself
   player <- getPlayer
