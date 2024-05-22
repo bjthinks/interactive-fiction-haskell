@@ -69,6 +69,17 @@ doVerb (Drop x) = do
           tell $ "You drop the " ++ name ++ "."
           nl
 
+doVerb (Go x) = do
+  canGo <- isTravelable x
+  case canGo of
+    False -> tell "You can\'t go that way." >> nl
+    True -> do
+      player <- getPlayer
+      maybePath <- getPath x
+      case maybePath of
+        Nothing -> tell "That direction doesn\'t go anywhere."
+        Just (_,dest) -> move player dest >> lookAt dest
+
 lookAt :: Ref -> GameMonad ()
 lookAt it = do
   getName it >>= tell >> nl
@@ -113,3 +124,15 @@ isGettable x = do
     Just loc -> do
       items <- getContents' loc
       return $ elem x $ filter (/= player) items
+
+isTravelable :: Ref -> GameMonad Bool
+isTravelable exit = do
+  maybePath <- getPath exit
+  case maybePath of
+    Nothing -> return False
+    Just (src,_t) -> do
+      player <- getPlayer
+      maybeLoc <- getLocation player
+      case maybeLoc of
+        Nothing -> return False
+        Just loc -> return $ loc == src
