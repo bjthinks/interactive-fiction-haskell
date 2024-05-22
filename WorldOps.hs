@@ -40,7 +40,7 @@ newThing n = do
                   name = n,
                   description = "",
                   exits = [],
-                  destination = Nothing }
+                  path = Nothing }
       s' = s { things = M.insert i t (things s),
                nextThing = i + 1 }
   put s'

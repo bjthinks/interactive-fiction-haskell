@@ -13,7 +13,7 @@ data Thing = Thing {
   contents :: [Ref],
   -- Typically, exits go somewhere, but other things don't
   exits :: [Ref],
-  destination :: Maybe Ref
+  path :: Maybe (Ref,Ref)
   } deriving Show
 
 data GameState = GameState { things :: M.Map Ref Thing,
