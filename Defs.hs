@@ -14,7 +14,8 @@ data Thing = Thing {
   -- Typically, exits go somewhere, but other things don't
   exits :: [Ref],
   path :: Maybe (Ref,Ref),
-  doEat :: GameMonad ()
+  doEat :: GameMonad (),
+  doUse :: GameMonad ()
   }
 
 data GameState = GameState { things :: M.Map Ref Thing,

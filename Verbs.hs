@@ -89,6 +89,20 @@ doVerb (Eat x) = do
       action <- getDoEat x
       action
 
+doVerb (Use x) = do
+  player <- getPlayer
+  inv <- getContents' player
+  maybeLoc <- getLocation player
+  stuff <- case maybeLoc of
+    Nothing -> return []
+    Just here -> getContents' here
+  let usableItems = inv ++ stuff
+  case (elem x usableItems) of
+    False -> tell "You can\'t use that." >> nl
+    True -> do
+      action <- getDoUse x
+      action
+
 doVerb Score = do
   tell "Your score is "
   points <- getScore
@@ -111,6 +125,7 @@ doVerb Help = do
   tell "help" >> nl
   tell "score" >> nl
   tell "take item" >> nl
+  tell "use item" >> nl
 
 lookAt :: Ref -> GameMonad ()
 lookAt it = do
