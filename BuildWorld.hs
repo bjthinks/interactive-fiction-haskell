@@ -6,17 +6,30 @@ import WorldOps
 buildWorld :: GameMonad ()
 buildWorld = do
 
-  house <- newRoom "Haunted House" "This house looks very spooky. The windows are boarded up and the green paint is peeling."
-  brisbin <- newRoom "Brisbin Street" "You are in the middle of Brisbin Street. The street continues to the west and east. To the north is a haunted house, and to the south is Ray\'s house."
-  newExit "north" brisbin house
-  newExit "south" house brisbin
+  brisbin <- newRoom "Brisbin Street" $
+    "You are in the middle of Brisbin Street. The street continues to the\n" ++
+    "west and east. To the north is Granny\'s House, and to the south is\n" ++
+    "Ray\'s house."
+
+  living <- newRoom "Living Room" $
+    "This is clearly the living room of Granny\'s House. The floor has\n" ++
+    "plain brown carpet. There are a tan sofa and two rust colored\n" ++
+    "armchairs, and a spindly palm tree sits in the corner next to a\n" ++
+    "display case."
+  newExit "north" brisbin living
+  newExit "south" living brisbin
+
+  dinette <- newRoom "Dinette" $
+    "This is a tiny dining room, most of which is taken up by a normal-\n" ++
+    "sized table. It has a plastic veneer which imitates a light brown\n" ++
+    "wood pattern. Four chairs with dark brown plastic seats and backs\n" ++
+    "surround the table, and the floor is an icky brown tile with a swirly\n" ++
+    "pattern."
+  newExit "west" living dinette
+  newExit "east" dinette living
 
   player <- newObject "Player" "You look normal." brisbin
   setPlayer player
-
-  newObject "Blet" "It's a blet. It defies description." house
-  newObject "Foo" "This Foo looks like it could also be a Bar." house
-  newObject "Desk" "A cheap IKEA desk with a drawer." house
   newObject "Calculus Book" "This is a multivariable calculus textbook." player
 
   return ()
