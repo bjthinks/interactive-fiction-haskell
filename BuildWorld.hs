@@ -16,7 +16,7 @@ buildWorld = do
     "digging. There is a concrete path connecting the street to the south\n" ++
     "and the driveway to the west. Granny\'s house is north, and the\n" ++
     "driveway is west. There are a pine tree and two white oak trees in\n" ++
-    "the yard. A squirrel watches you nervously from one of the oak trees.\n"
+    "the yard. A squirrel watches you nervously from one of the oak trees."
   newExit "north" brisbin yard
   newExit "south" yard brisbin
   newObject yard "acorns" $
