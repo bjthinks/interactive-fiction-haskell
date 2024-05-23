@@ -37,9 +37,10 @@ buildWorld = do
     "pattern."
   newExit "west" living dinette
   newExit "east" dinette living
-  newspaper <- newObject dinette "Newspaper" $
+  newspaper <- newObject dinette "newspaper" $
     "This is today\'s issue of the Minneapolis Star and Tribune."
-  candle <- newObject dinette "Candle" "A plain red candle. It is not lit."
+  candle <- newObject dinette "candle" "A plain red candle. It is not lit."
+  -- TODO add matches and be able to light candle for 10 points
 
   kitchen <- newRoom "Kitchen" $
     "This is a small but functional kitchen. There is a fridge in the\n" ++
@@ -50,13 +51,13 @@ buildWorld = do
     "bowl."
   newExit "west" dinette kitchen
   newExit "east" kitchen dinette
-  newObject kitchen "Brillo pad" "A heavily-used copper Brillo pad."
-  newObject kitchen "Apple" "A red delicious apple."
-  newObject kitchen "Banana" "The bottom half of a banana."
-  newObject kitchen "Orange" "A large seedless navel orange."
+  newObject kitchen "brillo pad" "A heavily-used copper Brillo pad."
+  newObject kitchen "apple" "A red delicious apple."
+  newObject kitchen "banana" "The bottom half of a banana."
+  newObject kitchen "orange" "A large seedless navel orange."
 
   player <- newObject brisbin "Player" "You look normal."
   setPlayer player
-  newObject player "Calculus Book" "This is a multivariable calculus textbook."
+  newObject player "calculus book" "This is a multivariable calculus textbook."
 
   return ()
