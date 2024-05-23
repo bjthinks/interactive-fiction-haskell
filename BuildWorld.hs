@@ -2,6 +2,7 @@ module BuildWorld where
 
 import Defs
 import WorldOps
+import Control.Monad.RWS
 
 buildWorld :: GameMonad ()
 buildWorld = do
@@ -19,8 +20,13 @@ buildWorld = do
     "the yard. A squirrel watches you nervously from one of the oak trees."
   newExit "north" brisbin yard
   newExit "south" yard brisbin
-  newObject yard "acorns" $
+  acorns <- newObject yard "acorns" $
     "Ordinary white oak acorns. Could you throw them at a squirrel?"
+  setDoEat acorns $ do
+    tell "You try one, but they taste terribly bitter. Maybe a squirrel would"
+    nl
+    tell "like them if you threw them at it?"
+    nl
   -- TODO throw acorn for 10 points
   newObject yard "sprinkler" "This sprinkler spins around fast when used."
   -- TODO water yard for 10 points
