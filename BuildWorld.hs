@@ -66,6 +66,7 @@ buildWorld = do
   newExit "west" dinette kitchen
   newExit "east" kitchen dinette
   newObject kitchen "brillo pad" "A heavily-used copper Brillo pad."
+  matches <- newObject kitchen "matches" "A simple book of paper matches."
   apple <- newObject kitchen "apple" "A red delicious apple."
   setDoEat apple $ do
     tell "The apple tastes sweet and slightly astringent."
