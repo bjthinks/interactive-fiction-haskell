@@ -57,8 +57,8 @@ newRoom name desc = do
   setDescription t desc
   return t
 
-newObject :: String -> String -> Ref -> GameMonad Ref
-newObject name desc loc = do
+newObject :: Ref -> String -> String -> GameMonad Ref
+newObject loc name desc = do
   t <- newThing name
   setDescription t desc
   move t loc

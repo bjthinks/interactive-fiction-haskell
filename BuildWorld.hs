@@ -28,8 +28,13 @@ buildWorld = do
   newExit "west" living dinette
   newExit "east" dinette living
 
-  player <- newObject "Player" "You look normal." brisbin
+  kitchen <- newRoom "Kitchen" $
+    ""
+  newExit "west" dinette kitchen
+  newExit "east" kitchen dinette
+
+  player <- newObject brisbin "Player" "You look normal."
   setPlayer player
-  newObject "Calculus Book" "This is a multivariable calculus textbook." player
+  newObject player "Calculus Book" "This is a multivariable calculus textbook."
 
   return ()
