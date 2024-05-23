@@ -103,4 +103,18 @@ buildWorld = do
   newExit "east" brisbin eastBrisbin
   newExit "west" eastBrisbin brisbin
 
+  justinYard <- newRoom "Justin\'s Yard" $
+    "You stand in front of Justin\'s house. It is a large home with a\n" ++
+    "noticable addition and multiple floors. There is a crabapple tree\n" ++
+    "here."
+  newExit "south" eastBrisbin justinYard
+  newExit "north" justinYard eastBrisbin
+  crabapple <- newObject justinYard "crabapple" $
+    "This crabapple looks like it might have a worm in it. Yuck!"
+  setDoEat crabapple $ do
+    tell "You eat the crabapple, worm and all! YUCK!"
+    nl
+    moveNowhere crabapple
+    -- TODO reduce score by 10
+
   return ()
