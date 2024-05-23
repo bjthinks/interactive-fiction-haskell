@@ -12,6 +12,7 @@ module WorldOps(getPlayer,
                 getPath,
                 getDoEat,
                 setDescription,
+                setDoEat,
                 move,
                 disconnect,
                 connect,
@@ -95,6 +96,11 @@ setDescription :: Ref -> String -> GameMonad ()
 setDescription i d = do
   t <- getThing i
   setThing i $ t { description = d }
+
+setDoEat :: Ref -> GameMonad () -> GameMonad ()
+setDoEat ref action = do
+  thing <- getThing ref
+  setThing ref $ thing { doEat = action }
 
 moveNowhere :: Ref -> GameMonad ()
 moveNowhere objRef = do
