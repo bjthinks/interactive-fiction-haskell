@@ -10,6 +10,6 @@ addPoints points = do
   tell "You "
   if points >= 0 then tell "earn" else tell "lose"
   tell " "
-  tell $ show points
+  tell $ show $ abs points
   tell " points. Use the \"score\" command to see your score."
   nl
