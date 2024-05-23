@@ -14,18 +14,21 @@ buildWorld = do
   yard <- newRoom "Granny\'s Front Yard" $
     "The grass is green but has many holes in it where squirrels have been\n" ++
     "digging. There is a concrete path connecting the street to the south\n" ++
-    "and the driveway to the west. Granny\'s house is north. There are a\n" ++
-    "pine tree and two white oak trees in the yard. A squirrel watches you\n" ++
-    "nervously from one of the oak trees."
+    "and the driveway to the west. Granny\'s house is north, and the\n" ++
+    "driveway is west. There are a pine tree and two white oak trees in\n" ++
+    "the yard. A squirrel watches you nervously from one of the oak trees.\n" ++
+    "Maybe you could throw an acorn at it."
   newExit "north" brisbin yard
   newExit "south" yard brisbin
   newObject yard "acorns" "Ordinary white oak acorns."
+  -- TODO throw acorn for 10 points
 
   living <- newRoom "Living Room" $
     "This is clearly the living room of Granny\'s House. The floor has\n" ++
     "plain brown carpet. There are a tan sofa and two rust colored\n" ++
     "armchairs, and a spindly palm tree sits in the corner next to a\n" ++
-    "display case."
+    "display case. To the south is Granny\'s front door, which goes back to" ++
+    "the front yard."
   newExit "north" yard living
   newExit "south" living yard
 
@@ -48,7 +51,7 @@ buildWorld = do
     "go along the west and south walls. There is a gas stove with an oven\n" ++
     "and broiler, a double sink, and a dishwasher. Next to the sink is a\n" ++
     "ceramic fish for holding Brillo pads, and on the cupboard is a fruit\n" ++
-    "bowl."
+    "bowl. To the west is Granny\'s side door, which goes to the driveway."
   newExit "west" dinette kitchen
   newExit "east" kitchen dinette
   newObject kitchen "brillo pad" "A heavily-used copper Brillo pad."
