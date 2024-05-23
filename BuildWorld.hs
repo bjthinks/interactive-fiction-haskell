@@ -56,6 +56,19 @@ buildWorld = do
   newObject kitchen "banana" "The bottom half of a banana."
   newObject kitchen "orange" "A large seedless navel orange."
 
+  driveway <- newRoom "Driveway" $
+    "A concrete driveway extends along the west side of Granny\'s House.\n" ++
+    "There are a great many small brown and medium black ants coming and\n" ++
+    "going out of anthills along the driveway. You wish you had a\n" ++
+    "magnifying glass to burn the ants. The street is south, and Granny\'s\n" ++
+    "side door is to the east. The front yard is to the southeast. The\n" ++
+    "garage is north."
+  newExit "south" driveway brisbin
+  newExit "east" driveway kitchen
+  newExit "west" kitchen driveway
+  newExit "southeast" driveway yard
+  newExit "west" yard driveway
+
   player <- newObject brisbin "Player" "You look normal."
   setPlayer player
   newObject player "calculus book" "This is a multivariable calculus textbook."
