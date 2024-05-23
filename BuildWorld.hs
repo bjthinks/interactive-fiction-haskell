@@ -20,7 +20,7 @@ buildWorld = do
   newExit "north" brisbin yard
   newExit "south" yard brisbin
   newObject yard "acorns" $
-    "Ordinary white oak acorns. Could you throw one at a squirrel?"
+    "Ordinary white oak acorns. Could you throw them at a squirrel?"
   -- TODO throw acorn for 10 points
   newObject yard "sprinkler" "This sprinkler spins around fast when used."
   -- TODO water yard for 10 points
