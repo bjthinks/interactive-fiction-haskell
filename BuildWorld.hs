@@ -63,9 +63,22 @@ buildWorld = do
   newExit "west" dinette kitchen
   newExit "east" kitchen dinette
   newObject kitchen "brillo pad" "A heavily-used copper Brillo pad."
-  newObject kitchen "apple" "A red delicious apple."
-  newObject kitchen "banana" "The bottom half of a banana."
-  newObject kitchen "orange" "A large seedless navel orange."
+  apple <- newObject kitchen "apple" "A red delicious apple."
+  setDoEat apple $ do
+    tell "The apple tastes sweet and slightly astringent."
+    nl
+    moveNowhere apple
+    -- TODO: Add 5 points
+  banana <- newObject kitchen "banana" "The bottom half of a banana."
+  setDoEat banana $ do
+    tell "The half banana tastes great and is surprisingly filling."
+    nl
+    moveNowhere banana
+    -- TODO: Add 5 points
+  orange <- newObject kitchen "orange" "A large seedless navel orange."
+  setDoEat orange $ do
+    tell "Oranges don\'t agree with you."
+    nl
 
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House.\n" ++
