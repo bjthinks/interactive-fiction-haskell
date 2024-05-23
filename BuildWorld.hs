@@ -11,13 +11,23 @@ buildWorld = do
     "west and east. To the north is Granny\'s House, and to the south is\n" ++
     "Ray\'s house."
 
+  yard <- newRoom "Granny\'s Front Yard" $
+    "The grass is green but has many holes in it where squirrels have been\n" ++
+    "digging. There is a concrete path connecting the street to the south\n" ++
+    "and the driveway to the west. Granny\'s house is north. There are a\n" ++
+    "pine tree and two white oak trees in the yard. A squirrel watches you\n" ++
+    "nervously from one of the oak trees."
+  newExit "north" brisbin yard
+  newExit "south" yard brisbin
+  newObject yard "acorns" "Ordinary white oak acorns."
+
   living <- newRoom "Living Room" $
     "This is clearly the living room of Granny\'s House. The floor has\n" ++
     "plain brown carpet. There are a tan sofa and two rust colored\n" ++
     "armchairs, and a spindly palm tree sits in the corner next to a\n" ++
     "display case."
-  newExit "north" brisbin living
-  newExit "south" living brisbin
+  newExit "north" yard living
+  newExit "south" living yard
 
   dinette <- newRoom "Dinette" $
     "This is a tiny dining room, most of which is taken up by a normal-\n" ++
