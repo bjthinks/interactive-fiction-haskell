@@ -98,7 +98,7 @@ buildWorld = do
   newObject player "calculus book" "This is a multivariable calculus textbook."
 
   eastBrisbin <- newRoom "East Brisbin Street" $
-    "This is the east end of the block. The Brock house is north, and\n" ++
+    "This is the east end of the block. Mike\'s house is north, and\n" ++
     "Justin\'s house is south."
   newExit "east" brisbin eastBrisbin
   newExit "west" eastBrisbin brisbin
