@@ -12,6 +12,7 @@ data Verb = Blank
           | Go Ref
           | Eat Ref
           | Score
+          | Help
           deriving Show
 
 type MyParser = Parsec String [(String,Ref)]
@@ -96,12 +97,17 @@ showScore = do
   string "score"
   return Score
 
+help :: MyParser Verb
+help = do
+  string "help"
+  return Help
+
 blank :: MyParser Verb
 blank = return Blank
 
 verb :: MyParser Verb
 verb = look <|> inventory <|> getItem <|> dropItem <|> goExit <|> eatItem <|>
-  showScore <|> blank
+  showScore <|> help <|> blank
 
 parseLine :: MyParser Verb
 parseLine = do

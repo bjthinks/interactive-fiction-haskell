@@ -100,6 +100,18 @@ doVerb Score = do
   nl
   maybeShowWinMessage
 
+doVerb Help = do
+  tell "Command summary:" >> nl
+  tell "drop item" >> nl
+  tell "eat item" >> nl
+  tell "inventory" >> nl
+  tell "look" >> nl
+  tell "look item/direction" >> nl
+  tell "go direction" >> nl
+  tell "help" >> nl
+  tell "score" >> nl
+  tell "take item" >> nl
+
 lookAt :: Ref -> GameMonad ()
 lookAt it = do
   getName it >>= tell >> nl
