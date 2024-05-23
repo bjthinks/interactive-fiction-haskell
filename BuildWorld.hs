@@ -27,6 +27,9 @@ buildWorld = do
     "pattern."
   newExit "west" living dinette
   newExit "east" dinette living
+  newspaper <- newObject dinette "Newspaper" $
+    "This is today\'s issue of the Minneapolis Star and Tribune."
+  candle <- newObject dinette "Candle" "A plain red candle. It is not lit."
 
   kitchen <- newRoom "Kitchen" $
     ""
