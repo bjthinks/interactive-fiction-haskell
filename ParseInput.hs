@@ -11,6 +11,7 @@ data Verb = Blank
           | Drop Ref
           | Go Ref
           | Eat Ref
+          | Use Ref
           | Score
           | Help
           deriving Show
@@ -92,6 +93,15 @@ eatItem = do
   ref <- them names
   return $ Eat ref
 
+useItem :: MyParser Verb
+useItem = do
+  string "use"
+  many1 space
+  -- Refactor the following two lines as new noun function
+  names <- getState
+  ref <- them names
+  return $ Use ref
+
 showScore :: MyParser Verb
 showScore = do
   string "score"
@@ -107,7 +117,7 @@ blank = return Blank
 
 verb :: MyParser Verb
 verb = look <|> inventory <|> getItem <|> dropItem <|> goExit <|> eatItem <|>
-  showScore <|> help <|> blank
+  useItem <|> showScore <|> help <|> blank
 
 parseLine :: MyParser Verb
 parseLine = do
