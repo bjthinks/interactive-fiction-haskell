@@ -25,6 +25,8 @@ import Control.Monad.RWS
 
 import Defs
 
+-- TODO: better variable names in this file
+
 getPlayer :: GameMonad Ref
 getPlayer = do
   s <- get
