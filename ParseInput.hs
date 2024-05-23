@@ -10,6 +10,7 @@ data Verb = Blank
           | Get Ref
           | Drop Ref
           | Go Ref
+          | Eat Ref
           deriving Show
 
 type MyParser = Parsec String [(String,Ref)]
@@ -80,11 +81,21 @@ goExit = do
   ref <- them names
   return $ Go ref
 
+eatItem :: MyParser Verb
+eatItem = do
+  string "eat"
+  many1 space
+  -- Refactor the following two lines as new noun function
+  names <- getState
+  ref <- them names
+  return $ Eat ref
+
 blank :: MyParser Verb
 blank = return Blank
 
 verb :: MyParser Verb
-verb = look <|> inventory <|> getItem <|> dropItem <|> goExit <|> blank
+verb = look <|> inventory <|> getItem <|> dropItem <|> goExit <|> eatItem <|>
+  blank
 
 parseLine :: MyParser Verb
 parseLine = do
