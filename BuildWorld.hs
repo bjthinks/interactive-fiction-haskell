@@ -32,9 +32,18 @@ buildWorld = do
   candle <- newObject dinette "Candle" "A plain red candle. It is not lit."
 
   kitchen <- newRoom "Kitchen" $
-    ""
+    "This is a small but functional kitchen. There is a fridge in the\n" ++
+    "corner with an ancient AM/FM radio on top of it. Dark brown cupboards\n" ++
+    "go along the west and south walls. There is a gas stove with an oven\n" ++
+    "and broiler, a double sink, and a dishwasher. Next to the sink is a\n" ++
+    "ceramic fish for holding Brillo pads, and on the cupboard is a fruit\n" ++
+    "bowl."
   newExit "west" dinette kitchen
   newExit "east" kitchen dinette
+  newObject kitchen "Brillo pad" "A heavily-used copper Brillo pad."
+  newObject kitchen "Apple" "A red delicious apple."
+  newObject kitchen "Banana" "The bottom half of a banana."
+  newObject kitchen "Orange" "A large seedless navel orange."
 
   player <- newObject brisbin "Player" "You look normal."
   setPlayer player
