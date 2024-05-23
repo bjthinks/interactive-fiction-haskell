@@ -10,6 +10,7 @@ module WorldOps(getPlayer,
                 getContents',
                 getExits,
                 getPath,
+                getDoEat,
                 setDescription,
                 move,
                 disconnect,
@@ -45,7 +46,8 @@ newThing n = do
                   name = n,
                   description = "",
                   exits = [],
-                  path = Nothing }
+                  path = Nothing,
+                  doEat = tell "You can\'t eat that." >> nl }
       s' = s { things = M.insert i t (things s),
                nextThing = i + 1 }
   put s'
@@ -82,6 +84,7 @@ getLocation    = getProperty location
 getContents'   = getProperty contents
 getExits       = getProperty exits
 getPath        = getProperty path
+getDoEat       = getProperty doEat
 
 setThing :: Ref -> Thing -> GameMonad ()
 setThing i t = do

@@ -10,8 +10,6 @@ import Defs
 import WorldOps
 import ParseInput
 
-nl = tell "\n"
-
 handleInput :: GameMonad ()
 handleInput = do
   line <- ask
@@ -79,6 +77,16 @@ doVerb (Go x) = do
       case maybePath of
         Nothing -> tell "That direction doesn\'t go anywhere."
         Just (_,dest) -> move player dest >> lookAt dest
+
+doVerb (Eat x) = do
+  player <- getPlayer
+  inv <- getContents' player
+  let haveIt = elem x inv
+  case haveIt of
+    False -> tell "You\'re not carrying that." >> nl
+    True -> do
+      action <- getDoEat x
+      action
 
 lookAt :: Ref -> GameMonad ()
 lookAt it = do
