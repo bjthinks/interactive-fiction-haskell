@@ -1,6 +1,7 @@
 module BuildWorld where
 
 import Defs
+import Score
 import WorldOps
 import Control.Monad.RWS
 
@@ -68,13 +69,13 @@ buildWorld = do
     tell "The apple tastes sweet and slightly astringent."
     nl
     moveNowhere apple
-    -- TODO: Add 5 points
+    addPoints 5
   banana <- newObject kitchen "banana" "The bottom half of a banana."
   setDoEat banana $ do
     tell "The half banana tastes great and is surprisingly filling."
     nl
     moveNowhere banana
-    -- TODO: Add 5 points
+    addPoints 5
   orange <- newObject kitchen "orange" "A large seedless navel orange."
   setDoEat orange $ do
     tell "Oranges don\'t agree with you."
@@ -115,6 +116,6 @@ buildWorld = do
     tell "You eat the crabapple, worm and all! YUCK!"
     nl
     moveNowhere crabapple
-    -- TODO reduce score by 10
+    addPoints (-10)
 
   return ()
