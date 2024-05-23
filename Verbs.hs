@@ -7,6 +7,7 @@ import Control.Monad
 import Control.Monad.RWS
 
 import Defs
+import Score
 import WorldOps
 import ParseInput
 
@@ -87,6 +88,17 @@ doVerb (Eat x) = do
     True -> do
       action <- getDoEat x
       action
+
+doVerb Score = do
+  tell "Your score is "
+  points <- getScore
+  tell $ show points
+  tell " out of a maximum of "
+  maxPoints <- getMaxScore
+  tell $ show maxPoints
+  tell "."
+  nl
+  maybeShowWinMessage
 
 lookAt :: Ref -> GameMonad ()
 lookAt it = do
