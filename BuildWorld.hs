@@ -118,4 +118,6 @@ buildWorld = do
     moveNowhere crabapple
     addPoints (-10)
 
+  setMaxScore 10
+
   return ()
