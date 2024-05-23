@@ -13,6 +13,10 @@ buildWorld = do
     "west and east. To the north is Granny\'s House, and to the south is\n" ++
     "Ray\'s house."
 
+  player <- newObject brisbin "Player" "You look normal."
+  setPlayer player
+  newObject player "calculus book" "This is a multivariable calculus textbook."
+
   yard <- newRoom "Granny\'s Front Yard" $
     "The grass is green but has many holes in it where squirrels have been\n" ++
     "digging. There is a concrete path connecting the street to the south\n" ++
@@ -29,8 +33,6 @@ buildWorld = do
     tell "like them if you threw them at it?"
     nl
   -- TODO throw acorn for 10 points
-  newObject yard "sprinkler" "This sprinkler spins around fast when used."
-  -- TODO water yard for 10 points
 
   living <- newRoom "Living Room" $
     "This is clearly the living room of Granny\'s House. The floor has\n" ++
@@ -94,9 +96,14 @@ buildWorld = do
   newExit "southeast" driveway yard
   newExit "west" yard driveway
 
-  player <- newObject brisbin "Player" "You look normal."
-  setPlayer player
-  newObject player "calculus book" "This is a multivariable calculus textbook."
+  garage <- newRoom "Garage" $
+    "Two cars are squeezed into this garage: a 1970s era yellow\n" ++
+    "Oldsmobile, and a very old green car with patched rust spots all over\n" ++
+    "its body. There is a side door going to the back yard to the east."
+  newExit "north" driveway garage
+  newExit "south" garage driveway
+  newObject garage "sprinkler" "This sprinkler spins around fast when used."
+  -- TODO water front yard for 10 points
 
   eastBrisbin <- newRoom "East Brisbin Street" $
     "This is the east end of the block. Mike\'s house is north, and\n" ++
