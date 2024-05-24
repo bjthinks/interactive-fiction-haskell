@@ -90,7 +90,7 @@ buildWorld = do
     "going out of anthills along the driveway. You wish you had a\n" ++
     "magnifying glass to use on the ants. The street is south, and\n" ++
     "Granny\'s side door is to the east. The front yard is to the\n" ++
-    "southeast. The garage is north."
+    "southeast and the backyard is to the northeast. The garage is north."
   newExit "south" driveway brisbin
   newExit "east" driveway kitchen
   newExit "west" kitchen driveway
@@ -106,8 +106,21 @@ buildWorld = do
   sprinkler <- newObject garage "sprinkler" $
     "This sprinkler spins around fast when used."
   -- TODO water front yard for 10 points
+
+  backyard <- newRoom "Backyard" $
+    "This is the largest part of Granny\'s yard. There are numerous shrubs\n" ++
+    "along the property line to the east, an empty sandbox near the house\n" ++
+    "to the south, and a small garden with moss roses in the middle of the\n" ++
+    "yard. Behind the garage are some disused laundry poles with old\n" ++
+    "clothesline strung between them. The driveway is southwest, and the\n" ++
+    "side yard is southeast. A side door goes to the garage to the west."
+  newExit "southwest" backyard driveway
+  newExit "northeast" driveway backyard
+  newExit "west" backyard garage
+  newExit "east" garage backyard
+
   setDoUse sprinkler $ do
-    let goodGrassLocs = []
+    let goodGrassLocs = [backyard]
     let defaultMsg = tell "There isn\'t any grass to water here." >> nl
     let carryingMsg = tell "You should drop the sprinkler first." >> nl
     let goodGrassMsg = tell "The grass here is healthy and green." >> nl
