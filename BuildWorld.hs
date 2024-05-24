@@ -20,8 +20,8 @@ buildWorld = do
   frontYard <- newRoom "Granny\'s Front Yard" $
     "The grass is green but has many holes in it where squirrels have been\n" ++
     "digging. There is a concrete path connecting the street to the south\n" ++
-    "and the driveway to the west. Granny\'s house is north, and the\n" ++
-    "driveway is west. There are a pine tree and two white oak trees in\n" ++
+    "and the driveway to the west. Granny\'s house is north and the side\n" ++
+    "yard is northeast. There are a pine tree and two white oak trees in\n" ++
     "the yard. A squirrel watches you nervously from one of the oak trees."
   newExit "north" brisbin frontYard
   newExit "south" frontYard brisbin
@@ -119,27 +119,16 @@ buildWorld = do
   newExit "west" backyard garage
   newExit "east" garage backyard
 
-  setDoUse sprinkler $ do
-    let goodGrassLocs = [backyard]
-    let defaultMsg = tell "There isn\'t any grass to water here." >> nl
-    let carryingMsg = tell "You should drop the sprinkler first." >> nl
-    let goodGrassMsg = tell "The grass here is healthy and green." >> nl
-    let successMsg = tell
-          "You turn on the sprinkler. The grass greens up right away." >> nl
-    let alreadyUsedMsg = tell "You\'ve already watered the grass." >> nl
-    maybeSprinklerLoc <- getLocation sprinkler
-    case maybeSprinklerLoc of
-      Nothing -> defaultMsg
-      Just sprinklerLoc -> do
-        if sprinklerLoc == player then carryingMsg else
-          if elem sprinklerLoc goodGrassLocs then goodGrassMsg else
-            if sprinklerLoc /= frontYard then defaultMsg else do
-              successMsg
-              addPoints 10
-              setDoUse sprinkler alreadyUsedMsg
-              -- let sprinklerOnMsg = tell "You would get wet." >> nl
-              -- setDoGet sprinkler sprinklerOnMsg
-              -- setDescription2 frontYard "The grass is green and healthy."
+  sideYard <- newRoom "Side Yard" $
+    "This narrow bit of property runs along the east side of Granny\'s\n" ++
+    "house. There is a window unit air conditioner sticking out of the\n" ++
+    "house, and a lightning rod and a TV antenna have been installed with\n" ++
+    "corresponding wires running up to the roof. The front yard is\n" ++
+    "southwest and the backyard is northwest."
+  newExit "northwest" sideYard backyard
+  newExit "southeast" backyard sideYard
+  newExit "southwest" sideYard frontYard
+  newExit "northeast" frontYard sideYard
 
   eastBrisbin <- newRoom "East Brisbin Street" $
     "This is the east end of the block. Mike\'s house is north, and\n" ++
@@ -160,6 +149,28 @@ buildWorld = do
     nl
     moveNowhere crabapple
     addPoints (-10)
+
+  setDoUse sprinkler $ do
+    let goodGrassLocs = [backyard, sideYard, justinYard]
+    let defaultMsg = tell "There isn\'t any grass to water here." >> nl
+    let carryingMsg = tell "You should drop the sprinkler first." >> nl
+    let goodGrassMsg = tell "The grass here is healthy and green." >> nl
+    let successMsg = tell
+          "You turn on the sprinkler. The grass greens up right away." >> nl
+    let alreadyUsedMsg = tell "You\'ve already watered the grass." >> nl
+    maybeSprinklerLoc <- getLocation sprinkler
+    case maybeSprinklerLoc of
+      Nothing -> defaultMsg
+      Just sprinklerLoc -> do
+        if sprinklerLoc == player then carryingMsg else
+          if elem sprinklerLoc goodGrassLocs then goodGrassMsg else
+            if sprinklerLoc /= frontYard then defaultMsg else do
+              successMsg
+              addPoints 10
+              setDoUse sprinkler alreadyUsedMsg
+              -- let sprinklerOnMsg = tell "You would get wet." >> nl
+              -- setDoGet sprinkler sprinklerOnMsg
+              -- setDescription2 frontYard "The grass is green and healthy."
 
   setMaxScore 20
 
