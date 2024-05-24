@@ -19,14 +19,14 @@ data Verb = Blank
 type MyParser = Parsec String [(String,Ref)]
 
 this :: (String,Ref) -> MyParser Ref
-this (n,r) = string n >> return r
+this (n,r) = try (string n) >> return r
 
 them :: [(String,Ref)] -> MyParser Ref
 them [] = parserFail "I don\'t know what that is."
 them (n:ns) = this n <|> them ns
 
 tryThis :: (String,Ref) -> MyParser (Maybe Ref)
-tryThis (n,r) = string n >> return (Just r)
+tryThis (n,r) = try (string n) >> return (Just r)
 
 tryThem :: [(String,Ref)] -> MyParser (Maybe Ref)
 tryThem [] = return Nothing
