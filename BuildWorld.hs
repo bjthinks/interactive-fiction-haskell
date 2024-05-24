@@ -17,15 +17,15 @@ buildWorld = do
   setPlayer player
   newObject player "calculus book" "This is a multivariable calculus textbook."
 
-  yard <- newRoom "Granny\'s Front Yard" $
+  frontYard <- newRoom "Granny\'s Front Yard" $
     "The grass is green but has many holes in it where squirrels have been\n" ++
     "digging. There is a concrete path connecting the street to the south\n" ++
     "and the driveway to the west. Granny\'s house is north, and the\n" ++
     "driveway is west. There are a pine tree and two white oak trees in\n" ++
     "the yard. A squirrel watches you nervously from one of the oak trees."
-  newExit "north" brisbin yard
-  newExit "south" yard brisbin
-  acorns <- newObject yard "acorns" $
+  newExit "north" brisbin frontYard
+  newExit "south" frontYard brisbin
+  acorns <- newObject frontYard "acorns" $
     "Ordinary white oak acorns. Could you throw them at a squirrel?"
   setDoEat acorns $ do
     tell "You try one, but they taste terribly bitter. Maybe a squirrel would"
@@ -40,8 +40,8 @@ buildWorld = do
     "armchairs, and a spindly palm tree sits in the corner next to a\n" ++
     "display case. To the south is Granny\'s front door, which goes back to" ++
     "the front yard."
-  newExit "north" yard living
-  newExit "south" living yard
+  newExit "north" frontYard living
+  newExit "south" living frontYard
 
   dinette <- newRoom "Dinette" $
     "This is a tiny dining room, most of which is taken up by a normal-\n" ++
@@ -94,8 +94,8 @@ buildWorld = do
   newExit "south" driveway brisbin
   newExit "east" driveway kitchen
   newExit "west" kitchen driveway
-  newExit "southeast" driveway yard
-  newExit "west" yard driveway
+  newExit "southeast" driveway frontYard
+  newExit "west" frontYard driveway
 
   garage <- newRoom "Garage" $
     "Two cars are squeezed into this garage: a 1970s era yellow\n" ++
