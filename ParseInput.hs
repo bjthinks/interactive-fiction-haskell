@@ -25,32 +25,19 @@ them :: [(String,Ref)] -> MyParser Ref
 them [] = parserFail "I don\'t know what that is."
 them (n:ns) = this n <|> them ns
 
-tryThis :: (String,Ref) -> MyParser (Maybe Ref)
-tryThis (n,r) = try (string n) >> return (Just r)
-
-tryThem :: [(String,Ref)] -> MyParser (Maybe Ref)
-tryThem [] = return Nothing
-tryThem (n:ns) = tryThis n <|> tryThem ns
-
-maybeNoun :: MyParser (Maybe Ref)
-maybeNoun = do
+lookAt :: MyParser Verb
+lookAt = try $ do
+  try (string "look")
+  -- TODO FIXME: zero spaces between look and noun shouldn't work
+  many1 space
   names <- getState
-  tryThem names
-
-noun :: MyParser Ref
-noun = do
-  n <- maybeNoun
-  case n of
-    Nothing -> parserFail ""
-    Just ref -> return ref
+  ref <- them names
+  return $ Look (Just ref)
 
 look :: MyParser Verb
 look = do
   try (string "look")
-  -- TODO FIXME: zero spaces between look and noun shouldn't work
-  spaces
-  ref <- maybeNoun
-  return (Look ref)
+  return $ Look Nothing
 
 inventory :: MyParser Verb
 inventory = do
@@ -116,8 +103,8 @@ blank :: MyParser Verb
 blank = return Blank
 
 verb :: MyParser Verb
-verb = look <|> inventory <|> getItem <|> dropItem <|> goExit <|> eatItem <|>
-  useItem <|> showScore <|> help <|> blank
+verb = lookAt <|> look <|> inventory <|> getItem <|> dropItem <|> goExit <|>
+  eatItem <|> useItem <|> showScore <|> help <|> blank
 
 parseLine :: MyParser Verb
 parseLine = do
