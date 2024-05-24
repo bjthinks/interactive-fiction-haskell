@@ -103,8 +103,30 @@ buildWorld = do
     "its body. There is a side door going to the back yard to the east."
   newExit "north" driveway garage
   newExit "south" garage driveway
-  newObject garage "sprinkler" "This sprinkler spins around fast when used."
+  sprinkler <- newObject garage "sprinkler" $
+    "This sprinkler spins around fast when used."
   -- TODO water front yard for 10 points
+  setDoUse sprinkler $ do
+    let goodGrassLocs = []
+    let defaultMsg = tell "There isn\'t any grass to water here." >> nl
+    let carryingMsg = tell "You should drop the sprinkler first." >> nl
+    let goodGrassMsg = tell "The grass here is healthy and green." >> nl
+    let successMsg = tell
+          "You turn on the sprinkler. The grass greens up right away." >> nl
+    let alreadyUsedMsg = tell "You\'ve already watered the grass." >> nl
+    maybeSprinklerLoc <- getLocation sprinkler
+    case maybeSprinklerLoc of
+      Nothing -> defaultMsg
+      Just sprinklerLoc -> do
+        if sprinklerLoc == player then carryingMsg else
+          if elem sprinklerLoc goodGrassLocs then goodGrassMsg else
+            if sprinklerLoc /= frontYard then defaultMsg else do
+              successMsg
+              addPoints 10
+              setDoUse sprinkler alreadyUsedMsg
+              -- let sprinklerOnMsg = tell "You would get wet." >> nl
+              -- setDoGet sprinkler sprinklerOnMsg
+              -- setDescription2 frontYard "The grass is green and healthy."
 
   eastBrisbin <- newRoom "East Brisbin Street" $
     "This is the east end of the block. Mike\'s house is north, and\n" ++
@@ -126,6 +148,6 @@ buildWorld = do
     moveNowhere crabapple
     addPoints (-10)
 
-  setMaxScore 10
+  setMaxScore 20
 
   return ()
