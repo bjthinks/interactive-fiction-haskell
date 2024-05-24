@@ -46,7 +46,7 @@ noun = do
 
 look :: MyParser Verb
 look = do
-  string "look"
+  try (string "look")
   -- TODO FIXME: zero spaces between look and noun shouldn't work
   spaces
   ref <- maybeNoun
@@ -54,12 +54,12 @@ look = do
 
 inventory :: MyParser Verb
 inventory = do
-  string "inventory"
+  try (string "inventory")
   return Inventory
 
 getItem :: MyParser Verb
 getItem = do
-  string "take"
+  try (string "get") <|> try (string "take")
   many1 space
   -- Refactor the following two lines as new noun function
   names <- getState
@@ -68,7 +68,7 @@ getItem = do
 
 dropItem :: MyParser Verb
 dropItem = do
-  string "drop"
+  try (string "drop")
   many1 space
   -- Refactor the following two lines as new noun function
   names <- getState
@@ -77,7 +77,7 @@ dropItem = do
 
 goExit :: MyParser Verb
 goExit = do
-  string "go"
+  try (string "go")
   many1 space
   -- Refactor the following two lines as new noun function
   names <- getState
@@ -86,7 +86,7 @@ goExit = do
 
 eatItem :: MyParser Verb
 eatItem = do
-  string "eat"
+  try (string "eat")
   many1 space
   -- Refactor the following two lines as new noun function
   names <- getState
@@ -95,7 +95,7 @@ eatItem = do
 
 useItem :: MyParser Verb
 useItem = do
-  string "use"
+  try (string "use")
   many1 space
   -- Refactor the following two lines as new noun function
   names <- getState
@@ -104,12 +104,12 @@ useItem = do
 
 showScore :: MyParser Verb
 showScore = do
-  string "score"
+  try (string "score")
   return Score
 
 help :: MyParser Verb
 help = do
-  string "help"
+  try (string "help")
   return Help
 
 blank :: MyParser Verb
