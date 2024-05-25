@@ -127,9 +127,12 @@ buildWorld = do
     "phone sits on the bedside stand."
   newExit "east" masterBedroom hallway
   newExit "west" hallway masterBedroom
-  newObject masterBedroom "perfume" $
+  perfume <- newObject masterBedroom "perfume" $
     "A collection of tiny vials of perfume, probably collected from store\n" ++
     "samples."
+  setDoUse perfume $ do
+    tell "You wipe perfume on your neck. You smell like cheap perfume now."
+    nl
 
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House.\n" ++
