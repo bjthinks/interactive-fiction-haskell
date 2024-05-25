@@ -48,50 +48,20 @@ inventory = do
   string "inventory" ||| string "i"
   return Inventory
 
-getItem :: MyParser Verb
-getItem = do
-  string "get" ||| string "take"
+simpleVerb :: String -> (Ref -> Verb) -> MyParser Verb
+simpleVerb name def = do
+  string name
   many1 space
-  -- Refactor the following two lines as new noun function
   names <- getState
   ref <- them names
-  return $ Get ref
+  return $ def ref
 
-dropItem :: MyParser Verb
-dropItem = do
-  string "drop"
-  many1 space
-  -- Refactor the following two lines as new noun function
-  names <- getState
-  ref <- them names
-  return $ Drop ref
-
-goExit :: MyParser Verb
-goExit = do
-  string "go"
-  many1 space
-  -- Refactor the following two lines as new noun function
-  names <- getState
-  ref <- them names
-  return $ Go ref
-
-eatItem :: MyParser Verb
-eatItem = do
-  string "eat"
-  many1 space
-  -- Refactor the following two lines as new noun function
-  names <- getState
-  ref <- them names
-  return $ Eat ref
-
-useItem :: MyParser Verb
-useItem = do
-  string "use"
-  many1 space
-  -- Refactor the following two lines as new noun function
-  names <- getState
-  ref <- them names
-  return $ Use ref
+getItem  = simpleVerb "get"  Get
+takeItem = simpleVerb "take" Get
+dropItem = simpleVerb "drop" Drop
+goExit   = simpleVerb "go"   Go
+eatItem  = simpleVerb "eat"  Eat
+useItem  = simpleVerb "use"  Use
 
 showScore :: MyParser Verb
 showScore = do
@@ -107,8 +77,8 @@ blank :: MyParser Verb
 blank = return Blank
 
 verb :: MyParser Verb
-verb = lookAt ||| look ||| inventory ||| getItem ||| dropItem ||| goExit |||
-  eatItem ||| useItem ||| showScore ||| help ||| blank
+verb = lookAt ||| look ||| inventory ||| getItem ||| takeItem ||| dropItem |||
+  goExit ||| eatItem ||| useItem ||| showScore ||| help ||| blank
 
 parseLine :: MyParser Verb
 parseLine = do
