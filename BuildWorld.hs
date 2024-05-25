@@ -160,10 +160,11 @@ buildWorld = do
   backyard <- newRoom "Backyard" $
     "This is the largest part of Granny\'s yard. There are numerous shrubs\n" ++
     "along the property line to the east, an empty sandbox near the house\n" ++
-    "to the south, and a small garden with moss roses in the middle of the\n" ++
-    "yard. Behind the garage are some disused laundry poles with old\n" ++
-    "clothesline strung between them. The driveway is southwest, and the\n" ++
-    "side yard is southeast. A side door goes to the garage to the west."
+    "to the south, a small garden with moss roses in the middle of the\n" ++
+    "yard, and lilacs are planted next to the garage. Behind the garage\n" ++
+    "are some disused laundry poles with old clotheslines strung between\n" ++
+    "them. The driveway is southwest, and the side yard is southeast. A\n" ++
+    "side door goes to the garage to the west."
   newExit "southwest" backyard driveway
   newExit "northeast" driveway backyard
   newExit "west" backyard garage
