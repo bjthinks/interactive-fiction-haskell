@@ -113,6 +113,13 @@ buildWorld = do
         -- setDoGet candle getLitCandleMsg
         setDescription candle "A plain red candle. It is burning brightly."
 
+  hallway <- newRoom "Hallway" $
+    "This simple east-west hallway has a tiny five watt light fixture on\n" ++
+    "the ceiling. There is a wicker hamper which, on inspection, appears\n" ++
+    "to contain a stack of clean placemats."
+  newExit "south" hallway living
+  newExit "north" living hallway
+
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House.\n" ++
     "There are a great many small brown and medium black ants coming and\n" ++
