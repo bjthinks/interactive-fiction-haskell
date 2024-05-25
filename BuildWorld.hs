@@ -22,7 +22,10 @@ buildWorld = do
     "digging. There is a concrete path connecting the street to the south\n" ++
     "and the driveway to the west. Granny\'s house is north and the side\n" ++
     "yard is northeast. There are a pine tree and two white oak trees in\n" ++
-    "the yard. A squirrel watches you nervously from one of the oak trees."
+    "the yard. A squirrel watches you nervously from one of the oak trees.\n"
+  yardDesc <- getDescription frontYard
+  setDescription frontYard $ yardDesc ++
+    "The grass here looks dry and parched."
   newExit "north" brisbin frontYard
   newExit "south" frontYard brisbin
   acorns <- newObject frontYard "acorns" $
@@ -154,10 +157,11 @@ buildWorld = do
     let goodGrassLocs = [backyard, sideYard, justinYard]
     let defaultMsg = tell "There isn\'t any grass to water here." >> nl
     let carryingMsg = tell "You should drop the sprinkler first." >> nl
-    let goodGrassMsg = tell "The grass here is healthy and green." >> nl
+    let healthStr = "The grass here is green and healthy."
+    let goodGrassMsg = tell healthStr >> nl
     let successMsg = tell
           "You turn on the sprinkler. The grass greens up right away." >> nl
-    let alreadyUsedMsg = tell "You\'ve already watered the grass." >> nl
+    let alreadyUsedMsg = tell "The sprinkler is already running." >> nl
     maybeSprinklerLoc <- getLocation sprinkler
     case maybeSprinklerLoc of
       Nothing -> defaultMsg
@@ -170,7 +174,7 @@ buildWorld = do
               setDoUse sprinkler alreadyUsedMsg
               -- let sprinklerOnMsg = tell "You would get wet." >> nl
               -- setDoGet sprinkler sprinklerOnMsg
-              -- setDescription2 frontYard "The grass is green and healthy."
+              setDescription frontYard $ yardDesc ++ healthStr
 
   setMaxScore 20
 
