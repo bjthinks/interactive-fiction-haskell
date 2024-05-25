@@ -19,4 +19,5 @@ main = do
   let (state, _) = execRWS buildWorld "" startState
   let (state', response) = execRWS handleInput "look" state
   liftIO $ putStr response
+  putStrLn "Type help for a list of commands."
   runInputT defaultSettings $ runMaybeT $ mainloop state'

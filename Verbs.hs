@@ -116,16 +116,16 @@ doVerb Score = do
 
 doVerb Help = do
   tell "Command summary:" >> nl
-  tell "drop item" >> nl
-  tell "eat item" >> nl
-  tell "inventory" >> nl
-  tell "look" >> nl
-  tell "look item/direction" >> nl
-  tell "go direction" >> nl
-  tell "help" >> nl
-  tell "score" >> nl
-  tell "take item" >> nl
-  tell "use item" >> nl
+  tell "  drop item" >> nl
+  tell "  eat item" >> nl
+  tell "  get/take item" >> nl
+  tell "  go direction" >> nl
+  tell "  help" >> nl
+  tell "  inventory" >> nl
+  tell "  look" >> nl
+  tell "  look item/direction" >> nl
+  tell "  score" >> nl
+  tell "  use item" >> nl
 
 lookAt :: Ref -> GameMonad ()
 lookAt it = do
