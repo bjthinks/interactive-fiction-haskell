@@ -92,7 +92,9 @@ doVerb (Use x) = do
   maybeLoc <- getLocation player
   stuff <- case maybeLoc of
     Nothing -> return []
-    Just here -> getContents' here
+    Just here -> do
+      cs <- getContents' here
+      return $ here : cs
   let usableItems = inv ++ stuff
   case (elem x usableItems) of
     False -> tell "You can\'t use that." >> nl

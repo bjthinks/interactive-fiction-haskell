@@ -3,7 +3,9 @@ module BuildWorld where
 import Defs
 import Score
 import WorldOps
+import Verbs
 import Control.Monad.RWS
+import Data.Maybe
 
 buildWorld :: GameMonad ()
 buildWorld = do
@@ -149,6 +151,28 @@ buildWorld = do
   -- addAlias dollhouse "dollhouse"
   gabby <- newObject childBedroom "Gabby Doll" $
     "It looks like she wants to be in her dollhouse."
+  setDoUse dollhouse $ do
+    maybePlayerLoc <- getLocation player
+    maybeDollhouseLoc <- getLocation dollhouse
+    let failMsg = tell "You can\'t use that now." >> nl
+    if maybePlayerLoc == Nothing || maybeDollhouseLoc == Nothing then
+      failMsg else do
+      let playerLoc = fromJust maybePlayerLoc
+      let dollhouseLoc = fromJust maybeDollhouseLoc
+      if dollhouseLoc == player then
+        tell "Please drop the dollhouse first." >> nl else
+        if playerLoc == dollhouse then do
+          tell "You exit the dollhouse. Everything looks normal again."
+          nl
+          move player dollhouseLoc
+          lookAt dollhouseLoc
+        else if playerLoc == dollhouseLoc then do
+          tell "You enter the dollhouse. Everything looks like a cartoon in "
+          tell "here."
+          nl
+          move player dollhouse
+          lookAt dollhouse
+        else failMsg
 
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House.\n" ++
