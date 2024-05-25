@@ -46,11 +46,8 @@ doVerb (Get x) = do
   case canGet of
     False -> tell "You can\'t pick that up." >> nl
     True -> do
-      player <- getPlayer
-      move x player
-      name <- getName x
-      tell $ "You pick up the " ++ name ++ "."
-      nl
+      action <- getDoGet x
+      action
 
 doVerb (Drop x) = do
   player <- getPlayer

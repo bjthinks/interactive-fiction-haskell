@@ -236,8 +236,8 @@ buildWorld = do
               successMsg
               addPoints 10
               setDoUse sprinkler alreadyUsedMsg
-              -- let sprinklerOnMsg = tell "You would get wet." >> nl
-              -- setDoGet sprinkler sprinklerOnMsg
+              let sprinklerOnMsg = tell "You would get wet." >> nl
+              setDoGet sprinkler sprinklerOnMsg
               setDescription frontYard $ yardDesc ++ healthStr
 
   setMaxScore 30
