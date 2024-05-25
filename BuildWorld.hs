@@ -41,8 +41,8 @@ buildWorld = do
     "This is clearly the living room of Granny\'s House. The floor has\n" ++
     "plain brown carpet. There are a tan sofa and two rust colored\n" ++
     "armchairs, and a spindly palm tree sits in the corner next to a\n" ++
-    "display case. To the south is Granny\'s front door, which goes back to" ++
-    "the front yard."
+    "display case. To the south is Granny\'s front door, which goes back\n" ++
+    "to the front yard."
   newExit "north" frontYard living
   newExit "south" living frontYard
 
