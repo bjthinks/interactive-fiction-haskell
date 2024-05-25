@@ -57,7 +57,7 @@ buildWorld = do
   newspaper <- newObject dinette "newspaper" $
     "This is today\'s issue of the Minneapolis Star and Tribune."
   candle <- newObject dinette "candle" "A plain red candle. It is not lit."
-  -- TODO add matches and be able to light candle for 10 points
+  -- TODO be able to light candle for 10 points
 
   kitchen <- newRoom "Kitchen" $
     "This is a small but functional kitchen. There is a fridge in the\n" ++
@@ -70,6 +70,10 @@ buildWorld = do
   newExit "east" kitchen dinette
   newObject kitchen "brillo pad" "A heavily-used copper Brillo pad."
   matches <- newObject kitchen "matches" "A simple book of paper matches."
+  setDoUse matches $ do
+    tell "Instead of using the matches, please use the thing you\'re trying "
+    tell "to light."
+    nl
   apple <- newObject kitchen "apple" "A red delicious apple."
   setDoEat apple $ do
     tell "The apple tastes sweet and slightly astringent."
