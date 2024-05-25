@@ -134,6 +134,14 @@ buildWorld = do
     tell "You wipe perfume on your neck. You smell like cheap perfume now."
     nl
 
+  childBedroom <- newRoom "Child\'s Bedroom" $
+    "This bedroom clearly belongs to a heteronormative young boy. There\n" ++
+    "are toys strewn about the floor, and a half-empty toybox is against\n" ++
+    "the west wall. There are three moderately-sized dressers, and a\n" ++
+    "large bookcase sits atop the biggest one. A twin bed is in the corner."
+  newExit "west" childBedroom hallway
+  newExit "east" hallway childBedroom
+
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House.\n" ++
     "There are a great many small brown and medium black ants coming and\n" ++
