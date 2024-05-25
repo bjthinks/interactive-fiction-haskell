@@ -120,6 +120,14 @@ buildWorld = do
   newExit "south" hallway living
   newExit "north" living hallway
 
+  masterBedroom <- newRoom "Master Bedroom" $
+    "Someone has clearly spend some money filling this bedroom with nice\n" ++
+    "furniture. There are a desk, a highboy dresser, another long dresser,\n" ++
+    "and a queen size bed with a flower-print bedspread. A touch tone\n" ++
+    "phone sits on the bedside stand."
+  newExit "east" masterBedroom hallway
+  newExit "west" hallway masterBedroom
+
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House.\n" ++
     "There are a great many small brown and medium black ants coming and\n" ++
