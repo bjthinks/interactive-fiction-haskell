@@ -12,9 +12,11 @@ module WorldOps(getPlayer,
                 getPath,
                 getDoEat,
                 getDoUse,
+                getDoGet,
                 setDescription,
                 setDoEat,
                 setDoUse,
+                setDoGet,
                 moveNowhere,
                 move,
                 disconnect,
@@ -54,7 +56,13 @@ newThing n = do
                   exits = [],
                   path = Nothing,
                   doEat = tell "You can\'t eat that." >> nl,
-                  doUse = tell "You can\'t use that." >> nl }
+                  doUse = tell "You can\'t use that." >> nl,
+                  doGet = do
+                    player <- getPlayer
+                    move i player
+                    name <- getName i
+                    tell $ "You pick up the " ++ name ++ "."
+                    nl }
       s' = s { things = M.insert i t (things s),
                nextThing = i + 1 }
   put s'
@@ -93,6 +101,7 @@ getExits       = getProperty exits
 getPath        = getProperty path
 getDoEat       = getProperty doEat
 getDoUse       = getProperty doUse
+getDoGet       = getProperty doGet
 
 setThing :: Ref -> Thing -> GameMonad ()
 setThing i t = do
@@ -113,6 +122,11 @@ setDoUse :: Ref -> GameMonad () -> GameMonad ()
 setDoUse ref action = do
   thing <- getThing ref
   setThing ref $ thing { doUse = action }
+
+setDoGet :: Ref -> GameMonad () -> GameMonad ()
+setDoGet ref action = do
+  thing <- getThing ref
+  setThing ref $ thing { doGet = action }
 
 moveNowhere :: Ref -> GameMonad ()
 moveNowhere objRef = do
