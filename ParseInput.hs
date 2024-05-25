@@ -31,7 +31,7 @@ them (n:ns) = this n ||| them ns
 
 lookAt :: MyParser Verb
 lookAt = do
-  string "look"
+  string "look" ||| string "l"
   -- TODO: some space
   many1 space
   names <- getState
@@ -40,12 +40,12 @@ lookAt = do
 
 look :: MyParser Verb
 look = do
-  string "look"
+  string "look" ||| string "l"
   return $ Look Nothing
 
 inventory :: MyParser Verb
 inventory = do
-  string "inventory"
+  string "inventory" ||| string "i"
   return Inventory
 
 getItem :: MyParser Verb
