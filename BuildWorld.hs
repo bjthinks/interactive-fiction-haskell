@@ -141,6 +141,12 @@ buildWorld = do
     "large bookcase sits atop the biggest one. A twin bed is in the corner."
   newExit "west" childBedroom hallway
   newExit "east" hallway childBedroom
+  dollhouse <- newObject childBedroom "Gabby\'s Dollhouse" $
+    "This dollhouse is pink and blue, and looks like a giant cat. There\n" ++
+    "are three floors connected by an elevator, with one room on each side\n" ++
+    "of the elevator on each floor. Everything inside the dollhouse looks\n" ++
+    "like a cartoon. Try \"use dollhouse\" to enter or exit the dollhouse."
+  -- addAlias dollhouse "dollhouse"
 
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House.\n" ++
