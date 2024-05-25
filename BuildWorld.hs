@@ -91,6 +91,28 @@ buildWorld = do
     tell "Oranges don\'t agree with you."
     nl
 
+  setDoUse candle $ do
+    let holdingCandleMsg =
+          tell "You should drop the candle before lighting it." >> nl
+    let noMatchesMsg =
+          tell "You\'re not carrying anything to light the candle with." >> nl
+    let lightMsg = do
+          tell $ "The candle burns brightly. You have leveled up your " ++
+            "pyromaniac skills."
+          nl
+    let alreadyLitMsg = tell "The candle is already lit." >> nl
+    let getLitCandleMsg =
+          tell "It wouldn\'t be safe to walk around with a lit candle." >> nl
+    maybeCandleLoc <- getLocation candle
+    if maybeCandleLoc == Just player then holdingCandleMsg else do
+      maybeMatchesLoc <- getLocation matches
+      if maybeMatchesLoc /= Just player then do noMatchesMsg else do
+        lightMsg
+        addPoints 10
+        setDoUse candle alreadyLitMsg
+        -- setDoGet candle getLitCandleMsg
+        setDescription candle "A plain red candle. It is burning brightly."
+
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House.\n" ++
     "There are a great many small brown and medium black ants coming and\n" ++
@@ -182,6 +204,6 @@ buildWorld = do
               -- setDoGet sprinkler sprinklerOnMsg
               setDescription frontYard $ yardDesc ++ healthStr
 
-  setMaxScore 20
+  setMaxScore 30
 
   return ()
