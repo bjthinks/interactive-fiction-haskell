@@ -159,13 +159,15 @@ buildWorld = do
     let carryingMsg = tell "You should drop the sprinkler first." >> nl
     let healthStr = "The grass here is green and healthy."
     let goodGrassMsg = tell healthStr >> nl
-    let successMsg = tell
-          "You turn on the sprinkler. The grass greens up right away." >> nl
+    let successMsg = do
+          tell $ "You hook up the sprinkler to a hose and turn it on. The\n" ++
+            "grass greens up right away."
+          nl
     let alreadyUsedMsg = tell "The sprinkler is already running." >> nl
     maybeSprinklerLoc <- getLocation sprinkler
     case maybeSprinklerLoc of
       Nothing -> defaultMsg
-      Just sprinklerLoc -> do
+      Just sprinklerLoc ->
         if sprinklerLoc == player then carryingMsg else
           if elem sprinklerLoc goodGrassLocs then goodGrassMsg else
             if sprinklerLoc /= frontYard then defaultMsg else do
