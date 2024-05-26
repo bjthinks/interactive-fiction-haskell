@@ -15,11 +15,17 @@ handleInput :: GameMonad ()
 handleInput = do
   line <- ask
   stuffRefs <- visibleStuff
-  stuffNames <- mapM getName stuffRefs
-  let stuff = zip (map (map toLower) stuffNames) stuffRefs
-  case parseInput stuff (map toLower line) of
+  stuff <- mapM getNameAndAliasesWithRefs stuffRefs
+  case parseInput (concat stuff) (map toLower line) of
     Left err -> tell (show err) >> nl
     Right verb -> doVerb verb
+  return ()
+  where
+    getNameAndAliasesWithRefs ref = do
+      n <- getName ref
+      as <- getAliases ref
+      let allNamesLowercase = map (map toLower) (n:as)
+      return $ map (\n -> (n,ref)) allNamesLowercase
 
 doVerb :: Verb -> GameMonad ()
 doVerb Blank = return ()
