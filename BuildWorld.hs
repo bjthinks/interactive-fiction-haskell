@@ -244,7 +244,7 @@ buildWorld = do
   justinYard <- newRoom "Justin\'s Yard" $
     "You stand in front of Justin\'s house. It is a large home with a\n" ++
     "noticable addition and multiple floors. There is a crabapple tree\n" ++
-    "here."
+    "here. Bimbo the cat is hanging out in the yard."
   newExit "south" eastBrisbin justinYard
   newExit "north" justinYard eastBrisbin
   crabapple <- newObject justinYard "crabapple" $
@@ -254,6 +254,11 @@ buildWorld = do
     nl
     moveNowhere crabapple
     addPoints (-10)
+  bimbo <- newObject justinYard "Bimbo" $
+    "Bimbo, who is oddly a male cat, has grey and white stripes covering\n" ++
+    "all of his body."
+  setDoGet bimbo $ tell
+    "Bimbo squirms out of your grasp and jumps to the ground." >> nl
 
   setDoUse sprinkler $ do
     let goodGrassLocs = [backyard, sideYard, justinYard]
