@@ -16,7 +16,8 @@ data Thing = Thing {
   path :: Maybe (Ref,Ref),
   doEat :: GameMonad (),
   doUse :: GameMonad (),
-  doGet :: GameMonad ()
+  doGet :: GameMonad (),
+  doDrop :: GameMonad ()
   }
 
 data GameState = GameState { things :: M.Map Ref Thing,

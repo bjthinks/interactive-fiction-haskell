@@ -13,10 +13,12 @@ module WorldOps(getPlayer,
                 getDoEat,
                 getDoUse,
                 getDoGet,
+                getDoDrop,
                 setDescription,
                 setDoEat,
                 setDoUse,
                 setDoGet,
+                setDoDrop,
                 moveNowhere,
                 move,
                 disconnect,
@@ -62,7 +64,21 @@ newThing n = do
                     move i player
                     name <- getName i
                     tell $ "You pick up the " ++ name ++ "."
-                    nl }
+                    nl,
+                  doDrop = do
+                    player <- getPlayer
+                    loc <- getLocation player
+                    case loc of
+                      Nothing -> do
+                        tell "You can\'t drop things while you are "
+                        tell "dead."
+                        nl
+                      Just room -> do
+                        move i room
+                        name <- getName i
+                        tell $ "You drop the " ++ name ++ "."
+                        nl
+                }
       s' = s { things = M.insert i t (things s),
                nextThing = i + 1 }
   put s'
@@ -102,6 +118,7 @@ getPath        = getProperty path
 getDoEat       = getProperty doEat
 getDoUse       = getProperty doUse
 getDoGet       = getProperty doGet
+getDoDrop      = getProperty doDrop
 
 setThing :: Ref -> Thing -> GameMonad ()
 setThing i t = do
@@ -127,6 +144,11 @@ setDoGet :: Ref -> GameMonad () -> GameMonad ()
 setDoGet ref action = do
   thing <- getThing ref
   setThing ref $ thing { doGet = action }
+
+setDoDrop :: Ref -> GameMonad () -> GameMonad ()
+setDoDrop ref action = do
+  thing <- getThing ref
+  setThing ref $ thing { doDrop = action }
 
 moveNowhere :: Ref -> GameMonad ()
 moveNowhere objRef = do

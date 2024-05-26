@@ -56,14 +56,8 @@ doVerb (Drop x) = do
   case haveIt of
     False -> tell "You\'re not carrying that." >> nl
     True -> do
-      loc <- getLocation player
-      case loc of
-        Nothing -> tell "You can\'t drop things while you are dead."
-        Just room -> do
-          move x room
-          name <- getName x
-          tell $ "You drop the " ++ name ++ "."
-          nl
+      action <- getDoDrop x
+      action
 
 doVerb (Go x) = do
   canGo <- isTravelable x
