@@ -185,6 +185,8 @@ buildWorld = do
       nl
       addPoints 10
       setDoDrop gabby defaultDropGabby
+      setDescription gabby
+        "This is cartoon Gabby. She likes being in her dollhouse."
 
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House.\n" ++
