@@ -14,8 +14,6 @@ buildWorld = do
     "You are in the middle of Brisbin Street. The street continues to the\n" ++
     "west and east. To the north is Granny\'s House, and to the south is\n" ++
     "Ray\'s house."
-  newObject brisbin "abc" ""
-  newObject brisbin "a" ""
 
   player <- newObject brisbin "Player" "You look normal."
   setPlayer player
