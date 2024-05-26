@@ -4,6 +4,7 @@ import Defs
 import Score
 import WorldOps
 import Verbs
+import Control.Monad
 import Control.Monad.RWS
 import Data.Maybe
 
@@ -174,6 +175,16 @@ buildWorld = do
           move player dollhouse
           lookAt dollhouse
         else failMsg
+  defaultDropGabby <- getDoDrop gabby
+  setDoDrop gabby $ do
+    defaultDropGabby
+    maybeGabbyLoc <- getLocation gabby
+    when (maybeGabbyLoc == Just dollhouse) $ do
+      tell $ "Gabby turns into her cartoon self and looks very happy to be " ++
+        "in her dollhouse!"
+      nl
+      addPoints 10
+      setDoDrop gabby defaultDropGabby
 
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House.\n" ++
@@ -267,6 +278,6 @@ buildWorld = do
               setDoGet sprinkler sprinklerOnMsg
               setDescription frontYard $ yardDesc ++ healthStr
 
-  setMaxScore 30
+  setMaxScore 40
 
   return ()
