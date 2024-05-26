@@ -19,7 +19,6 @@ buildWorld = do
     "You are a middle-aged man, about 5\'7\" tall, with dark blond hair\n" ++
     "and wearing jeans and a t-shirt."
   setPlayer player
-  newObject player "calculus book" "This is a multivariable calculus textbook."
 
   frontYard <- newRoom "Granny\'s Front Yard" $
     "The grass is green but has many holes in it where squirrels have been\n" ++
