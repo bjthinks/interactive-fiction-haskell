@@ -2,6 +2,7 @@ module ParseInput(Verb(..),parseInput) where
 
 import Text.Parsec
 import Text.Parsec.String
+import Data.List
 import Defs
 
 data Verb = Blank
@@ -89,4 +90,6 @@ parseLine = do
   return v
 
 parseInput :: [(String,Ref)] -> String -> Either ParseError Verb
-parseInput names = runParser parseLine names ""
+parseInput names = runParser parseLine (longestFirst names) ""
+  where
+    longestFirst = sortOn (negate . length . fst)
