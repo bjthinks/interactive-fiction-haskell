@@ -150,7 +150,7 @@ buildWorld = do
     "are three floors connected by an elevator, with one room on each side\n" ++
     "of the elevator on each floor. Everything inside the dollhouse looks\n" ++
     "like a cartoon. Try \"use dollhouse\" to enter or exit the dollhouse."
-  -- addAlias dollhouse "dollhouse"
+  addAlias dollhouse "dollhouse"
   gabby <- newObject childBedroom "Gabby" $
     "This is a Gabby doll. It looks like she wants to be in her dollhouse."
   setDoUse dollhouse $ do

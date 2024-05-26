@@ -5,6 +5,7 @@ module WorldOps(getPlayer,
                 newObject,
                 newExit,
                 getName,
+                getAliases,
                 getDescription,
                 getLocation,
                 getContents',
@@ -14,6 +15,8 @@ module WorldOps(getPlayer,
                 getDoUse,
                 getDoGet,
                 getDoDrop,
+                setAliases,
+                addAlias,
                 setDescription,
                 setDoEat,
                 setDoUse,
@@ -51,10 +54,11 @@ newThing :: String -> GameMonad Ref
 newThing n = do
   s <- get
   let i = nextThing s
-      t = Thing { location = Nothing,
-                  contents = [],
-                  name = n,
+      t = Thing { name = n,
+                  aliases = [],
                   description = "",
+                  location = Nothing,
+                  contents = [],
                   exits = [],
                   path = Nothing,
                   doEat = tell "You can\'t eat that." >> nl,
@@ -110,6 +114,7 @@ getProperty :: (Thing -> a) -> Ref -> GameMonad a
 getProperty c = fmap c . getThing
 
 getName        = getProperty name
+getAliases     = getProperty aliases
 getDescription = getProperty description
 getLocation    = getProperty location
 getContents'   = getProperty contents
@@ -124,6 +129,16 @@ setThing :: Ref -> Thing -> GameMonad ()
 setThing i t = do
   s <- get
   put $ s { things = M.insert i t (things s) }
+
+setAliases :: Ref -> [String] -> GameMonad ()
+setAliases ref as = do
+  thing <- getThing ref
+  setThing ref $ thing { aliases = as }
+
+addAlias :: Ref -> String -> GameMonad ()
+addAlias ref a = do
+  as <- getAliases ref
+  setAliases ref (a:as)
 
 setDescription :: Ref -> String -> GameMonad ()
 setDescription i d = do

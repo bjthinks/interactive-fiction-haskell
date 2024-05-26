@@ -7,6 +7,7 @@ type Ref = Int
 
 data Thing = Thing {
   name :: String,
+  aliases :: [String],
   description :: String,
   -- Typically, rooms have no location, but objects do
   location :: Maybe Ref,
