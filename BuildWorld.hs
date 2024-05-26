@@ -15,7 +15,9 @@ buildWorld = do
     "west and east. To the north is Granny\'s House, and to the south is\n" ++
     "Ray\'s house."
 
-  player <- newObject brisbin "Player" "You look normal."
+  player <- newObject brisbin "Yourself" $
+    "You are a middle-aged man, about 5\'7\" tall, with dark blond hair\n" ++
+    "and wearing jeans and a t-shirt."
   setPlayer player
   newObject player "calculus book" "This is a multivariable calculus textbook."
 
