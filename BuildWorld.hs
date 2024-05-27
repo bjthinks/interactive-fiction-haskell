@@ -27,9 +27,9 @@ buildWorld = do
   frontYard <- newRoom "Granny\'s Front Yard" $
     "The grass is green but has many holes in it where squirrels have been\n" ++
     "digging. There is a concrete path connecting the street to the south\n" ++
-    "and the driveway to the west. Granny\'s house is north and the side\n" ++
-    "yard is northeast. There are a pine tree and two white oak trees in\n" ++
-    "the yard. A squirrel watches you nervously from one of the oak trees.\n"
+    "and the driveway to the northwest. Granny\'s house is north and the\n" ++
+    "side yard is northeast. There are a pine tree and two white oak trees\n" ++
+    "in the yard. A squirrel watches you nervously from one of the oak trees.\n"
   yardDesc <- getDescription frontYard
   setDescription frontYard $ yardDesc ++
     "The grass here looks dry and parched."
@@ -213,11 +213,11 @@ buildWorld = do
     "magnifying glass to use on the ants. The street is south, and\n" ++
     "Granny\'s side door is to the east. The front yard is to the\n" ++
     "southeast and the backyard is to the northeast. The garage is north."
-  newExit "south" driveway brisbin
+  --newExit "south" driveway brisbin
   newExit "east" driveway kitchen
   newExit "west" kitchen driveway
   newExit "southeast" driveway frontYard
-  newExit "west" frontYard driveway
+  newExit "northwest" frontYard driveway
 
   garage <- newRoom "Garage" $
     "Two cars are squeezed into this garage: a 1970s era yellow\n" ++
