@@ -104,8 +104,21 @@ newObject loc name desc = do
 newExit :: String -> Ref -> Ref -> GameMonad Ref
 newExit name src dest = do
   t <- newThing name
+  setAliases t $ autoAliases name
   connect t src dest
   return t
+    where
+      autoAliases "north" = ["n"]
+      autoAliases "south" = ["s"]
+      autoAliases "east"  = ["e"]
+      autoAliases "west"  = ["w"]
+      autoAliases "northwest" = ["nw"]
+      autoAliases "northeast" = ["ne"]
+      autoAliases "southwest" = ["sw"]
+      autoAliases "southeast" = ["se"]
+      autoAliases "up"   = ["u"]
+      autoAliases "down" = ["d"]
+      autoAliases _ = []
 
 getThing :: Ref -> GameMonad Thing
 getThing i = fmap (fromJust . M.lookup i . things) get
