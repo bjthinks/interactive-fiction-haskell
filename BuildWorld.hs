@@ -208,12 +208,11 @@ buildWorld = do
 
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House.\n" ++
+    "Granny\'s side door is to the east. The front yard is to the\n" ++
+    "southeast and the backyard is to the northeast. The garage is north." ++
     "There are a great many small brown and medium black ants coming and\n" ++
     "going out of anthills along the driveway. You wish you had a\n" ++
-    "magnifying glass to use on the ants. The street is south, and\n" ++
-    "Granny\'s side door is to the east. The front yard is to the\n" ++
-    "southeast and the backyard is to the northeast. The garage is north."
-  --newExit "south" driveway brisbin
+    "magnifying glass to use on the ants."
   newExit "east" driveway kitchen
   newExit "west" kitchen driveway
   newExit "southeast" driveway frontYard
