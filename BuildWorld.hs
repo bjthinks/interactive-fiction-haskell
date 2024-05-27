@@ -37,7 +37,7 @@ buildWorld = do
   newExit "south" frontYard brisbin
   acorns <- newObject frontYard "acorns" $
     "Ordinary white oak acorns. Could you throw them at a squirrel?"
-  setDoEat acorns $ do
+  setOnEat acorns $ do
     tell "You try one, but they taste terribly bitter. Maybe a squirrel would"
     nl
     tell "like them if you threw them at it?"
@@ -77,28 +77,28 @@ buildWorld = do
   newExit "east" kitchen dinette
   newObject kitchen "brillo pad" "A heavily-used copper Brillo pad."
   matches <- newObject kitchen "matches" "A simple book of paper matches."
-  setDoUse matches $ do
+  setOnUse matches $ do
     tell "Instead of using the matches, please use the thing you\'re trying "
     tell "to light."
     nl
   apple <- newObject kitchen "apple" "A red delicious apple."
-  setDoEat apple $ do
+  setOnEat apple $ do
     tell "The apple tastes sweet and slightly astringent."
     nl
     moveNowhere apple
     addPoints 5
   banana <- newObject kitchen "banana" "The bottom half of a banana."
-  setDoEat banana $ do
+  setOnEat banana $ do
     tell "The half banana tastes great and is surprisingly filling."
     nl
     moveNowhere banana
     addPoints 5
   orange <- newObject kitchen "orange" "A large seedless navel orange."
-  setDoEat orange $ do
+  setOnEat orange $ do
     tell "Oranges don\'t agree with you."
     nl
 
-  setDoUse candle $ do
+  setOnUse candle $ do
     let holdingCandleMsg =
           tell "You should drop the candle before lighting it." >> nl
     let noMatchesMsg =
@@ -116,8 +116,8 @@ buildWorld = do
       if maybeMatchesLoc /= Just player then do noMatchesMsg else do
         lightMsg
         addPoints 10
-        setDoUse candle alreadyLitMsg
-        -- setDoGet candle getLitCandleMsg
+        setOnUse candle alreadyLitMsg
+        -- setOnGet candle getLitCandleMsg
         setDescription candle "A plain red candle. It is burning brightly."
 
   hallway <- newRoom "Hallway" $
@@ -137,7 +137,7 @@ buildWorld = do
   perfume <- newObject masterBedroom "perfume" $
     "A collection of tiny vials of perfume, probably collected from store\n" ++
     "samples."
-  setDoUse perfume $ do
+  setOnUse perfume $ do
     tell "You wipe perfume on your neck. You smell like cheap perfume now."
     nl
 
@@ -156,7 +156,7 @@ buildWorld = do
   addAlias dollhouse "dollhouse"
   gabby <- newObject childBedroom "Gabby" $
     "This is a Gabby doll. It looks like she wants to be in her dollhouse."
-  setDoUse dollhouse $ do
+  setOnUse dollhouse $ do
     maybePlayerLoc <- getLocation player
     maybeDollhouseLoc <- getLocation dollhouse
     let failMsg = tell "You can\'t use that now." >> nl
@@ -178,8 +178,8 @@ buildWorld = do
           move player dollhouse
           lookAt dollhouse
         else failMsg
-  defaultDropGabby <- getDoDrop gabby
-  setDoDrop gabby $ do
+  defaultDropGabby <- getOnDrop gabby
+  setOnDrop gabby $ do
     defaultDropGabby
     maybeGabbyLoc <- getLocation gabby
     when (maybeGabbyLoc == Just dollhouse) $ do
@@ -187,7 +187,7 @@ buildWorld = do
         "in her dollhouse!"
       nl
       addPoints 10
-      setDoDrop gabby defaultDropGabby
+      setOnDrop gabby defaultDropGabby
       setDescription gabby
         "This is cartoon Gabby. She likes being in her dollhouse."
 
@@ -267,7 +267,7 @@ buildWorld = do
   newExit "north" justinYard eastBrisbin
   crabapple <- newObject justinYard "crabapple" $
     "This crabapple looks like it might have a worm in it. Yuck!"
-  setDoEat crabapple $ do
+  setOnEat crabapple $ do
     tell "You eat the crabapple, worm and all! YUCK!"
     nl
     moveNowhere crabapple
@@ -275,10 +275,10 @@ buildWorld = do
   bimbo <- newObject justinYard "Bimbo" $
     "Bimbo, who is oddly a male cat, has grey and white stripes covering\n" ++
     "all of his body."
-  setDoGet bimbo $ tell
+  setOnGet bimbo $ tell
     "Bimbo squirms out of your grasp and jumps to the ground." >> nl
 
-  setDoUse sprinkler $ do
+  setOnUse sprinkler $ do
     let goodGrassLocs = [backyard, sideYard, justinYard]
     let defaultMsg = tell "There isn\'t any grass to water here." >> nl
     let carryingMsg = tell "You should drop the sprinkler first." >> nl
@@ -298,9 +298,9 @@ buildWorld = do
             if sprinklerLoc /= frontYard then defaultMsg else do
               successMsg
               addPoints 10
-              setDoUse sprinkler alreadyUsedMsg
+              setOnUse sprinkler alreadyUsedMsg
               let sprinklerOnMsg = tell "You would get wet." >> nl
-              setDoGet sprinkler sprinklerOnMsg
+              setOnGet sprinkler sprinklerOnMsg
               setDescription frontYard $ yardDesc ++ healthStr
 
   setMaxScore 40

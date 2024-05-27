@@ -52,7 +52,7 @@ doVerb (Get x) = do
   case canGet of
     False -> tell "You can\'t pick that up." >> nl
     True -> do
-      action <- getDoGet x
+      action <- getOnGet x
       action
 
 doVerb (Drop x) = do
@@ -62,7 +62,7 @@ doVerb (Drop x) = do
   case haveIt of
     False -> tell "You\'re not carrying that." >> nl
     True -> do
-      action <- getDoDrop x
+      action <- getOnDrop x
       action
 
 doVerb (Go x) = do
@@ -83,7 +83,7 @@ doVerb (Eat x) = do
   case haveIt of
     False -> tell "You\'re not carrying that." >> nl
     True -> do
-      action <- getDoEat x
+      action <- getOnEat x
       action
 
 doVerb (Use x) = do
@@ -99,7 +99,7 @@ doVerb (Use x) = do
   case (elem x usableItems) of
     False -> tell "You can\'t use that." >> nl
     True -> do
-      action <- getDoUse x
+      action <- getOnUse x
       action
 
 doVerb Score = do

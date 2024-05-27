@@ -11,18 +11,18 @@ module WorldOps(getPlayer,
                 getContents',
                 getExits,
                 getPath,
-                getDoEat,
-                getDoUse,
-                getDoGet,
-                getDoDrop,
+                getOnEat,
+                getOnUse,
+                getOnGet,
+                getOnDrop,
                 setAliases,
                 addAlias,
                 setDescription,
-                setDoEat,
-                setDoUse,
-                setDoGet,
+                setOnEat,
+                setOnUse,
+                setOnGet,
                 makeImmobile,
-                setDoDrop,
+                setOnDrop,
                 moveNowhere,
                 move,
                 disconnect,
@@ -62,15 +62,15 @@ newThing n = do
                   contents = [],
                   exits = [],
                   path = Nothing,
-                  doEat = tell "You can\'t eat that." >> nl,
-                  doUse = tell "You can\'t use that." >> nl,
-                  doGet = do
+                  onEat = tell "You can\'t eat that." >> nl,
+                  onUse = tell "You can\'t use that." >> nl,
+                  onGet = do
                     player <- getPlayer
                     move i player
                     name <- getName i
                     tell $ "You pick up the " ++ name ++ "."
                     nl,
-                  doDrop = do
+                  onDrop = do
                     player <- getPlayer
                     loc <- getLocation player
                     case loc of
@@ -134,10 +134,10 @@ getLocation    = getProperty location
 getContents'   = getProperty contents
 getExits       = getProperty exits
 getPath        = getProperty path
-getDoEat       = getProperty doEat
-getDoUse       = getProperty doUse
-getDoGet       = getProperty doGet
-getDoDrop      = getProperty doDrop
+getOnEat       = getProperty onEat
+getOnUse       = getProperty onUse
+getOnGet       = getProperty onGet
+getOnDrop      = getProperty onDrop
 
 setThing :: Ref -> Thing -> GameMonad ()
 setThing i t = do
@@ -159,29 +159,29 @@ setDescription i d = do
   t <- getThing i
   setThing i $ t { description = d }
 
-setDoEat :: Ref -> GameMonad () -> GameMonad ()
-setDoEat ref action = do
+setOnEat :: Ref -> GameMonad () -> GameMonad ()
+setOnEat ref action = do
   thing <- getThing ref
-  setThing ref $ thing { doEat = action }
+  setThing ref $ thing { onEat = action }
 
-setDoUse :: Ref -> GameMonad () -> GameMonad ()
-setDoUse ref action = do
+setOnUse :: Ref -> GameMonad () -> GameMonad ()
+setOnUse ref action = do
   thing <- getThing ref
-  setThing ref $ thing { doUse = action }
+  setThing ref $ thing { onUse = action }
 
-setDoGet :: Ref -> GameMonad () -> GameMonad ()
-setDoGet ref action = do
+setOnGet :: Ref -> GameMonad () -> GameMonad ()
+setOnGet ref action = do
   thing <- getThing ref
-  setThing ref $ thing { doGet = action }
+  setThing ref $ thing { onGet = action }
 
 makeImmobile :: Ref -> GameMonad ()
-makeImmobile ref = setDoGet ref $
+makeImmobile ref = setOnGet ref $
   tell "You can\'t pick that up." >> nl
 
-setDoDrop :: Ref -> GameMonad () -> GameMonad ()
-setDoDrop ref action = do
+setOnDrop :: Ref -> GameMonad () -> GameMonad ()
+setOnDrop ref action = do
   thing <- getThing ref
-  setThing ref $ thing { doDrop = action }
+  setThing ref $ thing { onDrop = action }
 
 moveNowhere :: Ref -> GameMonad ()
 moveNowhere objRef = do

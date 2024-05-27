@@ -15,10 +15,10 @@ data Thing = Thing {
   -- Typically, exits go somewhere, but other things don't
   exits :: [Ref],
   path :: Maybe (Ref,Ref),
-  doEat :: GameMonad (),
-  doUse :: GameMonad (),
-  doGet :: GameMonad (),
-  doDrop :: GameMonad ()
+  onEat :: GameMonad (),
+  onUse :: GameMonad (),
+  onGet :: GameMonad (),
+  onDrop :: GameMonad ()
   }
 
 data GameState = GameState { things :: M.Map Ref Thing,
