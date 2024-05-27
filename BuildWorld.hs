@@ -14,7 +14,7 @@ buildWorld = do
   brisbin <- newRoom "Brisbin Street" $
     "You are in the middle of Brisbin Street. The street continues to the\n" ++
     "west and east. To the north is Granny\'s House, and to the south is\n" ++
-    "Ray\'s house."
+    "Nick\'s house."
 
   player <- newObject brisbin "Yourself" $
     "You are a middle-aged man, about 5\'7\" tall, with light brown hair\n" ++
