@@ -183,7 +183,7 @@ buildWorld = do
     defaultDropGabby
     maybeGabbyLoc <- getLocation gabby
     when (maybeGabbyLoc == Just dollhouse) $ do
-      tell $ "Gabby turns into her cartoon self and looks very happy to be " ++
+      tell $ "Gabby turns into her cartoon self and looks very happy to be\n" ++
         "in her dollhouse!"
       nl
       addPoints 10
