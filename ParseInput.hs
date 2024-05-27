@@ -74,12 +74,18 @@ help = do
   string "help"
   return Help
 
+implicitGo :: MyParser Verb
+implicitGo = do
+  names <- getState
+  ref <- them names
+  return $ Go ref
+
 blank :: MyParser Verb
 blank = return Blank
 
 verb :: MyParser Verb
 verb = lookAt ||| look ||| inventory ||| getItem ||| takeItem ||| dropItem |||
-  goExit ||| eatItem ||| useItem ||| showScore ||| help ||| blank
+  goExit ||| eatItem ||| useItem ||| showScore ||| help ||| implicitGo ||| blank
 
 parseLine :: MyParser Verb
 parseLine = do
