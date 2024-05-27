@@ -191,6 +191,14 @@ buildWorld = do
       setDescription gabby
         "This is cartoon Gabby. She likes being in her dollhouse."
 
+  upstairsBathroom <- newRoom "Bathroom" $
+    "This is a small but servicable bathroom. The counter is a pale\n" ++
+    "yellow, with a plain sink inset into it. There are built in cupboards\n" ++
+    "below the counter, and a cupboard door stands wide open, probably to\n" ++
+    "allow heat into the bathroom from a vent enclosed by the cabinetry."
+  newExit "north" hallway upstairsBathroom
+  newExit "south" upstairsBathroom hallway
+
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House.\n" ++
     "There are a great many small brown and medium black ants coming and\n" ++
