@@ -125,6 +125,11 @@ doVerb Help = do
   tell "  look item/direction" >> nl
   tell "  score" >> nl
   tell "  use item" >> nl
+  tell "You can type the name of an exit to go that direction, and there are"
+  nl
+  tell "shorthand names for commonly named exits. So \"go n\" or just \"n\" is"
+  nl
+  tell "short for \"go north\"." >> nl
 
 lookAt :: Ref -> GameMonad ()
 lookAt it = do
