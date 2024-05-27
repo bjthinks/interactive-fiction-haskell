@@ -21,6 +21,7 @@ module WorldOps(getPlayer,
                 setDoEat,
                 setDoUse,
                 setDoGet,
+                makeImmobile,
                 setDoDrop,
                 moveNowhere,
                 move,
@@ -172,6 +173,10 @@ setDoGet :: Ref -> GameMonad () -> GameMonad ()
 setDoGet ref action = do
   thing <- getThing ref
   setThing ref $ thing { doGet = action }
+
+makeImmobile :: Ref -> GameMonad ()
+makeImmobile ref = setDoGet ref $
+  tell "You can\'t pick that up." >> nl
 
 setDoDrop :: Ref -> GameMonad () -> GameMonad ()
 setDoDrop ref action = do

@@ -198,6 +198,13 @@ buildWorld = do
     "into the bathroom from a vent enclosed by the cabinetry."
   newExit "north" hallway bathroom
   newExit "south" bathroom hallway
+  bathtub <- newObject bathroom "bathtub" $
+    "This is a plain white bathtub with a shower attachment and glass\n" ++
+    "doors."
+  bathtubDescription <- getDescription bathtub
+  setDescription bathtub $ bathtubDescription ++
+    " Type \"use bathtub\" to fill it with water."
+  makeImmobile bathtub
 
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House.\n" ++
