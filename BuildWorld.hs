@@ -17,8 +17,11 @@ buildWorld = do
     "Ray\'s house."
 
   player <- newObject brisbin "Yourself" $
-    "You are a middle-aged man, about 5\'7\" tall, with dark blond hair\n" ++
+    "You are a middle-aged man, about 5\'7\" tall, with light brown hair\n" ++
     "and wearing jeans and a t-shirt."
+  addAlias player "player"
+  addAlias player "self"
+  addAlias player "me"
   setPlayer player
 
   frontYard <- newRoom "Granny\'s Front Yard" $
