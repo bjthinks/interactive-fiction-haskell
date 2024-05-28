@@ -62,27 +62,23 @@ newThing n = do
                   contents = [],
                   exits = [],
                   path = Nothing,
-                  onEat = tell "You can\'t eat that." >> nl,
-                  onUse = tell "You can\'t use that." >> nl,
+                  onEat = msg "You can\'t eat that.",
+                  onUse = msg "You can\'t use that.",
                   onGet = do
                     player <- getPlayer
                     move i player
                     name <- getName i
-                    tell $ "You pick up the " ++ name ++ "."
-                    nl,
+                    msg $ "You pick up the " ++ name ++ ".",
                   onDrop = do
                     player <- getPlayer
                     loc <- getLocation player
                     case loc of
-                      Nothing -> do
-                        tell "You can\'t drop things while you are "
-                        tell "dead."
-                        nl
+                      Nothing ->
+                        msg "You can\'t drop things while you are dead."
                       Just room -> do
                         move i room
                         name <- getName i
-                        tell $ "You drop the " ++ name ++ "."
-                        nl
+                        msg $ "You drop the " ++ name ++ "."
                 }
       s' = s { things = M.insert i t (things s),
                nextThing = i + 1 }
@@ -176,7 +172,7 @@ setOnGet ref action = do
 
 makeImmobile :: Ref -> GameMonad ()
 makeImmobile ref = setOnGet ref $
-  tell "You can\'t pick that up." >> nl
+  msg "You can\'t pick that up."
 
 setOnDrop :: Ref -> GameMonad () -> GameMonad ()
 setOnDrop ref action = do

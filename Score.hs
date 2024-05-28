@@ -9,12 +9,9 @@ addPoints :: Int -> GameMonad ()
 addPoints points = do
   state <- get
   put $ state { score = score state + points }
-  tell "You "
-  if points >= 0 then tell "earn" else tell "lose"
-  tell " "
-  tell $ show $ abs points
-  tell " points. Use the \"score\" command to see your score."
-  nl
+  msg $ "You " ++ (if points >= 0 then "earn" else "lose") ++ " " ++
+    show (abs points) ++
+    " points. Use the \"score\" command to see your score."
   maybeShowWinMessage
 
 getScore :: GameMonad Int
@@ -37,5 +34,4 @@ maybeShowWinMessage = do
   points <- getScore
   maxPoints <- getMaxScore
   when (points >= maxPoints) $ do
-    tell "You have won! You may exit with Control-D, or continue playing."
-    nl
+    msg "You have won! You may exit with Control-D, or continue playing."

@@ -17,7 +17,7 @@ handleInput = do
   stuffRefs <- visibleStuff
   stuff <- mapM getNameAndAliasesWithRefs stuffRefs
   case parseInput (concat stuff) (map toLower line) of
-    Left err -> tell (show err) >> nl
+    Left err -> msg $ show err
     Right verb -> doVerb verb
   return ()
   where
@@ -37,20 +37,19 @@ doVerb (Look arg) = do
       getLocation player
     Just ref -> return (Just ref)
   case maybeThing of
-    Nothing -> tell "You are dead." >> nl
+    Nothing -> msg "You are dead."
     Just at -> lookAt at
 
 doVerb Inventory = do
   player <- getPlayer
   contents <- getContents' player
   names <- mapM getName contents
-  tell $ "You are carrying: " ++ humanFriendlyList names ++ "."
-  nl
+  msg $ "You are carrying: " ++ humanFriendlyList names ++ "."
 
 doVerb (Get x) = do
   canGet <- isGettable x
   case canGet of
-    False -> tell "You can\'t pick that up." >> nl
+    False -> msg "You can\'t pick that up."
     True -> do
       action <- getOnGet x
       action
@@ -60,7 +59,7 @@ doVerb (Drop x) = do
   inv <- getContents' player
   let haveIt = elem x inv
   case haveIt of
-    False -> tell "You\'re not carrying that." >> nl
+    False -> msg "You\'re not carrying that."
     True -> do
       action <- getOnDrop x
       action
@@ -68,12 +67,12 @@ doVerb (Drop x) = do
 doVerb (Go x) = do
   canGo <- isTravelable x
   case canGo of
-    False -> tell "You can\'t go that way." >> nl
+    False -> msg "You can\'t go that way."
     True -> do
       player <- getPlayer
       maybePath <- getPath x
       case maybePath of
-        Nothing -> tell "That direction doesn\'t go anywhere."
+        Nothing -> msg "That direction doesn\'t go anywhere."
         Just (_,dest) -> move player dest >> lookAt dest
 
 doVerb (Eat x) = do
@@ -81,7 +80,7 @@ doVerb (Eat x) = do
   inv <- getContents' player
   let haveIt = elem x inv
   case haveIt of
-    False -> tell "You\'re not carrying that." >> nl
+    False -> msg "You\'re not carrying that."
     True -> do
       action <- getOnEat x
       action
@@ -97,65 +96,57 @@ doVerb (Use x) = do
       return $ here : cs
   let usableItems = inv ++ stuff
   case (elem x usableItems) of
-    False -> tell "You can\'t use that." >> nl
+    False -> msg "You can\'t use that."
     True -> do
       action <- getOnUse x
       action
 
 doVerb Score = do
-  tell "Your score is "
   points <- getScore
-  tell $ show points
-  tell " out of a maximum of "
   maxPoints <- getMaxScore
-  tell $ show maxPoints
-  tell "."
-  nl
+  msg $ "Your score is " ++ show points ++ " out of a maximum of " ++
+    show maxPoints ++ "."
   maybeShowWinMessage
 
 doVerb Help = do
-  tell "Command summary:" >> nl
-  tell "  drop item" >> nl
-  tell "  eat item" >> nl
-  tell "  get/take item" >> nl
-  tell "  go direction" >> nl
-  tell "  help" >> nl
-  tell "  inventory" >> nl
-  tell "  look" >> nl
-  tell "  look item/direction" >> nl
-  tell "  score" >> nl
-  tell "  use item" >> nl
-  tell "You can type the name of an exit to go that direction, and there are"
-  nl
-  tell "shorthand names for commonly named exits. So \"go n\" or just \"n\" is"
-  nl
-  tell "short for \"go north\"." >> nl
+  msg "Command summary:"
+  msg "  drop item"
+  msg "  eat item"
+  msg "  get/take item"
+  msg "  go direction"
+  msg "  help"
+  msg "  inventory"
+  msg "  look"
+  msg "  look item/direction"
+  msg "  score"
+  msg "  use item"
+  msg $ "You can type the name of an exit to go that direction, and there " ++
+    "are shorthand names for commonly named exits. So \"go n\" or just " ++
+    "\"n\" is short for \"go north\"."
 
 lookAt :: Ref -> GameMonad ()
 lookAt it = do
-  getName it >>= tell >> nl
+  name <- getName it
+  msg name
   desc <- getDescription it
-  when (desc /= "") $ tell desc >> nl
+  when (desc /= "") $ msg desc
   path <- getPath it
   when (isJust path) $ do
     let (src,dest) = fromJust path
     srcName <- getName src
     destName <- getName dest
-    tell $ "This is a way to go from " ++ srcName ++ " to " ++ destName ++ "."
-    nl
+    msg $ "This is a way to go from " ++ srcName ++ " to " ++ destName ++ "."
   contents <- getContents' it
   -- You don't see yourself
   player <- getPlayer
   let others = filter (/= player) contents
   when (others /= []) $ do
     names <- mapM getName others
-    tell $ "Contents: " ++ humanFriendlyList names ++ "."
-    nl
+    msg $ "Contents: " ++ humanFriendlyList names ++ "."
   exits <- getExits it
   when (exits /= []) $ do
     exitNames <- mapM getName exits
-    tell $ "Exits: " ++ humanFriendlyList exitNames ++ "."
-    nl
+    msg $ "Exits: " ++ humanFriendlyList exitNames ++ "."
 
 humanFriendlyList :: [String] -> String
 humanFriendlyList [] = "nothing"

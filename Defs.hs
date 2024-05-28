@@ -35,5 +35,5 @@ type MoveInput = String
 type MoveOutput = String
 type GameMonad = RWS MoveInput MoveOutput GameState
 
-nl :: GameMonad ()
-nl = tell "\n"
+msg :: String -> GameMonad ()
+msg str = tell str >> tell "\n"
