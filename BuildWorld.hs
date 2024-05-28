@@ -12,12 +12,12 @@ buildWorld :: GameMonad ()
 buildWorld = do
 
   brisbin <- newRoom "Brisbin Street" $
-    "You are in the middle of Brisbin Street. The street continues to the\n" ++
-    "west and east. To the north is Granny\'s House, and to the south is\n" ++
+    "You are in the middle of Brisbin Street. The street continues to the " ++
+    "west and east. To the north is Granny\'s House, and to the south is " ++
     "Nick\'s house."
 
   player <- newObject brisbin "Yourself" $
-    "You are a middle-aged man, about 5\'7\" tall, with light brown hair\n" ++
+    "You are a middle-aged man, about 5\'7\" tall, with light brown hair " ++
     "and wearing jeans and a t-shirt."
   addAlias player "player"
   addAlias player "self"
@@ -25,11 +25,11 @@ buildWorld = do
   setPlayer player
 
   frontYard <- newRoom "Granny\'s Front Yard" $
-    "The grass is green but has many holes in it where squirrels have been\n" ++
-    "digging. There is a concrete path connecting the street to the south\n" ++
-    "and the driveway to the northwest. Granny\'s house is north and the\n" ++
-    "side yard is northeast. There are a pine tree and two white oak trees\n" ++
-    "in the yard. A squirrel watches you nervously from one of the oak trees.\n"
+    "The grass is green but has many holes in it where squirrels have been " ++
+    "digging. There is a concrete path connecting the street to the south " ++
+    "and the driveway to the northwest. Granny\'s house is north and the " ++
+    "side yard is northeast. There are a pine tree and two white oak trees " ++
+    "in the yard. A squirrel watches you nervously from one of the oak trees. "
   yardDesc <- getDescription frontYard
   setDescription frontYard $ yardDesc ++
     "The grass here looks dry and parched."
@@ -45,19 +45,19 @@ buildWorld = do
   -- TODO throw acorn for 10 points
 
   living <- newRoom "Living Room" $
-    "This is clearly the living room of Granny\'s House. The floor has\n" ++
-    "plain brown carpet. There are a tan sofa and two rust colored\n" ++
-    "armchairs, and a spindly palm tree sits in the corner next to a\n" ++
-    "display case. To the south is Granny\'s front door, which goes back\n" ++
+    "This is clearly the living room of Granny\'s House. The floor has " ++
+    "plain brown carpet. There are a tan sofa and two rust colored " ++
+    "armchairs, and a spindly palm tree sits in the corner next to a " ++
+    "display case. To the south is Granny\'s front door, which goes back " ++
     "to the front yard."
   newExit "north" frontYard living
   newExit "south" living frontYard
 
   dinette <- newRoom "Dinette" $
-    "This is a tiny dining room, most of which is taken up by a normal-\n" ++
-    "sized table. It has a plastic veneer which imitates a light brown\n" ++
-    "wood pattern. Four chairs with dark brown plastic seats and backs\n" ++
-    "surround the table, and the floor is an icky brown tile with a swirly\n" ++
+    "This is a tiny dining room, most of which is taken up by a normal- " ++
+    "sized table. It has a plastic veneer which imitates a light brown " ++
+    "wood pattern. Four chairs with dark brown plastic seats and backs " ++
+    "surround the table, and the floor is an icky brown tile with a swirly " ++
     "pattern."
   newExit "west" living dinette
   newExit "east" dinette living
@@ -67,11 +67,11 @@ buildWorld = do
   -- TODO be able to light candle for 10 points
 
   kitchen <- newRoom "Kitchen" $
-    "This is a small but functional kitchen. There is a fridge in the\n" ++
-    "corner with an ancient AM/FM radio on top of it. Dark brown cupboards\n" ++
-    "go along the west and south walls. There is a gas stove with an oven\n" ++
-    "and broiler, a double sink, and a dishwasher. Next to the sink is a\n" ++
-    "ceramic fish for holding Brillo pads, and on the cupboard is a fruit\n" ++
+    "This is a small but functional kitchen. There is a fridge in the " ++
+    "corner with an ancient AM/FM radio on top of it. Dark brown cupboards " ++
+    "go along the west and south walls. There is a gas stove with an oven " ++
+    "and broiler, a double sink, and a dishwasher. Next to the sink is a " ++
+    "ceramic fish for holding Brillo pads, and on the cupboard is a fruit " ++
     "bowl. To the west is Granny\'s side door, which goes to the driveway."
   newExit "west" dinette kitchen
   newExit "east" kitchen dinette
@@ -121,37 +121,37 @@ buildWorld = do
         setDescription candle "A plain red candle. It is burning brightly."
 
   hallway <- newRoom "Hallway" $
-    "This simple east-west hallway has a tiny five watt light fixture on\n" ++
-    "the ceiling. There is a wicker hamper which, on inspection, appears\n" ++
+    "This simple east-west hallway has a tiny five watt light fixture on " ++
+    "the ceiling. There is a wicker hamper which, on inspection, appears " ++
     "to contain a stack of clean placemats."
   newExit "south" hallway living
   newExit "north" living hallway
 
   masterBedroom <- newRoom "Master Bedroom" $
-    "Someone has clearly spend some money filling this bedroom with nice\n" ++
-    "furniture. There are a desk, a highboy dresser, another long dresser,\n" ++
-    "and a queen size bed with a flower-print bedspread. A touch tone\n" ++
+    "Someone has clearly spend some money filling this bedroom with nice " ++
+    "furniture. There are a desk, a highboy dresser, another long dresser, " ++
+    "and a queen size bed with a flower-print bedspread. A touch tone " ++
     "phone sits on the bedside stand."
   newExit "east" masterBedroom hallway
   newExit "west" hallway masterBedroom
   perfume <- newObject masterBedroom "perfume" $
-    "A collection of tiny vials of perfume, probably collected from store\n" ++
+    "A collection of tiny vials of perfume, probably collected from store " ++
     "samples."
   setOnUse perfume $ do
     tell "You wipe perfume on your neck. You smell like cheap perfume now."
     nl
 
   childBedroom <- newRoom "Child\'s Bedroom" $
-    "This bedroom clearly belongs to a heteronormative young boy. There\n" ++
-    "are toys strewn about the floor, and a half-empty toybox is against\n" ++
-    "the west wall. There are three moderately-sized dressers, and a\n" ++
+    "This bedroom clearly belongs to a heteronormative young boy. There " ++
+    "are toys strewn about the floor, and a half-empty toybox is against " ++
+    "the west wall. There are three moderately-sized dressers, and a " ++
     "large bookcase sits atop the biggest one. A twin bed is in the corner."
   newExit "west" childBedroom hallway
   newExit "east" hallway childBedroom
   dollhouse <- newObject childBedroom "Gabby\'s Dollhouse" $
-    "This dollhouse is pink and blue, and looks like a giant cat. There\n" ++
-    "are three floors connected by an elevator, with one room on each side\n" ++
-    "of the elevator on each floor. Everything inside the dollhouse looks\n" ++
+    "This dollhouse is pink and blue, and looks like a giant cat. There " ++
+    "are three floors connected by an elevator, with one room on each side " ++
+    "of the elevator on each floor. Everything inside the dollhouse looks " ++
     "like a cartoon. Try \"use dollhouse\" to enter or exit the dollhouse."
   addAlias dollhouse "dollhouse"
   gabby <- newObject childBedroom "Gabby" $
@@ -183,7 +183,7 @@ buildWorld = do
     defaultDropGabby
     maybeGabbyLoc <- getLocation gabby
     when (maybeGabbyLoc == Just dollhouse) $ do
-      tell $ "Gabby turns into her cartoon self and looks very happy to be\n" ++
+      tell $ "Gabby turns into her cartoon self and looks very happy to be " ++
         "in her dollhouse!"
       nl
       addPoints 10
@@ -192,14 +192,14 @@ buildWorld = do
         "This is cartoon Gabby. She likes being in her dollhouse."
 
   bathroom <- newRoom "Bathroom" $
-    "This is a small but servicable bathroom. The counter is a pale\n" ++
-    "yellow, with a plain sink inset into it. There are built in cupboards\n" ++
-    "below the counter, and a cupboard door stands wide open to allow heat\n" ++
+    "This is a small but servicable bathroom. The counter is a pale " ++
+    "yellow, with a plain sink inset into it. There are built in cupboards " ++
+    "below the counter, and a cupboard door stands wide open to allow heat " ++
     "into the bathroom from a vent enclosed by the cabinetry."
   newExit "north" hallway bathroom
   newExit "south" bathroom hallway
   bathtub <- newObject bathroom "bathtub" $
-    "This is a plain white bathtub with a shower attachment and glass\n" ++
+    "This is a plain white bathtub with a shower attachment and glass " ++
     "doors."
   bathtubDescription <- getDescription bathtub
   setDescription bathtub $ bathtubDescription ++
@@ -207,11 +207,11 @@ buildWorld = do
   makeImmobile bathtub
 
   driveway <- newRoom "Driveway" $
-    "A concrete driveway extends along the west side of Granny\'s House.\n" ++
-    "Granny\'s side door is to the east. The front yard is to the\n" ++
-    "southeast and the backyard is to the northeast. The garage is north.\n" ++
-    "There are a great many small brown and medium black ants coming and\n" ++
-    "going out of anthills along the driveway. You wish you had a\n" ++
+    "A concrete driveway extends along the west side of Granny\'s House. " ++
+    "Granny\'s side door is to the east. The front yard is to the " ++
+    "southeast and the backyard is to the northeast. The garage is north. " ++
+    "There are a great many small brown and medium black ants coming and " ++
+    "going out of anthills along the driveway. You wish you had a " ++
     "magnifying glass to use on the ants."
   newExit "east" driveway kitchen
   newExit "west" kitchen driveway
@@ -219,8 +219,8 @@ buildWorld = do
   newExit "northwest" frontYard driveway
 
   garage <- newRoom "Garage" $
-    "Two cars are squeezed into this garage: a 1970s era yellow\n" ++
-    "Oldsmobile, and a very old green car with patched rust spots all over\n" ++
+    "Two cars are squeezed into this garage: a 1970s era yellow " ++
+    "Oldsmobile, and a very old green car with patched rust spots all over " ++
     "its body. There is a side door going to the back yard to the east."
   newExit "north" driveway garage
   newExit "south" garage driveway
@@ -229,12 +229,12 @@ buildWorld = do
   -- TODO water front yard for 10 points
 
   backyard <- newRoom "Backyard" $
-    "This is the largest part of Granny\'s yard. There are numerous shrubs\n" ++
-    "along the property line to the east, an empty sandbox near the house\n" ++
-    "to the south, a small garden with moss roses in the middle of the\n" ++
-    "yard, and lilacs are planted next to the garage. Behind the garage\n" ++
-    "are some disused laundry poles with old clotheslines strung between\n" ++
-    "them. The driveway is southwest, and the side yard is southeast. A\n" ++
+    "This is the largest part of Granny\'s yard. There are numerous shrubs " ++
+    "along the property line to the east, an empty sandbox near the house " ++
+    "to the south, a small garden with moss roses in the middle of the " ++
+    "yard, and lilacs are planted next to the garage. Behind the garage " ++
+    "are some disused laundry poles with old clotheslines strung between " ++
+    "them. The driveway is southwest, and the side yard is southeast. A " ++
     "side door goes to the garage to the west."
   newExit "southwest" backyard driveway
   newExit "northeast" driveway backyard
@@ -242,10 +242,10 @@ buildWorld = do
   newExit "east" garage backyard
 
   sideYard <- newRoom "Side Yard" $
-    "This narrow bit of property runs along the east side of Granny\'s\n" ++
-    "house. There is a window unit air conditioner sticking out of the\n" ++
-    "house, and a lightning rod and a TV antenna have been installed with\n" ++
-    "corresponding wires running up to the roof. The front yard is\n" ++
+    "This narrow bit of property runs along the east side of Granny\'s " ++
+    "house. There is a window unit air conditioner sticking out of the " ++
+    "house, and a lightning rod and a TV antenna have been installed with " ++
+    "corresponding wires running up to the roof. The front yard is " ++
     "southwest and the backyard is northwest."
   newExit "northwest" sideYard backyard
   newExit "southeast" backyard sideYard
@@ -253,14 +253,14 @@ buildWorld = do
   newExit "northeast" frontYard sideYard
 
   eastBrisbin <- newRoom "East Brisbin Street" $
-    "This is the east end of the block. Mike\'s house is north, and\n" ++
+    "This is the east end of the block. Mike\'s house is north, and " ++
     "Justin\'s house is south."
   newExit "east" brisbin eastBrisbin
   newExit "west" eastBrisbin brisbin
 
   justinYard <- newRoom "Justin\'s Yard" $
-    "You stand in front of Justin\'s house. It is a large home with a\n" ++
-    "noticable addition and multiple floors. There is a crabapple tree\n" ++
+    "You stand in front of Justin\'s house. It is a large home with a " ++
+    "noticable addition and multiple floors. There is a crabapple tree " ++
     "here. Bimbo the cat is hanging out in the yard."
   newExit "south" eastBrisbin justinYard
   newExit "north" justinYard eastBrisbin
@@ -272,7 +272,7 @@ buildWorld = do
     moveNowhere crabapple
     addPoints (-10)
   bimbo <- newObject justinYard "Bimbo" $
-    "Bimbo, who is oddly a male cat, has grey and white stripes covering\n" ++
+    "Bimbo, who is oddly a male cat, has grey and white stripes covering " ++
     "all of his body."
   setOnGet bimbo $ tell
     "Bimbo squirms out of your grasp and jumps to the ground." >> nl
@@ -284,7 +284,7 @@ buildWorld = do
     let healthStr = "The grass here is green and healthy."
     let goodGrassMsg = tell healthStr >> nl
     let successMsg = do
-          tell $ "You hook up the sprinkler to a hose and turn it on. The\n" ++
+          tell $ "You hook up the sprinkler to a hose and turn it on. The " ++
             "grass greens up right away."
           nl
     let alreadyUsedMsg = tell "The sprinkler is already running." >> nl
