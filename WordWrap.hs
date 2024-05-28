@@ -12,7 +12,8 @@ wrap output outputLen partial partialLen input
     wrap ('\n' : output) 0 "" 0 (reverse partial ++ input)
   | input == "" = reverse (partial ++ output)
   | head input == ' ' =
-    wrap (' ' : (partial ++ output)) (outputLen + 1) "" 0 (tail input)
+    wrap (' ' : (partial ++ output)) (partialLen + outputLen + 1) "" 0
+    (tail input)
   | head input == '\n' =
     wrap ('\n' : (partial ++ output)) 0 "" 0 (tail input)
   | otherwise =
