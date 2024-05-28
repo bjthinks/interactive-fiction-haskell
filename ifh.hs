@@ -21,7 +21,4 @@ main = do
   let (state', response) = execRWS handleInput "look" state
   liftIO $ putStr $ wordWrap response
   putStrLn "Type help for a list of commands."
-  putStr $ wordWrap $ replicate 69 'a' ++ "\n"
-  putStr $ wordWrap $ replicate 70 'a' ++ "\n"
-  putStr $ wordWrap $ replicate 71 'a' ++ "\n"
   runInputT defaultSettings $ runMaybeT $ mainloop state'
