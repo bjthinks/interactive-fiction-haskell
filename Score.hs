@@ -36,6 +36,6 @@ maybeShowWinMessage :: GameMonad ()
 maybeShowWinMessage = do
   points <- getScore
   maxPoints <- getMaxScore
-  when (points == maxPoints) $ do
+  when (points >= maxPoints) $ do
     tell "You have won! You may exit with Control-D, or continue playing."
     nl
