@@ -8,6 +8,9 @@ wordWrap str = wrap "" 0 "" 0 str
 
 wrap :: String -> Int -> String -> Int -> String -> String
 wrap output outputLen partial partialLen input
+  | outputLen == 0 && partialLen >= maxLineLen &&
+    (if input == "" || head input == '\n' then False else True) =
+      wrap ('\n' : partial ++ output) 0 "" 0 input
   | outputLen + partialLen > maxLineLen =
     wrap ('\n' : output) 0 "" 0 (reverse partial ++ input)
   | input == "" = reverse (partial ++ output)
