@@ -1,14 +1,19 @@
 module WordWrap(wordWrap) where
 
-wordWrap :: String -> String
-wordWrap str = wrap "" 0 str
-
 maxLineLen :: Int
 maxLineLen = 70
 
-wrap :: String -> Int -> String -> String
-wrap output outputLen "" = reverse output
-wrap output outputLen ('\n':input) = wrap ('\n':output) 0 input
-wrap output outputLen (i:input)
-  | outputLen >= maxLineLen = wrap ('\n':output) 0 (i:input)
-  | otherwise               = wrap (i:output) (outputLen+1) input
+wordWrap :: String -> String
+wordWrap str = wrap "" 0 "" 0 str
+
+wrap :: String -> Int -> String -> Int -> String -> String
+wrap output outputLen partial partialLen input
+  | outputLen + partialLen > maxLineLen =
+    wrap ('\n' : output) 0 "" 0 (reverse partial ++ input)
+  | input == "" = reverse (partial ++ output)
+  | head input == ' ' =
+    wrap (' ' : (partial ++ output)) (outputLen + 1) "" 0 (tail input)
+  | head input == '\n' =
+    wrap ('\n' : (partial ++ output)) 0 "" 0 (tail input)
+  | otherwise =
+    wrap output outputLen (head input : partial) (partialLen + 1) (tail input)
