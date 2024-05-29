@@ -56,7 +56,7 @@ buildWorld = do
     "This is a tiny dining room, most of which is taken up by a normal " ++
     "sized table. It has a plastic veneer which imitates a light brown " ++
     "wood pattern. Four chairs with dark brown plastic seats and backs " ++
-    "surround the table, and the floor is an icky brown tile with a swirly " ++
+    "surround the table, and the floor is an brown tile with a swirly " ++
     "pattern."
   newExit "west" living dinette
   newExit "east" dinette living
