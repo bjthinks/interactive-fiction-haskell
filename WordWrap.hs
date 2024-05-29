@@ -14,6 +14,8 @@ wrap output outputLen partial partialLen input
   | outputLen + partialLen > maxLineLen =
     wrap ('\n' : output) 0 "" 0 (reverse partial ++ input)
   | input == "" = reverse (partial ++ output)
+  | head input == ' ' && partialLen + outputLen == 0 =
+    wrap output outputLen partial partialLen (tail input)
   | head input == ' ' =
     wrap (' ' : (partial ++ output)) (partialLen + outputLen + 1) "" 0
     (tail input)
