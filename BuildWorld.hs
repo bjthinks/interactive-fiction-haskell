@@ -25,7 +25,7 @@ buildWorld = do
   setPlayer player
 
   frontYard <- newRoom "Granny\'s Front Yard" $
-    "The grass is green but has many holes in it where squirrels have been " ++
+    "The grass has many holes in it where squirrels have been " ++
     "digging. There is a concrete path connecting the street to the south " ++
     "and the driveway to the northwest. Granny\'s house is north and the " ++
     "side yard is northeast. There are a pine tree and two white oak trees " ++
