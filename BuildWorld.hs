@@ -53,7 +53,7 @@ buildWorld = do
   newExit "south" living frontYard
 
   dinette <- newRoom "Dinette" $
-    "This is a tiny dining room, most of which is taken up by a normal- " ++
+    "This is a tiny dining room, most of which is taken up by a normal " ++
     "sized table. It has a plastic veneer which imitates a light brown " ++
     "wood pattern. Four chairs with dark brown plastic seats and backs " ++
     "surround the table, and the floor is an icky brown tile with a swirly " ++
