@@ -1,6 +1,6 @@
 module Defs where
 
-import qualified Data.Map as M
+import qualified Data.Map.Strict as M
 import Control.Monad.RWS
 
 type Ref = Int

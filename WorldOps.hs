@@ -30,7 +30,7 @@ module WorldOps(getPlayer,
                 visibleStuff) where
 
 import Data.Maybe
-import qualified Data.Map as M
+import qualified Data.Map.Strict as M
 import Control.Monad
 import Control.Monad.RWS
 
