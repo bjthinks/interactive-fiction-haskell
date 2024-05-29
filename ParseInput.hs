@@ -39,40 +39,33 @@ lookAt = do
   ref <- them names
   return $ Look (Just ref)
 
-look :: MyParser Verb
-look = do
-  string "look" ||| string "l"
-  return $ Look Nothing
+verbWithoutRef :: String -> Verb -> MyParser Verb
+verbWithoutRef name def = do
+  string name
+  return def
 
-inventory :: MyParser Verb
-inventory = do
-  string "inventory" ||| string "i"
-  return Inventory
+look      = verbWithoutRef "look" (Look Nothing)
+l         = verbWithoutRef "l" (Look Nothing)
+inventory = verbWithoutRef "inventory" Inventory
+i         = verbWithoutRef "i" Inventory
+help      = verbWithoutRef "help" Help
+showScore = verbWithoutRef "score" Score
+blank     = verbWithoutRef "" Blank
 
-simpleVerb :: String -> (Ref -> Verb) -> MyParser Verb
-simpleVerb name def = do
+verbWithRef :: String -> (Ref -> Verb) -> MyParser Verb
+verbWithRef name def = do
   string name
   many1 space
   names <- getState
   ref <- them names
   return $ def ref
 
-getItem  = simpleVerb "get"  Get
-takeItem = simpleVerb "take" Get
-dropItem = simpleVerb "drop" Drop
-goExit   = simpleVerb "go"   Go
-eatItem  = simpleVerb "eat"  Eat
-useItem  = simpleVerb "use"  Use
-
-showScore :: MyParser Verb
-showScore = do
-  string "score"
-  return Score
-
-help :: MyParser Verb
-help = do
-  string "help"
-  return Help
+getItem  = verbWithRef "get"  Get
+takeItem = verbWithRef "take" Get
+dropItem = verbWithRef "drop" Drop
+goExit   = verbWithRef "go"   Go
+eatItem  = verbWithRef "eat"  Eat
+useItem  = verbWithRef "use"  Use
 
 implicitGo :: MyParser Verb
 implicitGo = do
@@ -80,12 +73,13 @@ implicitGo = do
   ref <- them names
   return $ Go ref
 
-blank :: MyParser Verb
-blank = return Blank
-
 verb :: MyParser Verb
-verb = lookAt ||| look ||| inventory ||| getItem ||| takeItem ||| dropItem |||
-  goExit ||| eatItem ||| useItem ||| showScore ||| help ||| implicitGo ||| blank
+verb = lookAt ||| look ||| l |||
+  inventory ||| i |||
+  getItem ||| takeItem ||| dropItem |||
+  goExit ||| eatItem ||| useItem |||
+  showScore ||| help ||| implicitGo |||
+  blank
 
 parseLine :: MyParser Verb
 parseLine = do
