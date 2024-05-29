@@ -125,28 +125,28 @@ doVerb Help = do
     "\"n\" is short for \"go north\"."
 
 lookAt :: Ref -> GameMonad ()
-lookAt it = do
-  name <- getName it
+lookAt ref = do
+  name <- getName ref
   msg name
-  desc <- getDescription it
+  desc <- getDescription ref
   when (desc /= "") $ msg desc
-  path <- getPath it
+  path <- getPath ref
   when (isJust path) $ do
     let (src,dest) = fromJust path
     srcName <- getName src
     destName <- getName dest
     msg $ "This is a way to go from " ++ srcName ++ " to " ++ destName ++ "."
-  contents <- getContents' it
+  contents <- getContents' ref
   -- You don't see yourself
   player <- getPlayer
-  let others = filter (/= player) contents
-  when (others /= []) $ do
-    names <- mapM getName others
-    msg $ "Contents: " ++ humanFriendlyList names ++ "."
-  exits <- getExits it
+  let objects = filter (/= player) contents
+  when (objects /= []) $ do
+    objectNames <- mapM getName objects
+    msg $ "Contents: " ++ humanFriendlyList (sort objectNames) ++ "."
+  exits <- getExits ref
   when (exits /= []) $ do
     exitNames <- mapM getName exits
-    msg $ "Exits: " ++ humanFriendlyList exitNames ++ "."
+    msg $ "Exits: " ++ humanFriendlyList (sort exitNames) ++ "."
 
 humanFriendlyList :: [String] -> String
 humanFriendlyList [] = "nothing"
