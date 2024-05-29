@@ -241,6 +241,14 @@ buildWorld = do
   newExit "southwest" sideYard frontYard
   newExit "northeast" frontYard sideYard
 
+  nickYard <- newRoom "Nick\'s Yard" $
+    "This house is in a very poor state of disrepair. It is green, like " ++
+    "Granny\'s house, but could use a coat of paint, to say the least. " ++
+    "The lawn is in serious need of weeding. There is a paper wasp nest " ++
+    "out of reach, on the outside of the second floor."
+  newExit "north" nickYard brisbin
+  newExit "south" brisbin nickYard
+
   eastBrisbin <- newRoom "East Brisbin Street" $
     "This is the east end of the block. Mike\'s house is north, and " ++
     "Justin\'s house is south."
