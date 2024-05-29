@@ -274,7 +274,7 @@ buildWorld = do
     "Bimbo squirms out of your grasp and jumps to the ground."
 
   setOnUse sprinkler $ do
-    let goodGrassLocs = [backyard, sideYard, justinYard]
+    let goodGrassLocs = [backyard, sideYard, nickYard, justinYard]
     let defaultMsg = msg "There isn\'t any grass to water here."
     let carryingMsg = msg "You should drop the sprinkler first."
     let healthStr = "The grass here is green and healthy."
