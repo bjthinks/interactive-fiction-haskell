@@ -1,7 +1,7 @@
 module WordWrap(wordWrap) where
 
 maxLineLen :: Int
-maxLineLen = 70
+maxLineLen = 75
 
 wordWrap :: String -> String
 wordWrap str = wrap "" 0 "" 0 str
