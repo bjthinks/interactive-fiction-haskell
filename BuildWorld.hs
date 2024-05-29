@@ -32,7 +32,8 @@ buildWorld = do
     "in the yard. A squirrel watches you nervously from one of the oak trees. "
   yardDesc <- getDescription frontYard
   setDescription frontYard $ yardDesc ++
-    "The grass here looks dry and parched."
+    "The grass here looks dry and parched. A hose beckons you to water the " ++
+    "yard."
   newExit "north" brisbin frontYard
   newExit "south" frontYard brisbin
   acorns <- newObject frontYard "acorns" $
@@ -271,7 +272,7 @@ buildWorld = do
     let healthStr = "The grass here is green and healthy."
     let goodGrassMsg = msg healthStr
     let successMsg =
-          msg $ "You hook up the sprinkler to a hose and turn it on. The " ++
+          msg $ "You hook up the sprinkler to the hose and turn it on. The " ++
             "grass greens up right away."
     let alreadyUsedMsg = msg "The sprinkler is already running."
     maybeSprinklerLoc <- getLocation sprinkler
