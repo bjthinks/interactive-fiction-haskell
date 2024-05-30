@@ -63,7 +63,6 @@ buildWorld = do
   newspaper <- newObject dinette "newspaper" $
     "This is today\'s issue of the Minneapolis Star and Tribune."
   candle <- newObject dinette "candle" "A plain red candle. It is not lit."
-  -- TODO be able to light candle for 10 points
 
   kitchen <- newRoom "Kitchen" $
     "This is a small but functional kitchen. There is a fridge in the " ++
@@ -98,8 +97,8 @@ buildWorld = do
     let noMatchesMsg =
           msg "You\'re not carrying anything to light the candle with."
     let lightMsg =
-          msg $ "The candle burns brightly. You have leveled up your " ++
-            "pyromaniac skills."
+          msg $ "You light the candle and it burns brightly. You have " ++
+          "leveled up your pyromaniac skills."
     let alreadyLitMsg = msg "The candle is already lit."
     let getLitCandleMsg =
           msg "It wouldn\'t be safe to walk around with a lit candle."
