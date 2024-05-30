@@ -200,8 +200,8 @@ connect exit src dest = do
 visibleStuff :: GameMonad [Ref]
 visibleStuff = do
   roomStuff <- visibleStuffInRoom
-  invStuff <- visibleStuffInInventory
-  return $ roomStuff ++ invStuff
+  inventory <- getInventory
+  return $ roomStuff ++ inventory
 
 visibleStuffInRoom :: GameMonad [Ref]
 visibleStuffInRoom = do
@@ -214,7 +214,34 @@ visibleStuffInRoom = do
       es <- getExits here
       return (here : cs ++ es)
 
-visibleStuffInInventory :: GameMonad [Ref]
-visibleStuffInInventory = do
+isGettable :: Ref -> GameMonad Bool
+isGettable x = do
+  player <- getPlayer
+  maybeLoc <- getLocation player
+  case maybeLoc of
+    Nothing -> return False
+    Just loc -> do
+      items <- getContents' loc
+      return $ elem x $ filter (/= player) items
+
+getInventory :: GameMonad [Ref]
+getInventory = do
   player <- getPlayer
   getContents' player
+
+isInInventory :: Ref -> GameMonad Bool
+isInInventory ref = do
+  inventory <- getInventory
+  return $ elem ref inventory
+
+isTravelable :: Ref -> GameMonad Bool
+isTravelable exit = do
+  maybePath <- getPath exit
+  case maybePath of
+    Nothing -> return False
+    Just (src,_t) -> do
+      player <- getPlayer
+      maybeLoc <- getLocation player
+      case maybeLoc of
+        Nothing -> return False
+        Just loc -> return $ loc == src

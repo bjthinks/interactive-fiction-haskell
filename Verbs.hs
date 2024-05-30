@@ -165,35 +165,3 @@ humanFriendlyList xs = list3 xs
   where
     list3 [x,y] = x ++ ", and " ++ y
     list3 (x:xs) = x ++ ", " ++ list3 xs
-
-isGettable :: Ref -> GameMonad Bool
-isGettable x = do
-  player <- getPlayer
-  maybeLoc <- getLocation player
-  case maybeLoc of
-    Nothing -> return False
-    Just loc -> do
-      items <- getContents' loc
-      return $ elem x $ filter (/= player) items
-
-getInventory :: GameMonad [Ref]
-getInventory = do
-  player <- getPlayer
-  getContents' player
-
-isInInventory :: Ref -> GameMonad Bool
-isInInventory ref = do
-  inventory <- getInventory
-  return $ elem ref inventory
-
-isTravelable :: Ref -> GameMonad Bool
-isTravelable exit = do
-  maybePath <- getPath exit
-  case maybePath of
-    Nothing -> return False
-    Just (src,_t) -> do
-      player <- getPlayer
-      maybeLoc <- getLocation player
-      case maybeLoc of
-        Nothing -> return False
-        Just loc -> return $ loc == src
