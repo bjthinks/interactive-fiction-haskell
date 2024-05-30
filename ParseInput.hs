@@ -9,7 +9,9 @@ data Verb = Blank
           | Look (Maybe Ref)
           | Inventory
           | Get Ref
+          | GetAll
           | Drop Ref
+          | DropAll
           | Go Ref
           | Eat Ref
           | Use Ref
@@ -48,6 +50,13 @@ verbWithNoun name def = do
   ref <- noun
   return $ def ref
 
+verbWithAll :: String -> Verb -> MyParser Verb
+verbWithAll name def = do
+  string name
+  many1 space
+  string "all"
+  return def
+
 implicitGo :: MyParser Verb
 implicitGo = do
   ref <- noun
@@ -58,12 +67,15 @@ verb =
   simpleVerb   "inventory" Inventory |||
   simpleVerb   "score" Score |||
   verbWithNoun "drop" Drop |||
+  verbWithAll  "drop" DropAll |||
   simpleVerb   "help" Help |||
   verbWithNoun "look" (Look . Just) |||
   simpleVerb   "look" (Look Nothing) |||
   verbWithNoun "take" Get |||
+  verbWithAll  "take" GetAll |||
   verbWithNoun "eat" Eat |||
   verbWithNoun "get" Get |||
+  verbWithAll  "get" GetAll |||
   verbWithNoun "use"  Use |||
   verbWithNoun "go" Go |||
   simpleVerb   "i" Inventory |||
