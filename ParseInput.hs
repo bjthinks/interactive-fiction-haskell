@@ -23,16 +23,17 @@ infixl 3 |||
 (|||) :: MyParser a -> MyParser a -> MyParser a
 (|||) lhs rhs = try lhs <|> rhs
 
-this :: (String,Ref) -> MyParser Ref
-this (n,r) = string n >> return r
-
 noun :: MyParser Ref
 noun = do
   names <- getState
   tryNouns names
     where
-      tryNouns [] = parserFail "I don\'t know what that is."
-      tryNouns (n:ns) = this n ||| tryNouns ns
+      tryNouns :: [(String,Ref)] -> MyParser Ref
+      tryNouns [] = parserFail "There is nothing here."
+      tryNouns [n] = tryNoun n
+      tryNouns (n:ns) = tryNoun n ||| tryNouns ns
+      tryNoun :: (String,Ref) -> MyParser Ref
+      tryNoun (name,ref) = string name >> return ref
 
 simpleVerb :: String -> Verb -> MyParser Verb
 simpleVerb name def = do
