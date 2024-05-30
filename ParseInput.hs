@@ -30,42 +30,27 @@ them :: [(String,Ref)] -> MyParser Ref
 them [] = parserFail "I don\'t know what that is."
 them (n:ns) = this n ||| them ns
 
-lookAt :: MyParser Verb
-lookAt = do
-  string "look" ||| string "l"
-  -- TODO: some space
-  many1 space
-  names <- getState
-  ref <- them names
-  return $ Look (Just ref)
-
-verbWithoutRef :: String -> Verb -> MyParser Verb
-verbWithoutRef name def = do
+simpleVerb :: String -> Verb -> MyParser Verb
+simpleVerb name def = do
   string name
   return def
 
-look      = verbWithoutRef "look" (Look Nothing)
-l         = verbWithoutRef "l" (Look Nothing)
-inventory = verbWithoutRef "inventory" Inventory
-i         = verbWithoutRef "i" Inventory
-help      = verbWithoutRef "help" Help
-showScore = verbWithoutRef "score" Score
-blank     = verbWithoutRef "" Blank
-
-verbWithRef :: String -> (Ref -> Verb) -> MyParser Verb
-verbWithRef name def = do
+verbWithNoun :: String -> (Ref -> Verb) -> MyParser Verb
+verbWithNoun name def = do
   string name
+  -- TODO: some space
   many1 space
   names <- getState
   ref <- them names
   return $ def ref
 
-getItem  = verbWithRef "get"  Get
-takeItem = verbWithRef "take" Get
-dropItem = verbWithRef "drop" Drop
-goExit   = verbWithRef "go"   Go
-eatItem  = verbWithRef "eat"  Eat
-useItem  = verbWithRef "use"  Use
+lookAt :: MyParser Verb
+lookAt = do
+  string "look" ||| string "l"
+  many1 space
+  names <- getState
+  ref <- them names
+  return $ Look (Just ref)
 
 implicitGo :: MyParser Verb
 implicitGo = do
@@ -74,12 +59,22 @@ implicitGo = do
   return $ Go ref
 
 verb :: MyParser Verb
-verb = lookAt ||| look ||| l |||
-  inventory ||| i |||
-  getItem ||| takeItem ||| dropItem |||
-  goExit ||| eatItem ||| useItem |||
-  showScore ||| help ||| implicitGo |||
-  blank
+verb =
+  simpleVerb   "inventory" Inventory |||
+  simpleVerb   "score" Score |||
+  verbWithNoun "drop" Drop |||
+  simpleVerb   "help" Help |||
+  lookAt |||
+  simpleVerb   "look" (Look Nothing) |||
+  verbWithNoun "take" Get |||
+  verbWithNoun "eat" Eat |||
+  verbWithNoun "get" Get |||
+  verbWithNoun "use"  Use |||
+  verbWithNoun "go" Go |||
+  simpleVerb   "i" Inventory |||
+  simpleVerb   "l" (Look Nothing) |||
+  implicitGo |||
+  simpleVerb   "" Blank
 
 parseLine :: MyParser Verb
 parseLine = do
