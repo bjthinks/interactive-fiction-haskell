@@ -8,7 +8,7 @@ import Control.Monad.RWS
 
 import Defs
 import Score
-import WorldOps
+import Game
 import ParseInput
 
 handleInput :: GameMonad ()

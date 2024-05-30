@@ -2,7 +2,7 @@ module BuildWorld where
 
 import Defs
 import Score
-import WorldOps
+import Game
 import Verbs
 import Control.Monad
 import Control.Monad.RWS
