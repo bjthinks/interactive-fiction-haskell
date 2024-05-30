@@ -171,8 +171,9 @@ setOnGet ref action = do
   setThing ref $ thing { onGet = action }
 
 makeImmobile :: Ref -> GameMonad ()
-makeImmobile ref = setOnGet ref $
-  msg "You can\'t pick that up."
+makeImmobile ref = setOnGet ref $ do
+  name <- getName ref
+  msg $ "You can\'t pick up the " ++ name ++ "."
 
 setOnDrop :: Ref -> GameMonad () -> GameMonad ()
 setOnDrop ref action = do

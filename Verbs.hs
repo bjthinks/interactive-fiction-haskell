@@ -54,6 +54,13 @@ doVerb (Get x) = do
       action <- getOnGet x
       action
 
+doVerb GetAll = do
+  stuff <- visibleStuff
+  gettableStuff <- filterM isGettable stuff
+  case gettableStuff of
+    [] -> msg "There isn\'t anything here."
+    _ -> mapM (doVerb . Get) gettableStuff >> return ()
+
 doVerb (Drop x) = do
   player <- getPlayer
   inv <- getContents' player
