@@ -45,7 +45,6 @@ simpleVerb name def = do
 verbWithNoun :: String -> (Ref -> Verb) -> MyParser Verb
 verbWithNoun name def = do
   string name
-  -- TODO: some space
   many1 space
   ref <- noun
   return $ def ref
