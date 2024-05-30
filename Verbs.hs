@@ -61,15 +61,20 @@ doVerb GetAll = do
     [] -> msg "There isn\'t anything here."
     _ -> mapM (doVerb . Get) gettableStuff >> return ()
 
-doVerb (Drop x) = do
-  player <- getPlayer
-  inv <- getContents' player
-  let haveIt = elem x inv
+doVerb (Drop ref) = do
+  haveIt <- isInInventory ref
   case haveIt of
     False -> msg "You\'re not carrying that."
     True -> do
-      action <- getOnDrop x
+      action <- getOnDrop ref
       action
+
+doVerb DropAll = do
+  stuff <- visibleStuff
+  droppableStuff <- filterM isInInventory stuff
+  case droppableStuff of
+    [] -> msg "You\'re not carrying anything."
+    _ -> mapM (doVerb . Drop) droppableStuff >> return ()
 
 doVerb (Go x) = do
   canGo <- isTravelable x
@@ -173,6 +178,12 @@ isGettable x = do
     Just loc -> do
       items <- getContents' loc
       return $ elem x $ filter (/= player) items
+
+isInInventory :: Ref -> GameMonad Bool
+isInInventory ref = do
+  player <- getPlayer
+  inventory <- getContents' player
+  return $ elem ref inventory
 
 isTravelable :: Ref -> GameMonad Bool
 isTravelable exit = do
