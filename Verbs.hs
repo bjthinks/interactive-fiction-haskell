@@ -41,9 +41,8 @@ doVerb (Look arg) = do
     Just at -> lookAt at
 
 doVerb Inventory = do
-  player <- getPlayer
-  contents <- getContents' player
-  names <- mapM getName contents
+  inventory <- getInventory
+  names <- mapM getName inventory
   msg $ "You are carrying: " ++ humanFriendlyList names ++ "."
 
 doVerb (Get x) = do
@@ -87,30 +86,28 @@ doVerb (Go x) = do
         Nothing -> msg "That direction doesn\'t go anywhere."
         Just (_,dest) -> move player dest >> lookAt dest
 
-doVerb (Eat x) = do
-  player <- getPlayer
-  inv <- getContents' player
-  let haveIt = elem x inv
+doVerb (Eat ref) = do
+  haveIt <- isInInventory ref
   case haveIt of
     False -> msg "You\'re not carrying that."
     True -> do
-      action <- getOnEat x
+      action <- getOnEat ref
       action
 
-doVerb (Use x) = do
+doVerb (Use ref) = do
   player <- getPlayer
-  inv <- getContents' player
+  inventory <- getInventory
   maybeLoc <- getLocation player
   stuff <- case maybeLoc of
     Nothing -> return []
     Just here -> do
       cs <- getContents' here
       return $ here : cs
-  let usableItems = inv ++ stuff
-  case (elem x usableItems) of
+  let usableItems = inventory ++ stuff
+  case (elem ref usableItems) of
     False -> msg "You can\'t use that."
     True -> do
-      action <- getOnUse x
+      action <- getOnUse ref
       action
 
 doVerb Score = do
@@ -179,10 +176,14 @@ isGettable x = do
       items <- getContents' loc
       return $ elem x $ filter (/= player) items
 
+getInventory :: GameMonad [Ref]
+getInventory = do
+  player <- getPlayer
+  getContents' player
+
 isInInventory :: Ref -> GameMonad Bool
 isInInventory ref = do
-  player <- getPlayer
-  inventory <- getContents' player
+  inventory <- getInventory
   return $ elem ref inventory
 
 isTravelable :: Ref -> GameMonad Bool
