@@ -44,14 +44,6 @@ verbWithNoun name def = do
   ref <- them names
   return $ def ref
 
-lookAt :: MyParser Verb
-lookAt = do
-  string "look" ||| string "l"
-  many1 space
-  names <- getState
-  ref <- them names
-  return $ Look (Just ref)
-
 implicitGo :: MyParser Verb
 implicitGo = do
   names <- getState
@@ -64,7 +56,7 @@ verb =
   simpleVerb   "score" Score |||
   verbWithNoun "drop" Drop |||
   simpleVerb   "help" Help |||
-  lookAt |||
+  verbWithNoun "look" (Look . Just) |||
   simpleVerb   "look" (Look Nothing) |||
   verbWithNoun "take" Get |||
   verbWithNoun "eat" Eat |||
@@ -72,6 +64,7 @@ verb =
   verbWithNoun "use"  Use |||
   verbWithNoun "go" Go |||
   simpleVerb   "i" Inventory |||
+  verbWithNoun "l" (Look . Just) |||
   simpleVerb   "l" (Look Nothing) |||
   implicitGo |||
   simpleVerb   "" Blank
