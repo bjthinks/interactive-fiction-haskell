@@ -26,9 +26,13 @@ infixl 3 |||
 this :: (String,Ref) -> MyParser Ref
 this (n,r) = string n >> return r
 
-them :: [(String,Ref)] -> MyParser Ref
-them [] = parserFail "I don\'t know what that is."
-them (n:ns) = this n ||| them ns
+noun :: MyParser Ref
+noun = do
+  names <- getState
+  tryNouns names
+    where
+      tryNouns [] = parserFail "I don\'t know what that is."
+      tryNouns (n:ns) = this n ||| tryNouns ns
 
 simpleVerb :: String -> Verb -> MyParser Verb
 simpleVerb name def = do
@@ -40,14 +44,12 @@ verbWithNoun name def = do
   string name
   -- TODO: some space
   many1 space
-  names <- getState
-  ref <- them names
+  ref <- noun
   return $ def ref
 
 implicitGo :: MyParser Verb
 implicitGo = do
-  names <- getState
-  ref <- them names
+  ref <- noun
   return $ Go ref
 
 verb :: MyParser Verb
