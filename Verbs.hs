@@ -142,6 +142,7 @@ doVerb Help = do
   msg "  look"
   msg "  look item/direction"
   msg "  score"
+  msg "  throw item"
   msg "  use item"
   msg $ "You can type the name of an exit to go that direction, and there " ++
     "are shorthand names for commonly named exits. So \"go n\" or just " ++
