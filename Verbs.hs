@@ -15,7 +15,7 @@ import ParseInput
 handleInput :: GameMonad [()]
 handleInput = do
   line <- ask
-  let commands = wordsBy (== ';') line
+  let commands = splitOn ";" line
   mapM runCommand commands
     where
       runCommand command = do
