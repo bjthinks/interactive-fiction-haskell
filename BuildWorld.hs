@@ -263,6 +263,15 @@ buildWorld = do
   newExit "east" brisbin eastBrisbin
   newExit "west" eastBrisbin brisbin
 
+  mikeYard <- newRoom "Mike\'s Yard" $
+    "Mike\'s house is large and L-shaped. The driveway goes around the " ++
+    "house to the adjacent avenue. There is a planter in the shape of " ++
+    "an old-fashioned well with petunias growing out of it, and you also " ++
+    "see a flower bed next to the house. A garage stands at the back of " ++
+    "the lot."
+  newExit "north" eastBrisbin mikeYard
+  newExit "south" mikeYard eastBrisbin
+
   justinYard <- newRoom "Justin\'s Yard" $
     "You stand in front of Justin\'s house. It is a large home with a " ++
     "noticable addition and multiple floors. There is a crabapple tree " ++
@@ -297,7 +306,8 @@ buildWorld = do
   newExit "south" motel westBrisbin
 
   setOnUse sprinkler $ do
-    let goodGrassLocs = [backyard, sideYard, nickYard, justinYard]
+    let goodGrassLocs =
+          [backyard, sideYard, nickYard, mikeYard, justinYard, motel]
     let defaultMsg = msg "There isn\'t any grass to water here."
     let carryingMsg = msg "You should drop the sprinkler first."
     let healthStr = "The grass here is green and healthy."
