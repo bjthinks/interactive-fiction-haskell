@@ -281,6 +281,12 @@ buildWorld = do
   setOnGet bimbo $ msg
     "Bimbo squirms out of your grasp and jumps to the ground."
 
+  westBrisbin <- newRoom "West Brisbin Street" $
+    "This is the west end of the block. There is a seedy motel to the " ++
+    "north, and what looks like a haunted house to the south."
+  newExit "west" brisbin westBrisbin
+  newExit "east" westBrisbin brisbin
+
   setOnUse sprinkler $ do
     let goodGrassLocs = [backyard, sideYard, nickYard, justinYard]
     let defaultMsg = msg "There isn\'t any grass to water here."
