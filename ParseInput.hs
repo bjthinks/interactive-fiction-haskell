@@ -15,6 +15,7 @@ data Verb = Blank
           | Go Ref
           | Eat Ref
           | Use Ref
+          | Throw Ref
           | Score
           | Help
           deriving Show
@@ -77,6 +78,7 @@ parseLine :: MyParser Verb
 parseLine =
   simpleVerb   "inventory" Inventory |||
   simpleVerb   "score" Score |||
+  verbWithNoun "throw" Throw |||
   verbWithNoun "drop" Drop |||
   verbWithAll  "drop" DropAll |||
   simpleVerb   "help" Help |||
