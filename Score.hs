@@ -5,13 +5,13 @@ import Defs
 import Control.Monad
 import Control.Monad.RWS
 
-addPoints :: Int -> GameMonad ()
-addPoints points = do
+addPoints :: Int -> String -> GameMonad ()
+addPoints points reason = do
   state <- get
   put $ state { score = score state + points }
   msg $ "You " ++ (if points >= 0 then "earn" else "lose") ++ " " ++
-    show (abs points) ++
-    " points. Use the \"score\" command to see your score."
+    show (abs points) ++ " points for " ++ reason ++ ". " ++
+    "Use the \"score\" command to see your score."
   maybeShowWinMessage
 
 getScore :: GameMonad Int

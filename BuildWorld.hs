@@ -50,7 +50,7 @@ buildWorld = do
   setOnThrow acorns $ throwAcorns $ do
     msg $ "You throw an acorn at the squirrel. She catches the acorn, runs " ++
       "up the tree, and eats the acorn hungrily."
-    addPoints 10
+    addPoints 10 "improving your aim"
     setOnThrow acorns $ throwAcorns $
       msg "The squirrel catches the acorn and eats it."
 
@@ -94,12 +94,12 @@ buildWorld = do
   setOnEat apple $ do
     msg "The apple tastes sweet and slightly astringent."
     moveNowhere apple
-    addPoints 5
+    addPoints 5 "tasting an apple"
   banana <- newObject kitchen "banana" "The bottom half of a banana."
   setOnEat banana $ do
     msg "The half banana tastes great and is surprisingly filling."
     moveNowhere banana
-    addPoints 5
+    addPoints 5 "finishing a banana"
   orange <- newObject kitchen "orange" "A large seedless navel orange."
   setOnEat orange $ msg "Oranges don\'t agree with you."
 
@@ -108,16 +108,14 @@ buildWorld = do
           msg "You should drop the candle before lighting it."
     let noMatchesMsg =
           msg "You\'re not carrying anything to light the candle with."
-    let lightMsg =
-          msg $ "You light the candle and it burns brightly. You have " ++
-          "leveled up your pyromaniac skills."
+    let lightMsg = msg "You light the candle and it burns brightly."
     let alreadyLitMsg = msg "The candle is already lit."
     maybeCandleLoc <- getLocation candle
     if maybeCandleLoc == Just player then holdingCandleMsg else do
       maybeMatchesLoc <- getLocation matches
       if maybeMatchesLoc /= Just player then do noMatchesMsg else do
         lightMsg
-        addPoints 10
+        addPoints 10 "leveling up your pyromaniac skills"
         setOnUse candle alreadyLitMsg
         setDescription candle "A plain red candle. It is burning brightly."
 
@@ -183,7 +181,7 @@ buildWorld = do
     when (maybeGabbyLoc == Just dollhouse) $ do
       msg $ "Gabby turns into her cartoon self and looks very happy to be " ++
         "in her dollhouse!"
-      addPoints 10
+      addPoints 10 "returning Gabby to her home"
       setOnDrop gabby defaultDropGabby
       setDescription gabby
         "This is cartoon Gabby. She likes being in her dollhouse."
@@ -283,7 +281,7 @@ buildWorld = do
   setOnEat crabapple $ do
     msg "You eat the crabapple, worm and all! YUCK!"
     moveNowhere crabapple
-    addPoints (-10)
+    addPoints (-10) "grossing yourself out"
   bimbo <- newObject justinYard "Bimbo" $
     "Bimbo, who is oddly a male cat, has grey and white stripes covering " ++
     "all of his body."
@@ -324,7 +322,7 @@ buildWorld = do
           if elem sprinklerLoc goodGrassLocs then goodGrassMsg else
             if sprinklerLoc /= frontYard then defaultMsg else do
               successMsg
-              addPoints 10
+              addPoints 10 "watering the grass"
               setOnUse sprinkler alreadyUsedMsg
               let sprinklerOnMsg = msg "You would get wet."
               setOnGet sprinkler sprinklerOnMsg
