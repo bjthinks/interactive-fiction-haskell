@@ -41,7 +41,17 @@ buildWorld = do
   setOnEat acorns $
     msg $ "You try one, but they taste terribly bitter. Maybe a squirrel " ++
       "would like them if you threw them at it?"
-  -- TODO throw acorn for 10 points
+  let throwAcorns finalAction = do
+        player <- getPlayer
+        loc <- getLocation player
+        if loc == Just frontYard then finalAction else
+          msg "You don\'t see any squirrels here."
+  setOnThrow acorns $ throwAcorns $ do
+    msg $ "You throw an acorn at the squirrel. She catches the acorn, runs " ++
+      "up the tree, and eats the acorn hungrily."
+    addPoints 10
+    setOnThrow acorns $ throwAcorns $
+      msg "The squirrel catches the acorn and eats it."
 
   living <- newRoom "Living Room" $
     "This is clearly the living room of Granny\'s House. The floor has " ++
@@ -294,6 +304,6 @@ buildWorld = do
               setOnGet sprinkler sprinklerOnMsg
               setDescription frontYard $ yardDesc ++ healthStr
 
-  setMaxScore 40
+  setMaxScore 50
 
   return ()
