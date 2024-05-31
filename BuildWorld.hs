@@ -29,11 +29,7 @@ buildWorld = do
     "digging. There is a concrete path connecting the street to the south " ++
     "and the driveway to the northwest. Granny\'s house is north and the " ++
     "side yard is northeast. There are a pine tree and two white oak trees " ++
-    "in the yard. A squirrel watches you nervously from one of the oak trees. "
-  yardDesc <- getDescription frontYard
-  setDescription frontYard $ yardDesc ++
-    "The grass here looks dry and parched. A hose beckons you to water the " ++
-    "yard."
+    "in the yard. A squirrel watches you nervously from one of the oak trees."
   newExit "north" brisbin frontYard
   newExit "south" frontYard brisbin
   acorns <- newObject frontYard "acorns" $
@@ -241,7 +237,11 @@ buildWorld = do
     "house. There is a window unit air conditioner sticking out of the " ++
     "house, and a lightning rod and a TV antenna have been installed with " ++
     "corresponding wires running up to the roof. The front yard is " ++
-    "southwest and the backyard is northwest."
+    "southwest and the backyard is northwest. "
+  yardDesc <- getDescription sideYard
+  setDescription sideYard $ yardDesc ++
+    "The grass here looks dry and parched. A hose beckons you to water the " ++
+    "yard."
   newExit "northwest" sideYard backyard
   newExit "southeast" backyard sideYard
   newExit "southwest" sideYard frontYard
@@ -305,7 +305,7 @@ buildWorld = do
 
   setOnUse sprinkler $ do
     let goodGrassLocs =
-          [backyard, sideYard, nickYard, mikeYard, justinYard, motel]
+          [backyard, frontYard, nickYard, mikeYard, justinYard, motel]
     let defaultMsg = msg "There isn\'t any grass to water here."
     let carryingMsg = msg "You should drop the sprinkler first."
     let healthStr = "The grass here is green and healthy."
@@ -320,13 +320,13 @@ buildWorld = do
       Just sprinklerLoc ->
         if sprinklerLoc == player then carryingMsg else
           if elem sprinklerLoc goodGrassLocs then goodGrassMsg else
-            if sprinklerLoc /= frontYard then defaultMsg else do
+            if sprinklerLoc /= sideYard then defaultMsg else do
               successMsg
               addPoints 10 "watering the grass"
               setOnUse sprinkler alreadyUsedMsg
               let sprinklerOnMsg = msg "You would get wet."
               setOnGet sprinkler sprinklerOnMsg
-              setDescription frontYard $ yardDesc ++ healthStr
+              setDescription sideYard $ yardDesc ++ healthStr
 
   setMaxScore 50
 
