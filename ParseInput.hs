@@ -63,6 +63,8 @@ implicitGo = do
 
 verb :: MyParser Verb
 verb =
+  -- Bug: things named or aliased "a" or "al" break the get/take/drop all
+  -- commands, so don't use those names for things!
   simpleVerb   "inventory" Inventory |||
   simpleVerb   "score" Score |||
   verbWithNoun "drop" Drop |||
