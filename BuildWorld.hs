@@ -190,6 +190,7 @@ buildWorld = do
   bathtub <- newObject bathroom "bathtub" $
     "This is a plain white bathtub with a shower attachment and glass " ++
     "doors."
+  addAlias bathtub "tub"
   bathtubDescription <- getDescription bathtub
   setDescription bathtub $ bathtubDescription ++
     " Type \"use bathtub\" to fill it with water."
