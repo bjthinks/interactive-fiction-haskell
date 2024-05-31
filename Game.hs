@@ -49,7 +49,8 @@ newThing n = do
                       Just room -> do
                         move i room
                         name <- getName i
-                        msg $ "You drop the " ++ name ++ "."
+                        msg $ "You drop the " ++ name ++ ".",
+                  onThrow = msg "There is no point in throwing that."
                 }
       s' = s { things = M.insert i t (things s),
                nextThing = i + 1 }
@@ -105,6 +106,7 @@ getOnEat       = getProperty onEat
 getOnUse       = getProperty onUse
 getOnGet       = getProperty onGet
 getOnDrop      = getProperty onDrop
+getOnThrow     = getProperty onThrow
 
 setThing :: Ref -> Thing -> GameMonad ()
 setThing i t = do
@@ -150,6 +152,11 @@ setOnDrop :: Ref -> GameMonad () -> GameMonad ()
 setOnDrop ref action = do
   thing <- getThing ref
   setThing ref $ thing { onDrop = action }
+
+setOnThrow :: Ref -> GameMonad () -> GameMonad ()
+setOnThrow ref action = do
+  thing <- getThing ref
+  setThing ref $ thing { onThrow = action }
 
 moveNowhere :: Ref -> GameMonad ()
 moveNowhere objRef = do

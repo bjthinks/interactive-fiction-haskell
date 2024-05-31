@@ -72,6 +72,14 @@ doVerb (Drop ref) = do
       action <- getOnDrop ref
       action
 
+doVerb (Throw ref) = do
+  haveIt <- isInInventory ref
+  case haveIt of
+    False -> msg "You\'re not carrying that."
+    True -> do
+      action <- getOnThrow ref
+      action
+
 doVerb DropAll = do
   stuff <- visibleStuff
   droppableStuff <- filterM isInInventory stuff

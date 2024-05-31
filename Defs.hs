@@ -18,7 +18,8 @@ data Thing = Thing {
   onEat :: GameMonad (),
   onUse :: GameMonad (),
   onGet :: GameMonad (),
-  onDrop :: GameMonad ()
+  onDrop :: GameMonad (),
+  onThrow :: GameMonad ()
   }
 
 data GameState = GameState { things :: M.Map Ref Thing,
