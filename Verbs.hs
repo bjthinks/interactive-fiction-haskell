@@ -124,8 +124,10 @@ doVerb Score = do
 doVerb Help = do
   msg "Command summary:"
   msg "  drop item"
+  msg "  drop all"
   msg "  eat item"
   msg "  get/take item"
+  msg "  get/take all"
   msg "  go direction"
   msg "  help"
   msg "  inventory"
@@ -136,6 +138,7 @@ doVerb Help = do
   msg $ "You can type the name of an exit to go that direction, and there " ++
     "are shorthand names for commonly named exits. So \"go n\" or just " ++
     "\"n\" is short for \"go north\"."
+  msg "You can use semicolons to separate multiple commands."
 
 lookAt :: Ref -> GameMonad ()
 lookAt ref = do
