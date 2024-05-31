@@ -303,9 +303,19 @@ buildWorld = do
   newExit "north" westBrisbin motel
   newExit "south" motel westBrisbin
 
+  hauntedYard <- newRoom "Haunted House Yard" $
+    "This is a very large white stucco two story house, with a sizeable " ++
+    "addition above the garage. There is a lightpost in a tiny clearing in " ++
+    "the front yard, with white rocks surrounding it. As you approach the " ++
+    "house, the light on the post turns on. You feel like you are being " ++
+    "watched."
+  newExit "south" westBrisbin hauntedYard
+  newExit "north" hauntedYard westBrisbin
+
   setOnUse sprinkler $ do
     let goodGrassLocs =
-          [backyard, frontYard, nickYard, mikeYard, justinYard, motel]
+          [backyard, frontYard, nickYard, mikeYard, justinYard, motel,
+           hauntedYard]
     let defaultMsg = msg "There isn\'t any grass to water here."
     let carryingMsg = msg "You should drop the sprinkler first."
     let healthStr = "The grass here is green and healthy."
