@@ -287,6 +287,15 @@ buildWorld = do
   newExit "west" brisbin westBrisbin
   newExit "east" westBrisbin brisbin
 
+  motel <- newRoom "Oak Grove Motel" $
+    "You stand in the parking lot of a down-and-out motel. There are two " ++
+    "yellow cottages, a large white house with an exterior staircase, and " ++
+    "a row of motel rooms along the back of the property. In the middle of " ++
+    "the lot is an oval of grass with a picnic table and several oak trees, " ++
+    "from which the property no doubt got its name."
+  newExit "north" westBrisbin motel
+  newExit "south" motel westBrisbin
+
   setOnUse sprinkler $ do
     let goodGrassLocs = [backyard, sideYard, nickYard, justinYard]
     let defaultMsg = msg "There isn\'t any grass to water here."
