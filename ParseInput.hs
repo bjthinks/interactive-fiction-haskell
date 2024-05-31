@@ -39,32 +39,42 @@ noun = do
 
 simpleVerb :: String -> Verb -> MyParser Verb
 simpleVerb name def = do
+  spaces
   string name
+  spaces
+  eof
   return def
 
 verbWithNoun :: String -> (Ref -> Verb) -> MyParser Verb
 verbWithNoun name def = do
+  spaces
   string name
   many1 space
   ref <- noun
+  spaces
+  eof
   return $ def ref
 
 verbWithAll :: String -> Verb -> MyParser Verb
 verbWithAll name def = do
+  spaces
   string name
   many1 space
   string "all"
+  spaces
+  eof
   return def
 
 implicitGo :: MyParser Verb
 implicitGo = do
+  spaces
   ref <- noun
+  spaces
+  eof
   return $ Go ref
 
-verb :: MyParser Verb
-verb =
-  -- Bug: things named or aliased "a" or "al" break the get/take/drop all
-  -- commands, so don't use those names for things!
+parseLine :: MyParser Verb
+parseLine =
   simpleVerb   "inventory" Inventory |||
   simpleVerb   "score" Score |||
   verbWithNoun "drop" Drop |||
@@ -84,14 +94,6 @@ verb =
   simpleVerb   "l" (Look Nothing) |||
   implicitGo |||
   simpleVerb   "" Blank
-
-parseLine :: MyParser Verb
-parseLine = do
-  spaces
-  v <- verb
-  spaces
-  eof
-  return v
 
 parseInput :: [(String,Ref)] -> String -> Either ParseError Verb
 parseInput names = runParser parseLine (longestFirst names) ""
