@@ -38,6 +38,7 @@ buildWorld = do
   newExit "south" frontYard brisbin
   acorns <- newObject frontYard "acorns" $
     "Ordinary white oak acorns. Could you throw them at a squirrel?"
+  addAlias acorns "acorn"
   setOnEat acorns $
     msg $ "You try one, but they taste terribly bitter. Maybe a squirrel " ++
       "would like them if you threw them at it?"
