@@ -312,6 +312,18 @@ buildWorld = do
   newExit "south" westBrisbin hauntedYard
   newExit "north" hauntedYard westBrisbin
 
+  foyer <- newRoom "Foyer" $
+    "This is the front room of the haunted house. The whole house appears " ++
+    "to be done in lavish wood paneling. There is a picture of an elderly " ++
+    "man on the wall, and his eyes move to follow you. There is a writing " ++
+    "desk and a basket for umbrellas next to the coat closet."
+  newExit "south" hauntedYard foyer
+  newExit "north" foyer hauntedYard
+  writingDesk <- newObject foyer "desk" $
+    "This is a small writing desk with multiple drawers for storage and an " ++
+    "upper shelf with paper and fountain pens."
+  makeImmobile writingDesk
+
   setOnUse sprinkler $ do
     let goodGrassLocs =
           [backyard, frontYard, nickYard, mikeYard, justinYard, motel,
