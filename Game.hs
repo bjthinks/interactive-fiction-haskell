@@ -181,13 +181,12 @@ move objRef destRef = do
 disconnect :: Ref -> GameMonad ()
 disconnect exit = do
   exitThing <- getThing exit
-  -- TODO: use when, like in moveNowhere
-  case (path exitThing) of
-    Nothing -> return ()
-    Just (src,_) -> do
-      srcThing <- getThing src
-      setThing src $ srcThing { exits = filter (/= exit) (exits srcThing) }
-      setThing exit $ exitThing { path = Nothing }
+  let maybePath = path exitThing
+  when (isJust maybePath) $ do
+    let (src,_) = fromJust maybePath
+    srcThing <- getThing src
+    setThing src $ srcThing { exits = filter (/= exit) (exits srcThing) }
+    setThing exit $ exitThing { path = Nothing }
 
 connect :: Ref -> Ref -> Ref -> GameMonad ()
 connect exit src dest = do

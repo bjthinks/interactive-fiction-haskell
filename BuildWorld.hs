@@ -101,8 +101,6 @@ buildWorld = do
           msg $ "You light the candle and it burns brightly. You have " ++
           "leveled up your pyromaniac skills."
     let alreadyLitMsg = msg "The candle is already lit."
-    let getLitCandleMsg =
-          msg "It wouldn\'t be safe to walk around with a lit candle."
     maybeCandleLoc <- getLocation candle
     if maybeCandleLoc == Just player then holdingCandleMsg else do
       maybeMatchesLoc <- getLocation matches
@@ -110,7 +108,6 @@ buildWorld = do
         lightMsg
         addPoints 10
         setOnUse candle alreadyLitMsg
-        -- setOnGet candle getLitCandleMsg
         setDescription candle "A plain red candle. It is burning brightly."
 
   hallway <- newRoom "Hallway" $
@@ -216,7 +213,6 @@ buildWorld = do
   newExit "south" garage driveway
   sprinkler <- newObject garage "sprinkler" $
     "This sprinkler spins around fast when used."
-  -- TODO water front yard for 10 points
 
   backyard <- newRoom "Backyard" $
     "This is the largest part of Granny\'s yard. There are numerous shrubs " ++
