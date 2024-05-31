@@ -17,8 +17,8 @@ buildWorld = do
     "Nick\'s house."
 
   player <- newObject brisbin "Yourself" $
-    "You are a middle-aged man, about 5\'7\" tall, with light brown hair " ++
-    "and wearing jeans and a t-shirt."
+    "You are an eight year old boy with blond hair, " ++
+    "wearing jeans, a t-shirt, and tennis shoes with tube socks."
   addAlias player "player"
   addAlias player "self"
   addAlias player "me"
