@@ -203,10 +203,14 @@ connect exit src dest = do
   exitThing <- getThing exit
   setThing exit $ exitThing { path = Just (src,dest) }
 
+isOpenContainer :: Ref -> GameMonad Bool
+isOpenContainer ref = return True
+
 visibleStuff :: GameMonad [Ref]
 visibleStuff = do
   roomStuff <- visibleStuffInRoom
-  containerStuff <- mapM getContents' roomStuff
+  openContainersInRoom <- filterM isOpenContainer roomStuff
+  containerStuff <- mapM getContents' openContainersInRoom
   inventory <- getInventory
   return $ roomStuff ++ concat containerStuff ++ inventory
 
