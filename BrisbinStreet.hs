@@ -336,6 +336,10 @@ buildWorld = do
     "The jar is labeled \"Brains\". You try not to think about what might " ++
     "be inside."
   setOnGet brains $ msg "You read the label on the jar and shiver nervously."
+  ghosts <- newObject hhDiningRoom "three ghosts" $
+    "Three big ghosts circle the dining room table. You are scared to go past!"
+  addAlias ghosts "ghosts"
+  makeImmobile ghosts
 
   setOnUse sprinkler $ do
     let goodGrassLocs =
