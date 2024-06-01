@@ -332,10 +332,10 @@ buildWorld = do
     "ceramic jar."
   newExit "south" hhFoyer hhDiningRoom
   newExit "north" hhDiningRoom hhFoyer
-  brains <- newObject hhDiningRoom "jar" $
-    "The jar is labeled \"Brains\". You try not to think about what might " ++
+  eyeballs <- newObject hhDiningRoom "jar" $
+    "The jar is labeled \"Eyeballs\". You try not to think about what might " ++
     "be inside."
-  setOnGet brains $ msg "You read the label on the jar and shiver nervously."
+  setOnGet eyeballs $ msg "You read the label on the jar and shiver nervously."
   ghosts <- newObject hhDiningRoom "three ghosts" $
     "Three big ghosts circle the dining room table. You are scared to go past!"
   addAlias ghosts "ghosts"
