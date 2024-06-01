@@ -1,0 +1,2 @@
+This is a text adventure or "interactive fiction" written in Haskell as
+a proof of concept. It uses the RWS or Reader-Writer-State monad extremely heavily.
