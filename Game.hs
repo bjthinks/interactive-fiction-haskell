@@ -206,8 +206,9 @@ connect exit src dest = do
 visibleStuff :: GameMonad [Ref]
 visibleStuff = do
   roomStuff <- visibleStuffInRoom
+  containerStuff <- mapM getContents' roomStuff
   inventory <- getInventory
-  return $ roomStuff ++ inventory
+  return $ roomStuff ++ concat containerStuff ++ inventory
 
 visibleStuffInRoom :: GameMonad [Ref]
 visibleStuffInRoom = do
