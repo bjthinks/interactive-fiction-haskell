@@ -51,8 +51,7 @@ newThing n = do
                         name <- getName i
                         msg $ "You drop the " ++ name ++ ".",
                   onThrow = msg "There is no point in throwing that.",
-                  isContainer = False,
-                  isOpen = True
+                  showContents = True
                 }
       s' = s { things = M.insert i t (things s),
                nextThing = i + 1 }
@@ -97,20 +96,19 @@ getThing i = fmap (fromJust . M.lookup i . things) get
 getProperty :: (Thing -> a) -> Ref -> GameMonad a
 getProperty c = fmap c . getThing
 
-getName        = getProperty name
-getAliases     = getProperty aliases
-getDescription = getProperty description
-getLocation    = getProperty location
-getContents'   = getProperty contents
-getExits       = getProperty exits
-getPath        = getProperty path
-getOnEat       = getProperty onEat
-getOnUse       = getProperty onUse
-getOnGet       = getProperty onGet
-getOnDrop      = getProperty onDrop
-getOnThrow     = getProperty onThrow
-getIsContainer = getProperty isContainer
-getIsOpen      = getProperty isOpen
+getName         = getProperty name
+getAliases      = getProperty aliases
+getDescription  = getProperty description
+getLocation     = getProperty location
+getContents'    = getProperty contents
+getExits        = getProperty exits
+getPath         = getProperty path
+getOnEat        = getProperty onEat
+getOnUse        = getProperty onUse
+getOnGet        = getProperty onGet
+getOnDrop       = getProperty onDrop
+getOnThrow      = getProperty onThrow
+getShowContents = getProperty showContents
 
 setThing :: Ref -> Thing -> GameMonad ()
 setThing i t = do
@@ -162,18 +160,10 @@ setOnThrow ref action = do
   thing <- getThing ref
   setThing ref $ thing { onThrow = action }
 
-setContainer :: Ref -> Bool -> GameMonad ()
-setContainer ref flag = do
+setShowContents :: Ref -> Bool -> GameMonad ()
+setShowContents ref flag = do
   thing <- getThing ref
-  setThing ref $ thing { isContainer = flag }
-
-makeContainer :: Ref -> GameMonad ()
-makeContainer ref = setContainer ref True
-
-setOpen :: Ref -> Bool -> GameMonad ()
-setOpen ref flag = do
-  thing <- getThing ref
-  setThing ref $ thing { isOpen = flag }
+  setThing ref $ thing { showContents = flag }
 
 moveNowhere :: Ref -> GameMonad ()
 moveNowhere objRef = do
@@ -222,19 +212,13 @@ connect exit src dest = do
 
 -- Predicates for help with verbs and elsewhere
 
-isOpenContainer :: Ref -> GameMonad Bool
-isOpenContainer ref = do
-  c <- getIsContainer ref
-  o <- getIsOpen ref
-  return $ c && o
-
 visibleStuff :: GameMonad [Ref]
 visibleStuff = do
   roomStuff <- visibleStuffInRoom
-  openContainersInRoom <- filterM isOpenContainer roomStuff
+  openContainersInRoom <- filterM getShowContents roomStuff
   containerStuffInRoom <- mapM getContents' openContainersInRoom
   inventory <- getInventory
-  openContainersInInventory <- filterM isOpenContainer inventory
+  openContainersInInventory <- filterM getShowContents inventory
   containerStuffInInventory <- mapM getContents' openContainersInInventory
   return $ roomStuff ++ concat containerStuffInRoom ++ inventory ++
     concat containerStuffInInventory

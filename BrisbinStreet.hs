@@ -24,8 +24,10 @@ buildWorld = do
   addAlias player "self"
   addAlias player "me"
   setPlayer player
-  backpack <- newObject player "backpack" "A blue canvas backpack."
-  makeContainer backpack
+  backpack <- newObject player "backpack" "A blue canvas backpack. "
+  setShowContents backpack False
+  backpackDescription <- getDescription backpack
+  setDescription backpack $ backpackDescription ++ "It is closed."
   newObject backpack "math book" "A second grade math textbook."
 
   frontYard <- newRoom "Granny\'s Front Yard" $
@@ -152,7 +154,6 @@ buildWorld = do
     "of the elevator on each floor. Everything inside the dollhouse looks " ++
     "like a cartoon. Try \"use dollhouse\" to enter or exit the dollhouse."
   addAlias dollhouse "dollhouse"
-  makeContainer dollhouse
   gabby <- newObject childBedroom "Gabby" $
     "This is a Gabby doll. It looks like she wants to be in her dollhouse."
   addAlias gabby "doll"
@@ -329,7 +330,6 @@ buildWorld = do
     "This is a small writing desk with multiple drawers for storage and an " ++
     "upper shelf with paper and fountain pens."
   makeImmobile writingDesk
-  makeContainer writingDesk
   newObject writingDesk "notebook" $
     "This is a common spiral bound notebook with a puce cover."
   potion <- newObject writingDesk "potion" $
