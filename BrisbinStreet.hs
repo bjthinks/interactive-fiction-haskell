@@ -313,17 +313,29 @@ buildWorld = do
   newExit "south" westBrisbin hauntedYard
   newExit "north" hauntedYard westBrisbin
 
-  foyer <- newRoom "Foyer" $
+  hhFoyer <- newRoom "Foyer" $
     "This is the front room of the haunted house. The whole house appears " ++
     "to be done in lavish wood paneling. There is a picture of an elderly " ++
     "man on the wall, and his eyes move to follow you. There is a writing " ++
     "desk and a basket for umbrellas next to the coat closet."
-  newExit "south" hauntedYard foyer
-  newExit "north" foyer hauntedYard
-  writingDesk <- newObject foyer "desk" $
+  newExit "south" hauntedYard hhFoyer
+  newExit "north" hhFoyer hauntedYard
+  writingDesk <- newObject hhFoyer "desk" $
     "This is a small writing desk with multiple drawers for storage and an " ++
     "upper shelf with paper and fountain pens."
   makeImmobile writingDesk
+
+  hhDiningRoom <- newRoom "Dining Room" $
+    "This dining room has a huge rectangular hardwood table with ten chairs " ++
+    "on all sides of it. There is a chandelier with real candles in it, " ++
+    "which have been recently lit. In the middle of the table is a big " ++
+    "ceramic jar."
+  newExit "south" hhFoyer hhDiningRoom
+  newExit "north" hhDiningRoom hhFoyer
+  brains <- newObject hhDiningRoom "jar" $
+    "The jar is labeled \"Brains\". You try not to think about what might " ++
+    "be inside."
+  setOnGet brains $ msg "You read the label on the jar and shiver nervously."
 
   setOnUse sprinkler $ do
     let goodGrassLocs =
