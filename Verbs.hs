@@ -1,34 +1,13 @@
 module Verbs where
 
 import Data.List
-import Data.List.Split
-import Data.Char
 import Data.Maybe
 import Control.Monad
-import Control.Monad.RWS
 
 import Defs
 import Score
 import Game
 import ParseInput
-
-handleInput :: GameMonad [()]
-handleInput = do
-  commands <- reader $ splitOn ";"
-  mapM runCommand commands
-    where
-      runCommand command = do
-        stuffRefs <- visibleStuff
-        stuff <- mapM getNameAndAliasesWithRefs stuffRefs
-        case parseInput (concat stuff) (map toLower command) of
-          Left err -> msg $ show err
-          Right verb -> doVerb verb
-        return ()
-      getNameAndAliasesWithRefs ref = do
-        name <- getName ref
-        aliases <- getAliases ref
-        let allNamesLowercase = map (map toLower) (name:aliases)
-        return $ map (\str -> (str,ref)) allNamesLowercase
 
 doVerb :: Verb -> GameMonad ()
 doVerb Blank = return ()
