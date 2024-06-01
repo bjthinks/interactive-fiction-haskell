@@ -325,6 +325,8 @@ buildWorld = do
     "This is a small writing desk with multiple drawers for storage and an " ++
     "upper shelf with paper and fountain pens."
   makeImmobile writingDesk
+  newObject writingDesk "notebook" $
+    "This is a common spiral bound notebook with a puce cover."
   potion <- newObject writingDesk "potion" $
     "The label reads \"Invisibility\"."
 
