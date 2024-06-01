@@ -326,7 +326,7 @@ buildWorld = do
   makeImmobile writingDesk
 
   hhDiningRoom <- newRoom "Dining Room" $
-    "This dining room has a huge rectangular hardwood table with ten chairs " ++
+    "This dining room has a huge octagonal hardwood table with eight chairs " ++
     "on all sides of it. There is a chandelier with real candles in it, " ++
     "which have been recently lit. In the middle of the table is a big " ++
     "ceramic jar."
