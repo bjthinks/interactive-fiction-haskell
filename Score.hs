@@ -1,5 +1,4 @@
-module Score(addPoints, getScore, getMaxScore, setMaxScore,
-             maybeShowWinMessage) where
+module Score where
 
 import Defs
 import Control.Monad

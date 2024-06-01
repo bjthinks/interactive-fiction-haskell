@@ -1,4 +1,4 @@
-module BuildWorld where
+module BuildWorld(buildWorld) where
 
 import Defs
 import Score

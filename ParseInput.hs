@@ -1,4 +1,4 @@
-module ParseInput(Verb(..),parseInput) where
+module ParseInput(Verb(..), parseInput) where
 
 import Text.Parsec
 import Text.Parsec.String
