@@ -24,6 +24,7 @@ buildWorld = do
   addAlias player "self"
   addAlias player "me"
   setPlayer player
+  newObject player "backpack" "A blue canvas backpack."
 
   frontYard <- newRoom "Granny\'s Front Yard" $
     "The grass has many holes in it where squirrels have been " ++
