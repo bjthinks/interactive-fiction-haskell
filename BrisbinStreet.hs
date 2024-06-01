@@ -151,6 +151,7 @@ buildWorld = do
   addAlias dollhouse "dollhouse"
   gabby <- newObject childBedroom "Gabby" $
     "This is a Gabby doll. It looks like she wants to be in her dollhouse."
+  addAlias gabby "doll"
   setOnUse dollhouse $ do
     maybePlayerLoc <- getLocation player
     maybeDollhouseLoc <- getLocation dollhouse
