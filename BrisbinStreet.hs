@@ -1,8 +1,9 @@
-module BuildWorld(buildWorld) where
+module Main where
 
 import Defs
 import Score
 import Game
+import PlayGame
 import Verbs
 import Control.Monad
 import Control.Monad.RWS
@@ -352,4 +353,9 @@ buildWorld = do
 
   setMaxScore 50
 
+  return ()
+
+main :: IO ()
+main = do
+  playGame buildWorld
   return ()

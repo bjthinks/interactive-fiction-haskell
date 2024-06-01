@@ -1,5 +1,5 @@
 ifh: *.hs
-	ghc --make ifh && touch ifh
+	ghc --make BrisbinStreet && touch BrisbinStreet
 
 clean:
-	rm -f *.hi *.o *~ ifh
+	rm -f *.hi *.o *~ BrisbinStreet

@@ -1,4 +1,4 @@
-module Main(main) where
+module PlayGame(playGame) where
 
 import System.Console.Haskeline
 import Control.Monad.Trans.Maybe
@@ -7,7 +7,6 @@ import Data.Char
 import Data.List.Split
 
 import Defs
-import BuildWorld
 import Game
 import ParseInput
 import Verbs
@@ -38,8 +37,9 @@ mainloop state = do
   liftIO $ putStr $ wordWrap response
   mainloop newState
 
-main = do
-  let (state, _) = execRWS buildWorld "" startState
+playGame :: GameMonad () -> IO (Maybe ())
+playGame build = do
+  let (state, _) = execRWS build "" startState
   let (state', response) = execRWS handleInput "look" state
   putStr $ wordWrap response
   putStr $ wordWrap "Type help for a list of commands.\n"
