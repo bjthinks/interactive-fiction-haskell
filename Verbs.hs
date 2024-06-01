@@ -14,8 +14,7 @@ import ParseInput
 
 handleInput :: GameMonad [()]
 handleInput = do
-  line <- ask
-  let commands = splitOn ";" line
+  commands <- reader $ splitOn ";"
   mapM runCommand commands
     where
       runCommand command = do
@@ -26,10 +25,10 @@ handleInput = do
           Right verb -> doVerb verb
         return ()
       getNameAndAliasesWithRefs ref = do
-        n <- getName ref
-        as <- getAliases ref
-        let allNamesLowercase = map (map toLower) (n:as)
-        return $ map (\n -> (n,ref)) allNamesLowercase
+        name <- getName ref
+        aliases <- getAliases ref
+        let allNamesLowercase = map (map toLower) (name:aliases)
+        return $ map (\str -> (str,ref)) allNamesLowercase
 
 doVerb :: Verb -> GameMonad ()
 doVerb Blank = return ()
