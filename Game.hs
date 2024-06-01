@@ -50,7 +50,9 @@ newThing n = do
                         move i room
                         name <- getName i
                         msg $ "You drop the " ++ name ++ ".",
-                  onThrow = msg "There is no point in throwing that."
+                  onThrow = msg "There is no point in throwing that.",
+                  isContainer = False,
+                  isOpen = True
                 }
       s' = s { things = M.insert i t (things s),
                nextThing = i + 1 }
@@ -107,6 +109,8 @@ getOnUse       = getProperty onUse
 getOnGet       = getProperty onGet
 getOnDrop      = getProperty onDrop
 getOnThrow     = getProperty onThrow
+getIsContainer = getProperty isContainer
+getIsOpen      = getProperty isOpen
 
 setThing :: Ref -> Thing -> GameMonad ()
 setThing i t = do
@@ -158,6 +162,19 @@ setOnThrow ref action = do
   thing <- getThing ref
   setThing ref $ thing { onThrow = action }
 
+setContainer :: Ref -> Bool -> GameMonad ()
+setContainer ref flag = do
+  thing <- getThing ref
+  setThing ref $ thing { isContainer = flag }
+
+makeContainer :: Ref -> GameMonad ()
+makeContainer ref = setContainer ref True
+
+setOpen :: Ref -> Bool -> GameMonad ()
+setOpen ref flag = do
+  thing <- getThing ref
+  setThing ref $ thing { isOpen = flag }
+
 moveNowhere :: Ref -> GameMonad ()
 moveNowhere objRef = do
   maybeLocRef <- getLocation objRef
@@ -203,16 +220,24 @@ connect exit src dest = do
   exitThing <- getThing exit
   setThing exit $ exitThing { path = Just (src,dest) }
 
+-- Predicates for help with verbs and elsewhere
+
 isOpenContainer :: Ref -> GameMonad Bool
-isOpenContainer ref = return True
+isOpenContainer ref = do
+  c <- getIsContainer ref
+  o <- getIsOpen ref
+  return $ c && o
 
 visibleStuff :: GameMonad [Ref]
 visibleStuff = do
   roomStuff <- visibleStuffInRoom
   openContainersInRoom <- filterM isOpenContainer roomStuff
-  containerStuff <- mapM getContents' openContainersInRoom
+  containerStuffInRoom <- mapM getContents' openContainersInRoom
   inventory <- getInventory
-  return $ roomStuff ++ concat containerStuff ++ inventory
+  openContainersInInventory <- filterM isOpenContainer inventory
+  containerStuffInInventory <- mapM getContents' openContainersInInventory
+  return $ roomStuff ++ concat containerStuffInRoom ++ inventory ++
+    concat containerStuffInInventory
 
 visibleStuffInRoom :: GameMonad [Ref]
 visibleStuffInRoom = do

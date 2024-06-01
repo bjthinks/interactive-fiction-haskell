@@ -19,7 +19,9 @@ data Thing = Thing {
   onUse :: GameMonad (),
   onGet :: GameMonad (),
   onDrop :: GameMonad (),
-  onThrow :: GameMonad ()
+  onThrow :: GameMonad (),
+  isContainer :: Bool,
+  isOpen :: Bool
   }
 
 data GameState = GameState { things :: M.Map Ref Thing,
