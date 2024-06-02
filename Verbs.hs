@@ -82,15 +82,18 @@ doVerb (PutIn item container) = do
     False -> return ()
     True -> do
       itemName <- getName item
-      if item == container then
-        msg $ "You can't put the " ++ itemName ++ " inside itself!" else do
-        player <- getPlayer
-        itemLoc <- getLocation item
-        if itemLoc == Just player then do
-          move item container
-          containerName <- getName container
-          msg $ "You put the " ++ itemName ++ " in the " ++ containerName ++ "."
-          else msg $ "You aren\'t carrying the " ++ itemName ++ "."
+      case item == container of
+        True -> msg $ "You can't put the " ++ itemName ++ " inside itself!"
+        False -> do
+          player <- getPlayer
+          itemLoc <- getLocation item
+          case itemLoc == Just player of
+            False -> msg $ "You aren\'t carrying the " ++ itemName ++ "."
+            True -> do
+              move item container
+              containerName <- getName container
+              msg $ "You put the " ++ itemName ++ " in the " ++
+                containerName ++ "."
 
 doVerb (Go x) = do
   canGo <- isTravelable x
