@@ -33,6 +33,7 @@ newThing n = do
                     name <- getName i
                     msg $ "You drop the " ++ name ++ ".",
                   onThrow = msg "There is no point in throwing that.",
+                  isContainer = False,
                   onOpen = msg "You can\'t open that.",
                   onClose = msg "You can\'t close that.",
                   isOpen = True
@@ -123,6 +124,9 @@ connect exit src dest = do
   setThing src $ srcThing { exits = exit : (exits srcThing) }
   exitThing <- getThing exit
   setThing exit $ exitThing { path = Just (src,dest) }
+
+makeContainer :: Ref -> GameMonad ()
+makeContainer ref = setIsContainer ref True
 
 makeOpenable :: Ref -> GameMonad ()
 makeOpenable ref = do
