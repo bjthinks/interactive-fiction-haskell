@@ -33,6 +33,8 @@ newThing n = do
                     name <- getName i
                     msg $ "You drop the " ++ name ++ ".",
                   onThrow = msg "There is no point in throwing that.",
+                  onOpen = msg "You can\'t open that.",
+                  onClose = msg "You can\'t close that.",
                   showContents = True
                 }
       s' = s { things = M.insert i t (things s),
@@ -163,6 +165,14 @@ visibleRefs = do
   inventoryContainerContents <- getThingsInContainers inventory
   let playerStuff = player : inventory ++ inventoryContainerContents
   return $ roomStuff ++ playerStuff
+
+-- Includes room because of dollhouse
+isUsable :: Ref -> GameMonad Bool
+isUsable ref = do
+  room <- getRoom
+  contents <- getRoomContents -- excludes player
+  inventory <- getInventory
+  return $ elem ref $ room : contents ++ inventory
 
 -- TODO: Rest of this needs refactoring
 

@@ -21,6 +21,8 @@ data Thing = Thing {
   onGet :: GameMonad (),
   onDrop :: GameMonad (),
   onThrow :: GameMonad (),
+  onOpen :: GameMonad (),
+  onClose :: GameMonad (),
   showContents :: Bool
   }
 
@@ -74,6 +76,8 @@ getOnUse        = getProperty onUse
 getOnGet        = getProperty onGet
 getOnDrop       = getProperty onDrop
 getOnThrow      = getProperty onThrow
+getOnOpen       = getProperty onOpen
+getOnClose      = getProperty onClose
 getShowContents = getProperty showContents
 
 setThing :: Ref -> Thing -> GameMonad ()
@@ -125,6 +129,16 @@ setOnThrow :: Ref -> GameMonad () -> GameMonad ()
 setOnThrow ref action = do
   thing <- getThing ref
   setThing ref $ thing { onThrow = action }
+
+setOnOpen :: Ref -> GameMonad () -> GameMonad ()
+setOnOpen ref action = do
+  thing <- getThing ref
+  setThing ref $ thing { onOpen = action }
+
+setOnClose :: Ref -> GameMonad () -> GameMonad ()
+setOnClose ref action = do
+  thing <- getThing ref
+  setThing ref $ thing { onClose = action }
 
 setShowContents :: Ref -> Bool -> GameMonad ()
 setShowContents ref flag = do

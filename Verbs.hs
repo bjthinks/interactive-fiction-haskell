@@ -80,18 +80,28 @@ doVerb (Eat ref) = do
       action <- getOnEat ref
       action
 
--- TODO refactor
 doVerb (Use ref) = do
-  inventory <- getInventory
-  room <- getRoom
-  stuff <- do
-    cs <- getContents' room
-    return $ room : cs -- Need to be able to use dollhouse while in it
-  let usableItems = inventory ++ stuff
-  case (elem ref usableItems) of
+  usable <- isUsable ref
+  case usable of
     False -> msg "You can\'t use that."
     True -> do
       action <- getOnUse ref
+      action
+
+doVerb (Open ref) = do
+  usable <- isUsable ref
+  case usable of
+    False -> msg "You can\'t open that."
+    True -> do
+      action <- getOnOpen ref
+      action
+
+doVerb (Close ref) = do
+  usable <- isUsable ref
+  case usable of
+    False -> msg "You can\'t close that."
+    True -> do
+      action <- getOnClose ref
       action
 
 doVerb Score = do
