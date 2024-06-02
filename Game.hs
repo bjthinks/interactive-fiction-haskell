@@ -235,6 +235,11 @@ getRoomExits = do
     Nothing -> return []
     Just room -> getExits room
 
+getInventory :: GameMonad [Ref]
+getInventory = do
+  player <- getPlayer
+  getContents' player
+
 getThingsInContainers :: [Ref] -> GameMonad [Ref]
 getThingsInContainers refs = do
   openContainers <- filterM getShowContents refs
@@ -268,10 +273,11 @@ isGettable x = do
       items <- getContents' loc
       return $ elem x $ filter (/= player) items
 
-getInventory :: GameMonad [Ref]
-getInventory = do
-  player <- getPlayer
-  getContents' player
+-- Excludes player
+isInRoom :: Ref -> GameMonad Bool
+isInRoom ref = do
+  contents <- getRoomContents
+  return $ elem ref contents
 
 isInInventory :: Ref -> GameMonad Bool
 isInInventory ref = do
