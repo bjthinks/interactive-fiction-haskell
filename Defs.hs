@@ -115,11 +115,6 @@ setOnGet ref action = do
   thing <- getThing ref
   setThing ref $ thing { onGet = action }
 
-makeImmobile :: Ref -> GameMonad ()
-makeImmobile ref = setOnGet ref $ do
-  name <- getName ref
-  msg $ "You can\'t pick up the " ++ name ++ "."
-
 setOnDrop :: Ref -> GameMonad () -> GameMonad ()
 setOnDrop ref action = do
   thing <- getThing ref

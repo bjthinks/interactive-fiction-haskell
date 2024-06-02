@@ -26,7 +26,7 @@ newThing n = do
                     player <- getPlayer
                     move i player
                     name <- getName i
-                    msg $ "You pick up the " ++ name ++ ".",
+                    msg $ "You take the " ++ name ++ ".",
                   onDrop = do
                     room <- getRoom
                     move i room
@@ -100,6 +100,11 @@ move objRef destRef = do
   -- Change object's location to new one
   obj <- getThing objRef
   setThing objRef $ obj { location = Just destRef }
+
+makeImmobile :: Ref -> GameMonad ()
+makeImmobile ref = setOnGet ref $ do
+  name <- getName ref
+  msg $ "You can\'t take the " ++ name ++ "."
 
 disconnect :: Ref -> GameMonad ()
 disconnect exit = do
