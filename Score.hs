@@ -6,8 +6,8 @@ import Control.Monad.RWS
 
 addPoints :: Int -> String -> GameMonad ()
 addPoints points reason = do
-  state <- get
-  put $ state { score = score state + points }
+  oldScore <- getScore
+  setScore $ oldScore + points
   msg $ "You " ++ (if points >= 0 then "earn" else "lose") ++ " " ++
     show (abs points) ++ " points for " ++ reason ++ ". " ++
     "Use the \"score\" command to see your score."
@@ -17,6 +17,11 @@ getScore :: GameMonad Int
 getScore = do
   state <- get
   return $ score state
+
+setScore :: Int -> GameMonad ()
+setScore points = do
+  state <- get
+  put $ state { score = points }
 
 getMaxScore :: GameMonad Int
 getMaxScore = do
