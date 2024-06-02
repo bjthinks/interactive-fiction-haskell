@@ -212,27 +212,51 @@ connect exit src dest = do
 
 -- Predicates for help with verbs and elsewhere
 
-visibleStuff :: GameMonad [Ref]
-visibleStuff = do
-  roomStuff <- visibleStuffInRoom
-  openContainersInRoom <- filterM getShowContents roomStuff
-  containerStuffInRoom <- mapM getContents' openContainersInRoom
-  inventory <- getInventory
-  openContainersInInventory <- filterM getShowContents inventory
-  containerStuffInInventory <- mapM getContents' openContainersInInventory
-  return $ roomStuff ++ concat containerStuffInRoom ++ inventory ++
-    concat containerStuffInInventory
-
-visibleStuffInRoom :: GameMonad [Ref]
-visibleStuffInRoom = do
+getRoom :: GameMonad (Maybe Ref)
+getRoom = do
   player <- getPlayer
-  maybeHere <- getLocation player
-  case maybeHere of
+  getLocation player
+
+-- Excludes player
+getRoomContents :: GameMonad [Ref]
+getRoomContents = do
+  maybeRoom <- getRoom
+  case maybeRoom of
     Nothing -> return []
-    Just here -> do
-      cs <- getContents' here
-      es <- getExits here
-      return (here : cs ++ es)
+    Just room -> do
+      player <- getPlayer
+      contents <- getContents' room
+      return $ filter (/= player) contents
+
+getRoomExits :: GameMonad [Ref]
+getRoomExits = do
+  maybeRoom <- getRoom
+  case maybeRoom of
+    Nothing -> return []
+    Just room -> getExits room
+
+getThingsInContainers :: [Ref] -> GameMonad [Ref]
+getThingsInContainers refs = do
+  openContainers <- filterM getShowContents refs
+  contents <- mapM getContents' openContainers
+  return $ concat contents
+
+visibleRefs :: GameMonad [Ref]
+visibleRefs = do
+  maybeRoom <- getRoom
+  roomThings <- case maybeRoom of
+    Nothing -> return []
+    Just room -> do
+      roomContents <- getRoomContents -- excludes player
+      roomExits <- getRoomExits
+      roomContainerContents <- getThingsInContainers roomContents
+      return $ room : roomContents ++ roomExits ++ roomContainerContents
+  player <- getPlayer
+  inventory <- getInventory
+  inventoryContainerContents <- getThingsInContainers inventory
+  return $ roomThings ++ player : inventory ++ inventoryContainerContents
+
+-- TODO: Rest of this needs refactoring
 
 isGettable :: Ref -> GameMonad Bool
 isGettable x = do

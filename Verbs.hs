@@ -36,11 +36,11 @@ doVerb (Get x) = do
       action
 
 doVerb GetAll = do
-  stuff <- visibleStuff
-  gettableStuff <- filterM isGettable stuff
-  case gettableStuff of
+  refs <- visibleRefs
+  gettableRefs <- filterM isGettable refs
+  case gettableRefs of
     [] -> msg "There isn\'t anything here."
-    _ -> mapM (doVerb . Get) gettableStuff >> return ()
+    _ -> mapM (doVerb . Get) gettableRefs >> return ()
 
 doVerb (Drop ref) = do
   haveIt <- isInInventory ref
@@ -59,11 +59,11 @@ doVerb (Throw ref) = do
       action
 
 doVerb DropAll = do
-  stuff <- visibleStuff
-  droppableStuff <- filterM isInInventory stuff
-  case droppableStuff of
+  refs <- visibleRefs
+  droppableRefs <- filterM isInInventory refs
+  case droppableRefs of
     [] -> msg "You\'re not carrying anything."
-    _ -> mapM (doVerb . Drop) droppableStuff >> return ()
+    _ -> mapM (doVerb . Drop) droppableRefs >> return ()
 
 doVerb (Go x) = do
   canGo <- isTravelable x

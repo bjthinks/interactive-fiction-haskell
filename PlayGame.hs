@@ -18,8 +18,8 @@ handleInput = do
   mapM runCommand commands
     where
       runCommand command = do
-        stuffRefs <- visibleStuff
-        stuff <- mapM getNameAndAliasesWithRefs stuffRefs
+        refs <- visibleRefs
+        stuff <- mapM getNameAndAliasesWithRefs refs
         case parseInput (concat stuff) (map toLower command) of
           Left err -> msg $ show err
           Right verb -> doVerb verb
