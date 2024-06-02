@@ -45,13 +45,14 @@ doVerb (GetFrom item container) = do
     True -> do
       itemLoc <- getLocation item
       containerName <- getName container
-      if itemLoc == Just container then do
-        player <- getPlayer
-        move item player
-        itemName <- getName item
-        msg $ "You get the " ++ itemName ++ " from the " ++
-          containerName ++ "."
-        else msg $ "You don\'t see that in the " ++ containerName ++ "."
+      case itemLoc == Just container of
+        False -> msg $ "You don\'t see that in the " ++ containerName ++ "."
+        True -> do
+          player <- getPlayer
+          move item player
+          itemName <- getName item
+          msg $ "You get the " ++ itemName ++ " from the " ++ containerName ++
+            "."
 
 doVerb (Drop ref) = do
   haveIt <- isInInventory ref
