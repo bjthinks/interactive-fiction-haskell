@@ -10,8 +10,10 @@ data Verb = Blank
           | Inventory
           | Get Ref
           | GetAll
+          | GetFrom Ref Ref
           | Drop Ref
           | DropAll
+          | PutIn Ref Ref
           | Go Ref
           | Eat Ref
           | Use Ref
@@ -68,6 +70,20 @@ verbWithAll name def = do
   eof
   return def
 
+complexVerb :: String -> String -> (Ref -> Ref -> Verb) -> MyParser Verb
+complexVerb name1 name2 def = do
+  spaces
+  string name1
+  many1 space
+  ref1 <- noun
+  many1 space
+  string name2
+  many1 space
+  ref2 <- noun
+  spaces
+  eof
+  return $ def ref1 ref2
+
 implicitGo :: MyParser Verb
 implicitGo = do
   spaces
@@ -90,9 +106,12 @@ parseLine =
   verbWithNoun "open" Open |||
   verbWithNoun "take" Get |||
   verbWithAll  "take" GetAll |||
+  complexVerb  "take" "from" GetFrom |||
   verbWithNoun "eat" Eat |||
   verbWithNoun "get" Get |||
   verbWithAll  "get" GetAll |||
+  complexVerb  "get" "from" GetFrom |||
+  complexVerb  "put" "in" PutIn |||
   verbWithNoun "use"  Use |||
   verbWithNoun "go" Go |||
   simpleVerb   "i" Inventory |||
