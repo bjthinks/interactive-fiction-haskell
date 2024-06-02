@@ -16,6 +16,8 @@ data Verb = Blank
           | Eat Ref
           | Use Ref
           | Throw Ref
+          | Open Ref
+          | Close Ref
           | Score
           | Help
           deriving Show
@@ -77,6 +79,7 @@ implicitGo = do
 parseLine :: MyParser Verb
 parseLine =
   simpleVerb   "inventory" Inventory |||
+  verbWithNoun "close" Close |||
   simpleVerb   "score" Score |||
   verbWithNoun "throw" Throw |||
   verbWithNoun "drop" Drop |||
@@ -84,6 +87,7 @@ parseLine =
   simpleVerb   "help" Help |||
   verbWithNoun "look" (Look . Just) |||
   simpleVerb   "look" (Look Nothing) |||
+  verbWithNoun "open" Open |||
   verbWithNoun "take" Get |||
   verbWithAll  "take" GetAll |||
   verbWithNoun "eat" Eat |||
