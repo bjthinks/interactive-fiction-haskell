@@ -13,14 +13,10 @@ doVerb :: Verb -> GameMonad ()
 doVerb Blank = return ()
 
 doVerb (Look arg) = do
-  maybeThing <- case arg of
-    Nothing -> do
-      player <- getPlayer
-      getLocation player
-    Just ref -> return (Just ref)
-  case maybeThing of
-    Nothing -> msg "You are dead."
-    Just at -> lookAt at
+  ref <- case arg of
+    Nothing -> getRoom
+    Just ref -> return ref
+  lookAt ref
 
 doVerb Inventory = do
   inventory <- getInventory
@@ -84,15 +80,13 @@ doVerb (Eat ref) = do
       action <- getOnEat ref
       action
 
+-- TODO refactor
 doVerb (Use ref) = do
-  player <- getPlayer
   inventory <- getInventory
-  maybeLoc <- getLocation player
-  stuff <- case maybeLoc of
-    Nothing -> return []
-    Just here -> do
-      cs <- getContents' here
-      return $ here : cs
+  room <- getRoom
+  stuff <- do
+    cs <- getContents' room
+    return $ room : cs -- Need to be able to use dollhouse while in it
   let usableItems = inventory ++ stuff
   case (elem ref usableItems) of
     False -> msg "You can\'t use that."

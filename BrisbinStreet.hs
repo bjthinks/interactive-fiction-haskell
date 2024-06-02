@@ -45,9 +45,8 @@ buildWorld = do
     msg $ "You try one, but they taste terribly bitter. Maybe a squirrel " ++
       "would like them if you threw them at it?"
   let throwAcorns finalAction = do
-        player <- getPlayer
-        loc <- getLocation player
-        if loc == Just frontYard then finalAction else
+        room <- getRoom
+        if room == frontYard then finalAction else
           msg "You don\'t see any squirrels here."
   setOnThrow acorns $ throwAcorns $ do
     msg $ "You throw an acorn at the squirrel. She catches the acorn, runs " ++
@@ -158,12 +157,11 @@ buildWorld = do
     "This is a Gabby doll. It looks like she wants to be in her dollhouse."
   addAlias gabby "doll"
   setOnUse dollhouse $ do
-    maybePlayerLoc <- getLocation player
+    playerLoc <- getRoom
     maybeDollhouseLoc <- getLocation dollhouse
     let failMsg = msg "You can\'t use that now."
-    if maybePlayerLoc == Nothing || maybeDollhouseLoc == Nothing then
+    if maybeDollhouseLoc == Nothing then
       failMsg else do
-      let playerLoc = fromJust maybePlayerLoc
       let dollhouseLoc = fromJust maybeDollhouseLoc
       if dollhouseLoc == player then
         msg "Please drop the dollhouse first." else

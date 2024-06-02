@@ -41,15 +41,10 @@ newThing n = do
                     name <- getName i
                     msg $ "You pick up the " ++ name ++ ".",
                   onDrop = do
-                    player <- getPlayer
-                    loc <- getLocation player
-                    case loc of
-                      Nothing ->
-                        msg "You can\'t drop things while you are dead."
-                      Just room -> do
-                        move i room
-                        name <- getName i
-                        msg $ "You drop the " ++ name ++ ".",
+                    room <- getRoom
+                    move i room
+                    name <- getName i
+                    msg $ "You drop the " ++ name ++ ".",
                   onThrow = msg "There is no point in throwing that.",
                   showContents = True
                 }
@@ -166,18 +161,18 @@ setShowContents ref flag = do
   setThing ref $ thing { showContents = flag }
 
 moveNowhere :: Ref -> GameMonad ()
-moveNowhere objRef = do
-  maybeLocRef <- getLocation objRef
+moveNowhere ref = do
+  maybeLocRef <- getLocation ref
   when (isJust maybeLocRef) $ do
-    -- Remove objRef from location's contents
+    -- Remove ref from location's contents
     let locRef = fromJust maybeLocRef
     loc <- getThing locRef
     let locContents = contents loc
-        newContents = filter (/= objRef) locContents
+        newContents = filter (/= ref) locContents
     setThing locRef $ loc { contents = newContents }
     -- Set object's location to Nothing
-    obj <- getThing objRef
-    setThing objRef $ obj { location = Nothing }
+    obj <- getThing ref
+    setThing ref $ obj { location = Nothing }
 
 move :: Ref -> Ref -> GameMonad ()
 move objRef destRef = do
@@ -260,12 +255,9 @@ visibleRefs = do
 isGettable :: Ref -> GameMonad Bool
 isGettable x = do
   player <- getPlayer
-  maybeLoc <- getLocation player
-  case maybeLoc of
-    Nothing -> return False
-    Just loc -> do
-      items <- getContents' loc
-      return $ elem x $ filter (/= player) items
+  room <- getRoom
+  items <- getContents' room
+  return $ elem x $ filter (/= player) items
 
 -- Excludes player
 isInRoom :: Ref -> GameMonad Bool
@@ -284,8 +276,5 @@ isTravelable exit = do
   case maybePath of
     Nothing -> return False
     Just (src,_t) -> do
-      player <- getPlayer
-      maybeLoc <- getLocation player
-      case maybeLoc of
-        Nothing -> return False
-        Just loc -> return $ loc == src
+      room <- getRoom
+      return $ room == src
