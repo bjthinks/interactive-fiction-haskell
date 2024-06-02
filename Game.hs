@@ -143,6 +143,24 @@ makeOpenable ref = do
         msg $ "You close the " ++ name ++ "."
         setIsOpen ref False
 
+setOpenDescription :: Ref -> String -> GameMonad ()
+setOpenDescription ref description = do
+  action <- getOnOpen ref
+  setOnOpen ref $ do
+    action
+    setDescription ref description
+  open <- getIsOpen ref
+  if open == True then setDescription ref description else return ()
+
+setClosedDescription :: Ref -> String -> GameMonad ()
+setClosedDescription ref description = do
+  action <- getOnClose ref
+  setOnClose ref $ do
+    action
+    setDescription ref description
+  open <- getIsOpen ref
+  if open == False then setDescription ref description else return ()
+
 -- Predicates for help with verbs and elsewhere
 
 getRoom :: GameMonad Ref

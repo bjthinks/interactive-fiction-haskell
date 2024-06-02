@@ -24,11 +24,15 @@ buildWorld = do
   addAlias player "self"
   addAlias player "me"
   setPlayer player
-  backpack <- newObject player "backpack" "A blue canvas backpack. "
+  backpack <- newObject player "backpack" "A blue canvas backpack."
   makeOpenable backpack
   setIsOpen backpack False
   backpackDescription <- getDescription backpack
-  setDescription backpack $ backpackDescription ++ "It is closed."
+  -- Note the following two lines have to come after setIsOpen
+  setOpenDescription backpack $ backpackDescription ++
+    " The zipper is open."
+  setClosedDescription backpack $ backpackDescription ++
+    " The zipper is closed."
   newObject backpack "math book" "A second grade math textbook."
 
   frontYard <- newRoom "Granny\'s Front Yard" $
