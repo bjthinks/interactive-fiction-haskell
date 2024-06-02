@@ -175,17 +175,18 @@ lookAt ref = do
   let objects = filter (/= player) contents
   when (open && objects /= []) $ do
     objectNames <- mapM getName objects
-    msg $ "Contents: " ++ humanFriendlyList (sort objectNames) ++ "."
+    msg $ "Contents: " ++ humanFriendlyList objectNames ++ "."
   exits <- getExits ref
   when (exits /= []) $ do
     exitNames <- mapM getName exits
-    msg $ "Exits: " ++ humanFriendlyList (sort exitNames) ++ "."
+    msg $ "Exits: " ++ humanFriendlyList exitNames ++ "."
 
 humanFriendlyList :: [String] -> String
-humanFriendlyList [] = "nothing"
-humanFriendlyList [x] = x
-humanFriendlyList [x,y] = x ++ " and " ++ y
-humanFriendlyList xs = list3 xs
+humanFriendlyList xs = hfl (sort xs)
   where
+    hfl [] = "nothing"
+    hfl [x] = x
+    hfl [x,y] = x ++ " and " ++ y
+    hfl xs = list3 xs
     list3 [x,y] = x ++ ", and " ++ y
     list3 (x:xs) = x ++ ", " ++ list3 xs
