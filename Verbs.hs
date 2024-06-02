@@ -76,6 +76,22 @@ doVerb DropAll = do
     [] -> msg "You\'re not carrying anything."
     _ -> mapM (doVerb . Drop) droppableRefs >> return ()
 
+doVerb (PutIn item container) = do
+  goodContainer <- isUsableContainer container
+  case goodContainer of
+    False -> return ()
+    True -> do
+      itemName <- getName item
+      if item == container then
+        msg $ "You can't put the " ++ itemName ++ " inside itself!" else do
+        player <- getPlayer
+        itemLoc <- getLocation item
+        if itemLoc == Just player then do
+          move item container
+          containerName <- getName container
+          msg $ "You put the " ++ itemName ++ " in the " ++ containerName ++ "."
+          else msg $ "You aren\'t carrying the " ++ itemName ++ "."
+
 doVerb (Go x) = do
   canGo <- isTravelable x
   case canGo of
