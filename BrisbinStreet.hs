@@ -25,7 +25,8 @@ buildWorld = do
   addAlias player "me"
   setPlayer player
   backpack <- newObject player "backpack" "A blue canvas backpack. "
-  setShowContents backpack False
+  makeOpenable backpack
+  setIsOpen backpack False
   backpackDescription <- getDescription backpack
   setDescription backpack $ backpackDescription ++ "It is closed."
   newObject backpack "math book" "A second grade math textbook."
@@ -328,6 +329,8 @@ buildWorld = do
     "This is a small writing desk with multiple drawers for storage and an " ++
     "upper shelf with paper and fountain pens."
   makeImmobile writingDesk
+  makeOpenable writingDesk
+  setIsOpen writingDesk False
   newObject writingDesk "notebook" $
     "This is a common spiral bound notebook with a puce cover."
   potion <- newObject writingDesk "potion" $

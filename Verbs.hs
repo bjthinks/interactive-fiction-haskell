@@ -144,11 +144,11 @@ lookAt ref = do
     destName <- getName dest
     msg $ "This is a way to go from " ++ srcName ++ " to " ++ destName ++ "."
   contents <- getContents' ref
-  showContents <- getShowContents ref
+  open <- getIsOpen ref
   -- You don't see yourself
   player <- getPlayer
   let objects = filter (/= player) contents
-  when (showContents && objects /= []) $ do
+  when (open && objects /= []) $ do
     objectNames <- mapM getName objects
     msg $ "Contents: " ++ humanFriendlyList (sort objectNames) ++ "."
   exits <- getExits ref

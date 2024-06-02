@@ -23,7 +23,7 @@ data Thing = Thing {
   onThrow :: GameMonad (),
   onOpen :: GameMonad (),
   onClose :: GameMonad (),
-  showContents :: Bool
+  isOpen :: Bool
   }
 
 data GameState = GameState { things :: M.Map Ref Thing,
@@ -78,7 +78,7 @@ getOnDrop       = getProperty onDrop
 getOnThrow      = getProperty onThrow
 getOnOpen       = getProperty onOpen
 getOnClose      = getProperty onClose
-getShowContents = getProperty showContents
+getIsOpen       = getProperty isOpen
 
 setThing :: Ref -> Thing -> GameMonad ()
 setThing i t = do
@@ -135,7 +135,7 @@ setOnClose ref action = do
   thing <- getThing ref
   setThing ref $ thing { onClose = action }
 
-setShowContents :: Ref -> Bool -> GameMonad ()
-setShowContents ref flag = do
+setIsOpen :: Ref -> Bool -> GameMonad ()
+setIsOpen ref flag = do
   thing <- getThing ref
-  setThing ref $ thing { showContents = flag }
+  setThing ref $ thing { isOpen = flag }

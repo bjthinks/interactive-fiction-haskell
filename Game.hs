@@ -35,7 +35,7 @@ newThing n = do
                   onThrow = msg "There is no point in throwing that.",
                   onOpen = msg "You can\'t open that.",
                   onClose = msg "You can\'t close that.",
-                  showContents = True
+                  isOpen = True
                 }
       s' = s { things = M.insert i t (things s),
                nextThing = i + 1 }
@@ -124,6 +124,25 @@ connect exit src dest = do
   exitThing <- getThing exit
   setThing exit $ exitThing { path = Just (src,dest) }
 
+makeOpenable :: Ref -> GameMonad ()
+makeOpenable ref = do
+  setOnOpen ref $ do
+    open <- getIsOpen ref
+    case open of
+      True -> msg "It\'s already open."
+      False -> do
+        name <- getName ref
+        msg $ "You open the " ++ name ++ "."
+        setIsOpen ref True
+  setOnClose ref $ do
+    open <- getIsOpen ref
+    case open of
+      False -> msg "It\'s already closed."
+      True -> do
+        name <- getName ref
+        msg $ "You close the " ++ name ++ "."
+        setIsOpen ref False
+
 -- Predicates for help with verbs and elsewhere
 
 getRoom :: GameMonad Ref
@@ -154,7 +173,7 @@ getInventory = do
 
 getThingsInContainers :: [Ref] -> GameMonad [Ref]
 getThingsInContainers refs = do
-  openContainers <- filterM getShowContents refs
+  openContainers <- filterM getIsOpen refs
   contents <- mapM getContents' openContainers
   return $ concat contents
 
