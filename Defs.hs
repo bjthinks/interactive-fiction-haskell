@@ -29,11 +29,13 @@ data GameState = GameState { things :: M.Map Ref Thing,
                              player :: Maybe Ref,
                              score :: Int,
                              maxScore :: Int }
+
 startState = GameState { things = M.empty,
                          nextThing = 0,
                          player = Nothing,
                          score = 0,
                          maxScore = 0 }
+
 type MoveInput = String
 type MoveOutput = String
 type GameMonad = RWS MoveInput MoveOutput GameState
