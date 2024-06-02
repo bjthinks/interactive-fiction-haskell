@@ -123,7 +123,9 @@ getRoom :: GameMonad Ref
 getRoom = do
   player <- getPlayer
   maybeRoom <- getLocation player
-  return $ fromJust maybeRoom
+  case maybeRoom of
+    Nothing -> error "Internal error: player has no location"
+    Just room -> return room
 
 -- Excludes player
 getRoomContents :: GameMonad [Ref]
