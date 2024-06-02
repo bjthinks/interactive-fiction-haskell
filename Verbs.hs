@@ -39,27 +39,19 @@ doVerb GetAll = do
     _ -> mapM (doVerb . Get) gettableRefs >> return ()
 
 doVerb (GetFrom item container) = do
-  containerName <- getName container
-  isContainer <- getIsContainer container
-  case isContainer of
-    False -> msg $ "The " ++ containerName ++ " is not a container."
+  goodContainer <- isUsableContainer container
+  case goodContainer of
+    False -> return ()
     True -> do
-      usable <- isUsable container
-      case usable of
-        False -> msg $ "The " ++ containerName ++ " is not accessible."
-        True -> do
-          open <- getIsOpen container
-          case open of
-            False -> msg $ "The " ++ containerName ++ " is closed."
-            True -> do
-              itemLoc <- getLocation item
-              if itemLoc == Just container then do
-                player <- getPlayer
-                move item player
-                itemName <- getName item
-                msg $ "You get the " ++ itemName ++ " from the " ++
-                  containerName ++ "."
-                else msg $ "You don\'t see that in the " ++ containerName ++ "."
+      itemLoc <- getLocation item
+      containerName <- getName container
+      if itemLoc == Just container then do
+        player <- getPlayer
+        move item player
+        itemName <- getName item
+        msg $ "You get the " ++ itemName ++ " from the " ++
+          containerName ++ "."
+        else msg $ "You don\'t see that in the " ++ containerName ++ "."
 
 doVerb (Drop ref) = do
   haveIt <- isInInventory ref
@@ -190,3 +182,25 @@ humanFriendlyList xs = hfl (sort xs)
     hfl xs = list3 xs
     list3 [x,y] = x ++ ", and " ++ y
     list3 (x:xs) = x ++ ", " ++ list3 xs
+
+isUsableContainer :: Ref -> GameMonad Bool
+isUsableContainer container = do
+  containerName <- getName container
+  isContainer <- getIsContainer container
+  case isContainer of
+    False -> do
+      msg $ "The " ++ containerName ++ " is not a container."
+      return False
+    True -> do
+      usable <- isUsable container
+      case usable of
+        False -> do
+          msg $ "The " ++ containerName ++ " is not accessible."
+          return False
+        True -> do
+          open <- getIsOpen container
+          case open of
+            False -> do
+              msg $ "The " ++ containerName ++ " is closed."
+              return False
+            True -> return True
