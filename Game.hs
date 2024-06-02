@@ -212,28 +212,24 @@ connect exit src dest = do
 
 -- Predicates for help with verbs and elsewhere
 
-getRoom :: GameMonad (Maybe Ref)
+getRoom :: GameMonad Ref
 getRoom = do
   player <- getPlayer
-  getLocation player
+  maybeRoom <- getLocation player
+  return $ fromJust maybeRoom
 
 -- Excludes player
 getRoomContents :: GameMonad [Ref]
 getRoomContents = do
-  maybeRoom <- getRoom
-  case maybeRoom of
-    Nothing -> return []
-    Just room -> do
-      player <- getPlayer
-      contents <- getContents' room
-      return $ filter (/= player) contents
+  room <- getRoom
+  player <- getPlayer
+  contents <- getContents' room
+  return $ filter (/= player) contents
 
 getRoomExits :: GameMonad [Ref]
 getRoomExits = do
-  maybeRoom <- getRoom
-  case maybeRoom of
-    Nothing -> return []
-    Just room -> getExits room
+  room <- getRoom
+  getExits room
 
 getInventory :: GameMonad [Ref]
 getInventory = do
@@ -248,18 +244,16 @@ getThingsInContainers refs = do
 
 visibleRefs :: GameMonad [Ref]
 visibleRefs = do
-  maybeRoom <- getRoom
-  roomThings <- case maybeRoom of
-    Nothing -> return []
-    Just room -> do
-      roomContents <- getRoomContents -- excludes player
-      roomExits <- getRoomExits
-      roomContainerContents <- getThingsInContainers roomContents
-      return $ room : roomContents ++ roomExits ++ roomContainerContents
+  room <- getRoom
+  roomContents <- getRoomContents -- excludes player
+  roomExits <- getRoomExits
+  roomContainerContents <- getThingsInContainers roomContents
+  let roomStuff = room : roomContents ++ roomExits ++ roomContainerContents
   player <- getPlayer
   inventory <- getInventory
   inventoryContainerContents <- getThingsInContainers inventory
-  return $ roomThings ++ player : inventory ++ inventoryContainerContents
+  let playerStuff = player : inventory ++ inventoryContainerContents
+  return $ roomStuff ++ playerStuff
 
 -- TODO: Rest of this needs refactoring
 
