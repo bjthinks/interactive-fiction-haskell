@@ -38,6 +38,29 @@ doVerb GetAll = do
     [] -> msg "There isn\'t anything here."
     _ -> mapM (doVerb . Get) gettableRefs >> return ()
 
+doVerb (GetFrom item container) = do
+  containerName <- getName container
+  isContainer <- getIsContainer container
+  case isContainer of
+    False -> msg $ "The " ++ containerName ++ " is not a container."
+    True -> do
+      usable <- isUsable container
+      case usable of
+        False -> msg $ "The " ++ containerName ++ " is not accessible."
+        True -> do
+          open <- getIsOpen container
+          case open of
+            False -> msg $ "The " ++ containerName ++ " is closed."
+            True -> do
+              itemLoc <- getLocation item
+              if itemLoc == Just container then do
+                player <- getPlayer
+                move item player
+                itemName <- getName item
+                msg $ "You get the " ++ itemName ++ " from the " ++
+                  containerName ++ "."
+                else msg $ "You don\'t see that in the " ++ containerName ++ "."
+
 doVerb (Drop ref) = do
   haveIt <- isInInventory ref
   case haveIt of
