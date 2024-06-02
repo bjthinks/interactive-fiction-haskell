@@ -335,6 +335,13 @@ buildWorld = do
   makeImmobile writingDesk
   makeOpenable writingDesk
   setIsOpen writingDesk False
+  writingDeskDescription <- getDescription writingDesk
+  setOpenDescription writingDesk $ writingDeskDescription ++
+    " The drawers are open."
+  setClosedDescription writingDesk $ writingDeskDescription ++
+    " The drawers are closed."
+  addAlias writingDesk "drawers"
+  addAlias writingDesk "drawer"
   newObject writingDesk "notebook" $
     "This is a common spiral bound notebook with a puce cover."
   potion <- newObject writingDesk "potion" $
