@@ -128,8 +128,13 @@ doVerb (Open ref) = do
   case usable of
     False -> msg "You can\'t open that."
     True -> do
-      action <- getOnOpen ref
-      action
+      locked <- getIsLocked ref
+      refName <- getName ref
+      case locked of
+        True -> msg $ "The " ++ refName ++ " is locked."
+        False -> do
+          action <- getOnOpen ref
+          action
 
 doVerb (Close ref) = do
   usable <- isUsable ref
