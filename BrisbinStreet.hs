@@ -147,7 +147,7 @@ buildWorld = do
     msg "You wipe perfume on your neck. You smell like cheap perfume now."
 
   childBedroom <- newRoom "Child\'s Bedroom" $
-    "This bedroom clearly belongs to a heteronormative young boy. There " ++
+    "This bedroom clearly belongs to a young boy. There " ++
     "are toys strewn about the floor, and a half-empty toybox is against " ++
     "the west wall. There are three moderately-sized dressers, and a " ++
     "large bookcase sits atop the biggest one. A twin bed is in the corner."
