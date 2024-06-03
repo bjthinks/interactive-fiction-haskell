@@ -148,7 +148,7 @@ doVerb (Unlock ref key) = do
   usable <- isUsable ref
   exit <- isExit ref
   case usable || exit of
-    False -> msg "You can\'t unlock that."
+    False -> msg "You can\'t unlock that. It\'s not accessible."
     True -> do
       isLocked <- getIsLocked ref
       case isLocked of
@@ -165,6 +165,29 @@ doVerb (Unlock ref key) = do
                 True -> do
                   setIsLocked ref False
                   msg $ "You unlock it with the " ++ keyName ++ "."
+
+doVerb (Lock ref key) = do
+  usable <- isUsable ref
+  exit <- isExit ref
+  case usable || exit of
+    False -> msg "You can\'t lock that. It\'s not accessible."
+    True -> do
+      isLocked <- getIsLocked ref
+      case isLocked of
+        True -> msg "That\'s already locked."
+        False -> do
+          haveKey <- isInInventory key
+          keyName <- getName key
+          case haveKey of
+            False -> msg $ "You\'re not carrying the " ++ keyName ++ "."
+            True -> do
+              maybeKey <- getKey ref
+              case maybeKey == Just key of
+                False -> msg $ "The " ++ keyName ++ " is not the right key."
+                True -> do
+                  -- Bug for now: can be open but locked
+                  setIsLocked ref True
+                  msg $ "You lock it with the " ++ keyName ++ "."
 
 doVerb Score = do
   points <- getScore
