@@ -251,8 +251,8 @@ isInInventory ref = do
   inventory <- getInventory
   return $ elem ref inventory
 
-isTravelable :: Ref -> GameMonad Bool
-isTravelable exit = do
+isExit :: Ref -> GameMonad Bool
+isExit exit = do
   maybePath <- getPath exit
   case maybePath of
     Nothing -> return False

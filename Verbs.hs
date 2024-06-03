@@ -97,15 +97,15 @@ doVerb (PutIn item container) = do
                 containerName ++ "."
 
 doVerb (Go x) = do
-  canGo <- isTravelable x
+  canGo <- isExit x
   case canGo of
     False -> msg "You can\'t go that way."
     True -> do
       player <- getPlayer
       maybePath <- getPath x
-      case maybePath of
-        Nothing -> msg "That direction doesn\'t go anywhere."
-        Just (_,dest) -> move player dest >> lookAt dest
+      let (_,dest) = fromJust maybePath
+      move player dest
+      lookAt dest
 
 doVerb (Eat ref) = do
   haveIt <- isInInventory ref
@@ -143,6 +143,28 @@ doVerb (Close ref) = do
     True -> do
       action <- getOnClose ref
       action
+
+doVerb (Unlock ref key) = do
+  usable <- isUsable ref
+  exit <- isExit ref
+  case usable || exit of
+    False -> msg "You can\'t unlock that."
+    True -> do
+      isLocked <- getIsLocked ref
+      case isLocked of
+        False -> msg "That isn\'t locked."
+        True -> do
+          haveKey <- isInInventory key
+          keyName <- getName key
+          case haveKey of
+            False -> msg $ "You\'re not carrying the " ++ keyName ++ "."
+            True -> do
+              maybeKey <- getKey ref
+              case maybeKey == Just key of
+                False -> msg $ "The " ++ keyName ++ " is not the right key."
+                True -> do
+                  setIsLocked ref False
+                  msg $ "You unlock it with the " ++ keyName ++ "."
 
 doVerb Score = do
   points <- getScore
