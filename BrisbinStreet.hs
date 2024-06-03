@@ -342,6 +342,9 @@ buildWorld = do
     " The drawers are open."
   setClosedDescription writingDesk $ writingDeskDescription ++
     " The drawers are closed."
+  writingDeskKey <- newObject hhFoyer "triangular key" $
+    "This is an oddly shaped key. Who knows what it unlocks?"
+  makeLocked writingDesk writingDeskKey
   addAlias writingDesk "drawers"
   addAlias writingDesk "drawer"
   newObject writingDesk "notebook" $

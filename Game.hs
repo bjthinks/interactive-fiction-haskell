@@ -170,6 +170,12 @@ setClosedDescription ref description = do
   open <- getIsOpen ref
   if open == False then setDescription ref description else return ()
 
+makeLocked :: Ref -> Ref -> GameMonad ()
+makeLocked ref key = do
+  setIsOpen ref False
+  setIsLocked ref True
+  setKey ref $ Just key
+
 -- Predicates for help with verbs and elsewhere
 
 getRoom :: GameMonad Ref
