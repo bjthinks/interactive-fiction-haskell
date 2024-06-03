@@ -36,7 +36,9 @@ newThing n = do
                   isContainer = False,
                   onOpen = msg "You can\'t open that.",
                   onClose = msg "You can\'t close that.",
-                  isOpen = True
+                  isOpen = True,
+                  isLocked = False,
+                  key = Nothing
                 }
       s' = s { things = M.insert i t (things s),
                nextThing = i + 1 }

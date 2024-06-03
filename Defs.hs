@@ -24,7 +24,9 @@ data Thing = Thing {
   isContainer :: Bool,
   onOpen :: GameMonad (),
   onClose :: GameMonad (),
-  isOpen :: Bool
+  isOpen :: Bool,
+  isLocked :: Bool,
+  key :: Maybe Ref
   }
 
 data GameState = GameState { things :: M.Map Ref Thing,
@@ -81,6 +83,8 @@ getIsContainer  = getProperty isContainer
 getOnOpen       = getProperty onOpen
 getOnClose      = getProperty onClose
 getIsOpen       = getProperty isOpen
+getIsLocked     = getProperty isLocked
+getKey          = getProperty key
 
 setThing :: Ref -> Thing -> GameMonad ()
 setThing i t = do
@@ -146,3 +150,13 @@ setIsOpen :: Ref -> Bool -> GameMonad ()
 setIsOpen ref flag = do
   thing <- getThing ref
   setThing ref $ thing { isOpen = flag }
+
+setIsLocked :: Ref -> Bool -> GameMonad ()
+setIsLocked ref flag = do
+  thing <- getThing ref
+  setThing ref $ thing { isLocked = flag }
+
+setKey :: Ref -> Maybe Ref -> GameMonad ()
+setKey ref maybeKey = do
+  thing <- getThing ref
+  setThing ref $ thing { key = maybeKey }
