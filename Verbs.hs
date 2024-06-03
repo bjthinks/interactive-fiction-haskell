@@ -96,16 +96,20 @@ doVerb (PutIn item container) = do
               msg $ "You put the " ++ itemName ++ " in the " ++
                 containerName ++ "."
 
-doVerb (Go x) = do
-  canGo <- isExit x
+doVerb (Go ref) = do
+  canGo <- isExit ref
   case canGo of
     False -> msg "You can\'t go that way."
     True -> do
-      player <- getPlayer
-      maybePath <- getPath x
-      let (_,dest) = fromJust maybePath
-      move player dest
-      lookAt dest
+      locked <- getIsLocked ref
+      case locked of
+        True -> msg "The door is locked."
+        False -> do
+          player <- getPlayer
+          maybePath <- getPath ref
+          let (_,dest) = fromJust maybePath
+          move player dest
+          lookAt dest
 
 doVerb (Eat ref) = do
   haveIt <- isInInventory ref
