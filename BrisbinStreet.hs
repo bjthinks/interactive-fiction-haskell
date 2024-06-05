@@ -386,11 +386,24 @@ buildWorld = do
   staircaseEntrance <- newExit "east" hhKitchen hhLowerStaircase
   newExit "west" hhLowerStaircase hhKitchen
 
-  setOnGet book $ do
-    msg $ "You try to pick up the red book, but it appears to be attached " ++
-      "to some kind of mechanism. You hear walls moving, and the floor plan " ++
-      "of the house changes!"
-    -- Make floorplan change here
+  disconnect staircaseEntrance
+  let onGetBook1 = do
+        getBookMessage
+        disconnect bathroomEntrance
+        connect staircaseEntrance hhKitchen hhLowerStaircase
+        setOnGet book onGetBook2
+      onGetBook2 = do
+        getBookMessage
+        disconnect staircaseEntrance
+        connect bathroomEntrance hhReadingRoom hhBathroom1
+        setOnGet book onGetBook1
+      getBookMessage = msg $
+        "You try to pick up the red book, but it appears to be attached " ++
+        "to some kind of mechanism. You hear walls moving, and the floor " ++
+        "plan of the house changes!"
+  setOnGet book onGetBook1
+
+  return ()
 
   setOnUse sprinkler $ do
     let goodGrassLocs =
