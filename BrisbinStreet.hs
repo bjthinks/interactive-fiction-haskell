@@ -346,10 +346,10 @@ buildWorld = do
   newExit "west" hhReadingRoom hhFoyer
   book <- newObject hhReadingRoom "book" $
     "This red book stands out from the rest. It beckons you to take it."
-  writingDeskKey <- newObject hhReadingRoom "crooked key" $
+  crookedKey <- newObject hhReadingRoom "crooked key" $
     "This is an oddly shaped key. Who knows what it unlocks?"
-  moveNowhere writingDeskKey
-  makeLocked writingDesk writingDeskKey
+  moveNowhere crookedKey
+  makeLocked writingDesk crookedKey
   -- These two lines should come after makeLocked above
   setUnlockedDescription writingDesk $ writingDeskDescription ++
     " The drawers are unlocked."
