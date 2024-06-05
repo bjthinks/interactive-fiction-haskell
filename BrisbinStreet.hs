@@ -343,6 +343,16 @@ buildWorld = do
   potion <- newObject writingDesk "potion" $
     "The label reads \"Invisibility\"."
 
+  hhReadingRoom <- newRoom "Reading Room" $
+    ""
+  newExit "east" hhFoyer hhReadingRoom
+  newExit "west" hhReadingRoom hhFoyer
+
+  hhBathroom1 <- newRoom "Bathroom" $
+    ""
+  bathroomEntrance <- newExit "south" hhReadingRoom hhBathroom1
+  newExit "north" hhBathroom1 hhReadingRoom
+
   hhDiningRoom <- newRoom "Dining Room" $
     "This dining room has a huge octagonal hardwood table with eight chairs " ++
     "on all sides of it. There is a chandelier with real candles in it, " ++
@@ -358,6 +368,16 @@ buildWorld = do
     "Three big ghosts circle the dining room table. You are scared to go past!"
   addAlias ghosts "ghosts"
   makeImmobile ghosts
+
+  hhKitchen <- newRoom "Kitchen" $
+    ""
+  kitchenEntrance <- newExit "south" hhDiningRoom hhKitchen
+  newExit "north" hhKitchen hhDiningRoom
+
+  hhLowerStaircase <- newRoom "Spiral Staircase" $
+    ""
+  staircaseEntrance <- newExit "east" hhKitchen hhLowerStaircase
+  newExit "west" hhLowerStaircase hhKitchen
 
   setOnUse sprinkler $ do
     let goodGrassLocs =
