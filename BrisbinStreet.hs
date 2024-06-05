@@ -349,6 +349,13 @@ buildWorld = do
   crookedKey <- newObject hhReadingRoom "crooked key" $
     "This is an oddly shaped key. Who knows what it unlocks?"
   moveNowhere crookedKey
+  defaultSearchAction <- getOnSearch hhReadingRoom
+  setOnSearch hhReadingRoom $ do
+    msg $ "You look everywhere, and find a crooked key under one of the " ++
+      "armchairs."
+    move crookedKey hhReadingRoom
+    addPoints 5 "finding a useful key"
+    setOnSearch hhReadingRoom defaultSearchAction
   makeLocked writingDesk crookedKey
   -- These two lines should come after makeLocked above
   setUnlockedDescription writingDesk $ writingDeskDescription ++
@@ -432,7 +439,7 @@ buildWorld = do
               setOnGet sprinkler sprinklerOnMsg
               setDescription sideYard $ yardDesc ++ healthStr
 
-  setMaxScore 50
+  setMaxScore 55
 
   return ()
 
