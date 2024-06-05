@@ -34,9 +34,8 @@ newThing n = do
                     msg $ "You drop the " ++ name ++ ".",
                   onThrow = msg "There is no point in throwing that.",
                   isContainer = False,
-                  onOpen = msg "You can\'t open that.",
-                  onClose = msg "You can\'t close that.",
-                  isOpen = True,
+                  onUnlock = msg "You can\'t unlock that.",
+                  onLock = msg "You can\'t lock that.",
                   isLocked = False,
                   key = Nothing
                 }
@@ -133,48 +132,35 @@ connect exit src dest = do
 makeContainer :: Ref -> GameMonad ()
 makeContainer ref = setIsContainer ref True
 
-makeOpenable :: Ref -> GameMonad ()
-makeOpenable ref = do
-  setOnOpen ref $ do
-    open <- getIsOpen ref
-    case open of
-      True -> msg "It\'s already open."
-      False -> do
-        name <- getName ref
-        msg $ "You open the " ++ name ++ "."
-        setIsOpen ref True
-  setOnClose ref $ do
-    open <- getIsOpen ref
-    case open of
-      False -> msg "It\'s already closed."
-      True -> do
-        name <- getName ref
-        msg $ "You close the " ++ name ++ "."
-        setIsOpen ref False
-
-setOpenDescription :: Ref -> String -> GameMonad ()
-setOpenDescription ref description = do
-  action <- getOnOpen ref
-  setOnOpen ref $ do
+setUnlockedDescription :: Ref -> String -> GameMonad ()
+setUnlockedDescription ref description = do
+  action <- getOnUnlock ref
+  setOnUnlock ref $ do
     action
     setDescription ref description
-  open <- getIsOpen ref
-  if open == True then setDescription ref description else return ()
+  unlocked <- getIsUnlocked ref
+  if unlocked then setDescription ref description else return ()
 
-setClosedDescription :: Ref -> String -> GameMonad ()
-setClosedDescription ref description = do
-  action <- getOnClose ref
-  setOnClose ref $ do
+setLockedDescription :: Ref -> String -> GameMonad ()
+setLockedDescription ref description = do
+  action <- getOnLock ref
+  setOnLock ref $ do
     action
     setDescription ref description
-  open <- getIsOpen ref
-  if open == False then setDescription ref description else return ()
+  locked <- getIsLocked ref
+  if locked then setDescription ref description else return ()
 
 makeLocked :: Ref -> Ref -> GameMonad ()
 makeLocked ref key = do
-  setIsOpen ref False
   setIsLocked ref True
   setKey ref $ Just key
+  keyName <- getName key
+  setOnLock ref $ do
+    setIsLocked ref True
+    msg $ "You lock it with the " ++ keyName ++ "."
+  setOnUnlock ref $ do
+    setIsLocked ref False
+    msg $ "You unlock it with the " ++ keyName ++ "."
 
 -- Predicates for help with verbs and elsewhere
 
@@ -204,10 +190,12 @@ getInventory = do
   player <- getPlayer
   getContents' player
 
+-- This doesn't check isContainer, which is fine because it's only used
+-- in visibleRefs and not for get from/put into.
 getThingsInContainers :: [Ref] -> GameMonad [Ref]
 getThingsInContainers refs = do
-  openContainers <- filterM getIsOpen refs
-  contents <- mapM getContents' openContainers
+  unlockedContainers <- filterM (getIsUnlocked) refs
+  contents <- mapM getContents' unlockedContainers
   return $ concat contents
 
 visibleRefs :: GameMonad [Ref]

@@ -127,27 +127,6 @@ doVerb (Use ref) = do
       action <- getOnUse ref
       action
 
-doVerb (Open ref) = do
-  usable <- isUsable ref
-  case usable of
-    False -> msg "You can\'t open that."
-    True -> do
-      locked <- getIsLocked ref
-      refName <- getName ref
-      case locked of
-        True -> msg $ "The " ++ refName ++ " is locked."
-        False -> do
-          action <- getOnOpen ref
-          action
-
-doVerb (Close ref) = do
-  usable <- isUsable ref
-  case usable of
-    False -> msg "You can\'t close that."
-    True -> do
-      action <- getOnClose ref
-      action
-
 doVerb (Unlock ref key) = do
   usable <- isUsable ref
   exit <- isExit ref
@@ -167,8 +146,8 @@ doVerb (Unlock ref key) = do
               case maybeKey == Just key of
                 False -> msg $ "The " ++ keyName ++ " is not the right key."
                 True -> do
-                  setIsLocked ref False
-                  msg $ "You unlock it with the " ++ keyName ++ "."
+                  action <- getOnUnlock ref
+                  action
 
 doVerb (Lock ref key) = do
   usable <- isUsable ref
@@ -189,9 +168,8 @@ doVerb (Lock ref key) = do
               case maybeKey == Just key of
                 False -> msg $ "The " ++ keyName ++ " is not the right key."
                 True -> do
-                  -- Bug for now: can be open but locked
-                  setIsLocked ref True
-                  msg $ "You lock it with the " ++ keyName ++ "."
+                  action <- getOnLock ref
+                  action
 
 doVerb Score = do
   points <- getScore
@@ -202,7 +180,6 @@ doVerb Score = do
 
 doVerb Help = do
   msg "Command summary:"
-  msg "  close item"
   msg "  drop item"
   msg "  drop all"
   msg "  eat item"
@@ -212,12 +189,13 @@ doVerb Help = do
   msg "  go direction"
   msg "  help"
   msg "  inventory"
+  msg "  lock item with key"
   msg "  look"
   msg "  look item/direction"
-  msg "  open item"
   msg "  put item in container"
   msg "  score"
   msg "  throw item"
+  msg "  unlock item with key"
   msg "  use item"
   msg $ "You can type the name of an exit to go that direction, and there " ++
     "are shorthand names for commonly named exits. So \"go n\" or just " ++
@@ -237,11 +215,11 @@ lookAt ref = do
     destName <- getName dest
     msg $ "This is a way to go from " ++ srcName ++ " to " ++ destName ++ "."
   contents <- getContents' ref
-  open <- getIsOpen ref
+  unlocked <- getIsUnlocked ref
   -- You don't see yourself
   player <- getPlayer
   let objects = filter (/= player) contents
-  when (open && objects /= []) $ do
+  when (unlocked && objects /= []) $ do
     objectNames <- mapM getName objects
     msg $ "Contents: " ++ humanFriendlyList objectNames ++ "."
   exits <- getExits ref
@@ -274,9 +252,9 @@ isUsableContainer container = do
           msg $ "The " ++ containerName ++ " is not accessible."
           return False
         True -> do
-          open <- getIsOpen container
-          case open of
+          unlocked <- getIsUnlocked container
+          case unlocked of
             False -> do
-              msg $ "The " ++ containerName ++ " is closed."
+              msg $ "The " ++ containerName ++ " is locked."
               return False
             True -> return True

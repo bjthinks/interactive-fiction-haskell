@@ -26,14 +26,6 @@ buildWorld = do
   setPlayer player
   backpack <- newObject player "backpack" "A blue canvas backpack."
   makeContainer backpack
-  makeOpenable backpack
-  setIsOpen backpack False
-  backpackDescription <- getDescription backpack
-  -- Note the following two lines have to come after setIsOpen
-  setOpenDescription backpack $ backpackDescription ++
-    " The zipper is open."
-  setClosedDescription backpack $ backpackDescription ++
-    " The zipper is closed."
   newObject backpack "math book" "A second grade math textbook."
 
   frontYard <- newRoom "Granny\'s Front Yard" $
@@ -335,16 +327,15 @@ buildWorld = do
     "upper shelf with paper and fountain pens."
   makeImmobile writingDesk
   makeContainer writingDesk
-  makeOpenable writingDesk
-  setIsOpen writingDesk False
   writingDeskDescription <- getDescription writingDesk
-  setOpenDescription writingDesk $ writingDeskDescription ++
-    " The drawers are open."
-  setClosedDescription writingDesk $ writingDeskDescription ++
-    " The drawers are closed."
   writingDeskKey <- newObject hhFoyer "triangular key" $
     "This is an oddly shaped key. Who knows what it unlocks?"
   makeLocked writingDesk writingDeskKey
+  -- These two lines should come after makeLocked above
+  setUnlockedDescription writingDesk $ writingDeskDescription ++
+    " The drawers are unlocked."
+  setLockedDescription writingDesk $ writingDeskDescription ++
+    " The drawers are locked."
   addAlias writingDesk "drawers"
   addAlias writingDesk "drawer"
   newObject writingDesk "notebook" $

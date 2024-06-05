@@ -22,9 +22,8 @@ data Thing = Thing {
   onDrop :: GameMonad (),
   onThrow :: GameMonad (),
   isContainer :: Bool,
-  onOpen :: GameMonad (),
-  onClose :: GameMonad (),
-  isOpen :: Bool,
+  onUnlock :: GameMonad (),
+  onLock :: GameMonad (),
   isLocked :: Bool,
   key :: Maybe Ref
   }
@@ -80,11 +79,15 @@ getOnGet        = getProperty onGet
 getOnDrop       = getProperty onDrop
 getOnThrow      = getProperty onThrow
 getIsContainer  = getProperty isContainer
-getOnOpen       = getProperty onOpen
-getOnClose      = getProperty onClose
-getIsOpen       = getProperty isOpen
+getOnUnlock     = getProperty onUnlock
+getOnLock       = getProperty onLock
 getIsLocked     = getProperty isLocked
 getKey          = getProperty key
+
+getIsUnlocked :: Ref -> GameMonad Bool
+getIsUnlocked ref = do
+  locked <- getIsLocked ref
+  return $ not locked
 
 setThing :: Ref -> Thing -> GameMonad ()
 setThing i t = do
@@ -136,20 +139,15 @@ setIsContainer ref flag = do
   thing <- getThing ref
   setThing ref $ thing { isContainer = flag }
 
-setOnOpen :: Ref -> GameMonad () -> GameMonad ()
-setOnOpen ref action = do
+setOnUnlock :: Ref -> GameMonad () -> GameMonad ()
+setOnUnlock ref action = do
   thing <- getThing ref
-  setThing ref $ thing { onOpen = action }
+  setThing ref $ thing { onUnlock = action }
 
-setOnClose :: Ref -> GameMonad () -> GameMonad ()
-setOnClose ref action = do
+setOnLock :: Ref -> GameMonad () -> GameMonad ()
+setOnLock ref action = do
   thing <- getThing ref
-  setThing ref $ thing { onClose = action }
-
-setIsOpen :: Ref -> Bool -> GameMonad ()
-setIsOpen ref flag = do
-  thing <- getThing ref
-  setThing ref $ thing { isOpen = flag }
+  setThing ref $ thing { onLock = action }
 
 setIsLocked :: Ref -> Bool -> GameMonad ()
 setIsLocked ref flag = do
