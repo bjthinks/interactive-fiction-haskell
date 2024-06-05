@@ -112,9 +112,9 @@ doVerb (Go ref) = do
           lookAt dest
 
 doVerb (Eat ref) = do
-  haveIt <- isInInventory ref
-  case haveIt of
-    False -> msg "You\'re not carrying that."
+  usable <- isUsable ref
+  case usable of
+    False -> msg "That\'s not accessible."
     True -> do
       action <- getOnEat ref
       action
