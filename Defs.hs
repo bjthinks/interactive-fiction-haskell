@@ -25,7 +25,8 @@ data Thing = Thing {
   onUnlock :: GameMonad (),
   onLock :: GameMonad (),
   isLocked :: Bool,
-  key :: Maybe Ref
+  key :: Maybe Ref,
+  onSearch :: GameMonad ()
   }
 
 data GameState = GameState { things :: M.Map Ref Thing,
@@ -83,6 +84,7 @@ getOnUnlock     = getProperty onUnlock
 getOnLock       = getProperty onLock
 getIsLocked     = getProperty isLocked
 getKey          = getProperty key
+getOnSearch     = getProperty onSearch
 
 getIsUnlocked :: Ref -> GameMonad Bool
 getIsUnlocked ref = do
@@ -158,3 +160,8 @@ setKey :: Ref -> Maybe Ref -> GameMonad ()
 setKey ref maybeKey = do
   thing <- getThing ref
   setThing ref $ thing { key = maybeKey }
+
+setOnSearch :: Ref -> GameMonad () -> GameMonad ()
+setOnSearch ref action = do
+  thing <- getThing ref
+  setThing ref $ thing { onSearch = action }

@@ -171,6 +171,11 @@ doVerb (Lock ref key) = do
                   action <- getOnLock ref
                   action
 
+doVerb Search = do
+  room <- getRoom
+  action <- getOnSearch room
+  action
+
 doVerb Score = do
   points <- getScore
   maxPoints <- getMaxScore

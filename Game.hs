@@ -37,7 +37,8 @@ newThing n = do
                   onUnlock = msg "You can\'t unlock that.",
                   onLock = msg "You can\'t lock that.",
                   isLocked = False,
-                  key = Nothing
+                  key = Nothing,
+                  onSearch = msg "You look everywhere but don\'t find anything."
                 }
       s' = s { things = M.insert i t (things s),
                nextThing = i + 1 }
