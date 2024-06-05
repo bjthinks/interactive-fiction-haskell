@@ -344,9 +344,16 @@ buildWorld = do
     "The label reads \"Invisibility\"."
 
   hhReadingRoom <- newRoom "Reading Room" $
-    ""
+    "There are three high backed reading chairs upholstered in red suede " ++
+    "in this room. The walls are covered in bookshelves, with gaps for two " ++
+    "small windows. A colony of orb weaver spiders has made this room their " ++
+    "home -- you can see their webs covering the upper shelves of the " ++
+    "bookcases. One red book stands out from the rest, as if it has been " ++
+    "pulled out several inches."
   newExit "east" hhFoyer hhReadingRoom
   newExit "west" hhReadingRoom hhFoyer
+  book <- newObject hhReadingRoom "book" $
+    "This red book stands out from the rest. It beckons you to take it."
 
   hhBathroom1 <- newRoom "Bathroom" $
     ""
@@ -378,6 +385,12 @@ buildWorld = do
     ""
   staircaseEntrance <- newExit "east" hhKitchen hhLowerStaircase
   newExit "west" hhLowerStaircase hhKitchen
+
+  setOnGet book $ do
+    msg $ "You try to pick up the red book, but it appears to be attached " ++
+      "to some kind of mechanism. You hear walls moving, and the floor plan " ++
+      "of the house changes!"
+    -- Make floorplan change here
 
   setOnUse sprinkler $ do
     let goodGrassLocs =
