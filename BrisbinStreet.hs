@@ -328,14 +328,6 @@ buildWorld = do
   makeImmobile writingDesk
   makeContainer writingDesk
   writingDeskDescription <- getDescription writingDesk
-  writingDeskKey <- newObject hhFoyer "triangular key" $
-    "This is an oddly shaped key. Who knows what it unlocks?"
-  makeLocked writingDesk writingDeskKey
-  -- These two lines should come after makeLocked above
-  setUnlockedDescription writingDesk $ writingDeskDescription ++
-    " The drawers are unlocked."
-  setLockedDescription writingDesk $ writingDeskDescription ++
-    " The drawers are locked."
   addAlias writingDesk "drawers"
   addAlias writingDesk "drawer"
   newObject writingDesk "notebook" $
@@ -354,6 +346,15 @@ buildWorld = do
   newExit "west" hhReadingRoom hhFoyer
   book <- newObject hhReadingRoom "book" $
     "This red book stands out from the rest. It beckons you to take it."
+  writingDeskKey <- newObject hhReadingRoom "crooked key" $
+    "This is an oddly shaped key. Who knows what it unlocks?"
+  moveNowhere writingDeskKey
+  makeLocked writingDesk writingDeskKey
+  -- These two lines should come after makeLocked above
+  setUnlockedDescription writingDesk $ writingDeskDescription ++
+    " The drawers are unlocked."
+  setLockedDescription writingDesk $ writingDeskDescription ++
+    " The drawers are locked."
 
   hhBathroom1 <- newRoom "Bathroom" $
     ""
