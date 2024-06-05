@@ -1,0 +1,10 @@
+;; This buffer is for text that is not saved, and for Lisp evaluation.
+;; To create a file, visit it with C-x C-f and enter text in its buffer.
+
+read math book
+put doll in dollhouse
+light candle
+eat fruit off of counter
+change ghost description and add key on table
+drink potion
+get potion
