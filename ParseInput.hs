@@ -20,6 +20,7 @@ data Verb = Blank
           | Throw Ref
           | Unlock Ref Ref
           | Lock Ref Ref
+          | Search
           | Score
           | Help
           deriving Show
@@ -95,6 +96,7 @@ implicitGo = do
 parseLine :: MyParser Verb
 parseLine =
   simpleVerb   "inventory" Inventory |||
+  simpleVerb   "search" Search |||
   complexVerb  "unlock" "with" Unlock |||
   simpleVerb   "score" Score |||
   verbWithNoun "throw" Throw |||
