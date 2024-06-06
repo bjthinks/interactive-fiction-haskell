@@ -392,9 +392,25 @@ buildWorld = do
   skullKey <- newObject hhDiningRoom "skull key" $
     "This key has a tiny metal skull on its handle. Who knows what it " ++
     "unlocks?"
+  defaultGetSkullKey <- getOnGet skullKey
   setOnGet skullKey $ msg $
     "You approach the table to pick up the key, but the ghosts all turn " ++
-    "towards you and go \"BOO!\" You are too scared to go on."
+    "towards you and bare their huge ghostly teeth! You are too scared to " ++
+    "go on."
+  setOnDrink potion $ do
+    msg $ "You drink the potion, and watch in amazement as you turn " ++
+      "invisible, clothes and all!"
+    moveNowhere potion
+    setDescription player $
+      "You are an eight year old boy with blond hair, " ++
+      "wearing jeans, a t-shirt, and tennis shoes with tube socks. " ++
+      "At least, you think that\'s what you\'re wearing; it\'s hard to " ++
+      "tell now that you\'re invisible!"
+    setOnGet skullKey $ do
+      msg "You sneak up to the table, and the ghosts don\'t see you!"
+      defaultGetSkullKey
+      addPoints 5 "turning the tables on the three ghosts"
+      setOnGet skullKey defaultGetSkullKey
 
   hhKitchen <- newRoom "Kitchen" $
     ""
