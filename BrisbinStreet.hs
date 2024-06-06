@@ -380,13 +380,21 @@ buildWorld = do
     "be inside."
   setOnGet eyeballs $ msg "You read the label on the jar and shiver nervously."
   ghosts <- newObject hhDiningRoom "three ghosts" $
-    "Three big ghosts circle the dining room table. You are scared to go past!"
+    "Three big ghosts circle the dining room table. It looks like they are " ++
+    "guarding something."
   addAlias ghosts "ghosts"
   makeImmobile ghosts
+  skullKey <- newObject hhDiningRoom "skull key" $
+    "This key has a tiny metal skull on its handle. Who knows what it " ++
+    "unlocks?"
+  setOnGet skullKey $ msg $
+    "You approach the table to pick up the key, but the ghosts all turn " ++
+    "towards you and go \"BOO!\" You are too scared to go on."
 
   hhKitchen <- newRoom "Kitchen" $
     ""
   kitchenEntrance <- newExit "south" hhDiningRoom hhKitchen
+  makeLocked kitchenEntrance skullKey
   newExit "north" hhKitchen hhDiningRoom
 
   hhLowerStaircase <- newRoom "Spiral Staircase" $
