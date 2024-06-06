@@ -29,6 +29,13 @@ newThing n = do
                     move i player
                     name <- getName i
                     msg $ "You take the " ++ name ++ ".",
+                  onGetFrom = (\item -> do
+                    player <- getPlayer
+                    move item player
+                    itemName <- getName item
+                    containerName <- getName i
+                    msg $ "You get the " ++ itemName ++ " from the " ++
+                      containerName ++ "."),
                   onPutIn = (\item -> do
                     move item i
                     itemName <- getName item

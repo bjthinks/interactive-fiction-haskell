@@ -21,7 +21,8 @@ data Thing = Thing {
   onUse :: GameMonad (),
   onLight :: GameMonad (),
   onGet :: GameMonad (),
-  onPutIn :: Ref -> GameMonad (), -- put ref into this thing
+  onPutIn :: Ref -> GameMonad (), -- put ref into this container
+  onGetFrom :: Ref -> GameMonad (), -- get ref from this container
   onDrop :: GameMonad (),
   onThrow :: GameMonad (),
   isContainer :: Bool,
@@ -83,6 +84,7 @@ getOnUse        = getProperty onUse
 getOnLight      = getProperty onLight
 getOnGet        = getProperty onGet
 getOnPutIn      = getProperty onPutIn
+getOnGetFrom    = getProperty onGetFrom
 getOnDrop       = getProperty onDrop
 getOnThrow      = getProperty onThrow
 getIsContainer  = getProperty isContainer
@@ -146,6 +148,11 @@ setOnPutIn :: Ref -> (Ref -> GameMonad ()) -> GameMonad ()
 setOnPutIn ref action = do
   thing <- getThing ref
   setThing ref $ thing { onPutIn = action }
+
+setOnGetFrom :: Ref -> (Ref -> GameMonad ()) -> GameMonad ()
+setOnGetFrom ref action = do
+  thing <- getThing ref
+  setThing ref $ thing { onGetFrom = action }
 
 setOnDrop :: Ref -> GameMonad () -> GameMonad ()
 setOnDrop ref action = do

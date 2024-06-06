@@ -48,11 +48,8 @@ doVerb (GetFrom item container) = do
       case itemLoc == Just container of
         False -> msg $ "You don\'t see that in the " ++ containerName ++ "."
         True -> do
-          player <- getPlayer
-          move item player
-          itemName <- getName item
-          msg $ "You get the " ++ itemName ++ " from the " ++ containerName ++
-            "."
+          action <- getOnGetFrom container
+          action item
 
 doVerb (Drop ref) = do
   haveIt <- isInInventory ref
@@ -91,10 +88,8 @@ doVerb (PutIn item container) = do
           case itemLoc == Just player of
             False -> msg $ "You aren\'t carrying the " ++ itemName ++ "."
             True -> do
-              move item container
-              containerName <- getName container
-              msg $ "You put the " ++ itemName ++ " in the " ++
-                containerName ++ "."
+              action <- getOnPutIn container
+              action item
 
 doVerb (Go ref) = do
   canGo <- isExit ref
