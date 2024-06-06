@@ -199,6 +199,7 @@ doVerb Help = do
   msg "  look item/direction"
   msg "  put item in container"
   msg "  score"
+  msg "  search"
   msg "  throw item"
   msg "  unlock item with key"
   msg "  use item"
