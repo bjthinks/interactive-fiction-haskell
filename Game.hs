@@ -23,6 +23,7 @@ newThing n = do
                   onEat = msg "You can\'t eat that.",
                   onDrink = msg "You can\'t drink that.",
                   onUse = msg "You can\'t use that.",
+                  onLight = msg "You can\'t light that.",
                   onGet = do
                     player <- getPlayer
                     move i player

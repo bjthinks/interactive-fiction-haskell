@@ -130,9 +130,17 @@ doVerb (Drink ref) = do
 doVerb (Use ref) = do
   usable <- isUsable ref
   case usable of
-    False -> msg "You can\'t use that."
+    False -> msg "That\'s not accessible."
     True -> do
       action <- getOnUse ref
+      action
+
+doVerb (Light ref) = do
+  usable <- isUsable ref
+  case usable of
+    False -> msg "That\'s not accessible."
+    True -> do
+      action <- getOnLight ref
       action
 
 doVerb (Unlock ref key) = do

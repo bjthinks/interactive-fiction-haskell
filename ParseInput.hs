@@ -18,6 +18,7 @@ data Verb = Blank
           | Eat Ref
           | Drink Ref
           | Use Ref
+          | Light Ref
           | Throw Ref
           | Unlock Ref Ref
           | Lock Ref Ref
@@ -100,6 +101,7 @@ parseLine =
   simpleVerb   "search" Search |||
   complexVerb  "unlock" "with" Unlock |||
   verbWithNoun "drink" Drink |||
+  verbWithNoun "light" Light |||
   simpleVerb   "score" Score |||
   verbWithNoun "throw" Throw |||
   verbWithNoun "drop" Drop |||

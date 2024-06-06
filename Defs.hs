@@ -19,6 +19,7 @@ data Thing = Thing {
   onEat :: GameMonad (),
   onDrink :: GameMonad (),
   onUse :: GameMonad (),
+  onLight :: GameMonad (),
   onGet :: GameMonad (),
   onDrop :: GameMonad (),
   onThrow :: GameMonad (),
@@ -78,6 +79,7 @@ getPath         = getProperty path
 getOnEat        = getProperty onEat
 getOnDrink      = getProperty onDrink
 getOnUse        = getProperty onUse
+getOnLight      = getProperty onLight
 getOnGet        = getProperty onGet
 getOnDrop       = getProperty onDrop
 getOnThrow      = getProperty onThrow
@@ -127,6 +129,11 @@ setOnUse :: Ref -> GameMonad () -> GameMonad ()
 setOnUse ref action = do
   thing <- getThing ref
   setThing ref $ thing { onUse = action }
+
+setOnLight :: Ref -> GameMonad () -> GameMonad ()
+setOnLight ref action = do
+  thing <- getThing ref
+  setThing ref $ thing { onLight = action }
 
 setOnGet :: Ref -> GameMonad () -> GameMonad ()
 setOnGet ref action = do
