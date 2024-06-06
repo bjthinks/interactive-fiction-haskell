@@ -29,6 +29,12 @@ newThing n = do
                     move i player
                     name <- getName i
                     msg $ "You take the " ++ name ++ ".",
+                  onPutIn = (\item -> do
+                    move item i
+                    itemName <- getName item
+                    containerName <- getName i
+                    msg $ "You put the " ++ itemName ++ " in the " ++
+                      containerName ++ "."),
                   onDrop = do
                     room <- getRoom
                     move i room
