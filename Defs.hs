@@ -21,8 +21,8 @@ data Thing = Thing {
   onUse :: GameMonad (),
   onLight :: GameMonad (),
   onGet :: GameMonad (),
-  onPutIn :: Ref -> GameMonad (), -- put ref into this container
-  onGetFrom :: Ref -> GameMonad (), -- get ref from this container
+  onPutIn :: Ref -> GameMonad (), -- put this thing into ref
+  onGetFrom :: Ref -> GameMonad (), -- get this thing from ref
   onDrop :: GameMonad (),
   onThrow :: GameMonad (),
   isContainer :: Bool,
