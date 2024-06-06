@@ -422,6 +422,7 @@ buildWorld = do
   hhKitchen <- newRoom "Kitchen" $
     ""
   kitchenEntrance <- newExit "south" hhDiningRoom hhKitchen
+  addAlias kitchenEntrance "door"
   makeLocked kitchenEntrance skullKey
   newExit "north" hhKitchen hhDiningRoom
 
