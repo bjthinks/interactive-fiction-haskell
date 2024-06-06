@@ -150,6 +150,7 @@ buildWorld = do
     "are three floors connected by an elevator, with one room on each side " ++
     "of the elevator on each floor. Everything inside the dollhouse looks " ++
     "like a cartoon. Try \"use dollhouse\" to enter or exit the dollhouse."
+  makeContainer dollhouse
   addAlias dollhouse "dollhouse"
   gabby <- newObject childBedroom "Gabby" $
     "This is a Gabby doll. It looks like she wants to be in her dollhouse."
@@ -174,16 +175,22 @@ buildWorld = do
           lookAt dollhouse
         else failMsg
   defaultDropGabby <- getOnDrop gabby
+  defaultPutGabbyIn <- getOnPutIn gabby
+  let goInDollhouse = do
+        msg $ "Gabby turns into her cartoon self and looks very happy to be " ++
+          "in her dollhouse!"
+        addPoints 10 "returning Gabby to her home"
+        setOnDrop gabby defaultDropGabby
+        setOnPutIn gabby defaultPutGabbyIn
+        setDescription gabby
+          "This is cartoon Gabby. She likes being in her dollhouse."
   setOnDrop gabby $ do
     defaultDropGabby
     maybeGabbyLoc <- getLocation gabby
-    when (maybeGabbyLoc == Just dollhouse) $ do
-      msg $ "Gabby turns into her cartoon self and looks very happy to be " ++
-        "in her dollhouse!"
-      addPoints 10 "returning Gabby to her home"
-      setOnDrop gabby defaultDropGabby
-      setDescription gabby
-        "This is cartoon Gabby. She likes being in her dollhouse."
+    when (maybeGabbyLoc == Just dollhouse) goInDollhouse
+  setOnPutIn gabby $ (\container -> do
+    defaultPutGabbyIn container
+    when (container == dollhouse) goInDollhouse)
 
   bathroom <- newRoom "Bathroom" $
     "This is a small but servicable bathroom. The counter is a pale " ++
