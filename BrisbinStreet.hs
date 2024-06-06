@@ -468,7 +468,7 @@ buildWorld = do
               setOnGet sprinkler sprinklerOnMsg
               setDescription sideYard $ yardDesc ++ healthStr
 
-  setMaxScore 55
+  setMaxScore 60
 
   return ()
 
