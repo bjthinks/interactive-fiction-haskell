@@ -119,6 +119,14 @@ doVerb (Eat ref) = do
       action <- getOnEat ref
       action
 
+doVerb (Drink ref) = do
+  usable <- isUsable ref
+  case usable of
+    False -> msg "That\'s not accessible."
+    True -> do
+      action <- getOnDrink ref
+      action
+
 doVerb (Use ref) = do
   usable <- isUsable ref
   case usable of

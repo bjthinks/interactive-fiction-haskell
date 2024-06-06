@@ -16,6 +16,7 @@ data Verb = Blank
           | PutIn Ref Ref
           | Go Ref
           | Eat Ref
+          | Drink Ref
           | Use Ref
           | Throw Ref
           | Unlock Ref Ref
@@ -98,6 +99,7 @@ parseLine =
   simpleVerb   "inventory" Inventory |||
   simpleVerb   "search" Search |||
   complexVerb  "unlock" "with" Unlock |||
+  verbWithNoun "drink" Drink |||
   simpleVerb   "score" Score |||
   verbWithNoun "throw" Throw |||
   verbWithNoun "drop" Drop |||

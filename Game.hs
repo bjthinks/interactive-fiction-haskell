@@ -21,6 +21,7 @@ newThing n = do
                   exits = [],
                   path = Nothing,
                   onEat = msg "You can\'t eat that.",
+                  onDrink = msg "You can\'t drink that.",
                   onUse = msg "You can\'t use that.",
                   onGet = do
                     player <- getPlayer

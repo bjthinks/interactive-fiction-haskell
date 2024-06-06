@@ -17,6 +17,7 @@ data Thing = Thing {
   exits :: [Ref],
   path :: Maybe (Ref,Ref),
   onEat :: GameMonad (),
+  onDrink :: GameMonad (),
   onUse :: GameMonad (),
   onGet :: GameMonad (),
   onDrop :: GameMonad (),
@@ -75,6 +76,7 @@ getContents'    = getProperty contents
 getExits        = getProperty exits
 getPath         = getProperty path
 getOnEat        = getProperty onEat
+getOnDrink      = getProperty onDrink
 getOnUse        = getProperty onUse
 getOnGet        = getProperty onGet
 getOnDrop       = getProperty onDrop
@@ -115,6 +117,11 @@ setOnEat :: Ref -> GameMonad () -> GameMonad ()
 setOnEat ref action = do
   thing <- getThing ref
   setThing ref $ thing { onEat = action }
+
+setOnDrink :: Ref -> GameMonad () -> GameMonad ()
+setOnDrink ref action = do
+  thing <- getThing ref
+  setThing ref $ thing { onDrink = action }
 
 setOnUse :: Ref -> GameMonad () -> GameMonad ()
 setOnUse ref action = do
