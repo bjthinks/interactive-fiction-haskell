@@ -423,7 +423,7 @@ buildWorld = do
   staircaseEntrance <- newExit "east" hhKitchen hhLowerStaircase
   newExit "west" hhLowerStaircase hhKitchen
 
-  disconnect staircaseEntrance
+  disconnect bathroomEntrance
   let onGetBook1 = do
         getBookMessage
         disconnect bathroomEntrance
@@ -438,7 +438,7 @@ buildWorld = do
         "You try to pick up the red book, but it appears to be attached " ++
         "to some kind of mechanism. You hear walls moving, and the floor " ++
         "plan of the house changes!"
-  setOnGet book onGetBook1
+  setOnGet book onGetBook2
 
   return ()
 
