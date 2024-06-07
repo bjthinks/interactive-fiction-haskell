@@ -283,7 +283,10 @@ buildWorld = do
   justinYard <- newRoom "Justin\'s Yard" $
     "You stand in front of Justin\'s house. It is a large home with a " ++
     "noticable addition and multiple floors. There is a crabapple tree " ++
-    "here. Bimbo the cat is hanging out in the yard."
+    "here."
+  justinYardDescription <- getDescription justinYard
+  setDescription justinYard $ justinYardDescription ++
+    " Bimbo the cat is hanging out in the yard."
   newExit "south" eastBrisbin justinYard
   newExit "north" justinYard eastBrisbin
   crabapple <- newObject justinYard "crabapple" $
@@ -297,6 +300,7 @@ buildWorld = do
     "all of his body."
   setOnGet bimbo $ msg
     "Bimbo squirms out of your grasp and jumps to the ground."
+  addAlias bimbo "cat"
 
   westBrisbin <- newRoom "West Brisbin Street" $
     "This is the west end of the block. There is a seedy motel to the " ++
@@ -418,6 +422,11 @@ buildWorld = do
       defaultGetSkullKey
       addPoints 5 "turning the tables on the three ghosts"
       setOnGet skullKey defaultGetSkullKey
+    setOnGet bimbo $ do
+      msg $ "Bimbo is shocked to be picked up by an invisible person. He " ++
+        "squirms out of your grasp and runs into the backyard!"
+      moveNowhere bimbo
+      setDescription justinYard justinYardDescription
 
   hhKitchen <- newRoom "Kitchen" $
     ""
