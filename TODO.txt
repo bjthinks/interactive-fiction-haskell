@@ -1,7 +1,6 @@
 read math book
 get potion
-onGo -- You hear footsteps as you enter the house. Boards creak under your
-feet.
+You hear footsteps as you enter the house. Boards creak under your feet.
 upstairs key and whiskey in wet bar
 downstairs key in master bedroom
 points:
@@ -11,3 +10,4 @@ points:
   holy water in bathroom to throw at ghost
 locked front door. locked stairway doors.
 add more immobile items for flavor
+refactor all the setters in Defs

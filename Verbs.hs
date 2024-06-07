@@ -104,6 +104,8 @@ doVerb (Go ref) = do
           maybePath <- getPath ref
           let (_,dest) = fromJust maybePath
           move player dest
+          action <- getOnGo ref
+          action
           lookAt dest
 
 doVerb (Eat ref) = do
