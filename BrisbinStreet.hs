@@ -456,6 +456,12 @@ buildWorld = do
     ""
   staircaseEntrance <- newExit "east" hhKitchen hhLowerStaircase
   newExit "west" hhLowerStaircase hhKitchen
+  blackCat <- newObject hhLowerStaircase "black cat" $
+    "This cat arches its back and hisses when it sees you. It stares at you " ++
+    "creepily."
+  addAlias blackCat "cat"
+  setOnGet blackCat $ msg $ "The cat bares its claws and hisses. There is " ++
+    "no way you would try to pick up such an unfriendly cat."
 
   shortcut <- newExit "secret passage to haunted house kitchen"
     brisbin hhKitchen
