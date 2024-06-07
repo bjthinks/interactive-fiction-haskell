@@ -453,12 +453,15 @@ buildWorld = do
   newExit "north" hhKitchen hhDiningRoom
 
   hhLowerStaircase <- newRoom "Spiral Staircase" $
-    ""
+    "This room has a very large and opulent spiral staircase going to the " ++
+    "upstairs floor. The walnut railing is inlaid with mother of pearl, and " ++
+    "the steps are covered in yellow carpet. A very unfriendly black cat is " ++
+    "staring at you."
   staircaseEntrance <- newExit "east" hhKitchen hhLowerStaircase
   newExit "west" hhLowerStaircase hhKitchen
   blackCat <- newObject hhLowerStaircase "black cat" $
-    "This cat arches its back and hisses when it sees you. It stares at you " ++
-    "creepily."
+    "This cat arches its back and hisses when you look at it. It stares at " ++
+    "you creepily."
   addAlias blackCat "cat"
   setOnGet blackCat $ msg $ "The cat bares its claws and hisses. There is " ++
     "no way you would try to pick up such an unfriendly cat."
