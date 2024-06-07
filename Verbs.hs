@@ -195,25 +195,12 @@ doVerb Score = do
   maybeShowWinMessage
 
 doVerb Help = do
-  msg "Command summary:"
-  msg "  drop item"
-  msg "  drop all"
-  msg "  eat item"
-  msg "  get/take item"
-  msg "  get/take all"
-  msg "  get/take item from container"
-  msg "  go direction"
-  msg "  help"
-  msg "  inventory"
-  msg "  lock item with key"
-  msg "  look"
-  msg "  look item/direction"
-  msg "  put item in container"
-  msg "  score"
-  msg "  search"
-  msg "  throw item"
-  msg "  unlock item with key"
-  msg "  use item"
+  msg "Commands are of the form VERB, VERB NOUN, or VERB NOUN PREPOSITION NOUN."
+  msg "Some of the verbs I understand are:"
+  msg "inventory, search"
+  msg "go, look, get, drop, throw, use, eat, or drink, followed by a noun"
+  msg "unlock item/direction/door with key"
+  msg "get item from container, or put item in container"
   msg $ "You can type the name of an exit to go that direction, and there " ++
     "are shorthand names for commonly named exits. So \"go n\" or just " ++
     "\"n\" is short for \"go north\". You can also use semicolons to " ++
