@@ -98,6 +98,8 @@ implicitGo = do
 parseLine :: MyParser Verb
 parseLine =
   simpleVerb   "inventory" Inventory |||
+  verbWithNoun "examine" (Look . Just) |||
+  simpleVerb   "examine" (Look Nothing) |||
   simpleVerb   "search" Search |||
   complexVerb  "unlock" "with" Unlock |||
   complexVerb  "close" "with" Lock |||
