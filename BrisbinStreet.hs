@@ -440,7 +440,11 @@ buildWorld = do
       setDescription justinYard justinYardDescription
 
   hhKitchen <- newRoom "Kitchen" $
-    ""
+    "This kitchen is a complete mess. Someone has thrown all of the dishes " ++
+    "all over the room and broken them. Sharp pieces of ceramic litter the " ++
+    "floor and countertops. There is no food anywhere to be seen, and the " ++
+    "fridge is standing open and completely empty. You watch your step " ++
+    "very carefully as you pass through this room."
   kitchenEntrance <- newExit "south" hhDiningRoom hhKitchen
   addAlias kitchenEntrance "door"
   makeLocked kitchenEntrance skullKey
