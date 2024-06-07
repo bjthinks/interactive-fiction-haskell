@@ -70,7 +70,7 @@ getThing :: Ref -> GameMonad Thing
 getThing i = fmap (fromJust . M.lookup i . things) get
 
 getProperty :: (Thing -> a) -> Ref -> GameMonad a
-getProperty c = fmap c . getThing
+getProperty property = fmap property . getThing
 
 getName         = getProperty name
 getAliases      = getProperty aliases
@@ -106,10 +106,12 @@ setThing i t = do
   s <- get
   put $ s { things = M.insert i t (things s) }
 
-setAliases :: Ref -> [String] -> GameMonad ()
-setAliases ref as = do
+setProperty :: (Thing -> a -> Thing) -> Ref -> a -> GameMonad ()
+setProperty updater ref value = do
   thing <- getThing ref
-  setThing ref $ thing { aliases = as }
+  setThing ref $ updater thing value
+
+setAliases = setProperty (\t v -> t { aliases = v })
 
 addAlias :: Ref -> String -> GameMonad ()
 addAlias ref a = do
