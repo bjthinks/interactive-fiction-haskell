@@ -109,94 +109,26 @@ setProperty updater ref value = do
   thing <- getThing ref
   setThing ref $ updater thing value
 
-setAliases = setProperty (\t v -> t { aliases = v })
+setAliases     = setProperty (\t v -> t { aliases = v })
+setDescription = setProperty (\t v -> t { description = v })
+setOnEat       = setProperty (\t v -> t { onEat = v })
+setOnDrink     = setProperty (\t v -> t { onDrink = v })
+setOnUse       = setProperty (\t v -> t { onUse = v })
+setOnGo        = setProperty (\t v -> t { onGo = v })
+setOnLight     = setProperty (\t v -> t { onLight = v })
+setOnGet       = setProperty (\t v -> t { onGet = v })
+setOnPutIn     = setProperty (\t v -> t { onPutIn = v })
+setOnGetFrom   = setProperty (\t v -> t { onGetFrom = v })
+setOnDrop      = setProperty (\t v -> t { onDrop = v })
+setOnThrow     = setProperty (\t v -> t { onThrow = v })
+setIsContainer = setProperty (\t v -> t { isContainer = v })
+setOnUnlock    = setProperty (\t v -> t { onUnlock = v })
+setOnLock      = setProperty (\t v -> t { onLock = v })
+setIsLocked    = setProperty (\t v -> t { isLocked = v })
+setKey         = setProperty (\t v -> t { key = v })
+setOnSearch    = setProperty (\t v -> t { onSearch = v })
 
 addAlias :: Ref -> String -> GameMonad ()
 addAlias ref a = do
   as <- getAliases ref
   setAliases ref (a:as)
-
-setDescription :: Ref -> String -> GameMonad ()
-setDescription i d = do
-  t <- getThing i
-  setThing i $ t { description = d }
-
-setOnEat :: Ref -> GameMonad () -> GameMonad ()
-setOnEat ref action = do
-  thing <- getThing ref
-  setThing ref $ thing { onEat = action }
-
-setOnDrink :: Ref -> GameMonad () -> GameMonad ()
-setOnDrink ref action = do
-  thing <- getThing ref
-  setThing ref $ thing { onDrink = action }
-
-setOnUse :: Ref -> GameMonad () -> GameMonad ()
-setOnUse ref action = do
-  thing <- getThing ref
-  setThing ref $ thing { onUse = action }
-
-setOnGo :: Ref -> GameMonad () -> GameMonad ()
-setOnGo ref action = do
-  thing <- getThing ref
-  setThing ref $ thing { onGo = action }
-
-setOnLight :: Ref -> GameMonad () -> GameMonad ()
-setOnLight ref action = do
-  thing <- getThing ref
-  setThing ref $ thing { onLight = action }
-
-setOnGet :: Ref -> GameMonad () -> GameMonad ()
-setOnGet ref action = do
-  thing <- getThing ref
-  setThing ref $ thing { onGet = action }
-
-setOnPutIn :: Ref -> (Ref -> GameMonad ()) -> GameMonad ()
-setOnPutIn ref action = do
-  thing <- getThing ref
-  setThing ref $ thing { onPutIn = action }
-
-setOnGetFrom :: Ref -> (Ref -> GameMonad ()) -> GameMonad ()
-setOnGetFrom ref action = do
-  thing <- getThing ref
-  setThing ref $ thing { onGetFrom = action }
-
-setOnDrop :: Ref -> GameMonad () -> GameMonad ()
-setOnDrop ref action = do
-  thing <- getThing ref
-  setThing ref $ thing { onDrop = action }
-
-setOnThrow :: Ref -> GameMonad () -> GameMonad ()
-setOnThrow ref action = do
-  thing <- getThing ref
-  setThing ref $ thing { onThrow = action }
-
-setIsContainer :: Ref -> Bool -> GameMonad ()
-setIsContainer ref flag = do
-  thing <- getThing ref
-  setThing ref $ thing { isContainer = flag }
-
-setOnUnlock :: Ref -> GameMonad () -> GameMonad ()
-setOnUnlock ref action = do
-  thing <- getThing ref
-  setThing ref $ thing { onUnlock = action }
-
-setOnLock :: Ref -> GameMonad () -> GameMonad ()
-setOnLock ref action = do
-  thing <- getThing ref
-  setThing ref $ thing { onLock = action }
-
-setIsLocked :: Ref -> Bool -> GameMonad ()
-setIsLocked ref flag = do
-  thing <- getThing ref
-  setThing ref $ thing { isLocked = flag }
-
-setKey :: Ref -> Maybe Ref -> GameMonad ()
-setKey ref maybeKey = do
-  thing <- getThing ref
-  setThing ref $ thing { key = maybeKey }
-
-setOnSearch :: Ref -> GameMonad () -> GameMonad ()
-setOnSearch ref action = do
-  thing <- getThing ref
-  setThing ref $ thing { onSearch = action }
