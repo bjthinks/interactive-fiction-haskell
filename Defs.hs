@@ -38,13 +38,15 @@ data GameState = GameState { things :: M.Map Ref Thing,
                              nextThing :: Ref,
                              player :: Maybe Ref,
                              score :: Int,
-                             maxScore :: Int }
+                             maxScore :: Int,
+                             keepPlaying :: Bool }
 
 startState = GameState { things = M.empty,
                          nextThing = 0,
                          player = Nothing,
                          score = 0,
-                         maxScore = 0 }
+                         maxScore = 0,
+                         keepPlaying = True }
 
 type MoveInput = String
 type MoveOutput = String
@@ -65,6 +67,11 @@ setPlayer :: Ref -> GameMonad ()
 setPlayer p = do
   s <- get
   put $ s { player = Just p }
+
+stopPlaying :: GameMonad ()
+stopPlaying = do
+  state <- get
+  put $ state { keepPlaying = False }
 
 getThing :: Ref -> GameMonad Thing
 getThing i = fmap (fromJust . M.lookup i . things) get

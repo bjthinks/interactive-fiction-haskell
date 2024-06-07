@@ -25,6 +25,7 @@ data Verb = Blank
           | Search
           | Score
           | Help
+          | Exit
           deriving Show
 
 type MyParser = Parsec String [(String,Ref)]
@@ -109,12 +110,14 @@ parseLine =
   verbWithNoun "throw" Throw |||
   verbWithNoun "drop" Drop |||
   verbWithAll  "drop" DropAll |||
+  simpleVerb   "exit" Exit |||
   simpleVerb   "help" Help |||
   complexVerb  "lock" "with" Lock |||
   verbWithNoun "look" (Look . Just) |||
   simpleVerb   "look" (Look Nothing) |||
   verbWithNoun "move" Go |||
   complexVerb  "open" "with" Unlock |||
+  simpleVerb   "quit" Exit |||
   verbWithNoun "take" Get |||
   verbWithAll  "take" GetAll |||
   complexVerb  "take" "from" GetFrom |||

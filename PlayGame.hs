@@ -1,6 +1,7 @@
 module PlayGame(playGame) where
 
 import System.Console.Haskeline
+import Control.Monad
 import Control.Monad.Trans.Maybe
 import Control.Monad.RWS
 import Data.Char
@@ -35,7 +36,7 @@ mainloop state = do
   line <- MaybeT $ getInputLine "> "
   let (newState, response) = execRWS handleInput line state
   liftIO $ putStr $ wordWrap response
-  mainloop newState
+  when (keepPlaying newState) (mainloop newState)
 
 playGame :: GameMonad () -> IO (Maybe ())
 playGame build = do

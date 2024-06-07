@@ -208,6 +208,8 @@ doVerb Help = do
     "\"n\" is short for \"go north\". You can also use semicolons to " ++
     "separate multiple commands."
 
+doVerb Exit = stopPlaying
+
 lookAt :: Ref -> GameMonad ()
 lookAt ref = do
   name <- getName ref
