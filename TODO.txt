@@ -4,7 +4,6 @@ examine alias for look
 big wheel in garage
 onGo -- You hear footsteps as you enter the house. Boards creak under your
 feet.
-change Gabby to Gabby doll
 upstairs key and whiskey in wet bar
 downstairs key in master bedroom
 points:
