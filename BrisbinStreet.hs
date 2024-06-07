@@ -155,8 +155,9 @@ buildWorld = do
     "like a cartoon. Try \"use dollhouse\" to enter or exit the dollhouse."
   makeContainer dollhouse
   addAlias dollhouse "dollhouse"
-  gabby <- newObject childBedroom "Gabby" $
+  gabby <- newObject childBedroom "Gabby doll" $
     "This is a Gabby doll. It looks like she wants to be in her dollhouse."
+  addAlias gabby "Gabby"
   addAlias gabby "doll"
   setOnUse dollhouse $ do
     playerLoc <- getRoom
