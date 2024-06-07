@@ -97,9 +97,7 @@ getKey          = getProperty key
 getOnSearch     = getProperty onSearch
 
 getIsUnlocked :: Ref -> GameMonad Bool
-getIsUnlocked ref = do
-  locked <- getIsLocked ref
-  return $ not locked
+getIsUnlocked = fmap not . getIsLocked
 
 setThing :: Ref -> Thing -> GameMonad ()
 setThing i t = do
