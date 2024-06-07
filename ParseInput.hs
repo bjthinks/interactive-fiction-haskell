@@ -113,6 +113,7 @@ parseLine =
   complexVerb  "lock" "with" Lock |||
   verbWithNoun "look" (Look . Just) |||
   simpleVerb   "look" (Look Nothing) |||
+  verbWithNoun "move" Go |||
   complexVerb  "open" "with" Unlock |||
   verbWithNoun "take" Get |||
   verbWithAll  "take" GetAll |||
