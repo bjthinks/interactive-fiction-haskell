@@ -341,7 +341,8 @@ buildWorld = do
     "to be done in lavish wood paneling. There is a picture of an elderly " ++
     "man on the wall, and his eyes move to follow you. There is a writing " ++
     "desk and a basket for umbrellas next to the coat closet."
-  newExit "south" hauntedYard hhFoyer
+  hhEntrance <- newExit "south" hauntedYard hhFoyer
+  setOnGo hhEntrance $ msg "You hear footsteps as you enter the house."
   newExit "north" hhFoyer hauntedYard
   writingDesk <- newObject hhFoyer "desk" $
     "This is a small writing desk with multiple drawers for storage and an " ++
@@ -443,6 +444,8 @@ buildWorld = do
   kitchenEntrance <- newExit "south" hhDiningRoom hhKitchen
   addAlias kitchenEntrance "door"
   makeLocked kitchenEntrance skullKey
+  setOnGo kitchenEntrance $ msg $ "Boards creak under your feet, but the " ++
+    "ghosts don\'t notice."
   newExit "north" hhKitchen hhDiningRoom
 
   hhLowerStaircase <- newRoom "Spiral Staircase" $
