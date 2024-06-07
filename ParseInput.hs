@@ -100,6 +100,7 @@ parseLine =
   simpleVerb   "inventory" Inventory |||
   simpleVerb   "search" Search |||
   complexVerb  "unlock" "with" Unlock |||
+  complexVerb  "close" "with" Lock |||
   verbWithNoun "drink" Drink |||
   verbWithNoun "light" Light |||
   simpleVerb   "score" Score |||
@@ -110,6 +111,7 @@ parseLine =
   complexVerb  "lock" "with" Lock |||
   verbWithNoun "look" (Look . Just) |||
   simpleVerb   "look" (Look Nothing) |||
+  complexVerb  "open" "with" Unlock |||
   verbWithNoun "take" Get |||
   verbWithAll  "take" GetAll |||
   complexVerb  "take" "from" GetFrom |||
