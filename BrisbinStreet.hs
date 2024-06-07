@@ -453,6 +453,11 @@ buildWorld = do
   staircaseEntrance <- newExit "east" hhKitchen hhLowerStaircase
   newExit "west" hhLowerStaircase hhKitchen
 
+  shortcut <- newExit "secret passage to haunted house kitchen"
+    brisbin hhKitchen
+  addAlias shortcut "kitchen"
+  addAlias shortcut "k"
+
   disconnect bathroomEntrance
   let onGetBook1 = do
         getBookMessage
