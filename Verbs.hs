@@ -40,16 +40,14 @@ doVerb GetAll = do
 
 doVerb (GetFrom item container) = do
   goodContainer <- isUsableContainer container
-  case goodContainer of
-    False -> return ()
-    True -> do
-      itemLoc <- getLocation item
-      containerName <- getName container
-      case itemLoc == Just container of
-        False -> msg $ "You don\'t see that in the " ++ containerName ++ "."
-        True -> do
-          action <- getOnGetFrom item
-          action container
+  when goodContainer $ do
+    itemLoc <- getLocation item
+    containerName <- getName container
+    case itemLoc == Just container of
+      False -> msg $ "You don\'t see that in the " ++ containerName ++ "."
+      True -> do
+        action <- getOnGetFrom item
+        action container
 
 doVerb (Drop ref) = do
   haveIt <- isInInventory ref
@@ -76,20 +74,18 @@ doVerb DropAll = do
 
 doVerb (PutIn item container) = do
   goodContainer <- isUsableContainer container
-  case goodContainer of
-    False -> return ()
-    True -> do
-      itemName <- getName item
-      case item == container of
-        True -> msg $ "You can't put the " ++ itemName ++ " inside itself!"
-        False -> do
-          player <- getPlayer
-          itemLoc <- getLocation item
-          case itemLoc == Just player of
-            False -> msg $ "You aren\'t carrying the " ++ itemName ++ "."
-            True -> do
-              action <- getOnPutIn item
-              action container
+  when goodContainer $ do
+    itemName <- getName item
+    case item == container of
+      True -> msg $ "You can't put the " ++ itemName ++ " inside itself!"
+      False -> do
+        player <- getPlayer
+        itemLoc <- getLocation item
+        case itemLoc == Just player of
+          False -> msg $ "You aren\'t carrying the " ++ itemName ++ "."
+          True -> do
+            action <- getOnPutIn item
+            action container
 
 doVerb (Go ref) = do
   canGo <- isExit ref
