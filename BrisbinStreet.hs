@@ -102,21 +102,24 @@ buildWorld = do
   orange <- newObject kitchen "orange" "A large seedless navel orange."
   setOnEat orange $ msg "Oranges don\'t agree with you."
 
-  setOnUse candle $ do
-    let holdingCandleMsg =
-          msg "You should drop the candle before lighting it."
-    let noMatchesMsg =
-          msg "You\'re not carrying anything to light the candle with."
-    let lightMsg = msg "You light the candle and it burns brightly."
-    let alreadyLitMsg = msg "The candle is already lit."
-    maybeCandleLoc <- getLocation candle
-    if maybeCandleLoc == Just player then holdingCandleMsg else do
-      maybeMatchesLoc <- getLocation matches
-      if maybeMatchesLoc /= Just player then do noMatchesMsg else do
-        lightMsg
-        addPoints 10 "leveling up your pyromaniac skills"
-        setOnUse candle alreadyLitMsg
-        setDescription candle "A plain red candle. It is burning brightly."
+  let holdingCandleMsg =
+        msg "You should drop the candle before lighting it."
+      noMatchesMsg =
+        msg "You\'re not carrying anything to light the candle with."
+      lightMsg = msg "You light the candle and it burns brightly."
+      alreadyLitMsg = msg "The candle is already lit."
+  let useCandleAction = do
+        maybeCandleLoc <- getLocation candle
+        if maybeCandleLoc == Just player then holdingCandleMsg else do
+          maybeMatchesLoc <- getLocation matches
+          if maybeMatchesLoc /= Just player then do noMatchesMsg else do
+            lightMsg
+            addPoints 10 "leveling up your pyromaniac skills"
+            setOnUse candle alreadyLitMsg
+            setOnLight candle alreadyLitMsg
+            setDescription candle "A plain red candle. It is burning brightly."
+  setOnUse candle useCandleAction
+  setOnLight candle useCandleAction
 
   hallway <- newRoom "Hallway" $
     "This simple east-west hallway has a tiny five watt light fixture on " ++
