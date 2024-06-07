@@ -1,7 +1,6 @@
 read math book
 get potion
 examine alias for look
-big wheel in garage
 onGo -- You hear footsteps as you enter the house. Boards creak under your
 feet.
 upstairs key and whiskey in wet bar

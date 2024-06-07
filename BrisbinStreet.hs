@@ -232,6 +232,12 @@ buildWorld = do
   newExit "south" garage driveway
   sprinkler <- newObject garage "sprinkler" $
     "This sprinkler spins around fast when used."
+  bigWheel <- newObject garage "big wheel" $
+    "This is a classic Big Wheel trike from the 1970s. It\'s made from " ++
+    "blue and black plastic adorned with Batman logos, with a 16 inch " ++
+    "front wheel and a hand brake, presumably to facilitate intentional " ++
+    "spin outs."
+  setOnGet bigWheel $ msg "The big wheel is too big to carry around."
 
   backyard <- newRoom "Backyard" $
     "This is the largest part of Granny\'s yard. There are numerous shrubs " ++
