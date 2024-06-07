@@ -7,6 +7,6 @@ points:
   use air conditioner. circuit breakers. "It's warm in here."
   use capsella toy (in bathtub)
   holy water in bathroom to throw at ghost
-locked front door. locked stairway doors.
+locked front door? locked stairway doors.
 add more immobile items for flavor
 refactor all the setters in Defs
