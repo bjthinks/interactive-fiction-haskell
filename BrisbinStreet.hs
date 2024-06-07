@@ -394,6 +394,18 @@ buildWorld = do
     ""
   bathroomEntrance <- newExit "south" hhReadingRoom hhBathroom1
   newExit "north" hhBathroom1 hhReadingRoom
+  medicineCabinet <- newObject hhBathroom1 "medicine cabinet" $
+    "This is an ordinary cabinet behind the bathroom mirror. It\'s white " ++
+    "on the inside and has glass shelves."
+  addAlias medicineCabinet "cabinet"
+  makeImmobile medicineCabinet
+  makeContainer medicineCabinet
+  flask <- newObject medicineCabinet "flask" $
+    "This is a stoppered flask of clear liquid. It has a label which reads " ++
+    "\"Holy Water\"."
+  addAlias flask "holy water"
+  setOnDrink flask $ msg $ "You have a feeling the contents of this flask " ++
+    "are too important to drink."
 
   hhDiningRoom <- newRoom "Dining Room" $
     "This dining room has a huge octagonal hardwood table with eight chairs " ++
