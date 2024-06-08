@@ -38,4 +38,4 @@ maybeShowWinMessage = do
   points <- getScore
   maxPoints <- getMaxScore
   when (points >= maxPoints) $ do
-    msg "You have won! You may exit with Control-D, or continue playing."
+    msg "You have won! You may exit with \"exit\", or continue playing."
