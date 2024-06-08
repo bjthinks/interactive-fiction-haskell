@@ -24,6 +24,7 @@ doVerb Inventory = do
   msg $ "You are carrying: " ++ humanFriendlyList names ++ "."
 
 doVerb (Get ref) = do
+  -- TODO: verify that this checks isContainer, isUsable, and isUnlocked
   canGet <- isGettable ref
   -- TODO: You're already carring that.
   when (not canGet) $ stop "That\'s not something you can pick up."
@@ -37,15 +38,14 @@ doVerb GetAll = do
   return ()
 
 doVerb (GetFrom ref container) = do
-  goodContainer <- isUsableContainer container
-  when goodContainer $ do
-    refLoc <- getLocation ref
-    containerName <- getName container
-    case refLoc == Just container of
-      False -> msg $ "You don\'t see that in the " ++ containerName ++ "."
-      True -> do
-        action <- getOnGetFrom ref
-        action container
+  checkUsableContainer container
+  refLoc <- getLocation ref
+  containerName <- getName container
+  case refLoc == Just container of
+    False -> msg $ "You don\'t see that in the " ++ containerName ++ "."
+    True -> do
+      action <- getOnGetFrom ref
+      action container
 
 doVerb (Drop ref) = do
   haveIt <- isInInventory ref
@@ -73,19 +73,18 @@ doVerb DropAll = do
       return ()
 
 doVerb (PutIn ref container) = do
-  goodContainer <- isUsableContainer container
-  when goodContainer $ do
-    refName <- getName ref
-    case ref == container of
-      True -> msg $ "You can't put the " ++ refName ++ " inside itself!"
-      False -> do
-        player <- getPlayer
-        refLoc <- getLocation ref
-        case refLoc == Just player of
-          False -> msg $ "You aren\'t carrying the " ++ refName ++ "."
-          True -> do
-            action <- getOnPutIn ref
-            action container
+  checkUsableContainer container
+  refName <- getName ref
+  case ref == container of
+    True -> msg $ "You can't put the " ++ refName ++ " inside itself!"
+    False -> do
+      player <- getPlayer
+      refLoc <- getLocation ref
+      case refLoc == Just player of
+        False -> msg $ "You aren\'t carrying the " ++ refName ++ "."
+        True -> do
+          action <- getOnPutIn ref
+          action container
 
 doVerb (Go ref) = do
   canGo <- isExit ref
@@ -241,24 +240,13 @@ humanFriendlyList xs = hfl (sort xs)
     list3 [x,y] = x ++ ", and " ++ y
     list3 (x:xs) = x ++ ", " ++ list3 xs
 
-isUsableContainer :: Ref -> GameMonad Bool
-isUsableContainer container = do
+checkUsableContainer :: Ref -> GameMonad ()
+checkUsableContainer container = do
   containerName <- getName container
   isContainer <- getIsContainer container
-  case isContainer of
-    False -> do
-      msg $ "The " ++ containerName ++ " is not a container."
-      return False
-    True -> do
-      usable <- isUsable container
-      case usable of
-        False -> do
-          msg $ "The " ++ containerName ++ " is not accessible."
-          return False
-        True -> do
-          unlocked <- getIsUnlocked container
-          case unlocked of
-            False -> do
-              msg $ "The " ++ containerName ++ " is locked."
-              return False
-            True -> return True
+  when (not isContainer) $ stop $ "The " ++ containerName ++
+    " is not a container."
+  usable <- isUsable container
+  when (not usable) $ stop $ "The " ++ containerName ++ " is not accessible."
+  locked <- getIsLocked container
+  when locked $ stop $ "The " ++ containerName ++ " is locked."
