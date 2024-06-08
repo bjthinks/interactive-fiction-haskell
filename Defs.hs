@@ -3,6 +3,7 @@ module Defs where
 import qualified Data.Map.Strict as M
 import Control.Monad.RWS
 import Data.Maybe
+import Control.Monad.Trans.Maybe
 
 type Ref = Int
 
@@ -50,7 +51,7 @@ startState = GameState { things = M.empty,
 
 type MoveInput = String
 type MoveOutput = String
-type GameMonad = RWS MoveInput MoveOutput GameState
+type GameMonad = MaybeT (RWS MoveInput MoveOutput GameState)
 
 msg :: String -> GameMonad ()
 msg str = tell str >> tell "\n"

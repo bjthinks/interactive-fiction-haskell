@@ -34,14 +34,14 @@ handleInput = do
 mainloop :: GameState -> MaybeT (InputT IO) ()
 mainloop state = do
   line <- MaybeT $ getInputLine "> "
-  let (newState, response) = execRWS handleInput line state
+  let (newState, response) = execRWS (runMaybeT handleInput) line state
   liftIO $ putStr $ wordWrap response
   when (keepPlaying newState) (mainloop newState)
 
 playGame :: GameMonad () -> IO (Maybe ())
 playGame build = do
-  let (state, _) = execRWS build "" startState
-  let (state', response) = execRWS handleInput "look" state
+  let (state, _) = execRWS (runMaybeT build) "" startState
+  let (state', response) = execRWS (runMaybeT handleInput) "look" state
   putStr $ wordWrap response
   putStr $ wordWrap "Type help for a list of commands.\n"
   runInputT mySettings $ runMaybeT $ mainloop state'
