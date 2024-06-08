@@ -25,11 +25,9 @@ doVerb Inventory = do
 
 doVerb (Get ref) = do
   canGet <- isGettable ref
-  case canGet of
-    False -> msg "You can\'t pick that up."
-    True -> do
-      action <- getOnGet ref
-      action
+  when (not canGet) $ stop "That\'s not something you can pick up."
+  action <- getOnGet ref
+  action
 
 doVerb GetAll = do
   refs <- visibleRefs
