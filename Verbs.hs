@@ -27,7 +27,7 @@ doVerb (Get ref) = do
   -- TODO: verify that this checks isContainer, isUsable, and isUnlocked
   canGet <- isGettable ref
   -- TODO: You're already carring that.
-  when (not canGet) $ stop "That\'s not something you can pick up."
+  unless canGet $ stop "That\'s not something you can pick up."
   action <- getOnGet ref
   action
 
@@ -243,9 +243,9 @@ checkUsableContainer :: Ref -> GameMonad ()
 checkUsableContainer container = do
   containerName <- getName container
   isContainer <- getIsContainer container
-  when (not isContainer) $ stop $ "The " ++ containerName ++
+  unless isContainer $ stop $ "The " ++ containerName ++
     " is not a container."
   usable <- isUsable container
-  when (not usable) $ stop $ "The " ++ containerName ++ " is not accessible."
+  unless usable $ stop $ "The " ++ containerName ++ " is not accessible."
   locked <- getIsLocked container
   when locked $ stop $ "The " ++ containerName ++ " is locked."
