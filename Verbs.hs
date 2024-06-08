@@ -78,52 +78,41 @@ doVerb (PutIn ref container) = do
 
 doVerb (Go ref) = do
   canGo <- isExit ref
-  case canGo of
-    False -> msg "You can\'t go that way."
-    True -> do
-      locked <- getIsLocked ref
-      case locked of
-        True -> msg "The door is locked."
-        False -> do
-          player <- getPlayer
-          maybePath <- getPath ref
-          let (_,dest) = fromJust maybePath
-          move player dest
-          action <- getOnGo ref
-          action
-          lookAt dest
+  unless canGo $ stop "You can\'t go that way."
+  locked <- getIsLocked ref
+  when locked $ stop "The door is locked."
+  player <- getPlayer
+  maybePath <- getPath ref
+  let (_,dest) = fromJust maybePath
+  -- TODO put move action in onGo
+  move player dest
+  action <- getOnGo ref
+  action
+  lookAt dest
 
 doVerb (Eat ref) = do
   usable <- isUsable ref
-  case usable of
-    False -> msg "That\'s not accessible."
-    True -> do
-      action <- getOnEat ref
-      action
+  unless usable $ stop "That\'s not accessible."
+  action <- getOnEat ref
+  action
 
 doVerb (Drink ref) = do
   usable <- isUsable ref
-  case usable of
-    False -> msg "That\'s not accessible."
-    True -> do
-      action <- getOnDrink ref
-      action
+  unless usable $ msg "That\'s not accessible."
+  action <- getOnDrink ref
+  action
 
 doVerb (Use ref) = do
   usable <- isUsable ref
-  case usable of
-    False -> msg "That\'s not accessible."
-    True -> do
-      action <- getOnUse ref
-      action
+  unless usable $ stop "That\'s not accessible."
+  action <- getOnUse ref
+  action
 
 doVerb (Light ref) = do
   usable <- isUsable ref
-  case usable of
-    False -> msg "That\'s not accessible."
-    True -> do
-      action <- getOnLight ref
-      action
+  unless usable $ stop "That\'s not accessible."
+  action <- getOnLight ref
+  action
 
 doVerb (Unlock ref key) = do
   usable <- isUsable ref
