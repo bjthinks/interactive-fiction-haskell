@@ -3,6 +3,7 @@ module Defs where
 import qualified Data.Map.Strict as M
 import Control.Monad.RWS
 import Data.Maybe
+import Control.Monad
 import Control.Monad.Trans.Maybe
 
 type Ref = Int
@@ -55,6 +56,11 @@ type GameMonad = MaybeT (RWS MoveInput MoveOutput GameState)
 
 msg :: String -> GameMonad ()
 msg str = tell str >> tell "\n"
+
+-- Stop a game action and return to the main loop by injecting a Nothing
+-- into the MaybeT monad transformer.
+stop :: String -> GameMonad ()
+stop str = msg str >> mzero
 
 getPlayer :: GameMonad Ref
 getPlayer = do

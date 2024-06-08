@@ -22,7 +22,8 @@ handleInput = do
         refs <- visibleRefs
         stuff <- mapM getNameAndAliasesWithRefs refs
         case parseInput (concat stuff) (map toLower command) of
-          Left err -> msg $ show err
+          Left _ -> stop $ "I didn\'t understand something when you " ++
+                    "typed \"" ++ command ++ "\"."
           Right verb -> doVerb verb
         return ()
       getNameAndAliasesWithRefs ref = do
