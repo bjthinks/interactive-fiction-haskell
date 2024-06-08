@@ -48,42 +48,33 @@ doVerb (GetFrom ref container) = do
 
 doVerb (Drop ref) = do
   haveIt <- isInInventory ref
-  case haveIt of
-    False -> msg "You\'re not carrying that."
-    True -> do
-      action <- getOnDrop ref
-      action
+  unless haveIt $ stop "You\'re not carrying that."
+  action <- getOnDrop ref
+  action
 
 doVerb (Throw ref) = do
   haveIt <- isInInventory ref
-  case haveIt of
-    False -> msg "You\'re not carrying that."
-    True -> do
-      action <- getOnThrow ref
-      action
+  unless haveIt $ stop "You\'re not carrying that."
+  action <- getOnThrow ref
+  action
 
 doVerb DropAll = do
-  refs <- visibleRefs
-  droppableRefs <- filterM isInInventory refs
-  case droppableRefs of
-    [] -> msg "You\'re not carrying anything."
-    _ -> do
-      mapM (doVerb . Drop) droppableRefs
-      return ()
+  droppableRefs <- getInventory
+  when (droppableRefs == []) $ stop "You\'re not carrying anything."
+  mapM (doVerb . Drop) droppableRefs
+  return ()
 
 doVerb (PutIn ref container) = do
   checkUsableContainer container
   refName <- getName ref
-  case ref == container of
-    True -> msg $ "You can't put the " ++ refName ++ " inside itself!"
-    False -> do
-      player <- getPlayer
-      refLoc <- getLocation ref
-      case refLoc == Just player of
-        False -> msg $ "You aren\'t carrying the " ++ refName ++ "."
-        True -> do
-          action <- getOnPutIn ref
-          action container
+  when (ref == container) $ stop $ "You can't put the " ++ refName ++
+    " inside itself!"
+  player <- getPlayer
+  refLoc <- getLocation ref
+  unless (refLoc == Just player) $ stop $ "You aren\'t carrying the " ++
+    refName ++ "."
+  action <- getOnPutIn ref
+  action container
 
 doVerb (Go ref) = do
   canGo <- isExit ref
