@@ -1,5 +1,6 @@
 module ParseInput(Verb(..), parseInput) where
 
+import Control.Monad
 import Text.Parsec
 import Text.Parsec.String
 import Data.List
@@ -40,8 +41,7 @@ noun = do
   tryNouns names
     where
       tryNouns :: [(String,Ref)] -> MyParser Ref
-      tryNouns [] = parserFail "There is nothing here."
-      tryNouns [n] = tryNoun n
+      tryNouns [] = mzero
       tryNouns (n:ns) = tryNoun n ||| tryNouns ns
       tryNoun :: (String,Ref) -> MyParser Ref
       tryNoun (name,ref) = string name >> return ref
