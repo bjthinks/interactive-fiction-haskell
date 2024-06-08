@@ -240,8 +240,13 @@ isUsable ref = do
 
 isGettable :: Ref -> GameMonad Bool
 isGettable x = do
-  items <- getRoomContents
-  return $ elem x items
+  roomContents <- getRoomContents -- excludes player
+  roomContainerContents <- getThingsInContainers roomContents
+  inventory <- getInventory
+  inventoryContainerContents <- getThingsInContainers inventory
+  let gettableStuff = roomContents ++ roomContainerContents ++
+        inventoryContainerContents
+  return $ elem x gettableStuff
 
 -- Excludes player
 isInRoom :: Ref -> GameMonad Bool
