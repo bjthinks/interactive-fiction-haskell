@@ -91,26 +91,22 @@ doVerb (Go ref) = do
   lookAt dest
 
 doVerb (Eat ref) = do
-  usable <- isUsable ref
-  unless usable $ stop "That\'s not accessible."
+  checkUsable ref
   action <- getOnEat ref
   action
 
 doVerb (Drink ref) = do
-  usable <- isUsable ref
-  unless usable $ msg "That\'s not accessible."
+  checkUsable ref
   action <- getOnDrink ref
   action
 
 doVerb (Use ref) = do
-  usable <- isUsable ref
-  unless usable $ stop "That\'s not accessible."
+  checkUsable ref
   action <- getOnUse ref
   action
 
 doVerb (Light ref) = do
-  usable <- isUsable ref
-  unless usable $ stop "That\'s not accessible."
+  checkUsable ref
   action <- getOnLight ref
   action
 

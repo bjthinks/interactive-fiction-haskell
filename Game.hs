@@ -236,6 +236,11 @@ isUsable ref = do
   inventory <- getInventory
   return $ elem ref $ room : contents ++ inventory
 
+checkUsable :: Ref -> GameMonad ()
+checkUsable ref = do
+  canUse <- isUsable ref
+  unless canUse $ stop "That\'s not accessible."
+
 -- TODO: Rest of this needs refactoring
 
 gettableThings :: GameMonad [Ref]
