@@ -506,27 +506,20 @@ buildWorld = do
     let goodGrassLocs =
           [backyard, frontYard, nickYard, mikeYard, justinYard, motel,
            hauntedYard]
-    let defaultMsg = msg "There isn\'t any grass to water here."
-    let carryingMsg = msg "You should drop the sprinkler first."
-    let healthStr = "The grass here is green and healthy."
-    let goodGrassMsg = msg healthStr
-    let successMsg =
-          msg $ "You hook up the sprinkler to the hose and turn it on. The " ++
-            "grass greens up right away."
-    let alreadyUsedMsg = msg "The sprinkler is already running."
+        defaultStop = stop "There isn\'t any grass to water here."
+        healthyGrassStr = "The grass here is green and healthy."
     maybeSprinklerLoc <- getLocation sprinkler
-    case maybeSprinklerLoc of
-      Nothing -> defaultMsg
-      Just sprinklerLoc ->
-        if sprinklerLoc == player then carryingMsg else
-          if elem sprinklerLoc goodGrassLocs then goodGrassMsg else
-            if sprinklerLoc /= sideYard then defaultMsg else do
-              successMsg
-              addPoints 10 "watering the grass"
-              setOnUse sprinkler alreadyUsedMsg
-              let sprinklerOnMsg = msg "You would get wet."
-              setOnGet sprinkler sprinklerOnMsg
-              setDescription sideYard $ yardDesc ++ healthStr
+    when (isNothing maybeSprinklerLoc) defaultStop
+    let sprinklerLoc = fromJust maybeSprinklerLoc
+    when (sprinklerLoc == player) $ stop "You should drop the sprinkler first."
+    when (elem sprinklerLoc goodGrassLocs) $ stop healthyGrassStr
+    when (sprinklerLoc /= sideYard) defaultStop
+    msg $ "You hook up the sprinkler to the hose and turn it on. The " ++
+      "grass greens up right away."
+    addPoints 10 "watering the grass"
+    setOnUse sprinkler $ stop "The sprinkler is already running."
+    setOnGet sprinkler $ stop "You would get wet."
+    setDescription sideYard $ yardDesc ++ healthyGrassStr
 
   setMaxScore 60
 
