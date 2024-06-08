@@ -23,12 +23,12 @@ doVerb Inventory = do
   names <- mapM getName inventory
   msg $ "You are carrying: " ++ humanFriendlyList names ++ "."
 
-doVerb (Get x) = do
-  canGet <- isGettable x
+doVerb (Get ref) = do
+  canGet <- isGettable ref
   case canGet of
     False -> msg "You can\'t pick that up."
     True -> do
-      action <- getOnGet x
+      action <- getOnGet ref
       action
 
 doVerb GetAll = do
@@ -36,17 +36,19 @@ doVerb GetAll = do
   gettableRefs <- filterM isGettable refs
   case gettableRefs of
     [] -> msg "There isn\'t anything here."
-    _ -> mapM (doVerb . Get) gettableRefs >> return ()
+    _ -> do
+      mapM (doVerb . Get) gettableRefs
+      return ()
 
-doVerb (GetFrom item container) = do
+doVerb (GetFrom ref container) = do
   goodContainer <- isUsableContainer container
   when goodContainer $ do
-    itemLoc <- getLocation item
+    refLoc <- getLocation ref
     containerName <- getName container
-    case itemLoc == Just container of
+    case refLoc == Just container of
       False -> msg $ "You don\'t see that in the " ++ containerName ++ "."
       True -> do
-        action <- getOnGetFrom item
+        action <- getOnGetFrom ref
         action container
 
 doVerb (Drop ref) = do
@@ -70,21 +72,23 @@ doVerb DropAll = do
   droppableRefs <- filterM isInInventory refs
   case droppableRefs of
     [] -> msg "You\'re not carrying anything."
-    _ -> mapM (doVerb . Drop) droppableRefs >> return ()
+    _ -> do
+      mapM (doVerb . Drop) droppableRefs
+      return ()
 
-doVerb (PutIn item container) = do
+doVerb (PutIn ref container) = do
   goodContainer <- isUsableContainer container
   when goodContainer $ do
-    itemName <- getName item
-    case item == container of
-      True -> msg $ "You can't put the " ++ itemName ++ " inside itself!"
+    refName <- getName ref
+    case ref == container of
+      True -> msg $ "You can't put the " ++ refName ++ " inside itself!"
       False -> do
         player <- getPlayer
-        itemLoc <- getLocation item
-        case itemLoc == Just player of
-          False -> msg $ "You aren\'t carrying the " ++ itemName ++ "."
+        refLoc <- getLocation ref
+        case refLoc == Just player of
+          False -> msg $ "You aren\'t carrying the " ++ refName ++ "."
           True -> do
-            action <- getOnPutIn item
+            action <- getOnPutIn ref
             action container
 
 doVerb (Go ref) = do
