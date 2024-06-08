@@ -41,11 +41,10 @@ doVerb (GetFrom ref container) = do
   checkUsableContainer container
   refLoc <- getLocation ref
   containerName <- getName container
-  case refLoc == Just container of
-    False -> msg $ "You don\'t see that in the " ++ containerName ++ "."
-    True -> do
-      action <- getOnGetFrom ref
-      action container
+  when (refLoc /= Just container) $ stop $ "You don\'t see that in the " ++
+    containerName ++ "."
+  action <- getOnGetFrom ref
+  action container
 
 doVerb (Drop ref) = do
   haveIt <- isInInventory ref
