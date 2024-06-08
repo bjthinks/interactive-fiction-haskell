@@ -3,7 +3,7 @@ module Main where
 import Defs
 import Score
 import Game
-import PlayGame
+import Mainloop
 import Verbs
 import Control.Monad
 import Control.Monad.RWS

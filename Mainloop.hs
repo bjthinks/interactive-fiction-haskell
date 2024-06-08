@@ -1,4 +1,4 @@
-module PlayGame(playGame) where
+module Mainloop(playGame) where
 
 import System.Console.Haskeline
 import Control.Monad

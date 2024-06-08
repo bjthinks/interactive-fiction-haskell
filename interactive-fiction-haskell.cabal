@@ -19,7 +19,7 @@ extra-source-files:  README
 
 executable BrisbinStreet
   main-is:             BrisbinStreet.hs
-  other-modules:       Defs, Game, ParseInput, PlayGame, Score, Verbs, WordWrap
+  other-modules:       Defs, Game, ParseInput, Mainloop, Score, Verbs, WordWrap
   -- other-extensions:
   build-depends:
     base >=4.13 && <4.14,
