@@ -25,6 +25,7 @@ doVerb Inventory = do
 
 doVerb (Get ref) = do
   canGet <- isGettable ref
+  -- TODO: You're already carring that.
   when (not canGet) $ stop "That\'s not something you can pick up."
   action <- getOnGet ref
   action
