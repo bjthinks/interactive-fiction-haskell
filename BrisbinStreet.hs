@@ -500,8 +500,6 @@ buildWorld = do
         "plan of the house changes!"
   setOnGet book onGetBook2
 
-  return ()
-
   setOnUse sprinkler $ do
     let goodGrassLocs =
           [backyard, frontYard, nickYard, mikeYard, justinYard, motel,
