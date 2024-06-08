@@ -132,24 +132,17 @@ doVerb (Unlock ref key) = do
 doVerb (Lock ref key) = do
   usable <- isUsable ref
   exit <- isExit ref
-  case usable || exit of
-    False -> msg "You can\'t lock that. It\'s not accessible."
-    True -> do
-      isLocked <- getIsLocked ref
-      case isLocked of
-        True -> msg "That\'s already locked."
-        False -> do
-          haveKey <- isInInventory key
-          keyName <- getName key
-          case haveKey of
-            False -> msg $ "You\'re not carrying the " ++ keyName ++ "."
-            True -> do
-              maybeKey <- getKey ref
-              case maybeKey == Just key of
-                False -> msg $ "The " ++ keyName ++ " is not the right key."
-                True -> do
-                  action <- getOnLock ref
-                  action
+  unless (usable || exit) $ stop "You can\'t lock that. It\'s not accessible."
+  isLocked <- getIsLocked ref
+  when isLocked $ stop "That\'s already locked."
+  haveKey <- isInInventory key
+  keyName <- getName key
+  unless haveKey $ stop $ "You\'re not carrying the " ++ keyName ++ "."
+  maybeKey <- getKey ref
+  unless (maybeKey == Just key) $ stop $ "The " ++ keyName ++
+    " is not the right key."
+  action <- getOnLock ref
+  action
 
 doVerb Search = do
   room <- getRoom
