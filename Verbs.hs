@@ -117,24 +117,17 @@ doVerb (Light ref) = do
 doVerb (Unlock ref key) = do
   usable <- isUsable ref
   exit <- isExit ref
-  case usable || exit of
-    False -> msg "You can\'t unlock that. It\'s not accessible."
-    True -> do
-      isLocked <- getIsLocked ref
-      case isLocked of
-        False -> msg "That isn\'t locked."
-        True -> do
-          haveKey <- isInInventory key
-          keyName <- getName key
-          case haveKey of
-            False -> msg $ "You\'re not carrying the " ++ keyName ++ "."
-            True -> do
-              maybeKey <- getKey ref
-              case maybeKey == Just key of
-                False -> msg $ "The " ++ keyName ++ " is not the right key."
-                True -> do
-                  action <- getOnUnlock ref
-                  action
+  unless (usable || exit) $ stop "You can\'t unlock that. It\'s not accessible."
+  isLocked <- getIsLocked ref
+  unless isLocked $ stop "That isn\'t locked."
+  haveKey <- isInInventory key
+  keyName <- getName key
+  unless haveKey $ stop $ "You\'re not carrying the " ++ keyName ++ "."
+  maybeKey <- getKey ref
+  unless (maybeKey == Just key) $ stop $ "The " ++ keyName ++
+    " is not the right key."
+  action <- getOnUnlock ref
+  action
 
 doVerb (Lock ref key) = do
   usable <- isUsable ref
