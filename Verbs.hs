@@ -31,13 +31,10 @@ doVerb (Get ref) = do
   action
 
 doVerb GetAll = do
-  refs <- visibleRefs
-  gettableRefs <- filterM isGettable refs
-  case gettableRefs of
-    [] -> msg "There isn\'t anything here."
-    _ -> do
-      mapM (doVerb . Get) gettableRefs
-      return ()
+  gettableRefs <- gettableThings
+  when (gettableRefs == []) $ stop "There isn\'t anything to get."
+  mapM (doVerb . Get) gettableRefs
+  return ()
 
 doVerb (GetFrom ref container) = do
   goodContainer <- isUsableContainer container
