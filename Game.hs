@@ -238,15 +238,18 @@ isUsable ref = do
 
 -- TODO: Rest of this needs refactoring
 
-isGettable :: Ref -> GameMonad Bool
-isGettable x = do
+gettableThings :: GameMonad [Ref]
+gettableThings = do
   roomContents <- getRoomContents -- excludes player
   roomContainerContents <- getThingsInContainers roomContents
   inventory <- getInventory
   inventoryContainerContents <- getThingsInContainers inventory
-  let gettableStuff = roomContents ++ roomContainerContents ++
-        inventoryContainerContents
-  return $ elem x gettableStuff
+  return $ roomContents ++ roomContainerContents ++ inventoryContainerContents
+
+isGettable :: Ref -> GameMonad Bool
+isGettable x = do
+  refs <- gettableThings
+  return $ elem x refs
 
 -- Excludes player
 isInRoom :: Ref -> GameMonad Bool
