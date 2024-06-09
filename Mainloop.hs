@@ -39,12 +39,16 @@ mainloop state = do
   liftIO $ putStr $ wordWrap response
   when (keepPlaying newState) (mainloop newState)
 
+startup :: GameMonad () -> GameMonad ()
+startup buildWorld = do
+  buildWorld
+  doVerb (Look Nothing)
+  msg "Type help for a list of commands."
+
 playGame :: GameMonad () -> IO ()
-playGame build = do
-  let (state, _) = execRWS (runMaybeT build) "" startState
-  let (state', response) = execRWS (runMaybeT handleInput) "look" state
+playGame buildWorld = do
+  let (state, response) = execRWS (runMaybeT $ startup buildWorld) "" startState
   putStr $ wordWrap response
-  putStr $ wordWrap "Type help for a list of commands.\n"
-  void $ runInputT mySettings $ runMaybeT $ mainloop state'
+  void $ runInputT mySettings $ runMaybeT $ mainloop state
     where
       mySettings = setComplete noCompletion defaultSettings
