@@ -64,8 +64,7 @@ stop str = msg str >> mzero
 
 getPlayer :: GameMonad Ref
 getPlayer = do
-  s <- get
-  let maybePlayer = player s
+  maybePlayer <- fmap player get
   case maybePlayer of
     Just p -> return p
     Nothing -> error "Internal error: player not set"
