@@ -108,20 +108,19 @@ moveNowhere ref = do
     setThing ref $ obj { location = Nothing }
 
 move :: Ref -> Ref -> GameMonad ()
-move ref destination =
-  case ref == destination of
-    True -> error "Fatal error: attempt to move item inside itself"
-    False -> do
-      -- Get rid of any prior presence in another location
-      moveNowhere ref
-      -- Add ref to destination's contents
-      dest <- getThing destination
-      let destContents = contents dest
-          newContents = ref : destContents
-      setThing destination $ dest { contents = newContents }
-      -- Change object's location to new one
-      obj <- getThing ref
-      setThing ref $ obj { location = Just destination }
+move ref destination = do
+  when (ref == destination) $ error
+    "Fatal error: attempt to move item inside itself"
+  -- Get rid of any prior presence in another location
+  moveNowhere ref
+  -- Add ref to destination's contents
+  dest <- getThing destination
+  let destContents = contents dest
+      newContents = ref : destContents
+  setThing destination $ dest { contents = newContents }
+  -- Change object's location to new one
+  obj <- getThing ref
+  setThing ref $ obj { location = Just destination }
 
 makeImmobile :: Ref -> GameMonad ()
 makeImmobile ref = setOnGet ref $ do
@@ -272,6 +271,4 @@ isExit exit = do
   maybePath <- getPath exit
   case maybePath of
     Nothing -> return False
-    Just (src,_t) -> do
-      room <- getRoom
-      return $ room == src
+    Just (src,_) -> fmap (== src) getRoom
