@@ -21,16 +21,16 @@ handleInput = do
       runCommand command = do
         refs <- visibleRefs
         stuff <- mapM getNameAndAliasesWithRefs refs
-        case parseInput (concat stuff) (map toLower command) of
+        case parseInput (concat stuff) (toLowerString command) of
           Left _ -> stop $ "I didn\'t understand something when you " ++
                     "typed \"" ++ command ++ "\"."
           Right verb -> doVerb verb
-        return ()
       getNameAndAliasesWithRefs ref = do
         name <- getName ref
         aliases <- getAliases ref
-        let allNamesLowercase = map (map toLower) (name:aliases)
+        let allNamesLowercase = map toLowerString (name:aliases)
         return $ map (\str -> (str,ref)) allNamesLowercase
+      toLowerString = map toLower
 
 mainloop :: GameState -> MaybeT (InputT IO) ()
 mainloop state = do
