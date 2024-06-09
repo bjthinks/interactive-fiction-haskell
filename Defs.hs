@@ -66,13 +66,13 @@ getPlayer :: GameMonad Ref
 getPlayer = do
   maybePlayer <- fmap player get
   case maybePlayer of
-    Just p -> return p
+    Just player -> return player
     Nothing -> error "Internal error: player not set"
 
 setPlayer :: Ref -> GameMonad ()
-setPlayer p = do
-  s <- get
-  put $ s { player = Just p }
+setPlayer player = do
+  state <- get
+  put $ state { player = Just player }
 
 stopPlaying :: GameMonad ()
 stopPlaying = do
@@ -80,7 +80,7 @@ stopPlaying = do
   put $ state { keepPlaying = False }
 
 getThing :: Ref -> GameMonad Thing
-getThing i = fmap (fromJust . M.lookup i . things) get
+getThing ref = fmap (fromJust . M.lookup ref . things) get
 
 getProperty :: (Thing -> a) -> Ref -> GameMonad a
 getProperty property = fmap property . getThing
@@ -113,9 +113,9 @@ getIsUnlocked :: Ref -> GameMonad Bool
 getIsUnlocked = fmap not . getIsLocked
 
 setThing :: Ref -> Thing -> GameMonad ()
-setThing i t = do
-  s <- get
-  put $ s { things = M.insert i t (things s) }
+setThing ref thing = do
+  state <- get
+  put $ state { things = M.insert ref thing (things state) }
 
 setProperty :: (Thing -> a -> Thing) -> Ref -> a -> GameMonad ()
 setProperty updater ref value = do
@@ -142,6 +142,6 @@ setKey         = setProperty (\t v -> t { key = v })
 setOnSearch    = setProperty (\t v -> t { onSearch = v })
 
 addAlias :: Ref -> String -> GameMonad ()
-addAlias ref a = do
-  as <- getAliases ref
-  setAliases ref (a:as)
+addAlias ref alias = do
+  existingAliases <- getAliases ref
+  setAliases ref (alias:existingAliases)
