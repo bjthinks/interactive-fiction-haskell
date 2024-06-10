@@ -4,7 +4,10 @@ import Control.Monad
 import Text.Parsec
 import Text.Parsec.String
 import Data.List
+import Data.List.Split
 import Defs
+
+type Token = String
 
 data Verb = Blank
           | Look (Maybe Ref)
@@ -139,3 +142,6 @@ parseInput :: [(String,Ref)] -> String -> Either ParseError Verb
 parseInput names = runParser parseLine (longestFirst names) ""
   where
     longestFirst = sortOn (negate . length . fst)
+
+tokenize :: String -> [Token]
+tokenize = filter (/= "") . splitOn " "
