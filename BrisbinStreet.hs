@@ -112,7 +112,7 @@ buildWorld = do
         maybeCandleLoc <- getLocation candle
         if maybeCandleLoc == Just player then holdingCandleMsg else do
           maybeMatchesLoc <- getLocation matches
-          if maybeMatchesLoc /= Just player then do noMatchesMsg else do
+          if maybeMatchesLoc /= Just player then noMatchesMsg else do
             lightMsg
             addPoints 10 "leveling up your pyromaniac skills"
             setOnUse candle alreadyLitMsg
@@ -162,22 +162,20 @@ buildWorld = do
   setOnUse dollhouse $ do
     playerLoc <- getRoom
     maybeDollhouseLoc <- getLocation dollhouse
-    let failMsg = msg "You can\'t use that now."
-    if maybeDollhouseLoc == Nothing then
-      failMsg else do
-      let dollhouseLoc = fromJust maybeDollhouseLoc
-      if dollhouseLoc == player then
-        msg "Please drop the dollhouse first." else
-        if playerLoc == dollhouse then do
-          msg "You exit the dollhouse. Everything looks normal again."
-          move player dollhouseLoc
-          lookAt dollhouseLoc
-        else if playerLoc == dollhouseLoc then do
-          msg $ "You enter the dollhouse. Everything looks like a cartoon " ++
-            "in here."
-          move player dollhouse
-          lookAt dollhouse
-        else failMsg
+    let failUseDollhouse = stop "You can\'t use that now."
+    when (maybeDollhouseLoc == Nothing) failUseDollhouse
+    let dollhouseLoc = fromJust maybeDollhouseLoc
+    when (dollhouseLoc == player) $ stop "Please drop the dollhouse first."
+    if playerLoc == dollhouse then do
+      msg "You exit the dollhouse. Everything looks normal again."
+      move player dollhouseLoc
+      lookAt dollhouseLoc
+    else if playerLoc == dollhouseLoc then do
+      msg $ "You enter the dollhouse. Everything looks like a cartoon " ++
+        "in here."
+      move player dollhouse
+      lookAt dollhouse
+    else failUseDollhouse
   defaultDropGabby <- getOnDrop gabby
   defaultPutGabbyIn <- getOnPutIn gabby
   let goInDollhouse = do
