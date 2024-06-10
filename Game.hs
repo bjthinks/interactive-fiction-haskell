@@ -155,7 +155,7 @@ setUnlockedDescription ref description = do
     action
     setDescription ref description
   unlocked <- getIsUnlocked ref
-  if unlocked then setDescription ref description else return ()
+  when unlocked $ setDescription ref description
 
 setLockedDescription :: Ref -> String -> GameMonad ()
 setLockedDescription ref description = do
@@ -164,7 +164,7 @@ setLockedDescription ref description = do
     action
     setDescription ref description
   locked <- getIsLocked ref
-  if locked then setDescription ref description else return ()
+  when locked $ setDescription ref description
 
 makeLocked :: Ref -> Ref -> GameMonad ()
 makeLocked ref key = do
