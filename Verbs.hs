@@ -1,4 +1,4 @@
-module Verbs where
+module Verbs(doVerb) where
 
 import Data.List
 import Data.Maybe
