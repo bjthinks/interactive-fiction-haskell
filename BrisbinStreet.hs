@@ -5,6 +5,7 @@ import Score
 import Game
 import Mainloop
 import Verbs
+import ParseInput
 import Control.Monad
 import Control.Monad.RWS
 import Data.Maybe
@@ -169,12 +170,12 @@ buildWorld = do
     if playerLoc == dollhouse then do
       msg "You exit the dollhouse. Everything looks normal again."
       move player dollhouseLoc
-      lookAt dollhouseLoc
+      doVerb $ Look Nothing
     else if playerLoc == dollhouseLoc then do
       msg $ "You enter the dollhouse. Everything looks like a cartoon " ++
         "in here."
       move player dollhouse
-      lookAt dollhouse
+      doVerb $ Look Nothing
     else failUseDollhouse
   defaultDropGabby <- getOnDrop gabby
   defaultPutGabbyIn <- getOnPutIn gabby
