@@ -16,7 +16,28 @@ doVerb (Look arg) = do
   ref <- case arg of
     Nothing -> getRoom
     Just ref -> return ref
-  lookAt ref
+  name <- getName ref
+  msg name
+  desc <- getDescription ref
+  when (desc /= "") $ msg desc
+  path <- getPath ref
+  when (isJust path) $ do
+    let (src,dest) = fromJust path
+    srcName <- getName src
+    destName <- getName dest
+    msg $ "This is a way to go from " ++ srcName ++ " to " ++ destName ++ "."
+  contents <- getContents' ref
+  unlocked <- getIsUnlocked ref
+  -- You don't see yourself
+  player <- getPlayer
+  let objects = filter (/= player) contents
+  when (unlocked && objects /= []) $ do
+    objectNames <- mapM getName objects
+    msg $ "Contents: " ++ humanFriendlyList objectNames ++ "."
+  exits <- getExits ref
+  when (exits /= []) $ do
+    exitNames <- mapM getName exits
+    msg $ "Exits: " ++ humanFriendlyList exitNames ++ "."
 
 doVerb Inventory = do
   inventory <- getInventory
@@ -88,7 +109,7 @@ doVerb (Go ref) = do
   move player dest
   action <- getOnGo ref
   action
-  lookAt dest
+  doVerb (Look Nothing)
 
 doVerb (Eat ref) = do
   checkUsable ref
@@ -165,31 +186,6 @@ doVerb Help = do
     "separate multiple commands."
 
 doVerb Exit = stopPlaying
-
-lookAt :: Ref -> GameMonad ()
-lookAt ref = do
-  name <- getName ref
-  msg name
-  desc <- getDescription ref
-  when (desc /= "") $ msg desc
-  path <- getPath ref
-  when (isJust path) $ do
-    let (src,dest) = fromJust path
-    srcName <- getName src
-    destName <- getName dest
-    msg $ "This is a way to go from " ++ srcName ++ " to " ++ destName ++ "."
-  contents <- getContents' ref
-  unlocked <- getIsUnlocked ref
-  -- You don't see yourself
-  player <- getPlayer
-  let objects = filter (/= player) contents
-  when (unlocked && objects /= []) $ do
-    objectNames <- mapM getName objects
-    msg $ "Contents: " ++ humanFriendlyList objectNames ++ "."
-  exits <- getExits ref
-  when (exits /= []) $ do
-    exitNames <- mapM getName exits
-    msg $ "Exits: " ++ humanFriendlyList exitNames ++ "."
 
 humanFriendlyList :: [String] -> String
 humanFriendlyList xs = hfl (sort xs)
