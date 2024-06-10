@@ -172,12 +172,12 @@ buildWorld = do
       msg "You exit the dollhouse. Everything looks normal again."
       move player dollhouseLoc
       doVerb $ Look Nothing
-    else if playerLoc == dollhouseLoc then do
+      else if playerLoc == dollhouseLoc then do
       msg $ "You enter the dollhouse. Everything looks like a cartoon " ++
         "in here."
       move player dollhouse
       doVerb $ Look Nothing
-    else failUseDollhouse
+      else failUseDollhouse
   defaultDropGabby <- getOnDrop gabby
   defaultPutGabbyIn <- getOnPutIn gabby
   let goInDollhouse = do
