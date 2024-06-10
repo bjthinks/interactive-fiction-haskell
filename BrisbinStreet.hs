@@ -87,9 +87,13 @@ buildWorld = do
   brillo <- newObject kitchen "brillo pad" "A heavily-used copper Brillo pad."
   addAlias brillo "pad"
   matches <- newObject kitchen "matches" "A simple book of paper matches."
+  addAlias matches "match"
   setOnUse matches $
     msg $ "Instead of using the matches, please use the thing you\'re " ++
       "trying to light."
+  setOnLight matches $
+    msg $ "You light a match and watch as it burns down towards your " ++
+    "fingers. You blow out the match and throw it away."
   apple <- newObject kitchen "apple" "A red delicious apple."
   setOnEat apple $ do
     msg "The apple tastes sweet and slightly astringent."
