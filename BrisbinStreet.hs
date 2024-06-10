@@ -142,6 +142,9 @@ buildWorld = do
     "samples."
   setOnUse perfume $ do
     msg "You wipe perfume on your neck. You smell like cheap perfume now."
+  basementKey <- newObject masterBedroom "basement key" $
+    "This is an ordinery-looking key that opens the basement. Type \"unlock " ++
+    "down with basement key\" to use it."
 
   childBedroom <- newRoom "Child\'s Bedroom" $
     "This bedroom clearly belongs to a young boy. There " ++
@@ -211,6 +214,16 @@ buildWorld = do
   setDescription bathtub $ bathtubDescription ++
     " Type \"use bathtub\" to fill it with water."
   makeImmobile bathtub
+
+  basementLanding <- newRoom "Basement Landing" $
+    "The stairway, and the floor of this entire level, is a thin green " ++
+    "carpet. There are several rooms connected to the landing: a dining " ++
+    "room to the west, an unfinished laundry room to the south, a bathroom " ++
+    "to the north, and a makeshift bedroom to the east."
+  basementEntrance <- newExit "down" kitchen basementLanding
+  addAlias basementEntrance "door"
+  makeLocked basementEntrance basementKey
+  newExit "up" basementLanding kitchen
 
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House. " ++
