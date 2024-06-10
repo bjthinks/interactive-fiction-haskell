@@ -45,8 +45,8 @@ buildWorld = do
       "would like them if you threw them at it?"
   let throwAcorns finalAction = do
         room <- getRoom
-        if room == frontYard then finalAction else
-          msg "You don\'t see any squirrels here."
+        unless (room == frontYard) $ stop "You don\'t see any squirrels here."
+        finalAction
   setOnThrow acorns $ throwAcorns $ do
     msg $ "You throw an acorn at the squirrel. She catches the acorn, runs " ++
       "up the tree, and eats the acorn hungrily."
@@ -103,22 +103,19 @@ buildWorld = do
   orange <- newObject kitchen "orange" "A large seedless navel orange."
   setOnEat orange $ msg "Oranges don\'t agree with you."
 
-  let holdingCandleMsg =
-        msg "You should drop the candle before lighting it."
-      noMatchesMsg =
-        msg "You\'re not carrying anything to light the candle with."
-      lightMsg = msg "You light the candle and it burns brightly."
-      alreadyLitMsg = msg "The candle is already lit."
   let useCandleAction = do
         maybeCandleLoc <- getLocation candle
-        if maybeCandleLoc == Just player then holdingCandleMsg else do
-          maybeMatchesLoc <- getLocation matches
-          if maybeMatchesLoc /= Just player then noMatchesMsg else do
-            lightMsg
-            addPoints 10 "leveling up your pyromaniac skills"
-            setOnUse candle alreadyLitMsg
-            setOnLight candle alreadyLitMsg
-            setDescription candle "A plain red candle. It is burning brightly."
+        when (maybeCandleLoc == Just player) $ stop
+          "You should drop the candle before lighting it."
+        maybeMatchesLoc <- getLocation matches
+        unless (maybeMatchesLoc == Just player) $ stop
+          "You\'re not carrying anything to light the candle with."
+        msg "You light the candle and it burns brightly."
+        addPoints 10 "leveling up your pyromaniac skills"
+        let alreadyLit = stop "The candle is already lit."
+        setOnUse candle alreadyLit
+        setOnLight candle alreadyLit
+        setDescription candle "A plain red candle. It is burning brightly."
   setOnUse candle useCandleAction
   setOnLight candle useCandleAction
 
