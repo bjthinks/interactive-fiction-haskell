@@ -256,7 +256,12 @@ buildWorld = do
   upstairsKey <- newObject laundryDesk "upstairs key" $
     "This is an ordinary looking key to the upstairs level of Granny\'s House."
   moveNowhere upstairsKey
-  -- magnifyingGlass <- newObject
+  magnifyingGlass <- newObject laundryDesk "magnifying glass" $
+    "This is a rectangular magnifying glass with a metal handle, of a type " ++
+    "that hasn\'t been made in decades. It looks big enough that it would " ++
+    "concentrate the sun and burn things very well. Type \"use magnifying " ++
+    "glass\" to use it."
+  addAlias magnifyingGlass "glass"
   defaultSearchLaundryRoom <- getOnSearch laundryRoom
   setOnSearch laundryRoom $ do
     msg "You search the room thoroughly, and find something in the desk."
@@ -267,14 +272,27 @@ buildWorld = do
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House. " ++
     "Granny\'s side door is to the east. The front yard is to the " ++
-    "southeast and the backyard is to the northeast. The garage is north. " ++
-    "There are a great many small brown and medium black ants coming and " ++
-    "going out of anthills along the driveway. You wish you had a " ++
-    "magnifying glass to use on the ants."
+    "southeast and the backyard is to the northeast. The garage is north."
+  let antDescription =
+        " There are a great many small brown and medium black ants coming " ++
+        "and going out of anthills along the driveway. You wish you had a " ++
+        "magnifying glass to use on the ants."
+  drivewayDescription <- getDescription driveway
+  setDescription driveway $ drivewayDescription ++ antDescription
   newExit "east" driveway kitchen
   newExit "west" kitchen driveway
   newExit "southeast" driveway frontYard
   newExit "northwest" frontYard driveway
+
+  let noUseGlass = stop
+        "There isn\'t anything to burn with the sun around here."
+  setOnUse magnifyingGlass $ do
+    room <- getRoom
+    unless (room == driveway) noUseGlass
+    msg "You burn ant after ant with the sun, killing many of them."
+    addPoints 10 "being an exterminator"
+    setOnUse magnifyingGlass noUseGlass
+    setDescription driveway drivewayDescription
 
   garage <- newRoom "Garage" $
     "Two cars are squeezed into this garage: a 1970s era yellow " ++
