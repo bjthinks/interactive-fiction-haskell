@@ -595,6 +595,4 @@ buildWorld = do
   return ()
 
 main :: IO ()
-main = do
-  playGame buildWorld
-  return ()
+main = playGame buildWorld
