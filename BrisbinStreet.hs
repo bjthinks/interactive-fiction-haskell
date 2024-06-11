@@ -27,11 +27,16 @@ buildWorld = do
   setPlayer player
   backpack <- newObject player "backpack" "A blue canvas backpack."
   makeContainer backpack
-  mathBook <- newObject backpack "math book" "A second grade math textbook."
+  mathBook <- newObject backpack "math book" $
+    "A second grade math textbook."
+  mathBookDescription <- getDescription mathBook
+  setDescription mathBook $ mathBookDescription ++
+    " You might learn something if you read it."
   setOnRead mathBook $ do
     msg $ "You read some second grade math and feel smarter about carrying " ++
       "and borrowing."
     addPoints 5 "learning something"
+    setDescription mathBook mathBookDescription
     setOnRead mathBook $ stop "You\'ve already read that."
 
   frontYard <- newRoom "Granny\'s Front Yard" $
