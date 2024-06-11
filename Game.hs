@@ -20,11 +20,12 @@ newThing n = do
                   contents = [],
                   exits = [],
                   path = Nothing,
-                  onEat = msg "You can\'t eat that.",
-                  onDrink = msg "You can\'t drink that.",
-                  onUse = msg "You can\'t use that.",
+                  onEat = stop "You can\'t eat that.",
+                  onDrink = stop "You can\'t drink that.",
+                  onUse = stop "You can\'t use that.",
                   onGo = return (),
-                  onLight = msg "You can\'t light that.",
+                  onLight = stop "You can\'t light that.",
+                  onRead = stop "You can\'t read that.",
                   onGet = do
                     player <- getPlayer
                     move i player
@@ -48,10 +49,10 @@ newThing n = do
                     move i room
                     name <- getName i
                     msg $ "You drop the " ++ name ++ ".",
-                  onThrow = msg "There is no point in throwing that.",
+                  onThrow = stop "There is no point in throwing that.",
                   isContainer = False,
-                  onUnlock = msg "You can\'t unlock that.",
-                  onLock = msg "You can\'t lock that.",
+                  onUnlock = stop "You can\'t unlock that.",
+                  onLock = stop "You can\'t lock that.",
                   isLocked = False,
                   key = Nothing,
                   onSearch = msg "You look everywhere but don\'t find anything."

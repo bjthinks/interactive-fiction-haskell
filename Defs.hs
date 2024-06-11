@@ -23,6 +23,7 @@ data Thing = Thing {
   onUse :: GameMonad (),
   onGo :: GameMonad (),
   onLight :: GameMonad (),
+  onRead :: GameMonad (),
   onGet :: GameMonad (),
   onPutIn :: Ref -> GameMonad (), -- put this thing into ref
   onGetFrom :: Ref -> GameMonad (), -- get this thing from ref
@@ -97,6 +98,7 @@ getOnDrink      = getProperty onDrink
 getOnUse        = getProperty onUse
 getOnGo         = getProperty onGo
 getOnLight      = getProperty onLight
+getOnRead       = getProperty onRead
 getOnGet        = getProperty onGet
 getOnPutIn      = getProperty onPutIn
 getOnGetFrom    = getProperty onGetFrom
@@ -129,6 +131,7 @@ setOnDrink     = setProperty (\t v -> t { onDrink = v })
 setOnUse       = setProperty (\t v -> t { onUse = v })
 setOnGo        = setProperty (\t v -> t { onGo = v })
 setOnLight     = setProperty (\t v -> t { onLight = v })
+setOnRead      = setProperty (\t v -> t { onRead = v })
 setOnGet       = setProperty (\t v -> t { onGet = v })
 setOnPutIn     = setProperty (\t v -> t { onPutIn = v })
 setOnGetFrom   = setProperty (\t v -> t { onGetFrom = v })

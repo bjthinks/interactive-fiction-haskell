@@ -24,6 +24,7 @@ data Verb = Blank
           | Drink Ref
           | Use Ref
           | Light Ref
+          | Read Ref
           | Throw Ref
           | Unlock Ref Ref
           | Lock Ref Ref
@@ -117,6 +118,7 @@ parseLine =
   verbWithNoun "move" Go |||
   complexVerb  "open" "with" Unlock |||
   simpleVerb   "quit" Exit |||
+  verbWithNoun "read" Read |||
   verbWithNoun "take" Get |||
   verbWithAll  "take" GetAll |||
   complexVerb  "take" "from" GetFrom |||

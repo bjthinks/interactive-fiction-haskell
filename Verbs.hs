@@ -131,6 +131,11 @@ doVerb (Light ref) = do
   action <- getOnLight ref
   action
 
+doVerb (Read ref) = do
+  checkUsable ref
+  action <- getOnRead ref
+  action
+
 doVerb (Unlock ref key) = do
   usable <- isUsable ref
   exit <- isExit ref
