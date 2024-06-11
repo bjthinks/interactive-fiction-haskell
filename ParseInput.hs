@@ -39,15 +39,15 @@ infixl 3 |||
 (|||) :: MyParser a -> MyParser a -> MyParser a
 (|||) lhs rhs = try lhs <|> rhs
 
-myToken :: Token -> MyParser Token
-myToken x = token showToken posFromToken testToken
+matchToken :: Token -> MyParser Token
+matchToken x = token showToken posFromToken testToken
   where
     showToken      = id
     posFromToken _ = initialPos ""
     testToken t    = if x == t then Just t else Nothing
 
-myTokens :: [Token] -> MyParser [Token]
-myTokens xs = mapM myToken xs
+matchTokens :: [Token] -> MyParser [Token]
+matchTokens xs = mapM matchToken xs
 
 noun :: MyParser Ref
 noun = do
@@ -58,33 +58,33 @@ noun = do
       tryNouns [] = mzero
       tryNouns (n:ns) = tryNoun n ||| tryNouns ns
       tryNoun :: ([Token],Ref) -> MyParser Ref
-      tryNoun (name,ref) = myTokens name >> return ref
+      tryNoun (name,ref) = matchTokens name >> return ref
 
 simpleVerb :: Token -> Verb -> MyParser Verb
 simpleVerb name def = do
-  myToken name
+  matchToken name
   eof
   return def
 
 verbWithNoun :: Token -> (Ref -> Verb) -> MyParser Verb
 verbWithNoun name def = do
-  myToken name
+  matchToken name
   ref <- noun
   eof
   return $ def ref
 
 verbWithAll :: Token -> Verb -> MyParser Verb
 verbWithAll name def = do
-  myToken name
-  myToken "all"
+  matchToken name
+  matchToken "all"
   eof
   return def
 
 complexVerb :: Token -> Token -> (Ref -> Ref -> Verb) -> MyParser Verb
 complexVerb name1 name2 def = do
-  myToken name1
+  matchToken name1
   ref1 <- noun
-  myToken name2
+  matchToken name2
   ref2 <- noun
   eof
   return $ def ref1 ref2
