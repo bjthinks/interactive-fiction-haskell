@@ -5,6 +5,7 @@ import Control.Monad
 import Control.Monad.Trans.Maybe
 import Control.Monad.RWS
 import Data.Char
+import Data.List
 import Data.List.Split
 
 import Defs
@@ -23,7 +24,7 @@ handleInput = do
         stuff <- mapM getNameAndAliasesWithRefs refs
         case parseInput (concat stuff) (toLowerString command) of
           Left _ -> stop $ "I didn\'t understand something when you " ++
-                    "typed \"" ++ command ++ "\"."
+              "typed \"" ++ intercalate " " (words command) ++ "\"."
           Right verb -> doVerb verb
       getNameAndAliasesWithRefs ref = do
         name <- getName ref
