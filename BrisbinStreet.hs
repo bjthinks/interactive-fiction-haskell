@@ -27,7 +27,12 @@ buildWorld = do
   setPlayer player
   backpack <- newObject player "backpack" "A blue canvas backpack."
   makeContainer backpack
-  newObject backpack "math book" "A second grade math textbook."
+  mathBook <- newObject backpack "math book" "A second grade math textbook."
+  setOnRead mathBook $ do
+    msg $ "You read some second grade math and feel smarter about carrying " ++
+      "and borrowing."
+    addPoints 5 "learning something"
+    setOnRead mathBook $ stop "You\'ve already read that."
 
   frontYard <- newRoom "Granny\'s Front Yard" $
     "The grass has many holes in it where squirrels have been " ++
@@ -532,7 +537,7 @@ buildWorld = do
     setOnGet sprinkler $ stop "You would get wet."
     setDescription sideYard $ yardDesc ++ healthyGrassStr
 
-  setMaxScore 60
+  setMaxScore 65
 
   return ()
 
