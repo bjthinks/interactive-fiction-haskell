@@ -42,7 +42,7 @@ infixl 3 |||
 matchToken :: Token -> MyParser Token
 matchToken x = token showToken posFromToken testToken
   where
-    showToken      = id
+    showToken      = show
     posFromToken _ = initialPos ""
     testToken t    = if x == t then Just t else Nothing
 
