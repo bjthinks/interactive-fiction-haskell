@@ -3,6 +3,7 @@ module ParseInput(Verb(..), parseInput) where
 import Control.Monad
 import Text.Parsec
 import Text.Parsec.String
+import Text.Parsec.Pos
 import Data.List
 import Data.List.Split
 import Defs
@@ -32,70 +33,65 @@ data Verb = Blank
           | Exit
           deriving Show
 
-type MyParser = Parsec String [(String,Ref)]
+type MyParser = Parsec [Token] [([Token],Ref)]
 
 infixl 3 |||
 (|||) :: MyParser a -> MyParser a -> MyParser a
 (|||) lhs rhs = try lhs <|> rhs
+
+myToken :: Token -> MyParser Token
+myToken x = token showToken posFromToken testToken
+  where
+    showToken      = id
+    posFromToken _ = initialPos ""
+    testToken t    = if x == t then Just t else Nothing
+
+myTokens :: [Token] -> MyParser [Token]
+myTokens xs = mapM myToken xs
 
 noun :: MyParser Ref
 noun = do
   names <- getState
   tryNouns names
     where
-      tryNouns :: [(String,Ref)] -> MyParser Ref
+      tryNouns :: [([Token],Ref)] -> MyParser Ref
       tryNouns [] = mzero
       tryNouns (n:ns) = tryNoun n ||| tryNouns ns
-      tryNoun :: (String,Ref) -> MyParser Ref
-      tryNoun (name,ref) = string name >> return ref
+      tryNoun :: ([Token],Ref) -> MyParser Ref
+      tryNoun (name,ref) = myTokens name >> return ref
 
-simpleVerb :: String -> Verb -> MyParser Verb
+simpleVerb :: Token -> Verb -> MyParser Verb
 simpleVerb name def = do
-  spaces
-  string name
-  spaces
+  myToken name
   eof
   return def
 
-verbWithNoun :: String -> (Ref -> Verb) -> MyParser Verb
+verbWithNoun :: Token -> (Ref -> Verb) -> MyParser Verb
 verbWithNoun name def = do
-  spaces
-  string name
-  many1 space
+  myToken name
   ref <- noun
-  spaces
   eof
   return $ def ref
 
-verbWithAll :: String -> Verb -> MyParser Verb
+verbWithAll :: Token -> Verb -> MyParser Verb
 verbWithAll name def = do
-  spaces
-  string name
-  many1 space
-  string "all"
-  spaces
+  myToken name
+  myToken "all"
   eof
   return def
 
-complexVerb :: String -> String -> (Ref -> Ref -> Verb) -> MyParser Verb
+complexVerb :: Token -> Token -> (Ref -> Ref -> Verb) -> MyParser Verb
 complexVerb name1 name2 def = do
-  spaces
-  string name1
-  many1 space
+  myToken name1
   ref1 <- noun
-  many1 space
-  string name2
-  many1 space
+  myToken name2
   ref2 <- noun
-  spaces
   eof
   return $ def ref1 ref2
 
 implicitGo :: MyParser Verb
 implicitGo = do
-  spaces
   ref <- noun
-  spaces
   eof
   return $ Go ref
 
@@ -139,9 +135,12 @@ parseLine =
   simpleVerb   "" Blank
 
 parseInput :: [(String,Ref)] -> String -> Either ParseError Verb
-parseInput names = runParser parseLine (longestFirst names) ""
+parseInput names input =
+  runParser parseLine (longestFirst $ tokenizeNames names) "" (words input)
   where
     longestFirst = sortOn (negate . length . fst)
 
-tokenize :: String -> [Token]
-tokenize = filter (/= "") . splitOn " "
+tokenizeNames :: [(String,Ref)] -> [([Token],Ref)]
+tokenizeNames = map tokenizeName
+  where
+    tokenizeName (name,ref) = (words name,ref)
