@@ -273,12 +273,11 @@ buildWorld = do
     "A concrete driveway extends along the west side of Granny\'s House. " ++
     "Granny\'s side door is to the east. The front yard is to the " ++
     "southeast and the backyard is to the northeast. The garage is north."
-  let antDescription =
-        " There are a great many small brown and medium black ants coming " ++
-        "and going out of anthills along the driveway. You wish you had a " ++
-        "magnifying glass to use on the ants."
   drivewayDescription <- getDescription driveway
-  setDescription driveway $ drivewayDescription ++ antDescription
+  setDescription driveway $ drivewayDescription ++
+    " There are a great many small brown and medium black ants coming " ++
+    "and going out of anthills along the driveway. You wish you had a " ++
+    "magnifying glass to use on the ants."
   newExit "east" driveway kitchen
   newExit "west" kitchen driveway
   newExit "southeast" driveway frontYard
@@ -292,7 +291,9 @@ buildWorld = do
     msg "You burn ant after ant with the sun, killing many of them."
     addPoints 10 "being an exterminator"
     setOnUse magnifyingGlass noUseGlass
-    setDescription driveway drivewayDescription
+    setDescription driveway $ drivewayDescription ++
+      " There are a great many dead and burned ants littering the concrete " ++
+      "driveway. You smile at your deed."
 
   garage <- newRoom "Garage" $
     "Two cars are squeezed into this garage: a 1970s era yellow " ++
@@ -589,7 +590,7 @@ buildWorld = do
     setOnGet sprinkler $ stop "You would get wet."
     setDescription sideYard $ yardDesc ++ healthyGrassStr
 
-  setMaxScore 65
+  setMaxScore 75
 
   return ()
 
