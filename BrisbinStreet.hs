@@ -83,6 +83,8 @@ buildWorld = do
   newExit "east" dinette living
   newspaper <- newObject dinette "newspaper" $
     "This is today\'s issue of the Minneapolis Star and Tribune."
+  setOnRead newspaper $ msg $ "You read the sports section. It\'s all about " ++
+    "how the Minnesota Twins won the 1987 World Series."
   candle <- newObject dinette "candle" "A plain red candle. It is not lit."
 
   kitchen <- newRoom "Kitchen" $
