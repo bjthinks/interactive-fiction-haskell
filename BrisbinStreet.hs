@@ -237,6 +237,33 @@ buildWorld = do
   makeLocked basementEntrance basementKey
   newExit "up" basementLanding kitchen
 
+  laundryRoom <- newRoom "Laundry Room" $
+    "This room used to double as a kitchen. There are a gas stove and a " ++
+    "refrigerator along the west wall, and cupboards and a kitchen sink " ++
+    "against the east wall. The floor and exterior walls are exposed " ++
+    "concrete, and the interior walls are covered in thin cheap paneling. " ++
+    "There is a tremendous amount of clutter in the middle of the room, " ++
+    "with a narrow path going back to the washer and dryer."
+  laundryRoomDescription <- getDescription laundryRoom
+  setDescription laundryRoom $ laundryRoomDescription ++
+    " You might find something if you search."
+  newExit "south" basementLanding laundryRoom
+  newExit "north" laundryRoom basementLanding
+  laundryDesk <- newObject laundryRoom "old desk" $
+    "This is a disused desk with drawers on the right hand side."
+  addAlias laundryDesk "desk"
+  makeImmobile laundryDesk
+  upstairsKey <- newObject laundryDesk "upstairs key" $
+    "This is an ordinary looking key to the upstairs level of Granny\'s House."
+  moveNowhere upstairsKey
+  -- magnifyingGlass <- newObject
+  defaultSearchLaundryRoom <- getOnSearch laundryRoom
+  setOnSearch laundryRoom $ do
+    msg "You search the room thoroughly, and find something in the desk."
+    move upstairsKey laundryDesk
+    setDescription laundryRoom laundryRoomDescription
+    setOnSearch laundryRoom defaultSearchLaundryRoom
+
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House. " ++
     "Granny\'s side door is to the east. The front yard is to the " ++
