@@ -1,5 +1,6 @@
 module ParseInput(Verb(..), parseInput) where
 
+import Prelude hiding (Word)
 import Control.Monad
 import Text.Parsec
 import Text.Parsec.String
@@ -8,7 +9,8 @@ import Data.List
 import Data.List.Split
 import Defs
 
-type Token = String
+type Word = String
+type Token = (SourcePos, Word) -- (position, word)
 
 data Verb = Blank
           | Look (Maybe Ref)
@@ -36,20 +38,20 @@ data Verb = Blank
           | Exit
           deriving Show
 
-type MyParser = Parsec [Token] [([Token],Ref)]
+type MyParser = Parsec [Token] [([Word],Ref)]
 
 infixl 3 |||
 (|||) :: MyParser a -> MyParser a -> MyParser a
 (|||) lhs rhs = try lhs <|> rhs
 
-matchToken :: Token -> MyParser Token
+matchToken :: Word -> MyParser Word
 matchToken x = token showToken posFromToken testToken
   where
-    showToken      = show
-    posFromToken _ = initialPos ""
-    testToken t    = if x == t then Just t else Nothing
+    showToken       = show . snd
+    posFromToken    = fst
+    testToken (_,w) = if x == w then Just w else Nothing
 
-matchTokens :: [Token] -> MyParser [Token]
+matchTokens :: [Word] -> MyParser [Word]
 matchTokens xs = mapM matchToken xs
 
 noun :: MyParser Ref
@@ -57,40 +59,40 @@ noun = do
   names <- getState
   tryNouns names
     where
-      tryNouns :: [([Token],Ref)] -> MyParser Ref
+      tryNouns :: [([Word],Ref)] -> MyParser Ref
       tryNouns [] = mzero
       tryNouns (n:ns) = tryNoun n ||| tryNouns ns
-      tryNoun :: ([Token],Ref) -> MyParser Ref
+      tryNoun :: ([Word],Ref) -> MyParser Ref
       tryNoun (name,ref) = matchTokens name >> return ref
 
-simpleVerb :: Token -> Verb -> MyParser Verb
+simpleVerb :: Word -> Verb -> MyParser Verb
 simpleVerb name def = do
   matchToken name
   eof
   return def
 
-verbWithNoun :: Token -> (Ref -> Verb) -> MyParser Verb
+verbWithNoun :: Word -> (Ref -> Verb) -> MyParser Verb
 verbWithNoun name def = do
   matchToken name
   ref <- noun
   eof
   return $ def ref
 
-compoundVerb :: [Token] -> (Ref -> Verb) -> MyParser Verb
+compoundVerb :: [Word] -> (Ref -> Verb) -> MyParser Verb
 compoundVerb name def = do
   matchTokens name
   ref <- noun
   eof
   return $ def ref
 
-verbWithAll :: Token -> Verb -> MyParser Verb
+verbWithAll :: Word -> Verb -> MyParser Verb
 verbWithAll name def = do
   matchToken name
   matchToken "all"
   eof
   return def
 
-complexVerb :: Token -> Token -> (Ref -> Ref -> Verb) -> MyParser Verb
+complexVerb :: Word -> Word -> (Ref -> Ref -> Verb) -> MyParser Verb
 complexVerb name1 name2 def = do
   matchToken name1
   ref1 <- noun
@@ -149,11 +151,12 @@ parseLine =
 
 parseInput :: [(String,Ref)] -> String -> Either ParseError Verb
 parseInput names input =
-  runParser parseLine (longestFirst $ tokenizeNames names) "" (words input)
+  runParser parseLine (longestFirst $ tokenizeNames names) "" inputWithPos
   where
     longestFirst = sortOn (negate . length . fst)
+    inputWithPos = map (\w -> (initialPos "",w)) (words input)
 
-tokenizeNames :: [(String,Ref)] -> [([Token],Ref)]
-tokenizeNames = map tokenizeName
+tokenizeNames :: [(String,Ref)] -> [([Word],Ref)]
+tokenizeNames = map wordizeName
   where
-    tokenizeName (name,ref) = (words name,ref)
+    wordizeName (name,ref) = (words name,ref)
