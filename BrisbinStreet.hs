@@ -286,6 +286,7 @@ buildWorld = do
   setAliases circuitBreakerBox
     ["circuit breaker", "circuit breakers", "breaker box", "breaker",
      "breakers", "box"]
+  makeImmobile circuitBreakerBox
   circuitBoxDescription <- getDescription circuitBreakerBox
   setDescription circuitBreakerBox $ circuitBoxDescription ++
     " One of the breakers is in the off position. It is labeled \"Air " ++
@@ -297,7 +298,9 @@ buildWorld = do
         setDescription circuitBreakerBox $ circuitBoxDescription ++
           ' ' : goodBreakers
         setOnUse circuitBreakerBox $ msg goodBreakers
+        setOnTurnOn circuitBreakerBox $ msg goodBreakers
   setOnUse circuitBreakerBox resetBreaker
+  setOnTurnOn circuitBreakerBox resetBreaker
 
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House. " ++
