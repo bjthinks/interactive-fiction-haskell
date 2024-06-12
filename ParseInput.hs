@@ -24,6 +24,7 @@ data Verb = Blank
           | Drink Ref
           | Use Ref
           | TurnOn Ref
+          | TurnOff Ref
           | Light Ref
           | Read Ref
           | Throw Ref
@@ -130,6 +131,7 @@ parseLine =
   verbWithNoun "take" Get |||
   verbWithAll  "take" GetAll |||
   complexVerb  "take" "from" GetFrom |||
+  compoundVerb ["turn", "off"] TurnOff |||
   compoundVerb ["turn", "on"] TurnOn |||
   verbWithNoun "eat" Eat |||
   verbWithNoun "get" Get |||

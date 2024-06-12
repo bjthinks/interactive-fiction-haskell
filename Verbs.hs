@@ -134,6 +134,11 @@ doVerb (TurnOn ref) = do
   action <- getOnTurnOn ref
   action
 
+{-doVerb (TurnOff ref) = do
+  checkUsable ref
+  action <- getOnTurnOff ref
+  action-}
+
 doVerb (Light ref) = do
   checkUsable ref
   action <- getOnLight ref
