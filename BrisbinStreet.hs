@@ -119,6 +119,17 @@ buildWorld = do
     "bowl. To the west is Granny\'s side door, which goes to the driveway."
   newExit "west" dinette kitchen
   newExit "east" kitchen dinette
+  stove <- newObject kitchen "stove" $
+    "A vintage gas stove with one non-functional burner. Even the oven " ++
+    "is gas."
+  makeImmobile stove
+  let useStove = msg $ "You turn on a burner, and it lights from the pilot " ++
+        "light. You let it burn for a little bit, then, having nothing to " ++
+        "cook, turn it off."
+  setOnUse stove useStove
+  setOnLight stove useStove
+  setOnTurnOn stove useStove
+  setOnTurnOff stove $ stop "The stove is already off."
   matches <- newObject kitchen "matches" "A simple book of paper matches."
   addAlias matches "match"
   setOnUse matches $
