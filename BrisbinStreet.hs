@@ -119,8 +119,6 @@ buildWorld = do
     "bowl. To the west is Granny\'s side door, which goes to the driveway."
   newExit "west" dinette kitchen
   newExit "east" kitchen dinette
-  brillo <- newObject kitchen "brillo pad" "A heavily-used copper Brillo pad."
-  addAlias brillo "pad"
   matches <- newObject kitchen "matches" "A simple book of paper matches."
   addAlias matches "match"
   setOnUse matches $
