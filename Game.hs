@@ -16,6 +16,7 @@ newThing n = do
       t = Thing { name = n,
                   aliases = [],
                   description = "",
+                  description2 = "",
                   location = Nothing,
                   contents = [],
                   exits = [],

@@ -12,6 +12,7 @@ data Thing = Thing {
   name :: String,
   aliases :: [String],
   description :: String,
+  description2 :: String,
   -- Typically, rooms have no location, but objects do
   location :: Maybe Ref,
   contents :: [Ref],
@@ -90,6 +91,7 @@ getProperty property = fmap property . getThing
 getName         = getProperty name
 getAliases      = getProperty aliases
 getDescription  = getProperty description
+getDescription2 = getProperty description2
 getLocation     = getProperty location
 getContents'    = getProperty contents
 getExits        = getProperty exits
@@ -126,26 +128,27 @@ setProperty updater ref value = do
   thing <- getThing ref
   setThing ref $ updater thing value
 
-setAliases     = setProperty (\t v -> t { aliases = v })
-setDescription = setProperty (\t v -> t { description = v })
-setOnEat       = setProperty (\t v -> t { onEat = v })
-setOnDrink     = setProperty (\t v -> t { onDrink = v })
-setOnUse       = setProperty (\t v -> t { onUse = v })
-setOnTurnOn    = setProperty (\t v -> t { onTurnOn = v })
-setOnGo        = setProperty (\t v -> t { onGo = v })
-setOnLight     = setProperty (\t v -> t { onLight = v })
-setOnRead      = setProperty (\t v -> t { onRead = v })
-setOnGet       = setProperty (\t v -> t { onGet = v })
-setOnPutIn     = setProperty (\t v -> t { onPutIn = v })
-setOnGetFrom   = setProperty (\t v -> t { onGetFrom = v })
-setOnDrop      = setProperty (\t v -> t { onDrop = v })
-setOnThrow     = setProperty (\t v -> t { onThrow = v })
-setIsContainer = setProperty (\t v -> t { isContainer = v })
-setOnUnlock    = setProperty (\t v -> t { onUnlock = v })
-setOnLock      = setProperty (\t v -> t { onLock = v })
-setIsLocked    = setProperty (\t v -> t { isLocked = v })
-setKey         = setProperty (\t v -> t { key = v })
-setOnSearch    = setProperty (\t v -> t { onSearch = v })
+setAliases      = setProperty (\t v -> t { aliases = v })
+setDescription  = setProperty (\t v -> t { description = v })
+setDescription2 = setProperty (\t v -> t { description2 = v })
+setOnEat        = setProperty (\t v -> t { onEat = v })
+setOnDrink      = setProperty (\t v -> t { onDrink = v })
+setOnUse        = setProperty (\t v -> t { onUse = v })
+setOnTurnOn     = setProperty (\t v -> t { onTurnOn = v })
+setOnGo         = setProperty (\t v -> t { onGo = v })
+setOnLight      = setProperty (\t v -> t { onLight = v })
+setOnRead       = setProperty (\t v -> t { onRead = v })
+setOnGet        = setProperty (\t v -> t { onGet = v })
+setOnPutIn      = setProperty (\t v -> t { onPutIn = v })
+setOnGetFrom    = setProperty (\t v -> t { onGetFrom = v })
+setOnDrop       = setProperty (\t v -> t { onDrop = v })
+setOnThrow      = setProperty (\t v -> t { onThrow = v })
+setIsContainer  = setProperty (\t v -> t { isContainer = v })
+setOnUnlock     = setProperty (\t v -> t { onUnlock = v })
+setOnLock       = setProperty (\t v -> t { onLock = v })
+setIsLocked     = setProperty (\t v -> t { isLocked = v })
+setKey          = setProperty (\t v -> t { key = v })
+setOnSearch     = setProperty (\t v -> t { onSearch = v })
 
 addAlias :: Ref -> String -> GameMonad ()
 addAlias ref alias = do

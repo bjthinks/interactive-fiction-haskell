@@ -19,7 +19,10 @@ doVerb (Look arg) = do
   name <- getName ref
   msg name
   desc <- getDescription ref
-  when (desc /= "") $ msg desc
+  desc2 <- getDescription2 ref
+  when (desc /= "" || desc2 /= "") $
+    if desc == "" then msg desc2 else if desc2 == "" then msg desc else
+      msg $ desc ++ ' ' : desc2
   path <- getPath ref
   when (isJust path) $ do
     let (src,dest) = fromJust path
