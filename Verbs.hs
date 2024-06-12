@@ -186,7 +186,7 @@ doVerb Score = do
 doVerb Help = do
   msg "Commands are of the form VERB, VERB NOUN, or VERB NOUN PREPOSITION NOUN."
   msg "Some of the verbs I understand are:"
-  msg "inventory, search"
+  msg "inventory, search, quit"
   msg "go, look, get, drop, throw, use, eat, or drink, followed by a noun"
   msg "unlock item/direction/door with key"
   msg "get item from container, or put item in container"
