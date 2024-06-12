@@ -5,3 +5,4 @@ points:
 locked stairway doors
 add more immobile items for flavor
 get all from container
+add stove

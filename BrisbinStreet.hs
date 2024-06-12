@@ -87,10 +87,13 @@ buildWorld = do
         let acAlreadyOn = stop "The air conditioner is already running."
         setOnUse airConditioner acAlreadyOn
         setOnTurnOn airConditioner acAlreadyOn
+        setOnTurnOff airConditioner $ stop $ "You don\'t want to turn " ++
+          "it off. It would get hot and muggy again."
         setDescription2 living "It feels cool and pleasant in here."
         setDescription2 airConditioner "The unit hums noisily as it runs."
   setOnUse airConditioner acFails
   setOnTurnOn airConditioner acFails
+  setOnTurnOff airConditioner $ stop "The air conditioner isn\'t running."
 
   dinette <- newRoom "Dinette" $
     "This is a tiny dining room, most of which is taken up by a normal " ++
@@ -311,6 +314,8 @@ buildWorld = do
         setOnTurnOn airConditioner acWorks
   setOnUse circuitBreakerBox resetBreaker
   setOnTurnOn circuitBreakerBox resetBreaker
+  setOnTurnOff circuitBreakerBox $ stop
+    "You shouldn\'t pointlessly monkey around with circuit breakers."
 
   basementBedroom <- newRoom "Basement Bedroom" $
     "This bedroom has a huge king-size bed and a very old vacuum tube " ++
