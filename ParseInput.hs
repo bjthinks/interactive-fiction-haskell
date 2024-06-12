@@ -23,6 +23,7 @@ data Verb = Blank
           | Eat Ref
           | Drink Ref
           | Use Ref
+          | TurnOn Ref
           | Light Ref
           | Read Ref
           | Throw Ref
@@ -70,6 +71,13 @@ simpleVerb name def = do
 verbWithNoun :: Token -> (Ref -> Verb) -> MyParser Verb
 verbWithNoun name def = do
   matchToken name
+  ref <- noun
+  eof
+  return $ def ref
+
+compoundVerb :: [Token] -> (Ref -> Verb) -> MyParser Verb
+compoundVerb name def = do
+  matchTokens name
   ref <- noun
   eof
   return $ def ref
@@ -122,6 +130,7 @@ parseLine =
   verbWithNoun "take" Get |||
   verbWithAll  "take" GetAll |||
   complexVerb  "take" "from" GetFrom |||
+  compoundVerb ["turn", "on"] TurnOn |||
   verbWithNoun "eat" Eat |||
   verbWithNoun "get" Get |||
   verbWithAll  "get" GetAll |||

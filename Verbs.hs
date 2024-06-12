@@ -126,6 +126,11 @@ doVerb (Use ref) = do
   action <- getOnUse ref
   action
 
+doVerb (TurnOn ref) = do
+  checkUsable ref
+  action <- getOnTurnOn ref
+  action
+
 doVerb (Light ref) = do
   checkUsable ref
   action <- getOnLight ref

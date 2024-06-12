@@ -23,6 +23,7 @@ newThing n = do
                   onEat = stop "You can\'t eat that.",
                   onDrink = stop "You can\'t drink that.",
                   onUse = stop "You can\'t use that.",
+                  onTurnOn = stop "You can\'t turn that on.",
                   onGo = return (),
                   onLight = stop "You can\'t light that.",
                   onRead = stop "You can\'t read that.",

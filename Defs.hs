@@ -21,6 +21,7 @@ data Thing = Thing {
   onEat :: GameMonad (),
   onDrink :: GameMonad (),
   onUse :: GameMonad (),
+  onTurnOn :: GameMonad (),
   onGo :: GameMonad (),
   onLight :: GameMonad (),
   onRead :: GameMonad (),
@@ -96,6 +97,7 @@ getPath         = getProperty path
 getOnEat        = getProperty onEat
 getOnDrink      = getProperty onDrink
 getOnUse        = getProperty onUse
+getOnTurnOn     = getProperty onTurnOn
 getOnGo         = getProperty onGo
 getOnLight      = getProperty onLight
 getOnRead       = getProperty onRead
@@ -129,6 +131,7 @@ setDescription = setProperty (\t v -> t { description = v })
 setOnEat       = setProperty (\t v -> t { onEat = v })
 setOnDrink     = setProperty (\t v -> t { onDrink = v })
 setOnUse       = setProperty (\t v -> t { onUse = v })
+setOnTurnOn    = setProperty (\t v -> t { onTurnOn = v })
 setOnGo        = setProperty (\t v -> t { onGo = v })
 setOnLight     = setProperty (\t v -> t { onLight = v })
 setOnRead      = setProperty (\t v -> t { onRead = v })
