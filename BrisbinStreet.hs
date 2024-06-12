@@ -538,14 +538,14 @@ buildWorld = do
     "ghosts don\'t notice."
   newExit "north" hhKitchen hhDiningRoom
 
-  hhLowerStaircase <- newRoom "Spiral Staircase" $
+  hhStaircase <- newRoom "Spiral Staircase" $
     "This room has a very large and opulent spiral staircase going to the " ++
     "upstairs floor. The walnut railing is inlaid with mother of pearl, and " ++
     "the steps are covered in yellow carpet. A very unfriendly black cat is " ++
     "staring at you."
-  staircaseEntrance <- newExit "east" hhKitchen hhLowerStaircase
-  newExit "west" hhLowerStaircase hhKitchen
-  blackCat <- newObject hhLowerStaircase "black cat" $
+  staircaseEntrance <- newExit "east" hhKitchen hhStaircase
+  newExit "west" hhStaircase hhKitchen
+  blackCat <- newObject hhStaircase "black cat" $
     "This cat arches its back and hisses when you look at it. It stares at " ++
     "you creepily."
   addAlias blackCat "cat"
@@ -557,11 +557,24 @@ buildWorld = do
   addAlias shortcut "kitchen"
   addAlias shortcut "k"
 
+  hhLanding <- newRoom "Landing" $
+    ""
+  newExit "up" hhStaircase hhLanding
+  newExit "down" hhLanding hhStaircase
+
+  hhAtrium <- newRoom "Atrium" $
+    "This room has a large vaulted skylight covering the ceiling. There are " ++
+    "numerous houseplants in large pots along the walls, but most of them " ++
+    "are yellow from lack of sun. Even though it is cloudless and sunny " ++
+    "today, there is no sun entering through the skylight."
+  newExit "west" hhLanding hhAtrium
+  newExit "east" hhAtrium hhLanding
+
   disconnect bathroomEntrance
   let onGetBook1 = do
         getBookMessage
         disconnect bathroomEntrance
-        connect staircaseEntrance hhKitchen hhLowerStaircase
+        connect staircaseEntrance hhKitchen hhStaircase
         setOnGet book onGetBook2
       onGetBook2 = do
         getBookMessage
