@@ -272,6 +272,33 @@ buildWorld = do
     setDescription laundryRoom laundryRoomDescription
     setOnSearch laundryRoom defaultSearchLaundryRoom
 
+  diningRoom <- newRoom "Dining Room" $
+    "This small room is nearly filled with a huge round oaken table. " ++
+    "There are six large padded wooden chairs surrounding it. This must " ++
+    "be where Granny and her family share meals on special occasions. A " ++
+    "cabinet holds Granny\'s fine china. There " ++
+    "is an ironing board and an iron near the entrance, and a circuit " ++
+    "breaker box in the far corner in a wooden cabinet."
+  newExit "west" basementLanding diningRoom
+  newExit "east" diningRoom basementLanding
+  circuitBreakerBox <- newObject diningRoom "circuit breaker box" $
+    "This is an ordinary circuit breaker box with 100 Amp service."
+  setAliases circuitBreakerBox
+    ["circuit breaker", "circuit breakers", "breaker box", "breaker",
+     "breakers", "box"]
+  circuitBoxDescription <- getDescription circuitBreakerBox
+  setDescription circuitBreakerBox $ circuitBoxDescription ++
+    " One of the breakers is in the off position. It is labeled \"Air " ++
+    "Conditioner\". Type \"use breaker\" to turn it on."
+  let resetBreaker = do
+        msg "You flip the breaker labeled \"Air Conditioner\" to on."
+        addPoints 5 "being an electrician"
+        let goodBreakers = "All of the breakers are in the on position."
+        setDescription circuitBreakerBox $ circuitBoxDescription ++
+          ' ' : goodBreakers
+        setOnUse circuitBreakerBox $ msg goodBreakers
+  setOnUse circuitBreakerBox resetBreaker
+
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House. " ++
     "Granny\'s side door is to the east. The front yard is to the " ++
@@ -606,7 +633,7 @@ buildWorld = do
     setOnGet sprinkler $ stop "You would get wet."
     setDescription sideYard $ yardDesc ++ healthyGrassStr
 
-  setMaxScore 75
+  setMaxScore 80
 
   return ()
 
