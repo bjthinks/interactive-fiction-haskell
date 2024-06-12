@@ -1,6 +1,7 @@
 module Mainloop(playGame) where
 
 import System.Console.Haskeline
+import Text.Parsec.Error
 import Control.Monad
 import Control.Monad.Trans.Maybe
 import Control.Monad.RWS
@@ -23,10 +24,7 @@ handleInput = do
         refs <- visibleRefs
         stuff <- mapM getNameAndAliasesWithRefs refs
         case parseInput (concat stuff) (toLowerString command) of
-          Left err -> do
-            msg $ show err
-            stop $ "I didn\'t understand something when you " ++
-              "typed \"" ++ intercalate " " (words command) ++ "\"."
+          Left err -> stop $ prettyError err
           Right verb -> doVerb verb
       getNameAndAliasesWithRefs ref = do
         name <- getName ref
@@ -34,6 +32,16 @@ handleInput = do
         let allNamesLowercase = map toLowerString (name:aliases)
         return $ map (\str -> (str,ref)) allNamesLowercase
       toLowerString = map toLower
+      prettyError err = stripLeadingNewlines $ showErrorMessages
+        "I didn\'t understand you when you entered (SYS)"
+        "I didn\'t understand you when you entered"
+        "I was expecting you to enter" -- good
+        "I didn\'t expect you to enter" -- good
+        "I expected you to type more at the end of your input" -- good
+        (errorMessages err)
+      -- This hack is necessary for reasons I don't understand
+      stripLeadingNewlines ('\n':str) = str
+      stripLeadingNewlines str = str
 
 mainloop :: GameState -> MaybeT (InputT IO) ()
 mainloop state = do
