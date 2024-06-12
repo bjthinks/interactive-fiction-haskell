@@ -287,18 +287,16 @@ buildWorld = do
     ["circuit breaker", "circuit breakers", "breaker box", "breaker",
      "breakers", "box"]
   makeImmobile circuitBreakerBox
-  circuitBoxDescription <- getDescription circuitBreakerBox
-  setDescription circuitBreakerBox $ circuitBoxDescription ++
-    " One of the breakers is in the off position. It is labeled \"Air " ++
+  setDescription2 circuitBreakerBox $
+    "One of the breakers is in the off position. It is labeled \"Air " ++
     "Conditioner\". Type \"use breaker\" to turn it on."
   let resetBreaker = do
         msg "You flip the breaker labeled \"Air Conditioner\" to on."
         addPoints 5 "being an electrician"
         let goodBreakers = "All of the breakers are in the on position."
-        setDescription circuitBreakerBox $ circuitBoxDescription ++
-          ' ' : goodBreakers
-        setOnUse circuitBreakerBox $ msg goodBreakers
-        setOnTurnOn circuitBreakerBox $ msg goodBreakers
+        setDescription2 circuitBreakerBox goodBreakers
+        setOnUse circuitBreakerBox $ stop goodBreakers
+        setOnTurnOn circuitBreakerBox $ stop goodBreakers
   setOnUse circuitBreakerBox resetBreaker
   setOnTurnOn circuitBreakerBox resetBreaker
 
@@ -306,9 +304,8 @@ buildWorld = do
     "A concrete driveway extends along the west side of Granny\'s House. " ++
     "Granny\'s side door is to the east. The front yard is to the " ++
     "southeast and the backyard is to the northeast. The garage is north."
-  drivewayDescription <- getDescription driveway
-  setDescription driveway $ drivewayDescription ++
-    " There are a great many small brown and medium black ants coming " ++
+  setDescription2 driveway $
+    "There are a great many small brown and medium black ants coming " ++
     "and going out of anthills along the driveway. You wish you had a " ++
     "magnifying glass to use on the ants."
   newExit "east" driveway kitchen
@@ -324,8 +321,8 @@ buildWorld = do
     msg "You burn ant after ant with the sun, killing many of them."
     addPoints 10 "being an exterminator"
     setOnUse magnifyingGlass noUseGlass
-    setDescription driveway $ drivewayDescription ++
-      " There are a great many dead and burned ants littering the concrete " ++
+    setDescription2 driveway $
+      "There are a great many dead and burned ants littering the concrete " ++
       "driveway. You smile at your deed."
 
   garage <- newRoom "Garage" $
@@ -361,9 +358,8 @@ buildWorld = do
     "house. There is a window unit air conditioner sticking out of the " ++
     "house, and a lightning rod and a TV antenna have been installed with " ++
     "corresponding wires running up to the roof. The front yard is " ++
-    "southwest and the backyard is northwest. "
-  yardDesc <- getDescription sideYard
-  setDescription sideYard $ yardDesc ++
+    "southwest and the backyard is northwest."
+  setDescription2 sideYard $
     "The grass here looks dry and parched. A hose beckons you to water the " ++
     "yard."
   newExit "northwest" sideYard backyard
@@ -634,7 +630,7 @@ buildWorld = do
     addPoints 10 "watering the grass"
     setOnUse sprinkler $ stop "The sprinkler is already running."
     setOnGet sprinkler $ stop "You would get wet."
-    setDescription sideYard $ yardDesc ++ healthyGrassStr
+    setDescription2 sideYard healthyGrassStr
 
   setMaxScore 80
 
