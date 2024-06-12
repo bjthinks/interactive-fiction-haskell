@@ -32,16 +32,16 @@ handleInput = do
         let allNamesLowercase = map toLowerString (name:aliases)
         return $ map (\str -> (str,ref)) allNamesLowercase
       toLowerString = map toLower
-      prettyError err = stripLeadingNewlines $ showErrorMessages
-        "I didn\'t understand you when you entered (SYS)"
-        "I didn\'t understand you when you entered"
+      prettyError err = stripLeadingNewline $ showErrorMessages
+        "I didn\'t understand what you typed"
+        "I didn\'t understand what you typed"
         "I was expecting you to enter" -- good
         "I didn\'t expect you to enter" -- good
         "I expected you to type more at the end of your input" -- good
         (errorMessages err)
-      -- This hack is necessary for reasons I don't understand
-      stripLeadingNewlines ('\n':str) = str
-      stripLeadingNewlines str = str
+      -- showErrorMessages is stupid about this
+      stripLeadingNewline ('\n':str) = str
+      stripLeadingNewline str = str
 
 mainloop :: GameState -> MaybeT (InputT IO) ()
 mainloop state = do
