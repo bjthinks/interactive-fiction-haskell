@@ -10,7 +10,7 @@ import Data.List.Split
 import Defs
 
 type Word = String
-type Token = (SourcePos, Word) -- (position, word)
+type Token = (Int, Word) -- (position, word)
 
 data Verb = Blank
           | Look (Maybe Ref)
@@ -47,9 +47,9 @@ infixl 3 |||
 matchToken :: Word -> MyParser Word
 matchToken x = token showToken posFromToken testToken
   where
-    showToken       = show . snd
-    posFromToken    = fst
-    testToken (_,w) = if x == w then Just w else Nothing
+    showToken    (_,w) = show w
+    posFromToken (p,_) = newPos "" 1 p
+    testToken    (_,w) = if x == w then Just w else Nothing
 
 matchTokens :: [Word] -> MyParser [Word]
 matchTokens xs = mapM matchToken xs
@@ -154,7 +154,7 @@ parseInput names input =
   runParser parseLine (longestFirst $ tokenizeNames names) "" inputWithPos
   where
     longestFirst = sortOn (negate . length . fst)
-    inputWithPos = map (\w -> (initialPos "",w)) (words input)
+    inputWithPos = zipWith (,) [1..] (words input)
 
 tokenizeNames :: [(String,Ref)] -> [([Word],Ref)]
 tokenizeNames = map wordizeName
