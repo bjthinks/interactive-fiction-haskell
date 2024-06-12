@@ -29,14 +29,12 @@ buildWorld = do
   makeContainer backpack
   mathBook <- newObject backpack "math book" $
     "A second grade math textbook."
-  mathBookDescription <- getDescription mathBook
-  setDescription mathBook $ mathBookDescription ++
-    " You might learn something if you read it."
+  setDescription2 mathBook "You might learn something if you read it."
   setOnRead mathBook $ do
     msg $ "You read some second grade math and feel smarter about carrying " ++
       "and borrowing."
     addPoints 5 "learning something"
-    setDescription mathBook mathBookDescription
+    setDescription2 mathBook ""
     setOnRead mathBook $ stop "You\'ve already read that."
 
   frontYard <- newRoom "Granny\'s Front Yard" $
@@ -85,7 +83,8 @@ buildWorld = do
     "This is today\'s issue of the Minneapolis Star and Tribune."
   setOnRead newspaper $ msg $ "You read the sports section. It\'s all about " ++
     "how the Minnesota Twins won the 1987 World Series."
-  candle <- newObject dinette "candle" "A plain red candle. It is not lit."
+  candle <- newObject dinette "candle" "A plain red candle."
+  setDescription2 candle "It is not lit."
 
   kitchen <- newRoom "Kitchen" $
     "This is a small but functional kitchen. There is a fridge in the " ++
@@ -131,7 +130,7 @@ buildWorld = do
         let alreadyLit = stop "The candle is already lit."
         setOnUse candle alreadyLit
         setOnLight candle alreadyLit
-        setDescription candle "A plain red candle. It is burning brightly."
+        setDescription2 candle "It is burning brightly."
   setOnUse candle useCandleAction
   setOnLight candle useCandleAction
 
@@ -222,9 +221,7 @@ buildWorld = do
     "This is a plain white bathtub with a shower attachment and glass " ++
     "doors."
   addAlias bathtub "tub"
-  bathtubDescription <- getDescription bathtub
-  setDescription bathtub $ bathtubDescription ++
-    " Type \"use bathtub\" to fill it with water."
+  setDescription2 bathtub "Type \"use bathtub\" to fill it with water."
   makeImmobile bathtub
 
   basementLanding <- newRoom "Basement Landing" $
@@ -247,9 +244,7 @@ buildWorld = do
     "concrete, and the interior walls are covered in thin cheap paneling. " ++
     "There is a tremendous amount of clutter in the middle of the room, " ++
     "with a narrow path going back to the washer and dryer."
-  laundryRoomDescription <- getDescription laundryRoom
-  setDescription laundryRoom $ laundryRoomDescription ++
-    " You might find something if you search."
+  setDescription2 laundryRoom "You might find something if you search."
   newExit "south" basementLanding laundryRoom
   newExit "north" laundryRoom basementLanding
   laundryDesk <- newObject laundryRoom "old desk" $
@@ -269,7 +264,7 @@ buildWorld = do
   setOnSearch laundryRoom $ do
     msg "You search the room thoroughly, and find something in the desk."
     move upstairsKey laundryDesk
-    setDescription laundryRoom laundryRoomDescription
+    setDescription2 laundryRoom ""
     setOnSearch laundryRoom defaultSearchLaundryRoom
 
   diningRoom <- newRoom "Dining Room" $
@@ -394,9 +389,7 @@ buildWorld = do
     "You stand in front of Justin\'s house. It is a large home with a " ++
     "noticable addition and multiple floors. There is a crabapple tree " ++
     "here."
-  justinYardDescription <- getDescription justinYard
-  setDescription justinYard $ justinYardDescription ++
-    " Bimbo the cat is hanging out in the yard."
+  setDescription2 justinYard "Bimbo the cat is hanging out in the yard."
   newExit "south" eastBrisbin justinYard
   newExit "north" justinYard eastBrisbin
   crabapple <- newObject justinYard "crabapple" $
@@ -471,9 +464,8 @@ buildWorld = do
   crookedKey <- newObject hhReadingRoom "crooked key" $
     "This is an oddly shaped key. Who knows what it unlocks?"
   moveNowhere crookedKey
-  readingRoomDescription <- getDescription hhReadingRoom
-  setDescription hhReadingRoom $ readingRoomDescription ++
-    " There is a lot of clutter on the floor. Maybe there is something " ++
+  setDescription2 hhReadingRoom $
+    "There is a lot of clutter on the floor. Maybe there is something " ++
     "important hidden here?"
   defaultSearchAction <- getOnSearch hhReadingRoom
   setOnSearch hhReadingRoom $ do
@@ -482,7 +474,7 @@ buildWorld = do
     move crookedKey hhReadingRoom
     addPoints 5 "finding a useful key"
     setOnSearch hhReadingRoom defaultSearchAction
-    setDescription hhReadingRoom readingRoomDescription
+    setDescription2 hhReadingRoom ""
   makeLocked writingDesk crookedKey
   -- These two lines should come after makeLocked above
   setUnlockedDescription writingDesk $ writingDeskDescription ++
@@ -535,9 +527,7 @@ buildWorld = do
     msg $ "You drink the potion, and watch in amazement as you turn " ++
       "invisible, clothes and all!"
     moveNowhere potion
-    setDescription player $
-      "You are an eight year old boy with blond hair, " ++
-      "wearing jeans, a t-shirt, and tennis shoes with tube socks. " ++
+    setDescription2 player $
       "At least, you think that\'s what you\'re wearing; it\'s hard to " ++
       "tell now that you\'re invisible!"
     setOnGet skullKey $ do
@@ -549,7 +539,7 @@ buildWorld = do
       msg $ "Bimbo is shocked to be picked up by an invisible person. He " ++
         "squirms out of your grasp and runs into the backyard!"
       moveNowhere bimbo
-      setDescription justinYard justinYardDescription
+      setDescription2 justinYard ""
 
   hhKitchen <- newRoom "Kitchen" $
     "This kitchen is a complete mess. Someone has thrown all of the dishes " ++
