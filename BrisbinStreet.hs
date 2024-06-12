@@ -236,6 +236,9 @@ buildWorld = do
   addAlias basementEntrance "door"
   makeLocked basementEntrance basementKey
   newExit "up" basementLanding kitchen
+  basementShortcut <- newExit "shortcut to Granny\'s basement" brisbin
+    basementLanding
+  addAlias basementShortcut "b"
 
   laundryRoom <- newRoom "Laundry Room" $
     "This room used to double as a kitchen. There are a gas stove and a " ++
