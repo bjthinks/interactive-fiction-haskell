@@ -70,6 +70,27 @@ buildWorld = do
     "to the front yard."
   newExit "north" frontYard living
   newExit "south" living frontYard
+  setDescription2 living "It\'s hot and muggy in here."
+  airConditioner <- newObject living "air conditioner" $
+    "You see a beefy, 240 volt window unit air conditioner. It has plastic " ++
+    "paneling that is made to look like wood."
+  setAliases airConditioner ["air", "conditioner", "ac"]
+  setDescription2 airConditioner
+    "It sure would be nice if you could turn it on."
+  let acFails = msg $ "You press the on button, but nothing happens. " ++
+        "The power must be off at the breaker."
+  let acWorks = do
+        msg $ "You turn on the air conditioner, and it starts up with a " ++
+          "noisy hum. Cold air blows into the room, and it feels much " ++
+          "better in here."
+        addPoints 5 "becoming an HVAC specialist"
+        let acAlreadyOn = stop "The air conditioner is already running."
+        setOnUse airConditioner acAlreadyOn
+        setOnTurnOn airConditioner acAlreadyOn
+        setDescription2 living "It feels cool and pleasant in here."
+        setDescription2 airConditioner "The unit hums noisily as it runs."
+  setOnUse airConditioner acFails
+  setOnTurnOn airConditioner acFails
 
   dinette <- newRoom "Dinette" $
     "This is a tiny dining room, most of which is taken up by a normal " ++
@@ -292,6 +313,8 @@ buildWorld = do
         setDescription2 circuitBreakerBox goodBreakers
         setOnUse circuitBreakerBox $ stop goodBreakers
         setOnTurnOn circuitBreakerBox $ stop goodBreakers
+        setOnUse airConditioner acWorks
+        setOnTurnOn airConditioner acWorks
   setOnUse circuitBreakerBox resetBreaker
   setOnTurnOn circuitBreakerBox resetBreaker
 
@@ -622,7 +645,7 @@ buildWorld = do
     setOnGet sprinkler $ stop "You would get wet."
     setDescription2 sideYard healthyGrassStr
 
-  setMaxScore 80
+  setMaxScore 85
 
   return ()
 
