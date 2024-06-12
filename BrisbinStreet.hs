@@ -275,12 +275,6 @@ buildWorld = do
   upstairsKey <- newObject laundryDesk "upstairs key" $
     "This is an ordinary looking key to the upstairs level of Granny\'s House."
   moveNowhere upstairsKey
-  magnifyingGlass <- newObject laundryDesk "magnifying glass" $
-    "This is a rectangular magnifying glass with a metal handle, of a type " ++
-    "that hasn\'t been made in decades. It looks big enough that it would " ++
-    "concentrate the sun and burn things very well. Type \"use magnifying " ++
-    "glass\" to use it."
-  addAlias magnifyingGlass "glass"
   defaultSearchLaundryRoom <- getOnSearch laundryRoom
   setOnSearch laundryRoom $ do
     msg "You search the room thoroughly, and find something in the desk."
@@ -317,6 +311,23 @@ buildWorld = do
         setOnTurnOn airConditioner acWorks
   setOnUse circuitBreakerBox resetBreaker
   setOnTurnOn circuitBreakerBox resetBreaker
+
+  basementBedroom <- newRoom "Basement Bedroom" $
+    "This bedroom has a huge king-size bed and a very old vacuum tube " ++
+    "television that sits directly on the floor. Granny\'s nightstand " ++
+    "sits by the bed. There is a tan recliner facing the TV."
+  newExit "east" basementLanding basementBedroom
+  newExit "west" basementBedroom basementLanding
+  nightstand <- newObject basementBedroom "nightstand" $
+    "This is a fancy-looking nightstand with an old school clock radio, " ++
+    "some moisturizer, and two large drawers."
+  makeImmobile nightstand
+  magnifyingGlass <- newObject nightstand "magnifying glass" $
+    "This is a rectangular magnifying glass with a metal handle, of a type " ++
+    "that hasn\'t been made in decades. It looks big enough that it would " ++
+    "concentrate the sun and burn things very well. Type \"use magnifying " ++
+    "glass\" to use it."
+  addAlias magnifyingGlass "glass"
 
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House. " ++
