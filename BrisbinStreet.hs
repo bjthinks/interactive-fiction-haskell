@@ -633,8 +633,17 @@ buildWorld = do
 
   hhLanding <- newRoom "Landing" $
     ""
-  newExit "up" hhStaircase hhLanding
-  newExit "down" hhLanding hhStaircase
+  landingEntrance <- newExit "up" hhStaircase hhLanding
+  staircaseEntrance <- newExit "down" hhLanding hhStaircase
+  setOnGo landingEntrance $ do
+    msg $ "The black cat follows you upstairs. You feel like you are being " ++
+      "watched."
+    move blackCat hhLanding
+  setOnGo staircaseEntrance $ do
+    msg $ "The black cat watches you carefully as you descend the stairs. " ++
+      "When you get to the bottom, it takes up position at the base of the " ++
+      "stairs, as if it\'s standing guard over the upstairs level."
+    move blackCat hhStaircase
 
   hhAtrium <- newRoom "Atrium" $
     "This room has a large vaulted skylight covering the ceiling. There are " ++
