@@ -147,7 +147,7 @@ parseLine =
   verbWithNoun "l" (Look . Just) |||
   simpleVerb   "l" (Look Nothing) |||
   implicitGo |||
-  simpleVerb   "" Blank
+  (eof >> return Blank)
 
 parseInput :: [(String,Ref)] -> String -> Either ParseError Verb
 parseInput names input =
