@@ -460,7 +460,7 @@ buildWorld = do
   addAlias bimbo "cat"
   setOnGet bimbo $ msg
     "Bimbo squirms out of your grasp and jumps to the ground."
-  
+  setOnPet bimbo $ msg "Bimbo purrs and rubs up against you."
 
   westBrisbin <- newRoom "West Brisbin Street" $
     "This is the west end of the block. There is a seedy motel to the " ++
@@ -624,6 +624,7 @@ buildWorld = do
   addAlias blackCat "cat"
   setOnGet blackCat $ msg $ "The cat bares its claws and hisses. There is " ++
     "no way you would try to pick up such an unfriendly cat."
+  setOnPet blackCat $ msg "There is no way to pet such an unfriendly cat."
 
   shortcut <- newExit "secret passage to haunted house kitchen"
     brisbin hhKitchen
