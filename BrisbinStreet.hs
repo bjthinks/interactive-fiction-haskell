@@ -540,12 +540,15 @@ buildWorld = do
     " The drawers are locked."
 
   hhBathroom1 <- newRoom "Bathroom" $
-    ""
+    "In this otherwise normal-looking bathroom, there is an open coffin. " ++
+    "It takes up most of the space on the floor. Other than that, you see " ++
+    "a sink, a toilet, and a shower. There is a medicine cabinet behind the " ++
+    "bathroom mirror."
   bathroomEntrance <- newExit "south" hhReadingRoom hhBathroom1
   newExit "north" hhBathroom1 hhReadingRoom
   medicineCabinet <- newObject hhBathroom1 "medicine cabinet" $
-    "This is an ordinary cabinet behind the bathroom mirror. It\'s white " ++
-    "on the inside and has glass shelves."
+    "This is an ordinary cabinet. It\'s white on the inside and has glass " ++
+    "shelves."
   addAlias medicineCabinet "cabinet"
   makeImmobile medicineCabinet
   makeContainer medicineCabinet
