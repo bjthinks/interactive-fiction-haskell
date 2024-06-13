@@ -344,6 +344,18 @@ buildWorld = do
     "glass\" to use it."
   addAlias magnifyingGlass "glass"
 
+  basementBar <- newRoom "Bar" $
+    "This area is half filled with a large wet bar. The bar is quite wide, " ++
+    "and has a light colored wood pattern on its plastic top; the sides " ++
+    "are dark wood. There are three tall bar chairs with black padded " ++
+    "backs and seats, and two armchairs along the opposite wall. There " ++
+    "is even a small light with the word BAR on its globe."
+  newExit "north" basementBedroom basementBar
+  newExit "south" basementBar basementBedroom
+  -- light
+  -- spirits
+  -- note
+
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House. " ++
     "Granny\'s side door is to the east. The front yard is to the " ++
