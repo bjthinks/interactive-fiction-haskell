@@ -335,6 +335,7 @@ buildWorld = do
   nightstand <- newObject basementBedroom "nightstand" $
     "This is a fancy-looking nightstand with an old school clock radio, " ++
     "some moisturizer, and two large drawers."
+  addAlias nightstand "stand"
   makeImmobile nightstand
   magnifyingGlass <- newObject nightstand "magnifying glass" $
     "This is a rectangular magnifying glass with a metal handle, of a type " ++
