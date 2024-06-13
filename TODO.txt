@@ -5,3 +5,6 @@ points:
 locked stairway doors
 add more immobile items for flavor
 get all from container
+boards creak in different place?
+describe hhBathroom
+describe hhLanding
