@@ -435,8 +435,11 @@ buildWorld = do
   misty <- newObject mikeYard "Misty" $
     "Misty is a small bunny with a grey coat, a white underbelly, a cute " ++
     "nose, long ears, imploring eyes, a tiny little tail, and a pink collar."
+  setAliases misty ["bunny", "rabbit"]
   setOnGet misty $ msg $ "Misty doesn\'t know you very well, so she hops " ++
     "away from your outstreched arms."
+  setOnPet misty $ msg $ "You gently pet Misty between her eyes and nose. " ++
+    "She excitedly hops about; she loves being pet there."
 
   justinYard <- newRoom "Justin\'s Yard" $
     "You stand in front of Justin\'s house. It is a large home with a " ++
@@ -454,9 +457,10 @@ buildWorld = do
   bimbo <- newObject justinYard "Bimbo" $
     "Bimbo, who is oddly a male cat, has grey and white stripes covering " ++
     "all of his body."
+  addAlias bimbo "cat"
   setOnGet bimbo $ msg
     "Bimbo squirms out of your grasp and jumps to the ground."
-  addAlias bimbo "cat"
+  
 
   westBrisbin <- newRoom "West Brisbin Street" $
     "This is the west end of the block. There is a seedy motel to the " ++
