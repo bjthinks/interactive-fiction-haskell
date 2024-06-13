@@ -25,15 +25,7 @@ handleInput = do
         refs <- visibleRefs
         stuff <- mapM getNameAndAliasesWithRefs refs
         case parseInput (concat stuff) (toLowerString command) of
-          Left err -> do
-            let commandWords = words command
-                badWordNumber = sourceColumn $ errorPos err
-                badWordList = drop (badWordNumber - 1) commandWords
-                badWord = if badWordList == []
-                  then last commandWords
-                  else head badWordList
-            stop $ "I didn\'t understand something at (or shortly after) " ++
-              "\"" ++ badWord ++ "\"."
+          Left err -> printError (words command) err
           Right verb -> doVerb verb
       getNameAndAliasesWithRefs ref = do
         name <- getName ref
@@ -41,6 +33,16 @@ handleInput = do
         let allNamesLowercase = map toLowerString (name:aliases)
         return $ map (\str -> (str,ref)) allNamesLowercase
       toLowerString = map toLower
+
+printError :: [String] -> ParseError -> GameMonad ()
+printError commandWords err = do
+  let badWordNumber = sourceColumn $ errorPos err
+      badWordList = drop (badWordNumber - 1) commandWords
+      badWord = if badWordList == []
+        then last commandWords
+        else head badWordList
+  stop $ "I didn\'t understand something at (or shortly after) " ++
+    "\"" ++ badWord ++ "\"."
 
 mainloop :: GameState -> MaybeT (InputT IO) ()
 mainloop state = do
