@@ -109,44 +109,44 @@ implicitGo = do
 
 parseLine :: MyParser Verb
 parseLine =
-  simpleVerb   "inventory" Inventory |||
-  verbWithNoun "examine" (Look . Just) |||
-  simpleVerb   "examine" (Look Nothing) |||
-  simpleVerb   "search" Search |||
-  complexVerb  "unlock" "with" Unlock |||
-  complexVerb  "close" "with" Lock |||
-  verbWithNoun "drink" Drink |||
-  verbWithNoun "light" Light |||
-  simpleVerb   "score" Score |||
-  verbWithNoun "throw" Throw |||
-  verbWithNoun "drop" Drop |||
-  verbWithAll  "drop" DropAll |||
-  simpleVerb   "exit" Exit |||
-  simpleVerb   "help" Help |||
-  complexVerb  "lock" "with" Lock |||
-  verbWithNoun "look" (Look . Just) |||
-  simpleVerb   "look" (Look Nothing) |||
-  verbWithNoun "move" Go |||
-  complexVerb  "open" "with" Unlock |||
-  simpleVerb   "quit" Exit |||
-  verbWithNoun "read" Read |||
-  verbWithNoun "take" Get |||
-  verbWithAll  "take" GetAll |||
-  complexVerb  "take" "from" GetFrom |||
-  compoundVerb ["turn", "off"] TurnOff |||
-  compoundVerb ["turn", "on"] TurnOn |||
-  verbWithNoun "eat" Eat |||
-  verbWithNoun "get" Get |||
-  verbWithAll  "get" GetAll |||
-  complexVerb  "get" "from" GetFrom |||
-  complexVerb  "put" "into" PutIn |||
-  complexVerb  "put" "in" PutIn |||
-  verbWithNoun "use" Use |||
-  verbWithNoun "go" Go |||
-  simpleVerb   "i" Inventory |||
-  verbWithNoun "l" (Look . Just) |||
-  simpleVerb   "l" (Look Nothing) |||
-  implicitGo |||
+  simpleVerb   "inventory" Inventory <|>
+  (verbWithNoun "examine" (Look . Just) |||
+   simpleVerb   "examine" (Look Nothing)) <|>
+  simpleVerb   "search" Search <|>
+  complexVerb  "unlock" "with" Unlock <|>
+  complexVerb  "close" "with" Lock <|>
+  verbWithNoun "drink" Drink <|>
+  verbWithNoun "light" Light <|>
+  simpleVerb   "score" Score <|>
+  verbWithNoun "throw" Throw <|>
+  (verbWithNoun "drop" Drop |||
+   verbWithAll  "drop" DropAll) <|>
+  simpleVerb   "exit" Exit <|>
+  simpleVerb   "help" Help <|>
+  complexVerb  "lock" "with" Lock <|>
+  (verbWithNoun "look" (Look . Just) |||
+   simpleVerb   "look" (Look Nothing)) <|>
+  verbWithNoun "move" Go <|>
+  complexVerb  "open" "with" Unlock <|>
+  simpleVerb   "quit" Exit <|>
+  verbWithNoun "read" Read <|>
+  (verbWithNoun "take" Get |||
+   verbWithAll  "take" GetAll |||
+   complexVerb  "take" "from" GetFrom) <|>
+  (compoundVerb ["turn", "off"] TurnOff |||
+   compoundVerb ["turn", "on"] TurnOn) <|>
+  verbWithNoun "eat" Eat <|>
+  (verbWithNoun "get" Get |||
+   verbWithAll  "get" GetAll |||
+   complexVerb  "get" "from" GetFrom) <|>
+  (complexVerb  "put" "into" PutIn |||
+   complexVerb  "put" "in" PutIn) <|>
+  verbWithNoun "use" Use <|>
+  verbWithNoun "go" Go <|>
+  simpleVerb   "i" Inventory <|>
+  (verbWithNoun "l" (Look . Just) |||
+   simpleVerb   "l" (Look Nothing)) <|>
+  implicitGo <|>
   (eof >> return Blank)
 
 parseInput :: [(String,Ref)] -> String -> Either ParseError Verb
