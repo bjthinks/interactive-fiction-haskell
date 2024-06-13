@@ -1,6 +1,8 @@
 module Mainloop(playGame) where
 
 import System.Console.Haskeline
+import Text.Parsec.Error
+import Text.Parsec.Pos
 import Control.Monad
 import Control.Monad.Trans.Maybe
 import Control.Monad.RWS
@@ -24,7 +26,7 @@ handleInput = do
         stuff <- mapM getNameAndAliasesWithRefs refs
         case parseInput (concat stuff) (toLowerString command) of
           Left err -> do
-            msg $ show err
+            msg $ "Error at word number " ++ show (wordNumber err)
             stop $ "I didn\'t understand something when you " ++
               "typed \"" ++ intercalate " " (words command) ++ "\"."
           Right verb -> doVerb verb
@@ -34,6 +36,7 @@ handleInput = do
         let allNamesLowercase = map toLowerString (name:aliases)
         return $ map (\str -> (str,ref)) allNamesLowercase
       toLowerString = map toLower
+      wordNumber err = sourceColumn $ errorPos err
 
 mainloop :: GameState -> MaybeT (InputT IO) ()
 mainloop state = do
