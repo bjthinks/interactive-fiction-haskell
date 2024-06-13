@@ -29,6 +29,7 @@ data Verb = Blank
           | TurnOff Ref
           | Light Ref
           | Read Ref
+          | Pet Ref
           | Throw Ref
           | Unlock Ref Ref
           | Lock Ref Ref
@@ -139,6 +140,7 @@ parseLine =
   verbWithNoun "get" Get |||
   verbWithAll  "get" GetAll |||
   complexVerb  "get" "from" GetFrom |||
+  verbWithNoun "pet" Pet |||
   complexVerb  "put" "into" PutIn |||
   complexVerb  "put" "in" PutIn |||
   verbWithNoun "use" Use |||

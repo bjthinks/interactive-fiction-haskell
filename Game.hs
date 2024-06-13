@@ -34,6 +34,7 @@ newThing n = do
                     move i player
                     name <- getName i
                     msg $ "You take the " ++ name ++ ".",
+                  onPet = stop "That\'s not an animal you can pet.",
                   onGetFrom = (\container -> do
                     player <- getPlayer
                     move i player

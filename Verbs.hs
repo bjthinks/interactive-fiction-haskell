@@ -155,6 +155,11 @@ doVerb (Read ref) = do
   action <- getOnRead ref
   action
 
+doVerb (Pet ref) = do
+  checkUsable ref
+  action <- getOnPet ref
+  action
+
 doVerb (Unlock ref key) = do
   usable <- isUsable ref
   exit <- isExit ref
