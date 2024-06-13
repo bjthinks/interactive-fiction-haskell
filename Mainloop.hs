@@ -26,9 +26,14 @@ handleInput = do
         stuff <- mapM getNameAndAliasesWithRefs refs
         case parseInput (concat stuff) (toLowerString command) of
           Left err -> do
-            msg $ "Error at word number " ++ show (wordNumber err)
-            stop $ "I didn\'t understand something when you " ++
-              "typed \"" ++ intercalate " " (words command) ++ "\"."
+            let commandWords = words command
+                badWordNumber = sourceColumn $ errorPos err
+                badWordList = drop (badWordNumber - 1) commandWords
+                badWord = if badWordList == []
+                  then last commandWords
+                  else head badWordList
+            stop $ "I didn\'t understand something at (or shortly after) " ++
+              "\"" ++ badWord ++ "\"."
           Right verb -> doVerb verb
       getNameAndAliasesWithRefs ref = do
         name <- getName ref
@@ -36,7 +41,6 @@ handleInput = do
         let allNamesLowercase = map toLowerString (name:aliases)
         return $ map (\str -> (str,ref)) allNamesLowercase
       toLowerString = map toLower
-      wordNumber err = sourceColumn $ errorPos err
 
 mainloop :: GameState -> MaybeT (InputT IO) ()
 mainloop state = do
