@@ -429,9 +429,14 @@ buildWorld = do
     "house to the adjacent avenue. There is a planter in the shape of " ++
     "an old-fashioned well with petunias growing out of it, and you also " ++
     "see a flower bed next to the house. A garage stands at the back of " ++
-    "the lot."
+    "the lot. A pet bunny named Misty is here."
   newExit "north" eastBrisbin mikeYard
   newExit "south" mikeYard eastBrisbin
+  misty <- newObject mikeYard "Misty" $
+    "Misty is a small bunny with a grey coat, a white underbelly, a cute " ++
+    "nose, long ears, imploring eyes, a tiny little tail, and a pink collar."
+  setOnGet misty $ msg $ "Misty doesn\'t know you very well, so she hops " ++
+    "away from your outstreched arms."
 
   justinYard <- newRoom "Justin\'s Yard" $
     "You stand in front of Justin\'s house. It is a large home with a " ++
