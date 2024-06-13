@@ -14,9 +14,10 @@ clean up error logic in Mainloop.hs
 addAlias "here" in newRoom
 You might learn something if you read it. (math book)
 Look at locked door should say it's locked
-Sit / sit on
+Sit / sit on??
 Helpful note on bar. Read, not look, to get hints on points.
 check "get all" for correctness and note that:
   -- This doesn't check isContainer, which is fine because it's only used
   -- in visibleRefs and not for get from/put into.
   getThingsInContainers :: [Ref] -> GameMonad [Ref]
+consider a pet command?
