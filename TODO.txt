@@ -1,3 +1,4 @@
+Think about renaming or reorganizing files
 whiskey in wet bar
 points:
   use capsella toy (in bathtub)
@@ -11,8 +12,11 @@ describe hhLanding
 finish Granny's basement
 clean up error logic in Mainloop.hs
 addAlias "here" in newRoom
-pet bunny named Misty in Nick's Yard
 You might learn something if you read it. (math book)
 Look at locked door should say it's locked
 Sit / sit on
 Helpful note on bar. Read, not look, to get hints on points.
+check "get all" for correctness and note that:
+  -- This doesn't check isContainer, which is fine because it's only used
+  -- in visibleRefs and not for get from/put into.
+  getThingsInContainers :: [Ref] -> GameMonad [Ref]
