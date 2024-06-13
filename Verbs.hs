@@ -28,7 +28,13 @@ doVerb (Look arg) = do
     let (src,dest) = fromJust path
     srcName <- getName src
     destName <- getName dest
-    msg $ "This is a way to go from " ++ srcName ++ " to " ++ destName ++ "."
+    let pathStr = "This is a way to go from " ++ srcName ++ " to " ++
+          destName ++ "."
+    locked <- getIsLocked ref
+    let message = if locked
+          then (pathStr ++ " The door is locked.")
+          else pathStr
+    msg message
   contents <- getContents' ref
   unlocked <- getIsUnlocked ref
   -- You don't see yourself
