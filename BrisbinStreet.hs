@@ -284,6 +284,7 @@ buildWorld = do
     "This is a disused desk with drawers on the right hand side."
   addAlias laundryDesk "desk"
   makeImmobile laundryDesk
+  makeContainer laundryDesk
   upstairsKey <- newObject laundryDesk "upstairs key" $
     "This is an ordinary looking key to the upstairs level of Granny\'s House."
   moveNowhere upstairsKey
@@ -337,6 +338,7 @@ buildWorld = do
     "some moisturizer, and two large drawers."
   addAlias nightstand "stand"
   makeImmobile nightstand
+  makeContainer nightstand
   magnifyingGlass <- newObject nightstand "magnifying glass" $
     "This is a rectangular magnifying glass with a metal handle, of a type " ++
     "that hasn\'t been made in decades. It looks big enough that it would " ++
