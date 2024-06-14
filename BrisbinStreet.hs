@@ -393,6 +393,21 @@ buildWorld = do
     "light in the ceiling just outside the shower stall."
   newExit "north" basementLanding basementBathroom
   newExit "south" basementBathroom basementLanding
+  note <- newObject basementBathroom "note" $
+    "This helpful note lists ways to earn points in this game. Reading it " ++
+    "is considered cheating!"
+  setOnRead note $ do
+    msg "Ways to Earn Points:"
+    msg "1. Learn some math"
+    msg "2. Pet a bunny"
+    msg "3. Water the grass"
+    msg "4. Feed the squirrel"
+    msg "5. Eat something"
+    msg "6. Become a pyromaniac"
+    msg "7. Help a doll"
+    msg "8. Become an exterminator"
+    msg "9. Cool the house"
+    msg "10. Solve the mystery of the Haunted House"
 
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House. " ++
