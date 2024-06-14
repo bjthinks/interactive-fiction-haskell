@@ -55,16 +55,17 @@ doVerb Inventory = do
 
 doVerb (Get ref) = do
   -- TODO: verify that this checks isContainer, isUsable, and isUnlocked
-  canGet <- isGettable ref
+  refs <- gettableThings
+  let canGet = elem ref refs
   -- TODO: You're already carring that.
   unless canGet $ stop "That\'s not something you can pick up."
   action <- getOnGet ref
   action
 
 doVerb GetAll = do
-  gettableRefs <- gettableThings
-  when (gettableRefs == []) $ stop "There isn\'t anything to get."
-  mapM (doVerb . Get) gettableRefs
+  thingsToGet <- getRoomContents -- excludes player
+  when (thingsToGet == []) $ stop "There isn\'t anything to get."
+  mapM (doVerb . Get) thingsToGet
   return ()
 
 doVerb (GetFrom ref container) = do

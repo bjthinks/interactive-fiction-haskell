@@ -255,11 +255,6 @@ gettableThings = do
   inventoryContainerContents <- getThingsInContainers inventory
   return $ roomContents ++ roomContainerContents ++ inventoryContainerContents
 
-isGettable :: Ref -> GameMonad Bool
-isGettable x = do
-  refs <- gettableThings
-  return $ elem x refs
-
 -- Excludes player
 isInRoom :: Ref -> GameMonad Bool
 isInRoom ref = do
