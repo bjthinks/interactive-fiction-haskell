@@ -54,10 +54,17 @@ doVerb Inventory = do
   msg $ "You are carrying: " ++ humanFriendlyList names ++ "."
 
 doVerb (Get ref) = do
-  -- TODO: verify that this checks isContainer, isUsable, and isUnlocked
-  refs <- gettableThings
-  let canGet = elem ref refs
-  -- TODO: You're already carring that.
+  roomContents <- getRoomContents -- excludes player
+  -- TODO: Consider whether or not to have this functionality
+  -- TODO: and if so, verify that this checks isContainer, isUsable,
+  --       and isUnlocked
+  {-roomContainerContents <- getThingsInContainers roomContents
+  inventory <- getInventory
+  inventoryContainerContents <- getThingsInContainers inventory
+  let gettableThings =
+        roomContents ++ roomContainerContents ++ inventoryContainerContents-}
+  let canGet = elem ref roomContents -- gettableThings
+  -- TODO: You're already carring that. Better error messages here.
   unless canGet $ stop "That\'s not something you can pick up."
   action <- getOnGet ref
   action
