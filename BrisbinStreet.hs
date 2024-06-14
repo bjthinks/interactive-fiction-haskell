@@ -451,8 +451,12 @@ buildWorld = do
   setAliases misty ["bunny", "rabbit"]
   setOnGet misty $ msg $ "Misty doesn\'t know you very well, so she hops " ++
     "away from your outstreched arms."
-  setOnPet misty $ msg $ "You gently pet Misty between her eyes and nose. " ++
-    "She excitedly hops about; she loves being pet there."
+  let happyMisty = msg $ "You gently pet Misty between her eyes and nose. " ++
+        "She excitedly hops about; she loves being pet there."
+  setOnPet misty $ do
+    happyMisty
+    addPoints 10 "being so loving to a deserving animal"
+    setOnPet misty happyMisty
 
   justinYard <- newRoom "Justin\'s Yard" $
     "You stand in front of Justin\'s house. It is a large home with a " ++
@@ -705,7 +709,7 @@ buildWorld = do
     setOnGet sprinkler $ stop "You would get wet."
     setDescription2 sideYard healthyGrassStr
 
-  setMaxScore 85
+  setMaxScore 95
 
   return ()
 
