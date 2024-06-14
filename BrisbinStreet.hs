@@ -348,11 +348,34 @@ buildWorld = do
     "This area is half filled with a large wet bar. The bar is quite wide, " ++
     "and has a light colored wood pattern on its plastic top; the sides " ++
     "are dark wood. There are three tall bar chairs with black padded " ++
-    "backs and seats, and two armchairs along the opposite wall. There " ++
-    "is even a small light with the word BAR on its globe."
+    "backs and seats, and two armchairs along the opposite wall. The bar " ++
+    "has a small incandescent light on the far wall."
   newExit "north" basementBedroom basementBar
   newExit "south" basementBar basementBedroom
-  -- light
+  barLight <- newObject basementBar "light" $ "This is a small round light " ++
+    "mounted on the far wall. The word BAR is on its globe in large, ornate " ++
+    "capital letters."
+  makeImmobile barLight
+  let lightOffDesc = "The light is currently off."
+      lightOnDesc = "Light shines from the globe, illuminating the area."
+  let lightOn = do
+        msg "You turn the bar light on."
+        setDescription2 barLight lightOnDesc
+        setOnUse barLight lightOff
+        setOnTurnOn barLight lightAlreadyOn
+        setOnTurnOff barLight lightOff
+      lightAlreadyOn = stop "The bar light is already on."
+      lightOff = do
+        msg "You turn the bar light off."
+        setDescription2 barLight lightOffDesc
+        setOnUse barLight lightOn
+        setOnTurnOn barLight lightOn
+        setOnTurnOff barLight lightAlreadyOff
+      lightAlreadyOff = stop "The bar light is already off."
+  setDescription2 barLight lightOffDesc
+  setOnUse barLight lightOn
+  setOnTurnOn barLight lightOn
+  setOnTurnOff barLight lightAlreadyOff
   -- spirits
   -- note
 
