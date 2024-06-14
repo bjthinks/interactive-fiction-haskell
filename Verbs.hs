@@ -63,7 +63,8 @@ doVerb (Get ref) = do
   inventoryContainerContents <- getThingsInContainers inventory
   let gettableThings =
         roomContents ++ roomContainerContents ++ inventoryContainerContents-}
-  checkNotCarrying ref
+  stopIfExit ref
+  stopIfCarrying ref
   let canGet = elem ref roomContents -- gettableThings
   -- TODO: Better error messages here.
   unless canGet $ stop "That\'s not something you can pick up."
@@ -235,8 +236,15 @@ humanFriendlyList xs = hfl (sort xs)
     list3 [x,y] = x ++ ", and " ++ y
     list3 (x:xs) = x ++ ", " ++ list3 xs
 
-checkNotCarrying :: Ref -> GameMonad ()
-checkNotCarrying ref = do
+stopIfExit :: Ref -> GameMonad ()
+stopIfExit ref = do
+  flag <- isExit ref
+  name <- getName ref
+  when flag $ stop $ name ++ " is a way to go, not something to interact " ++
+    "with."
+
+stopIfCarrying :: Ref -> GameMonad ()
+stopIfCarrying ref = do
   haveIt <- isInInventory ref
   refName <- getName ref
   when haveIt $ stop $ "You\'re already carrying the " ++ refName ++ "."
