@@ -43,14 +43,14 @@ data Thing = Thing {
 
 data GameState = GameState { things :: M.Map Ref Thing,
                              nextThing :: Ref,
-                             player :: Maybe Ref,
+                             maybePlayer :: Maybe Ref,
                              score :: Int,
                              maxScore :: Int,
                              keepPlaying :: Bool }
 
 startState = GameState { things = M.empty,
                          nextThing = 0,
-                         player = Nothing,
+                         maybePlayer = Nothing,
                          score = 0,
                          maxScore = 0,
                          keepPlaying = True }
@@ -69,20 +69,20 @@ stop str = msg str >> mzero
 
 getPlayer :: GameMonad Ref
 getPlayer = do
-  maybePlayer <- fmap player get
-  case maybePlayer of
+  mp <- fmap maybePlayer get
+  case mp of
     Just player -> return player
     Nothing -> error "Internal error: player not set"
 
 setPlayer :: Ref -> GameMonad ()
 setPlayer player = do
-  state <- get
-  put $ state { player = Just player }
+  st <- get
+  put $ st { maybePlayer = Just player }
 
 stopPlaying :: GameMonad ()
 stopPlaying = do
-  state <- get
-  put $ state { keepPlaying = False }
+  st <- get
+  put $ st { keepPlaying = False }
 
 getThing :: Ref -> GameMonad Thing
 getThing ref = fmap (fromJust . M.lookup ref . things) get
@@ -124,8 +124,8 @@ getIsUnlocked = fmap not . getIsLocked
 
 setThing :: Ref -> Thing -> GameMonad ()
 setThing ref thing = do
-  state <- get
-  put $ state { things = M.insert ref thing (things state) }
+  st <- get
+  put $ st { things = M.insert ref thing (things st) }
 
 setProperty :: (Thing -> a -> Thing) -> Ref -> a -> GameMonad ()
 setProperty updater ref value = do
