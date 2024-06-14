@@ -261,7 +261,7 @@ buildWorld = do
     "The stairway, and the floor of this entire level, is a thin green " ++
     "carpet. There are several rooms connected to the landing: a dining " ++
     "room to the west, an unfinished laundry room to the south, a bathroom " ++
-    "to the north, and a makeshift bedroom to the east."
+    "to the north, and a bedroom to the east."
   basementEntrance <- newExit "down" kitchen basementLanding
   addAlias basementEntrance "door"
   makeLocked basementEntrance basementKey
