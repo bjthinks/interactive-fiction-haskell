@@ -352,6 +352,15 @@ buildWorld = do
     "has a small incandescent light on the far wall."
   newExit "north" basementBedroom basementBar
   newExit "south" basementBar basementBedroom
+  spirits <- newObject basementBar "spirits" $
+    "Behind the bar are numerous bottles of whiskey and other spirits, " ++
+    "all capped with pour spouts."
+  setAliases spirits ["alcohol", "whiskey", "booze", "liquor"]
+  setOnGet spirits $ msg $ "As you are underage, you don't think you should " ++
+    "be walking around with opened liquor bottles."
+  setOnDrink spirits $ msg $ "An eight year old boy such as yourself should " ++
+    "not be drinking booze."
+
   barLight <- newObject basementBar "light" $ "This is a small round light " ++
     "mounted on the far wall. The word BAR is on its globe in large, ornate " ++
     "capital letters."
@@ -376,7 +385,6 @@ buildWorld = do
   setOnUse barLight lightOn
   setOnTurnOn barLight lightOn
   setOnTurnOff barLight lightAlreadyOff
-  -- spirits
   -- note
 
   driveway <- newRoom "Driveway" $
