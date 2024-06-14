@@ -654,23 +654,25 @@ buildWorld = do
     "You approach the table to pick up the key, but the ghosts all turn " ++
     "towards you and bare their huge ghostly teeth! You are too scared to " ++
     "go on."
-  setOnDrink potion $ do
-    msg $ "You drink the potion, and watch in amazement as you turn " ++
-      "invisible, clothes and all!"
-    moveNowhere potion
-    setDescription2 player $
-      "At least, you think that\'s what you\'re wearing; it\'s hard to " ++
-      "tell now that you\'re invisible!"
-    setOnGet skullKey $ do
-      msg "You sneak up to the table, and the ghosts don\'t see you!"
-      defaultGetSkullKey
-      addPoints 5 "turning the tables on the three ghosts"
-      setOnGet skullKey defaultGetSkullKey
-    setOnGet bimbo $ do
-      msg $ "Bimbo is shocked to be picked up by an invisible person. He " ++
-        "squirms out of your grasp and runs into the backyard!"
-      moveNowhere bimbo
-      setDescription2 justinYard ""
+  let usePotion = do
+        msg $ "You drink the potion, and watch in amazement as you turn " ++
+          "invisible, clothes and all!"
+        moveNowhere potion
+        setDescription2 player $
+          "At least, you think that\'s what you\'re wearing; it\'s hard to " ++
+          "tell now that you\'re invisible!"
+        setOnGet skullKey $ do
+          msg "You sneak up to the table, and the ghosts don\'t see you!"
+          defaultGetSkullKey
+          addPoints 5 "turning the tables on the three ghosts"
+          setOnGet skullKey defaultGetSkullKey
+        setOnGet bimbo $ do
+          msg $ "Bimbo is shocked to be picked up by an invisible person. " ++
+            "He squirms out of your grasp and runs into the backyard!"
+          moveNowhere bimbo
+          setDescription2 justinYard ""
+  setOnDrink potion usePotion
+  setOnUse potion usePotion
 
   hhKitchen <- newRoom "Kitchen" $
     "This kitchen is a complete mess. Someone has thrown all of the dishes " ++
