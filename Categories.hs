@@ -48,9 +48,6 @@ getOpenContainers = do
   containers <- filterM getIsContainer (inventory ++ roomContents)
   filterM getIsUnlocked containers
 
--- TODO change this
--- This doesn't check isContainer, which is fine because it's only used
--- in visibleRefs and not for get from/put into.
 getThingsInOpenContainers :: GameMonad [Ref]
 getThingsInOpenContainers = do
   openContainers <- getOpenContainers
