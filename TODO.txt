@@ -14,9 +14,6 @@ clean up error logic in Mainloop.hs
 addAlias "here" in newRoom
 You might learn something if you read it. (math book)
 Helpful note on bar. Read, not look, to get hints on points.
-check "get all" for correctness and note that:
-  -- This doesn't check isContainer, which is fine because it's only used
-  -- in visibleRefs and not for get from/put into.
-  getThingsInContainers :: [Ref] -> GameMonad [Ref]
+git grep TODO
 turn on sprinkler
 use book
