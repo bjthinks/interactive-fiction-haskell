@@ -3,10 +3,10 @@ module ParseInput(Verb(..), parseInput) where
 import Prelude hiding (Word)
 import Control.Monad
 import Text.Parsec
-import Text.Parsec.String
+--import Text.Parsec.String
 import Text.Parsec.Pos
 import Data.List
-import Data.List.Split
+--import Data.List.Split
 import Defs
 
 type Word = String
@@ -45,15 +45,15 @@ infixl 3 |||
 (|||) :: MyParser a -> MyParser a -> MyParser a
 (|||) lhs rhs = try lhs <|> rhs
 
-matchToken :: Word -> MyParser Word
-matchToken x = token showToken posFromToken testToken
+matchToken :: Word -> MyParser ()
+matchToken x = token showToken posFromToken testToken >> return ()
   where
     showToken    (_,w) = show w
     posFromToken (p,_) = newPos "" 1 p
     testToken    (_,w) = if x == w then Just w else Nothing
 
-matchTokens :: [Word] -> MyParser [Word]
-matchTokens xs = mapM matchToken xs
+matchTokens :: [Word] -> MyParser ()
+matchTokens xs = mapM_ matchToken xs
 
 noun :: MyParser Ref
 noun = do
