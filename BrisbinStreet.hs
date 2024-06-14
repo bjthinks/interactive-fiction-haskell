@@ -470,7 +470,8 @@ buildWorld = do
   newExit "south" mikeYard eastBrisbin
   misty <- newObject mikeYard "Misty" $
     "Misty is a small bunny with a grey coat, a white underbelly, a cute " ++
-    "nose, long ears, imploring eyes, a tiny little tail, and a pink collar."
+    "nose, long ears, imploring eyes, a tiny little tail, and a pink " ++
+    "collar. She would like it if you pet her."
   setAliases misty ["bunny", "rabbit"]
   setOnGet misty $ msg $ "Misty doesn\'t know you very well, so she hops " ++
     "away from your outstreched arms."
