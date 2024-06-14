@@ -385,7 +385,14 @@ buildWorld = do
   setOnUse barLight lightOn
   setOnTurnOn barLight lightOn
   setOnTurnOff barLight lightAlreadyOff
-  -- note
+
+  basementBathroom <- newRoom "Bathroom" $
+    "This is a full bathroom, with a large counter and vanity with three " ++
+    "mirrors and two cabinets, a toilet, and " ++
+    "a shower stall with small green square tile. There is a little round " ++
+    "light in the ceiling just outside the shower stall."
+  newExit "north" basementLanding basementBathroom
+  newExit "south" basementBathroom basementLanding
 
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House. " ++
