@@ -74,10 +74,3 @@ visibleRefs = do
   roomExits <- getRoomExits
   return $ player : inventory ++ room : roomContents ++ containerContents ++
     roomExits
-{-
-  roomContainerContents <- getThingsInContainers roomContents
-  let roomStuff = room : roomContents ++ roomExits ++ roomContainerContents
-  inventoryContainerContents <- getThingsInContainers inventory
-  let playerStuff = player : inventory ++ inventoryContainerContents
-  return $ roomStuff ++ playerStuff
--}
