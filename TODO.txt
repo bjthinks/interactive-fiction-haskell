@@ -18,3 +18,5 @@ check "get all" for correctness and note that:
   -- This doesn't check isContainer, which is fine because it's only used
   -- in visibleRefs and not for get from/put into.
   getThingsInContainers :: [Ref] -> GameMonad [Ref]
+turn on sprinkler
+use book
