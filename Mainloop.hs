@@ -11,6 +11,7 @@ import Data.List
 import Data.List.Split
 
 import Defs
+import Categories
 import Game
 import ParseInput
 import Verbs

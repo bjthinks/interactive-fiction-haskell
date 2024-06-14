@@ -5,6 +5,7 @@ import Data.Maybe
 import Control.Monad
 
 import Defs
+import Categories
 import Score
 import Game
 import ParseInput

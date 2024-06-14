@@ -1,6 +1,7 @@
 module Main (main) where
 
 import Defs
+import Categories
 import Score
 import Game
 import Mainloop

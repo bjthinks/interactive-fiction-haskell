@@ -6,6 +6,7 @@ import Control.Monad
 import Control.Monad.RWS
 
 import Defs
+import Categories
 
 -- TODO: better variable names in this file
 
@@ -184,53 +185,6 @@ makeLocked ref key = do
     msg $ "You unlock it with the " ++ keyName ++ "."
 
 -- Predicates for help with verbs and elsewhere
-
-getRoom :: GameMonad Ref
-getRoom = do
-  player <- getPlayer
-  maybeRoom <- getLocation player
-  case maybeRoom of
-    Nothing -> error "Internal error: player has no location"
-    Just room -> return room
-
--- Excludes player
-getRoomContents :: GameMonad [Ref]
-getRoomContents = do
-  room <- getRoom
-  player <- getPlayer
-  contents <- getContents' room
-  return $ filter (/= player) contents
-
-getRoomExits :: GameMonad [Ref]
-getRoomExits = do
-  room <- getRoom
-  getExits room
-
-getInventory :: GameMonad [Ref]
-getInventory = do
-  player <- getPlayer
-  getContents' player
-
--- This doesn't check isContainer, which is fine because it's only used
--- in visibleRefs and not for get from/put into.
-getThingsInContainers :: [Ref] -> GameMonad [Ref]
-getThingsInContainers refs = do
-  unlockedContainers <- filterM (getIsUnlocked) refs
-  contents <- mapM getContents' unlockedContainers
-  return $ concat contents
-
-visibleRefs :: GameMonad [Ref]
-visibleRefs = do
-  room <- getRoom
-  roomContents <- getRoomContents -- excludes player
-  roomExits <- getRoomExits
-  roomContainerContents <- getThingsInContainers roomContents
-  let roomStuff = room : roomContents ++ roomExits ++ roomContainerContents
-  player <- getPlayer
-  inventory <- getInventory
-  inventoryContainerContents <- getThingsInContainers inventory
-  let playerStuff = player : inventory ++ inventoryContainerContents
-  return $ roomStuff ++ playerStuff
 
 -- Includes room because of dollhouse
 isUsable :: Ref -> GameMonad Bool
