@@ -396,6 +396,8 @@ buildWorld = do
     "light in the ceiling just outside the shower stall."
   newExit "north" basementLanding basementBathroom
   newExit "south" basementBathroom basementLanding
+  newExit "east" basementBathroom basementBar
+  newExit "west" basementBar basementBathroom
   note <- newObject basementBathroom "note" $
     "This helpful note lists ways to earn points in this game. Reading it " ++
     "is considered cheating!"
