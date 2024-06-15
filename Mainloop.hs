@@ -15,10 +15,10 @@ import ParseInput
 import Verbs
 import WordWrap
 
-handleInput :: GameAction [()]
+handleInput :: GameAction ()
 handleInput = do
   commands <- reader $ splitOn ";"
-  mapM runCommand commands
+  mapM_ runCommand commands
     where
       runCommand command = do
         refs <- visibleRefs
