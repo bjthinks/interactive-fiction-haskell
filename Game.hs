@@ -69,23 +69,24 @@ newThing n = do
 
 newRoom :: String -> String -> GameAction Ref
 newRoom name desc = do
-  t <- newThing name
-  setDescription t desc
-  return t
+  thing <- newThing name
+  setDescription thing desc
+  addAlias thing "here"
+  return thing
 
 newObject :: Ref -> String -> String -> GameAction Ref
 newObject loc name desc = do
-  t <- newThing name
-  setDescription t desc
-  move t loc
-  return t
+  thing <- newThing name
+  setDescription thing desc
+  move thing loc
+  return thing
 
 newExit :: String -> Ref -> Ref -> GameAction Ref
 newExit name src dest = do
-  t <- newThing name
-  setAliases t $ autoAliases name
-  connect t src dest
-  return t
+  thing <- newThing name
+  setAliases thing $ autoAliases name
+  connect thing src dest
+  return thing
     where
       autoAliases "north" = ["n"]
       autoAliases "south" = ["s"]
