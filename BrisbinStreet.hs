@@ -8,7 +8,6 @@ import Mainloop
 import Verbs
 import ParseInput
 import Control.Monad
-import Control.Monad.RWS
 import Data.Maybe
 
 buildWorld :: GameMonad ()
@@ -695,7 +694,8 @@ buildWorld = do
     "upstairs floor. The walnut railing is inlaid with mother of pearl, and " ++
     "the steps are covered in yellow carpet. A very unfriendly black cat is " ++
     "staring at you."
-  staircaseEntrance <- newExit "east" hhKitchen hhStaircase
+  -- TODO staircaseEntrance <-
+  newExit "east" hhKitchen hhStaircase
   newExit "west" hhStaircase hhKitchen
   blackCat <- newObject hhStaircase "black cat" $
     "This cat arches its back and hisses when you look at it. It stares at " ++
