@@ -76,41 +76,23 @@ visibleRefs = do
 -- Predicates for distinguishing among categories 1-6
 
 isPlayer :: Ref -> GameAction Bool
-isPlayer ref = do
-  -- Alternative definition: (== ref) <$> getPlayer
-  player <- getPlayer
-  return $ ref == player
+isPlayer ref = (== ref) <$> getPlayer
 
 isInInventory :: Ref -> GameAction Bool
-isInInventory ref = do
-  -- Alternative definition: elem ref <$> getInventory
-  inventory <- getInventory
-  return $ elem ref inventory
+isInInventory ref = elem ref <$> getInventory
 
 isRoom :: Ref -> GameAction Bool
-isRoom ref = do
-  -- Alternative definition: (== ref) <$> getRoom
-  room <- getRoom
-  return $ ref == room
+isRoom ref = (== ref) <$> getRoom
 
 -- Excludes player
 isInRoom :: Ref -> GameAction Bool
-isInRoom ref = do
-  -- Alternative definition: elem ref <$> getRoomContents
-  contents <- getRoomContents
-  return $ elem ref contents
+isInRoom ref = elem ref <$> getRoomContents
 
 isInOpenContainer :: Ref -> GameAction Bool
-isInOpenContainer ref = do
-  -- Alternative definition: elem ref <$> getThingsInOpenContainers
-  contents <- getThingsInOpenContainers
-  return $ elem ref contents
+isInOpenContainer ref = elem ref <$> getThingsInOpenContainers
 
 isExit :: Ref -> GameAction Bool
-isExit ref = do
-  -- Alternative definition: elem ref <$> getRoomExits
-  exits <- getRoomExits
-  return $ elem ref exits
+isExit ref = elem ref <$> getRoomExits
 
 -- Stop functions for use in doVerb
 
