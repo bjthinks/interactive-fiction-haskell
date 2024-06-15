@@ -7,12 +7,10 @@ import Control.Monad
 import Control.Monad.Trans.Maybe
 import Control.Monad.RWS
 import Data.Char
-import Data.List
 import Data.List.Split
 
 import Defs
 import Categories
-import Game
 import ParseInput
 import Verbs
 import WordWrap
