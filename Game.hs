@@ -101,16 +101,15 @@ newExit name src dest = do
 
 moveNowhere :: Ref -> GameMonad ()
 moveNowhere ref = do
-  maybeLocRef <- getLocation ref
-  when (isJust maybeLocRef) $ do
+  maybeLoc <- getLocation ref
+  when (isJust maybeLoc) $ do
     -- Remove ref from location's contents
-    let locRef = fromJust maybeLocRef
-    locContents <- getContents' locRef
+    let loc = fromJust maybeLoc
+    locContents <- getContents' loc
     let newContents = filter (/= ref) locContents
-    setContents locRef newContents
+    setContents loc newContents
     -- Set object's location to Nothing
-    obj <- getThing ref
-    setThing ref $ obj { location = Nothing }
+    setLocation ref Nothing
 
 move :: Ref -> Ref -> GameMonad ()
 move ref destination = do
@@ -119,13 +118,10 @@ move ref destination = do
   -- Get rid of any prior presence in another location
   moveNowhere ref
   -- Add ref to destination's contents
-  dest <- getThing destination
-  let destContents = contentsList dest
-      newContents = ref : destContents
-  setThing destination $ dest { contentsList = newContents }
+  destContents <- getContents' destination
+  setContents destination $ ref : destContents
   -- Change object's location to new one
-  obj <- getThing ref
-  setThing ref $ obj { location = Just destination }
+  setLocation ref $ Just destination
 
 makeImmobile :: Ref -> GameMonad ()
 makeImmobile ref = setOnGet ref $ do
