@@ -15,7 +15,7 @@ data Thing = Thing {
   description2 :: String,
   -- Typically, rooms have no location, but objects do
   location :: Maybe Ref,
-  contents :: [Ref],
+  contentsList :: [Ref],
   -- Typically, exits go somewhere, but other things don't
   exits :: [Ref],
   path :: Maybe (Ref,Ref),
@@ -95,7 +95,7 @@ getAliases      = getProperty aliases
 getDescription  = getProperty description
 getDescription2 = getProperty description2
 getLocation     = getProperty location
-getContents'    = getProperty contents
+getContents'    = getProperty contentsList
 getExits        = getProperty exits
 getPath         = getProperty path
 getOnEat        = getProperty onEat
@@ -135,6 +135,10 @@ setProperty updater ref value = do
 setAliases      = setProperty (\t v -> t { aliases = v })
 setDescription  = setProperty (\t v -> t { description = v })
 setDescription2 = setProperty (\t v -> t { description2 = v })
+setLocation     = setProperty (\t v -> t { location = v })
+setContents     = setProperty (\t v -> t { contentsList = v })
+setExits        = setProperty (\t v -> t { exits = v })
+setPath         = setProperty (\t v -> t { path = v })
 setOnEat        = setProperty (\t v -> t { onEat = v })
 setOnDrink      = setProperty (\t v -> t { onDrink = v })
 setOnUse        = setProperty (\t v -> t { onUse = v })

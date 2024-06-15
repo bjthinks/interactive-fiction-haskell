@@ -19,7 +19,7 @@ newThing n = do
                   description = "",
                   description2 = "",
                   location = Nothing,
-                  contents = [],
+                  contentsList = [],
                   exits = [],
                   path = Nothing,
                   onEat = stop "You can\'t eat that.",
@@ -105,10 +105,9 @@ moveNowhere ref = do
   when (isJust maybeLocRef) $ do
     -- Remove ref from location's contents
     let locRef = fromJust maybeLocRef
-    loc <- getThing locRef
-    let locContents = contents loc
-        newContents = filter (/= ref) locContents
-    setThing locRef $ loc { contents = newContents }
+    locContents <- getContents' locRef
+    let newContents = filter (/= ref) locContents
+    setContents locRef newContents
     -- Set object's location to Nothing
     obj <- getThing ref
     setThing ref $ obj { location = Nothing }
@@ -121,9 +120,9 @@ move ref destination = do
   moveNowhere ref
   -- Add ref to destination's contents
   dest <- getThing destination
-  let destContents = contents dest
+  let destContents = contentsList dest
       newContents = ref : destContents
-  setThing destination $ dest { contents = newContents }
+  setThing destination $ dest { contentsList = newContents }
   -- Change object's location to new one
   obj <- getThing ref
   setThing ref $ obj { location = Just destination }
