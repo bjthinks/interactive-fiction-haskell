@@ -15,23 +15,23 @@ addPoints points reason = do
 
 getScore :: GameMonad Int
 getScore = do
-  state <- get
-  return $ score state
+  st <- get
+  return $ score st
 
 setScore :: Int -> GameMonad ()
 setScore points = do
-  state <- get
-  put $ state { score = points }
+  st <- get
+  put $ st { score = points }
 
 getMaxScore :: GameMonad Int
 getMaxScore = do
-  state <- get
-  return $ maxScore state
+  st <- get
+  return $ maxScore st
 
 setMaxScore :: Int -> GameMonad ()
 setMaxScore points = do
-  state <- get
-  put $ state { maxScore = points }
+  st <- get
+  put $ st { maxScore = points }
 
 maybeShowWinMessage :: GameMonad ()
 maybeShowWinMessage = do
