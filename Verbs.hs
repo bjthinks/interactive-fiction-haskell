@@ -78,6 +78,7 @@ doVerb (GetFrom ref container) = do
   stopIfRoom "get from" container
   stopIfInOpenContainer "get from" container
   stopIfExit "get from" container
+  -- TODO: stopIfNotContainer
 
   stopIfInRoom "get out" ref -- TODO remove, for testing
   checkUsableContainer container
