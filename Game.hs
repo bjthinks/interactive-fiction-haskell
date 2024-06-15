@@ -130,21 +130,19 @@ makeImmobile ref = setOnGet ref $ do
 
 disconnect :: Ref -> GameMonad ()
 disconnect exit = do
-  exitThing <- getThing exit
-  let maybePath = path exitThing
+  maybePath <- getPath exit
   when (isJust maybePath) $ do
-    let (src,_) = fromJust maybePath
-    srcThing <- getThing src
-    setThing src $ srcThing { exits = filter (/= exit) (exits srcThing) }
-    setThing exit $ exitThing { path = Nothing }
+    let Just (src,_) = maybePath
+    srcExits <- getExits src
+    setExits src $ filter (/= exit) srcExits
+    setPath exit Nothing
 
 connect :: Ref -> Ref -> Ref -> GameMonad ()
 connect exit src dest = do
   disconnect exit
-  srcThing <- getThing src
-  setThing src $ srcThing { exits = exit : (exits srcThing) }
-  exitThing <- getThing exit
-  setThing exit $ exitThing { path = Just (src,dest) }
+  srcExits <- getExits src
+  setExits src $ exit : srcExits
+  setPath exit $ Just (src,dest)
 
 makeContainer :: Ref -> GameMonad ()
 makeContainer ref = setIsContainer ref True
