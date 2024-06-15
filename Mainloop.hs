@@ -44,9 +44,9 @@ printError commandWords err = do
     "\"" ++ badWord ++ "\"."
 
 mainloop :: GameState -> MaybeT (InputT IO) ()
-mainloop state = do
+mainloop oldState = do
   line <- MaybeT $ getInputLine "> "
-  let (newState, response) = execRWS (runMaybeT handleInput) line state
+  let (newState, response) = execRWS (runMaybeT handleInput) line oldState
   liftIO $ putStr $ wordWrap response
   when (keepPlaying newState) (mainloop newState)
 
@@ -58,8 +58,9 @@ startup buildWorld = do
 
 playGame :: GameMonad () -> IO ()
 playGame buildWorld = do
-  let (state, response) = execRWS (runMaybeT $ startup buildWorld) "" startState
+  let (newState, response) =
+        execRWS (runMaybeT $ startup buildWorld) "" startState
   putStr $ wordWrap response
-  void $ runInputT mySettings $ runMaybeT $ mainloop state
+  void $ runInputT mySettings $ runMaybeT $ mainloop newState
     where
       mySettings = setComplete noCompletion defaultSettings
