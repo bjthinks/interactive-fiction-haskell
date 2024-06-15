@@ -191,23 +191,3 @@ checkUsable :: Ref -> GameAction ()
 checkUsable ref = do
   canUse <- isUsable ref
   unless canUse $ stop "That\'s not accessible."
-
--- TODO: Rest of this needs refactoring
-
--- Excludes player
-isInRoom :: Ref -> GameAction Bool
-isInRoom ref = do
-  contents <- getRoomContents
-  return $ elem ref contents
-
-isInInventory :: Ref -> GameAction Bool
-isInInventory ref = do
-  inventory <- getInventory
-  return $ elem ref inventory
-
-isExit :: Ref -> GameAction Bool
-isExit exit = do
-  maybePath <- getPath exit
-  case maybePath of
-    Nothing -> return False
-    Just (src,_) -> fmap (== src) getRoom
