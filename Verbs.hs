@@ -75,8 +75,7 @@ doVerb (Get ref) = do
 doVerb GetAll = do
   thingsToGet <- getRoomContents -- excludes player
   when (thingsToGet == []) $ stop "There isn\'t anything to get."
-  mapM (doVerb . Get) thingsToGet
-  return ()
+  mapM_ (doVerb . Get) thingsToGet
 
 doVerb (GetFrom ref container) = do
   checkUsableContainer container
@@ -102,8 +101,7 @@ doVerb (Throw ref) = do
 doVerb DropAll = do
   droppableRefs <- getInventory
   when (droppableRefs == []) $ stop "You\'re not carrying anything."
-  mapM (doVerb . Drop) droppableRefs
-  return ()
+  mapM_ (doVerb . Drop) droppableRefs
 
 doVerb (PutIn ref container) = do
   checkUsableContainer container
@@ -236,6 +234,7 @@ humanFriendlyList xs = hfl (sort xs)
     hfl xs = list3 xs
     list3 [x,y] = x ++ ", and " ++ y
     list3 (x:xs) = x ++ ", " ++ list3 xs
+    list3 _ = undefined
 
 stopIfExit :: Ref -> GameMonad ()
 stopIfExit ref = do
