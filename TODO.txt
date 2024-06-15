@@ -1,18 +1,13 @@
 Think about renaming or reorganizing files
-whiskey in wet bar
 points:
   use capsella toy (in bathtub)
   holy water in bathroom to throw at ghost
-locked stairway doors
 add more immobile items for flavor
 get all from container
 boards creak in different place?
-describe hhBathroom
 describe hhLanding
-finish Granny's basement
 clean up error logic in Mainloop.hs
 addAlias "here" in newRoom
-You might learn something if you read it. (math book)
 git grep TODO
 turn on sprinkler
 use book
