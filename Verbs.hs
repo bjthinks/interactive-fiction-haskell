@@ -60,9 +60,13 @@ doVerb (Get ref) = do
   stopIfRoom "get" ref
   stopIfExit "get" ref
   -- ref is either in the room, or in an open container
-  -- TODO: call GetFrom if in a container
-  action <- getOnGet ref
-  action
+  inRoom <- isInRoom ref
+  if inRoom then do
+    action <- getOnGet ref
+    action
+    else do
+    justContainer <- getLocation ref
+    doVerb $ GetFrom ref $ fromJust justContainer
 
 doVerb GetAll = do
   thingsToGet <- getRoomContents -- excludes player
