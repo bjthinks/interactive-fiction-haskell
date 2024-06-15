@@ -14,10 +14,10 @@ newThing :: String -> GameMonad Ref
 newThing n = do
   s <- get
   let i = nextThing s
-      t = Thing { name = n,
+      t = Thing { nameStr = n,
                   aliases = [],
-                  description = "",
-                  description2 = "",
+                  descriptionStr = "",
+                  descriptionStr2 = "",
                   location = Nothing,
                   contentsList = [],
                   exits = [],
@@ -59,7 +59,7 @@ newThing n = do
                   onUnlock = stop "You can\'t unlock that.",
                   onLock = stop "You can\'t lock that.",
                   isLocked = False,
-                  key = Nothing,
+                  keyRef = Nothing,
                   onSearch = msg "You look everywhere but don\'t find anything."
                 }
       s' = s { things = M.insert i t (things s),

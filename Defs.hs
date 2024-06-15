@@ -9,10 +9,10 @@ import Control.Monad.Trans.Maybe
 type Ref = Int
 
 data Thing = Thing {
-  name :: String,
+  nameStr :: String,
   aliases :: [String],
-  description :: String,
-  description2 :: String,
+  descriptionStr :: String,
+  descriptionStr2 :: String,
   -- Typically, rooms have no location, but objects do
   location :: Maybe Ref,
   contentsList :: [Ref],
@@ -37,7 +37,7 @@ data Thing = Thing {
   onUnlock :: GameMonad (),
   onLock :: GameMonad (),
   isLocked :: Bool,
-  key :: Maybe Ref,
+  keyRef :: Maybe Ref,
   onSearch :: GameMonad ()
   }
 
@@ -90,10 +90,10 @@ getThing ref = fmap (fromJust . M.lookup ref . things) get
 getProperty :: (Thing -> a) -> Ref -> GameMonad a
 getProperty property = fmap property . getThing
 
-getName         = getProperty name
+getName         = getProperty nameStr
 getAliases      = getProperty aliases
-getDescription  = getProperty description
-getDescription2 = getProperty description2
+getDescription  = getProperty descriptionStr
+getDescription2 = getProperty descriptionStr2
 getLocation     = getProperty location
 getContents'    = getProperty contentsList
 getExits        = getProperty exits
@@ -116,7 +116,7 @@ getIsContainer  = getProperty isContainer
 getOnUnlock     = getProperty onUnlock
 getOnLock       = getProperty onLock
 getIsLocked     = getProperty isLocked
-getKey          = getProperty key
+getKey          = getProperty keyRef
 getOnSearch     = getProperty onSearch
 
 getIsUnlocked :: Ref -> GameMonad Bool
@@ -133,8 +133,8 @@ setProperty updater ref value = do
   setThing ref $ updater thing value
 
 setAliases      = setProperty (\t v -> t { aliases = v })
-setDescription  = setProperty (\t v -> t { description = v })
-setDescription2 = setProperty (\t v -> t { description2 = v })
+setDescription  = setProperty (\t v -> t { descriptionStr = v })
+setDescription2 = setProperty (\t v -> t { descriptionStr2 = v })
 setLocation     = setProperty (\t v -> t { location = v })
 setContents     = setProperty (\t v -> t { contentsList = v })
 setExits        = setProperty (\t v -> t { exits = v })
@@ -157,7 +157,7 @@ setIsContainer  = setProperty (\t v -> t { isContainer = v })
 setOnUnlock     = setProperty (\t v -> t { onUnlock = v })
 setOnLock       = setProperty (\t v -> t { onLock = v })
 setIsLocked     = setProperty (\t v -> t { isLocked = v })
-setKey          = setProperty (\t v -> t { key = v })
+setKey          = setProperty (\t v -> t { keyRef = v })
 setOnSearch     = setProperty (\t v -> t { onSearch = v })
 
 addAlias :: Ref -> String -> GameMonad ()
