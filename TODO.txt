@@ -13,8 +13,9 @@ finish Granny's basement
 clean up error logic in Mainloop.hs
 addAlias "here" in newRoom
 You might learn something if you read it. (math book)
-Helpful note on bar. Read, not look, to get hints on points.
 git grep TODO
 turn on sprinkler
 use book
 defaultThing needs its own file
+connect bathroom to bar
+burn ants
