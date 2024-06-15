@@ -55,20 +55,12 @@ doVerb Inventory = do
   msg $ "You are carrying: " ++ humanFriendlyList names ++ "."
 
 doVerb (Get ref) = do
-  roomContents <- getRoomContents -- excludes player
-  -- TODO: Consider whether or not to have this functionality
-  -- TODO: and if so, verify that this checks isContainer, isUsable,
-  --       and isUnlocked
-  {-roomContainerContents <- getThingsInContainers roomContents
-  inventory <- getInventory
-  inventoryContainerContents <- getThingsInContainers inventory
-  let gettableThings =
-        roomContents ++ roomContainerContents ++ inventoryContainerContents-}
-  stopIfExit ref
-  stopIfCarrying ref
-  let canGet = elem ref roomContents -- gettableThings
-  -- TODO: Better error messages here.
-  unless canGet $ stop "That\'s not something you can pick up."
+  stopIfPlayer "get" ref
+  stopIfInInventory "get" ref
+  stopIfRoom "get" ref
+  stopIfExit "get" ref
+  -- ref is either in the room, or in an open container
+  -- TODO: call GetFrom if in a container
   action <- getOnGet ref
   action
 
@@ -78,6 +70,12 @@ doVerb GetAll = do
   mapM_ (doVerb . Get) thingsToGet
 
 doVerb (GetFrom ref container) = do
+  stopIfPlayer "get from" container
+  stopIfRoom "get from" container
+  stopIfInOpenContainer "get from" container
+  stopIfExit "get from" container
+
+  stopIfInRoom "get out" ref -- TODO remove, for testing
   checkUsableContainer container
   refLoc <- getLocation ref
   containerName <- getName container
@@ -235,19 +233,6 @@ humanFriendlyList = hfl . sort
     list3 [x,y] = x ++ ", and " ++ y
     list3 (x:xs) = x ++ ", " ++ list3 xs
     list3 _ = undefined
-
-stopIfExit :: Ref -> GameAction ()
-stopIfExit ref = do
-  flag <- isExit ref
-  name <- getName ref
-  when flag $ stop $ name ++ " is a way to go, not something to interact " ++
-    "with."
-
-stopIfCarrying :: Ref -> GameAction ()
-stopIfCarrying ref = do
-  haveIt <- isInInventory ref
-  refName <- getName ref
-  when haveIt $ stop $ "You\'re already carrying the " ++ refName ++ "."
 
 checkUsableContainer :: Ref -> GameAction ()
 checkUsableContainer container = do

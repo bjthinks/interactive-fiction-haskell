@@ -1,6 +1,7 @@
 module Categories where
 
 import Control.Monad
+import Data.Char
 
 import Defs
 
@@ -110,3 +111,51 @@ isExit ref = do
   -- Alternative definition: elem ref <$> getRoomExits
   exits <- getRoomExits
   return $ elem ref exits
+
+-- Stop functions for use in doVerb
+
+stopIfPlayer :: String -> Ref -> GameAction ()
+stopIfPlayer verb ref = do
+  flag <- isPlayer ref
+  when flag $ stop $ "You can\'t " ++ verb ++ " yourself!"
+
+stopIfInInventory :: String -> Ref -> GameAction ()
+stopIfInInventory verb ref = do
+  flag <- isInInventory ref
+  name <- getName ref
+  when flag $ stop $ (capitalize name) ++ " is something you are holding, " ++
+    "not something to " ++ verb ++ "."
+
+stopIfRoom :: String -> Ref -> GameAction ()
+stopIfRoom verb ref = do
+  flag <- isRoom ref
+  name <- getName ref
+  when flag $ stop $ (capitalize name) ++ " is where you are, " ++
+    "not something to " ++ verb ++ "."
+
+stopIfInRoom :: String -> Ref -> GameAction ()
+stopIfInRoom verb ref = do
+  flag <- isInRoom ref
+  name <- getName ref
+  when flag $ stop $ (capitalize name) ++ " is something here, " ++
+    "not something to " ++ verb ++ "."
+
+stopIfInOpenContainer :: String -> Ref -> GameAction ()
+stopIfInOpenContainer verb ref = do
+  flag <- isInOpenContainer ref
+  name <- getName ref
+  when flag $ stop $ (capitalize name) ++ " is something in a container, " ++
+    "not something to " ++ verb ++ "."
+
+stopIfExit :: String -> Ref -> GameAction ()
+stopIfExit verb ref = do
+  flag <- isExit ref
+  name <- getName ref
+  when flag $ stop $ (capitalize name) ++ " is a way to go, " ++
+    "not something to " ++ verb ++ "."
+
+-- Utility functions
+
+capitalize :: String -> String
+capitalize "" = ""
+capitalize (c:cs) = toUpper c : cs
