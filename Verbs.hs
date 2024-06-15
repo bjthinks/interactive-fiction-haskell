@@ -226,7 +226,7 @@ doVerb Help = do
 doVerb Exit = stopPlaying
 
 humanFriendlyList :: [String] -> String
-humanFriendlyList xs = hfl (sort xs)
+humanFriendlyList = hfl . sort
   where
     hfl [] = "nothing"
     hfl [x] = x
