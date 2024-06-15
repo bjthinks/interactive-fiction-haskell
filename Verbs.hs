@@ -10,7 +10,7 @@ import Score
 import Game
 import ParseInput
 
-doVerb :: Verb -> GameMonad ()
+doVerb :: Verb -> GameAction ()
 doVerb Blank = return ()
 
 doVerb (Look arg) = do
@@ -236,20 +236,20 @@ humanFriendlyList = hfl . sort
     list3 (x:xs) = x ++ ", " ++ list3 xs
     list3 _ = undefined
 
-stopIfExit :: Ref -> GameMonad ()
+stopIfExit :: Ref -> GameAction ()
 stopIfExit ref = do
   flag <- isExit ref
   name <- getName ref
   when flag $ stop $ name ++ " is a way to go, not something to interact " ++
     "with."
 
-stopIfCarrying :: Ref -> GameMonad ()
+stopIfCarrying :: Ref -> GameAction ()
 stopIfCarrying ref = do
   haveIt <- isInInventory ref
   refName <- getName ref
   when haveIt $ stop $ "You\'re already carrying the " ++ refName ++ "."
 
-checkUsableContainer :: Ref -> GameMonad ()
+checkUsableContainer :: Ref -> GameAction ()
 checkUsableContainer container = do
   containerName <- getName container
   isContainer <- getIsContainer container

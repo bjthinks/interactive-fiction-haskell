@@ -10,7 +10,7 @@ import Categories
 
 -- TODO: better variable names in this file
 
-newThing :: String -> GameMonad Ref
+newThing :: String -> GameAction Ref
 newThing n = do
   s <- get
   let i = nextThing s
@@ -67,20 +67,20 @@ newThing n = do
   put s'
   return i
 
-newRoom :: String -> String -> GameMonad Ref
+newRoom :: String -> String -> GameAction Ref
 newRoom name desc = do
   t <- newThing name
   setDescription t desc
   return t
 
-newObject :: Ref -> String -> String -> GameMonad Ref
+newObject :: Ref -> String -> String -> GameAction Ref
 newObject loc name desc = do
   t <- newThing name
   setDescription t desc
   move t loc
   return t
 
-newExit :: String -> Ref -> Ref -> GameMonad Ref
+newExit :: String -> Ref -> Ref -> GameAction Ref
 newExit name src dest = do
   t <- newThing name
   setAliases t $ autoAliases name
@@ -99,7 +99,7 @@ newExit name src dest = do
       autoAliases "down" = ["d"]
       autoAliases _ = []
 
-moveNowhere :: Ref -> GameMonad ()
+moveNowhere :: Ref -> GameAction ()
 moveNowhere ref = do
   maybeLoc <- getLocation ref
   when (isJust maybeLoc) $ do
@@ -111,7 +111,7 @@ moveNowhere ref = do
     -- Set object's location to Nothing
     setLocation ref Nothing
 
-move :: Ref -> Ref -> GameMonad ()
+move :: Ref -> Ref -> GameAction ()
 move ref destination = do
   when (ref == destination) $ error
     "Fatal error: attempt to move item inside itself"
@@ -123,12 +123,12 @@ move ref destination = do
   -- Change object's location to new one
   setLocation ref $ Just destination
 
-makeImmobile :: Ref -> GameMonad ()
+makeImmobile :: Ref -> GameAction ()
 makeImmobile ref = setOnGet ref $ do
   name <- getName ref
   msg $ "You can\'t take the " ++ name ++ "."
 
-disconnect :: Ref -> GameMonad ()
+disconnect :: Ref -> GameAction ()
 disconnect exit = do
   maybePath <- getPath exit
   when (isJust maybePath) $ do
@@ -137,17 +137,17 @@ disconnect exit = do
     setExits src $ filter (/= exit) srcExits
     setPath exit Nothing
 
-connect :: Ref -> Ref -> Ref -> GameMonad ()
+connect :: Ref -> Ref -> Ref -> GameAction ()
 connect exit src dest = do
   disconnect exit
   srcExits <- getExits src
   setExits src $ exit : srcExits
   setPath exit $ Just (src,dest)
 
-makeContainer :: Ref -> GameMonad ()
+makeContainer :: Ref -> GameAction ()
 makeContainer ref = setIsContainer ref True
 
-setUnlockedDescription :: Ref -> String -> GameMonad ()
+setUnlockedDescription :: Ref -> String -> GameAction ()
 setUnlockedDescription ref description = do
   action <- getOnUnlock ref
   setOnUnlock ref $ do
@@ -156,7 +156,7 @@ setUnlockedDescription ref description = do
   unlocked <- getIsUnlocked ref
   when unlocked $ setDescription ref description
 
-setLockedDescription :: Ref -> String -> GameMonad ()
+setLockedDescription :: Ref -> String -> GameAction ()
 setLockedDescription ref description = do
   action <- getOnLock ref
   setOnLock ref $ do
@@ -165,7 +165,7 @@ setLockedDescription ref description = do
   locked <- getIsLocked ref
   when locked $ setDescription ref description
 
-makeLocked :: Ref -> Ref -> GameMonad ()
+makeLocked :: Ref -> Ref -> GameAction ()
 makeLocked ref key = do
   setIsLocked ref True
   setKey ref $ Just key
@@ -180,14 +180,14 @@ makeLocked ref key = do
 -- Predicates for help with verbs and elsewhere
 
 -- Includes room because of dollhouse
-isUsable :: Ref -> GameMonad Bool
+isUsable :: Ref -> GameAction Bool
 isUsable ref = do
   room <- getRoom
   contents <- getRoomContents -- excludes player
   inventory <- getInventory
   return $ elem ref $ room : contents ++ inventory
 
-checkUsable :: Ref -> GameMonad ()
+checkUsable :: Ref -> GameAction ()
 checkUsable ref = do
   canUse <- isUsable ref
   unless canUse $ stop "That\'s not accessible."
@@ -195,17 +195,17 @@ checkUsable ref = do
 -- TODO: Rest of this needs refactoring
 
 -- Excludes player
-isInRoom :: Ref -> GameMonad Bool
+isInRoom :: Ref -> GameAction Bool
 isInRoom ref = do
   contents <- getRoomContents
   return $ elem ref contents
 
-isInInventory :: Ref -> GameMonad Bool
+isInInventory :: Ref -> GameAction Bool
 isInInventory ref = do
   inventory <- getInventory
   return $ elem ref inventory
 
-isExit :: Ref -> GameMonad Bool
+isExit :: Ref -> GameAction Bool
 isExit exit = do
   maybePath <- getPath exit
   case maybePath of

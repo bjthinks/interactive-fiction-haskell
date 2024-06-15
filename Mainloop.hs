@@ -15,7 +15,7 @@ import ParseInput
 import Verbs
 import WordWrap
 
-handleInput :: GameMonad [()]
+handleInput :: GameAction [()]
 handleInput = do
   commands <- reader $ splitOn ";"
   mapM runCommand commands
@@ -33,7 +33,7 @@ handleInput = do
         return $ map (\str -> (str,ref)) allNamesLowercase
       toLowerString = map toLower
 
-printError :: [String] -> ParseError -> GameMonad ()
+printError :: [String] -> ParseError -> GameAction ()
 printError commandWords err = do
   let badWordNumber = sourceColumn $ errorPos err
       badWordList = drop (badWordNumber - 1) commandWords
@@ -50,13 +50,13 @@ mainloop oldState = do
   liftIO $ putStr $ wordWrap response
   when (keepPlaying newState) (mainloop newState)
 
-startup :: GameMonad () -> GameMonad ()
+startup :: GameAction () -> GameAction ()
 startup buildWorld = do
   buildWorld
   doVerb (Look Nothing)
   msg "Type help for a list of commands."
 
-playGame :: GameMonad () -> IO ()
+playGame :: GameAction () -> IO ()
 playGame buildWorld = do
   let (newState, response) =
         execRWS (runMaybeT $ startup buildWorld) "" startState

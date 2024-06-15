@@ -19,12 +19,12 @@ stop when handling the wrong category of Ref.
 
 -- getPlayer is in Defs.hs
 
-getInventory :: GameMonad [Ref]
+getInventory :: GameAction [Ref]
 getInventory = do
   player <- getPlayer
   getContents' player
 
-getRoom :: GameMonad Ref
+getRoom :: GameAction Ref
 getRoom = do
   player <- getPlayer
   maybeRoom <- getLocation player
@@ -33,7 +33,7 @@ getRoom = do
     Just room -> return room
 
 -- Excludes player
-getRoomContents :: GameMonad [Ref]
+getRoomContents :: GameAction [Ref]
 getRoomContents = do
   room <- getRoom
   player <- getPlayer
@@ -41,27 +41,27 @@ getRoomContents = do
   return $ filter (/= player) contents
 
 -- helper function: get all unlocked containers in inventory or room
-getOpenContainers :: GameMonad [Ref]
+getOpenContainers :: GameAction [Ref]
 getOpenContainers = do
   inventory <- getInventory
   roomContents <- getRoomContents
   containers <- filterM getIsContainer (inventory ++ roomContents)
   filterM getIsUnlocked containers
 
-getThingsInOpenContainers :: GameMonad [Ref]
+getThingsInOpenContainers :: GameAction [Ref]
 getThingsInOpenContainers = do
   openContainers <- getOpenContainers
   contents <- mapM getContents' openContainers
   return $ concat contents
 
-getRoomExits :: GameMonad [Ref]
+getRoomExits :: GameAction [Ref]
 getRoomExits = do
   room <- getRoom
   getExits room
 
 -- For the parser
 
-visibleRefs :: GameMonad [Ref]
+visibleRefs :: GameAction [Ref]
 visibleRefs = do
   player <- getPlayer
   inventory <- getInventory

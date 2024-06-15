@@ -4,7 +4,7 @@ import Defs
 import Control.Monad
 import Control.Monad.RWS
 
-addPoints :: Int -> String -> GameMonad ()
+addPoints :: Int -> String -> GameAction ()
 addPoints points reason = do
   oldScore <- getScore
   setScore $ oldScore + points
@@ -13,27 +13,27 @@ addPoints points reason = do
     "Use the \"score\" command to see your score."
   maybeShowWinMessage
 
-getScore :: GameMonad Int
+getScore :: GameAction Int
 getScore = do
   st <- get
   return $ score st
 
-setScore :: Int -> GameMonad ()
+setScore :: Int -> GameAction ()
 setScore points = do
   st <- get
   put $ st { score = points }
 
-getMaxScore :: GameMonad Int
+getMaxScore :: GameAction Int
 getMaxScore = do
   st <- get
   return $ maxScore st
 
-setMaxScore :: Int -> GameMonad ()
+setMaxScore :: Int -> GameAction ()
 setMaxScore points = do
   st <- get
   put $ st { maxScore = points }
 
-maybeShowWinMessage :: GameMonad ()
+maybeShowWinMessage :: GameAction ()
 maybeShowWinMessage = do
   points <- getScore
   maxPoints <- getMaxScore

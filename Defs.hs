@@ -19,26 +19,26 @@ data Thing = Thing {
   -- Typically, exits go somewhere, but other things don't
   thingExits :: [Ref],
   thingPath :: Maybe (Ref,Ref),
-  thingOnEat :: GameMonad (),
-  thingOnDrink :: GameMonad (),
-  thingOnUse :: GameMonad (),
-  thingOnTurnOn :: GameMonad (),
-  thingOnTurnOff :: GameMonad (),
-  thingOnGo :: GameMonad (),
-  thingOnLight :: GameMonad (),
-  thingOnRead :: GameMonad (),
-  thingOnGet :: GameMonad (),
-  thingOnPet :: GameMonad (),
-  thingOnPutIn :: Ref -> GameMonad (), -- put this thing into ref
-  thingOnGetFrom :: Ref -> GameMonad (), -- get this thing from ref
-  thingOnDrop :: GameMonad (),
-  thingOnThrow :: GameMonad (),
+  thingOnEat :: GameAction (),
+  thingOnDrink :: GameAction (),
+  thingOnUse :: GameAction (),
+  thingOnTurnOn :: GameAction (),
+  thingOnTurnOff :: GameAction (),
+  thingOnGo :: GameAction (),
+  thingOnLight :: GameAction (),
+  thingOnRead :: GameAction (),
+  thingOnGet :: GameAction (),
+  thingOnPet :: GameAction (),
+  thingOnPutIn :: Ref -> GameAction (), -- put this thing into ref
+  thingOnGetFrom :: Ref -> GameAction (), -- get this thing from ref
+  thingOnDrop :: GameAction (),
+  thingOnThrow :: GameAction (),
   thingIsContainer :: Bool,
-  thingOnUnlock :: GameMonad (),
-  thingOnLock :: GameMonad (),
+  thingOnUnlock :: GameAction (),
+  thingOnLock :: GameAction (),
   thingIsLocked :: Bool,
   thingKey :: Maybe Ref,
-  thingOnSearch :: GameMonad ()
+  thingOnSearch :: GameAction ()
   }
 
 data GameState = GameState { things :: M.Map Ref Thing,
@@ -57,37 +57,37 @@ startState = GameState { things = M.empty,
 
 type MoveInput = String
 type MoveOutput = String
-type GameMonad = MaybeT (RWS MoveInput MoveOutput GameState)
+type GameAction = MaybeT (RWS MoveInput MoveOutput GameState)
 
-msg :: String -> GameMonad ()
+msg :: String -> GameAction ()
 msg str = tell str >> tell "\n"
 
 -- Stop a game action and return to the main loop by injecting a Nothing
 -- into the MaybeT monad transformer.
-stop :: String -> GameMonad ()
+stop :: String -> GameAction ()
 stop str = msg str >> mzero
 
-getPlayer :: GameMonad Ref
+getPlayer :: GameAction Ref
 getPlayer = do
   mp <- fmap maybePlayer get
   case mp of
     Just player -> return player
     Nothing -> error "Internal error: player not set"
 
-setPlayer :: Ref -> GameMonad ()
+setPlayer :: Ref -> GameAction ()
 setPlayer player = do
   st <- get
   put $ st { maybePlayer = Just player }
 
-stopPlaying :: GameMonad ()
+stopPlaying :: GameAction ()
 stopPlaying = do
   st <- get
   put $ st { keepPlaying = False }
 
-getThing :: Ref -> GameMonad Thing
+getThing :: Ref -> GameAction Thing
 getThing ref = fmap (fromJust . M.lookup ref . things) get
 
-getProperty :: (Thing -> a) -> Ref -> GameMonad a
+getProperty :: (Thing -> a) -> Ref -> GameAction a
 getProperty property = fmap property . getThing
 
 getName         = getProperty thingName
@@ -119,15 +119,15 @@ getIsLocked     = getProperty thingIsLocked
 getKey          = getProperty thingKey
 getOnSearch     = getProperty thingOnSearch
 
-getIsUnlocked :: Ref -> GameMonad Bool
+getIsUnlocked :: Ref -> GameAction Bool
 getIsUnlocked = fmap not . getIsLocked
 
-setThing :: Ref -> Thing -> GameMonad ()
+setThing :: Ref -> Thing -> GameAction ()
 setThing ref thing = do
   st <- get
   put $ st { things = M.insert ref thing (things st) }
 
-setProperty :: (Thing -> a -> Thing) -> Ref -> a -> GameMonad ()
+setProperty :: (Thing -> a -> Thing) -> Ref -> a -> GameAction ()
 setProperty updater ref value = do
   thing <- getThing ref
   setThing ref $ updater thing value
@@ -160,7 +160,7 @@ setIsLocked     = setProperty (\t v -> t { thingIsLocked = v })
 setKey          = setProperty (\t v -> t { thingKey = v })
 setOnSearch     = setProperty (\t v -> t { thingOnSearch = v })
 
-addAlias :: Ref -> String -> GameMonad ()
+addAlias :: Ref -> String -> GameAction ()
 addAlias ref alias = do
   existingAliases <- getAliases ref
   setAliases ref (alias:existingAliases)
