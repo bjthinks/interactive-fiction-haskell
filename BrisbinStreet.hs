@@ -412,7 +412,8 @@ buildWorld = do
     msg "7. Help a doll"
     msg "8. Become an exterminator"
     msg "9. Cool the house"
-    msg "10. Solve the mystery of the Haunted House"
+    msg "10. Play with a toy"
+    msg $ "Finally, you must solve the mystery of the Haunted House."
 
   driveway <- newRoom "Driveway" $
     "A concrete driveway extends along the west side of Granny\'s House. " ++
