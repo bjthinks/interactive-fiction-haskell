@@ -9,36 +9,36 @@ import Control.Monad.Trans.Maybe
 type Ref = Int
 
 data Thing = Thing {
-  nameStr :: String,
-  aliases :: [String],
-  descriptionStr :: String,
-  descriptionStr2 :: String,
+  thingName :: String,
+  thingAliases :: [String],
+  thingDescription :: String,
+  thingDescription2 :: String,
   -- Typically, rooms have no location, but objects do
-  location :: Maybe Ref,
-  contentsList :: [Ref],
+  thingLocation :: Maybe Ref,
+  thingContents :: [Ref],
   -- Typically, exits go somewhere, but other things don't
-  exits :: [Ref],
-  path :: Maybe (Ref,Ref),
-  onEat :: GameMonad (),
-  onDrink :: GameMonad (),
-  onUse :: GameMonad (),
-  onTurnOn :: GameMonad (),
-  onTurnOff :: GameMonad (),
-  onGo :: GameMonad (),
-  onLight :: GameMonad (),
-  onRead :: GameMonad (),
-  onGet :: GameMonad (),
-  onPet :: GameMonad (),
-  onPutIn :: Ref -> GameMonad (), -- put this thing into ref
-  onGetFrom :: Ref -> GameMonad (), -- get this thing from ref
-  onDrop :: GameMonad (),
-  onThrow :: GameMonad (),
-  isContainer :: Bool,
-  onUnlock :: GameMonad (),
-  onLock :: GameMonad (),
-  isLocked :: Bool,
-  keyRef :: Maybe Ref,
-  onSearch :: GameMonad ()
+  thingExits :: [Ref],
+  thingPath :: Maybe (Ref,Ref),
+  thingOnEat :: GameMonad (),
+  thingOnDrink :: GameMonad (),
+  thingOnUse :: GameMonad (),
+  thingOnTurnOn :: GameMonad (),
+  thingOnTurnOff :: GameMonad (),
+  thingOnGo :: GameMonad (),
+  thingOnLight :: GameMonad (),
+  thingOnRead :: GameMonad (),
+  thingOnGet :: GameMonad (),
+  thingOnPet :: GameMonad (),
+  thingOnPutIn :: Ref -> GameMonad (), -- put this thing into ref
+  thingOnGetFrom :: Ref -> GameMonad (), -- get this thing from ref
+  thingOnDrop :: GameMonad (),
+  thingOnThrow :: GameMonad (),
+  thingIsContainer :: Bool,
+  thingOnUnlock :: GameMonad (),
+  thingOnLock :: GameMonad (),
+  thingIsLocked :: Bool,
+  thingKey :: Maybe Ref,
+  thingOnSearch :: GameMonad ()
   }
 
 data GameState = GameState { things :: M.Map Ref Thing,
@@ -90,34 +90,34 @@ getThing ref = fmap (fromJust . M.lookup ref . things) get
 getProperty :: (Thing -> a) -> Ref -> GameMonad a
 getProperty property = fmap property . getThing
 
-getName         = getProperty nameStr
-getAliases      = getProperty aliases
-getDescription  = getProperty descriptionStr
-getDescription2 = getProperty descriptionStr2
-getLocation     = getProperty location
-getContents'    = getProperty contentsList
-getExits        = getProperty exits
-getPath         = getProperty path
-getOnEat        = getProperty onEat
-getOnDrink      = getProperty onDrink
-getOnUse        = getProperty onUse
-getOnTurnOn     = getProperty onTurnOn
-getOnTurnOff    = getProperty onTurnOff
-getOnGo         = getProperty onGo
-getOnLight      = getProperty onLight
-getOnRead       = getProperty onRead
-getOnGet        = getProperty onGet
-getOnPet        = getProperty onPet
-getOnPutIn      = getProperty onPutIn
-getOnGetFrom    = getProperty onGetFrom
-getOnDrop       = getProperty onDrop
-getOnThrow      = getProperty onThrow
-getIsContainer  = getProperty isContainer
-getOnUnlock     = getProperty onUnlock
-getOnLock       = getProperty onLock
-getIsLocked     = getProperty isLocked
-getKey          = getProperty keyRef
-getOnSearch     = getProperty onSearch
+getName         = getProperty thingName
+getAliases      = getProperty thingAliases
+getDescription  = getProperty thingDescription
+getDescription2 = getProperty thingDescription2
+getLocation     = getProperty thingLocation
+getContents'    = getProperty thingContents
+getExits        = getProperty thingExits
+getPath         = getProperty thingPath
+getOnEat        = getProperty thingOnEat
+getOnDrink      = getProperty thingOnDrink
+getOnUse        = getProperty thingOnUse
+getOnTurnOn     = getProperty thingOnTurnOn
+getOnTurnOff    = getProperty thingOnTurnOff
+getOnGo         = getProperty thingOnGo
+getOnLight      = getProperty thingOnLight
+getOnRead       = getProperty thingOnRead
+getOnGet        = getProperty thingOnGet
+getOnPet        = getProperty thingOnPet
+getOnPutIn      = getProperty thingOnPutIn
+getOnGetFrom    = getProperty thingOnGetFrom
+getOnDrop       = getProperty thingOnDrop
+getOnThrow      = getProperty thingOnThrow
+getIsContainer  = getProperty thingIsContainer
+getOnUnlock     = getProperty thingOnUnlock
+getOnLock       = getProperty thingOnLock
+getIsLocked     = getProperty thingIsLocked
+getKey          = getProperty thingKey
+getOnSearch     = getProperty thingOnSearch
 
 getIsUnlocked :: Ref -> GameMonad Bool
 getIsUnlocked = fmap not . getIsLocked
@@ -132,33 +132,33 @@ setProperty updater ref value = do
   thing <- getThing ref
   setThing ref $ updater thing value
 
-setAliases      = setProperty (\t v -> t { aliases = v })
-setDescription  = setProperty (\t v -> t { descriptionStr = v })
-setDescription2 = setProperty (\t v -> t { descriptionStr2 = v })
-setLocation     = setProperty (\t v -> t { location = v })
-setContents     = setProperty (\t v -> t { contentsList = v })
-setExits        = setProperty (\t v -> t { exits = v })
-setPath         = setProperty (\t v -> t { path = v })
-setOnEat        = setProperty (\t v -> t { onEat = v })
-setOnDrink      = setProperty (\t v -> t { onDrink = v })
-setOnUse        = setProperty (\t v -> t { onUse = v })
-setOnTurnOn     = setProperty (\t v -> t { onTurnOn = v })
-setOnTurnOff    = setProperty (\t v -> t { onTurnOff = v })
-setOnGo         = setProperty (\t v -> t { onGo = v })
-setOnLight      = setProperty (\t v -> t { onLight = v })
-setOnRead       = setProperty (\t v -> t { onRead = v })
-setOnGet        = setProperty (\t v -> t { onGet = v })
-setOnPet        = setProperty (\t v -> t { onPet = v })
-setOnPutIn      = setProperty (\t v -> t { onPutIn = v })
-setOnGetFrom    = setProperty (\t v -> t { onGetFrom = v })
-setOnDrop       = setProperty (\t v -> t { onDrop = v })
-setOnThrow      = setProperty (\t v -> t { onThrow = v })
-setIsContainer  = setProperty (\t v -> t { isContainer = v })
-setOnUnlock     = setProperty (\t v -> t { onUnlock = v })
-setOnLock       = setProperty (\t v -> t { onLock = v })
-setIsLocked     = setProperty (\t v -> t { isLocked = v })
-setKey          = setProperty (\t v -> t { keyRef = v })
-setOnSearch     = setProperty (\t v -> t { onSearch = v })
+setAliases      = setProperty (\t v -> t { thingAliases = v })
+setDescription  = setProperty (\t v -> t { thingDescription = v })
+setDescription2 = setProperty (\t v -> t { thingDescription2 = v })
+setLocation     = setProperty (\t v -> t { thingLocation = v })
+setContents     = setProperty (\t v -> t { thingContents = v })
+setExits        = setProperty (\t v -> t { thingExits = v })
+setPath         = setProperty (\t v -> t { thingPath = v })
+setOnEat        = setProperty (\t v -> t { thingOnEat = v })
+setOnDrink      = setProperty (\t v -> t { thingOnDrink = v })
+setOnUse        = setProperty (\t v -> t { thingOnUse = v })
+setOnTurnOn     = setProperty (\t v -> t { thingOnTurnOn = v })
+setOnTurnOff    = setProperty (\t v -> t { thingOnTurnOff = v })
+setOnGo         = setProperty (\t v -> t { thingOnGo = v })
+setOnLight      = setProperty (\t v -> t { thingOnLight = v })
+setOnRead       = setProperty (\t v -> t { thingOnRead = v })
+setOnGet        = setProperty (\t v -> t { thingOnGet = v })
+setOnPet        = setProperty (\t v -> t { thingOnPet = v })
+setOnPutIn      = setProperty (\t v -> t { thingOnPutIn = v })
+setOnGetFrom    = setProperty (\t v -> t { thingOnGetFrom = v })
+setOnDrop       = setProperty (\t v -> t { thingOnDrop = v })
+setOnThrow      = setProperty (\t v -> t { thingOnThrow = v })
+setIsContainer  = setProperty (\t v -> t { thingIsContainer = v })
+setOnUnlock     = setProperty (\t v -> t { thingOnUnlock = v })
+setOnLock       = setProperty (\t v -> t { thingOnLock = v })
+setIsLocked     = setProperty (\t v -> t { thingIsLocked = v })
+setKey          = setProperty (\t v -> t { thingKey = v })
+setOnSearch     = setProperty (\t v -> t { thingOnSearch = v })
 
 addAlias :: Ref -> String -> GameMonad ()
 addAlias ref alias = do

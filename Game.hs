@@ -14,53 +14,53 @@ newThing :: String -> GameMonad Ref
 newThing n = do
   s <- get
   let i = nextThing s
-      t = Thing { nameStr = n,
-                  aliases = [],
-                  descriptionStr = "",
-                  descriptionStr2 = "",
-                  location = Nothing,
-                  contentsList = [],
-                  exits = [],
-                  path = Nothing,
-                  onEat = stop "You can\'t eat that.",
-                  onDrink = stop "You can\'t drink that.",
-                  onUse = stop "You can\'t use that.",
-                  onTurnOn = stop "You can\'t turn that on.",
-                  onTurnOff = stop "You can\'t turn that off.",
-                  onGo = return (),
-                  onLight = stop "You can\'t light that.",
-                  onRead = stop "You can\'t read that.",
-                  onGet = do
+      t = Thing { thingName = n,
+                  thingAliases = [],
+                  thingDescription = "",
+                  thingDescription2 = "",
+                  thingLocation = Nothing,
+                  thingContents = [],
+                  thingExits = [],
+                  thingPath = Nothing,
+                  thingOnEat = stop "You can\'t eat that.",
+                  thingOnDrink = stop "You can\'t drink that.",
+                  thingOnUse = stop "You can\'t use that.",
+                  thingOnTurnOn = stop "You can\'t turn that on.",
+                  thingOnTurnOff = stop "You can\'t turn that off.",
+                  thingOnGo = return (),
+                  thingOnLight = stop "You can\'t light that.",
+                  thingOnRead = stop "You can\'t read that.",
+                  thingOnGet = do
                     player <- getPlayer
                     move i player
                     name <- getName i
                     msg $ "You take the " ++ name ++ ".",
-                  onPet = stop "That\'s not an animal you can pet.",
-                  onGetFrom = (\container -> do
+                  thingOnPet = stop "That\'s not an animal you can pet.",
+                  thingOnGetFrom = (\container -> do
                     player <- getPlayer
                     move i player
                     itemName <- getName i
                     containerName <- getName container
                     msg $ "You get the " ++ itemName ++ " from the " ++
                       containerName ++ "."),
-                  onPutIn = (\container -> do
+                  thingOnPutIn = (\container -> do
                     move i container
                     itemName <- getName i
                     containerName <- getName container
                     msg $ "You put the " ++ itemName ++ " in the " ++
                       containerName ++ "."),
-                  onDrop = do
+                  thingOnDrop = do
                     room <- getRoom
                     move i room
                     name <- getName i
                     msg $ "You drop the " ++ name ++ ".",
-                  onThrow = stop "There is no point in throwing that.",
-                  isContainer = False,
-                  onUnlock = stop "You can\'t unlock that.",
-                  onLock = stop "You can\'t lock that.",
-                  isLocked = False,
-                  keyRef = Nothing,
-                  onSearch = msg "You look everywhere but don\'t find anything."
+                  thingOnThrow = stop "There is no point in throwing that.",
+                  thingIsContainer = False,
+                  thingOnUnlock = stop "You can\'t unlock that.",
+                  thingOnLock = stop "You can\'t lock that.",
+                  thingIsLocked = False,
+                  thingKey = Nothing,
+                  thingOnSearch = msg "You look everywhere but don\'t find anything."
                 }
       s' = s { things = M.insert i t (things s),
                nextThing = i + 1 }

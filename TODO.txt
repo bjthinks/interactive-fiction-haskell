@@ -17,3 +17,4 @@ Helpful note on bar. Read, not look, to get hints on points.
 git grep TODO
 turn on sprinkler
 use book
+defaultThing needs its own file
