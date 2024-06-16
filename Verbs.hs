@@ -100,9 +100,9 @@ doVerb (Throw ref) = do
   action
 
 doVerb DropAll = do
-  droppableRefs <- getInventory
-  when (droppableRefs == []) $ stop "You\'re not carrying anything."
-  mapM_ (doVerb . Drop) droppableRefs
+  thingsToDrop <- getInventory
+  when (thingsToDrop == []) $ stop "You\'re not carrying anything."
+  mapM_ (doVerb . Drop) thingsToDrop
 
 doVerb (PutIn ref container) = do
   checkUsableContainer container
