@@ -90,8 +90,9 @@ doVerb (GetFrom ref container) = do
   action container
 
 doVerb (Drop ref) = do
-  haveIt <- isInInventory ref
-  unless haveIt $ stop "You\'re not carrying that."
+  stopIfNotObject "drop" ref
+  stopIfInRoom "drop" ref
+  stopIfInOpenContainer "drop" ref
   action <- getOnDrop ref
   action
 
