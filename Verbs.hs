@@ -137,12 +137,12 @@ doVerb (Go ref) = do
   doVerb (Look Nothing)
 
 doVerb (Eat ref) = do
-  checkUsable ref
+  stopIfNotUsable "eat" ref
   action <- getOnEat ref
   action
 
 doVerb (Drink ref) = do
-  checkUsable ref
+  stopIfNotUsable "drink" ref
   action <- getOnDrink ref
   action
 

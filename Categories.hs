@@ -160,6 +160,12 @@ stopIfNotInInventory verb ref = do
   stopIfInRoom verb ref
   stopIfInOpenContainer verb ref
 
+-- Not used for the Use verb, because of Gabby's Dollhouse
+stopIfNotUsable :: String -> Ref -> GameAction ()
+stopIfNotUsable verb ref = do
+  stopIfNotObject verb ref
+  stopIfInOpenContainer verb ref
+
 -- Utility functions
 
 capitalize :: String -> String
