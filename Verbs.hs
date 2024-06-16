@@ -105,14 +105,15 @@ doVerb DropAll = do
   mapM_ (doVerb . Drop) thingsToDrop
 
 doVerb (PutIn ref container) = do
-  checkUsableContainer container
+  stopIfNotObject "put things into" container
+  stopIfInOpenContainer "put things into" container
+  stopIfNotOpenContainer container
+  -- container is open and in either inventory or room
+  stopIfNotInInventory "put into a container" ref
+  -- ref is in inventory
   refName <- getName ref
   when (ref == container) $ stop $ "You can't put the " ++ refName ++
     " inside itself!"
-  player <- getPlayer
-  refLoc <- getLocation ref
-  unless (refLoc == Just player) $ stop $ "You aren\'t carrying the " ++
-    refName ++ "."
   action <- getOnPutIn ref
   action container
 
@@ -236,14 +237,3 @@ humanFriendlyList = hfl . sort
     list3 [x,y] = x ++ ", and " ++ y
     list3 (x:xs) = x ++ ", " ++ list3 xs
     list3 _ = undefined
-
-checkUsableContainer :: Ref -> GameAction ()
-checkUsableContainer container = do
-  containerName <- getName container
-  isContainer <- getIsContainer container
-  unless isContainer $ stop $ "The " ++ containerName ++
-    " is not a container."
-  usable <- isUsable container
-  unless usable $ stop $ "The " ++ containerName ++ " is not accessible."
-  locked <- getIsLocked container
-  when locked $ stop $ "The " ++ containerName ++ " is locked."
