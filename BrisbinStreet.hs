@@ -2,6 +2,7 @@
 module Main (main) where
 
 import Defs
+import Thing
 import Categories
 import Score
 import Game
