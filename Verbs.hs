@@ -208,17 +208,28 @@ doVerb (Unlock ref key) = do
   action
 
 doVerb (Lock ref key) = do
-  usable <- isUsable ref
-  exit <- isExit ref
-  unless (usable || exit) $ stop "You can\'t lock that. It\'s not accessible."
+  let verb = "lock"
+  stopIfPlayer verb ref
+  stopIfRoom verb ref
+  stopIfInOpenContainer verb ref
+  -- ref is an exit, in the room, or in the inventory
+  -- make sure ref is unlocked
+  name <- getName ref
   isLocked <- getIsLocked ref
-  when isLocked $ stop "That\'s already locked."
-  haveKey <- isInInventory key
+  exit <- isExit ref
+  container <- getIsContainer ref
+  when (not exit && not container) $ stop $
+    "The " ++ name ++ " isn\'t a container."
+  when (exit && isLocked) $ stop $ capitalize name ++ " is already locked."
+  when (container && isLocked) $ stop $ "The " ++ name ++ " is already locked."
+  -- ref is either an unlocked exit or an unlocked, accessible container
+  stopIfNotInInventory "lock with" key
+  -- key is in the inventory
   keyName <- getName key
-  unless haveKey $ stop $ "You\'re not carrying the " ++ keyName ++ "."
   maybeKey <- getKey ref
   unless (maybeKey == Just key) $ stop $ "The " ++ keyName ++
-    " is not the right key."
+    " is not the right key to lock " ++ (if not exit then "the " else "") ++
+    name ++ "."
   action <- getOnLock ref
   action
 
@@ -248,6 +259,7 @@ doVerb Help = do
 
 doVerb Exit = stopPlaying
 
+-- helper function for look and inventory
 humanFriendlyList :: [String] -> String
 humanFriendlyList = hfl . sort
   where
