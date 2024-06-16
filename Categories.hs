@@ -136,6 +136,22 @@ stopIfExit verb ref = do
   when flag $ stop $ (capitalize name) ++ " is a way to go, " ++
     "not something to " ++ verb ++ "."
 
+-- Additional stop functions
+
+stopIfNotOpenContainer :: Ref -> GameAction ()
+stopIfNotOpenContainer ref = do
+  name <- getName ref
+  container <- getIsContainer ref
+  unless container $ stop $ (capitalize name) ++ " is not a container."
+  unlocked <- getIsUnlocked ref
+  unless unlocked $ stop $ (capitalize name) ++ " is locked."
+
+stopIfNotObject :: String -> Ref -> GameAction ()
+stopIfNotObject verb ref = do
+  stopIfPlayer verb ref
+  stopIfRoom verb ref
+  stopIfExit verb ref
+
 -- Utility functions
 
 capitalize :: String -> String

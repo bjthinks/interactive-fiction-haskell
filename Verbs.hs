@@ -55,10 +55,8 @@ doVerb Inventory = do
   msg $ "You are carrying: " ++ humanFriendlyList names ++ "."
 
 doVerb (Get ref) = do
-  stopIfPlayer "get" ref
+  stopIfNotObject "get" ref
   stopIfInInventory "get" ref
-  stopIfRoom "get" ref
-  stopIfExit "get" ref
   -- ref is either in the room, or in an open container
   inRoom <- isInRoom ref
   if inRoom then do
@@ -74,13 +72,15 @@ doVerb GetAll = do
   mapM_ (doVerb . Get) thingsToGet
 
 doVerb (GetFrom ref container) = do
-  stopIfPlayer "get from" container
-  stopIfRoom "get from" container
+  stopIfNotObject "get from" container
   stopIfInOpenContainer "get from" container
-  stopIfExit "get from" container
-  -- TODO: stopIfNotContainer
-
-  stopIfInRoom "get out" ref -- TODO remove, for testing
+  stopIfNotOpenContainer container
+  -- container is open and in either inventory or room
+  stopIfNotObject "get out" ref
+  stopIfInRoom "get out" ref
+  stopIfInInventory "get out" ref
+  -- ref is in some container
+  -- TODO finish refactoring this function
   checkUsableContainer container
   refLoc <- getLocation ref
   containerName <- getName container
