@@ -157,27 +157,27 @@ doVerb (Use ref) = do
   action
 
 doVerb (TurnOn ref) = do
-  checkUsable ref
+  stopIfNotUsable "turn on" ref
   action <- getOnTurnOn ref
   action
 
 doVerb (TurnOff ref) = do
-  checkUsable ref
+  stopIfNotUsable "turn off" ref
   action <- getOnTurnOff ref
   action
 
 doVerb (Light ref) = do
-  checkUsable ref
+  stopIfNotUsable "light" ref
   action <- getOnLight ref
   action
 
 doVerb (Read ref) = do
-  checkUsable ref
+  stopIfNotUsable "read" ref
   action <- getOnRead ref
   action
 
 doVerb (Pet ref) = do
-  checkUsable ref
+  stopIfNotUsable "pet" ref
   action <- getOnPet ref
   action
 
