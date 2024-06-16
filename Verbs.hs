@@ -147,7 +147,12 @@ doVerb (Drink ref) = do
   action
 
 doVerb (Use ref) = do
-  checkUsable ref
+  let verb = "use"
+  stopIfPlayer verb ref
+  stopIfExit verb ref
+  stopIfInOpenContainer verb ref
+  -- ref is either the room (needed by Gabby's Dollhouse), in the room,
+  -- or in the inventory
   action <- getOnUse ref
   action
 
