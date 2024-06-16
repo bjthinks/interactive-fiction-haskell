@@ -189,13 +189,13 @@ doVerb (Unlock ref key) = do
   -- ref is an exit, in the room, or in the inventory
   -- make sure ref is locked
   name <- getName ref
-  isLocked <- getIsLocked ref
+  isUnlocked <- getIsUnlocked ref
   exit <- isExit ref
   container <- getIsContainer ref
   when (not exit && not container) $ stop $
     "The " ++ name ++ " isn\'t a container."
-  when (exit && not isLocked) $ stop $ capitalize name ++ " isn\'t locked."
-  when (container && not isLocked) $ stop $ "The " ++ name ++ " isn\'t locked."
+  when (exit && isUnlocked) $ stop $ capitalize name ++ " isn\'t locked."
+  when (container && isUnlocked) $ stop $ "The " ++ name ++ " isn\'t locked."
   -- ref is either a locked exit or a locked, accessible container
   stopIfNotInInventory "unlock with" key
   -- key is in the inventory
