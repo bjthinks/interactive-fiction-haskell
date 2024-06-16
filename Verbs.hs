@@ -80,12 +80,12 @@ doVerb (GetFrom ref container) = do
   stopIfInRoom "get out" ref
   stopIfInInventory "get out" ref
   -- ref is in some container
-  -- TODO finish refactoring this function
-  checkUsableContainer container
   refLoc <- getLocation ref
-  containerName <- getName container
-  when (refLoc /= Just container) $ stop $ "You don\'t see that in the " ++
-    containerName ++ "."
+  unless (refLoc == Just container) $ do
+    refName <- getName ref
+    containerName <- getName container
+    stop $ "The " ++ refName ++ " is not in the " ++ containerName ++ "."
+  -- ref is in container
   action <- getOnGetFrom ref
   action container
 
