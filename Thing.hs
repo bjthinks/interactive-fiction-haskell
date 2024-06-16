@@ -9,14 +9,15 @@ import qualified Data.Map.Strict as M
 -- TODO: better variable names in this file
 
 newThing :: String -> GameAction Ref
-newThing n = do
-  s <- get
-  let this = nextThing s
-      t = defaultThing n this
-      s' = s { things = M.insert this t (things s),
-               nextThing = this + 1 }
-  put s'
-  return this
+newThing name = do
+  oldState <- get
+  let ref = nextThing oldState
+      thing = defaultThing name ref
+      newState = oldState {
+        things = M.insert ref thing (things oldState),
+        nextThing = ref + 1 }
+  put newState
+  return ref
 
 defaultThing :: String -> Ref -> Thing
 defaultThing n this = Thing {
