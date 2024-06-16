@@ -118,17 +118,22 @@ doVerb (PutIn ref container) = do
   action container
 
 doVerb (Go ref) = do
-  canGo <- isExit ref
-  unless canGo $ stop "You can\'t go that way."
+  let verb = "go to or through"
+  stopIfPlayer verb ref
+  stopIfInInventory verb ref
+  stopIfRoom verb ref
+  stopIfInRoom verb ref
+  stopIfInOpenContainer verb ref
+  -- ref is an exit
   locked <- getIsLocked ref
-  when locked $ stop "The door is locked."
-  player <- getPlayer
-  maybePath <- getPath ref
-  let (_,dest) = fromJust maybePath
+  name <- getName ref
+  when locked $ stop $ "The door going " ++ name ++ " is locked."
+  Just (_,dest) <- getPath ref
   -- TODO put move action in onGo
-  move player dest
   action <- getOnGo ref
   action
+  player <- getPlayer
+  move player dest
   doVerb (Look Nothing)
 
 doVerb (Eat ref) = do
