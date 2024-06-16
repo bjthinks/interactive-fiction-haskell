@@ -15,3 +15,4 @@ defaultThing needs its own file
 connect bathroom to bar
 burn ants
 read flask / potion
+consider handling plurals in error messages in Categories.hs (e.g. acorns)

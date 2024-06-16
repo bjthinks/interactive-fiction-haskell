@@ -99,52 +99,54 @@ isExit ref = elem ref <$> getRoomExits
 stopIfPlayer :: String -> Ref -> GameAction ()
 stopIfPlayer verb ref = do
   flag <- isPlayer ref
-  when flag $ stop $ "You can\'t " ++ verb ++ " yourself!"
+  when flag $ stop $ "You are the player, not something you can " ++ verb ++ "."
 
 stopIfInInventory :: String -> Ref -> GameAction ()
 stopIfInInventory verb ref = do
   flag <- isInInventory ref
   name <- getName ref
-  when flag $ stop $ (capitalize name) ++ " is something you are holding, " ++
-    "not something to " ++ verb ++ "."
+  when flag $ stop $ "The " ++ name ++ " is something you are holding, " ++
+    "not something you can " ++ verb ++ "."
 
 stopIfRoom :: String -> Ref -> GameAction ()
 stopIfRoom verb ref = do
   flag <- isRoom ref
   name <- getName ref
   when flag $ stop $ (capitalize name) ++ " is where you are, " ++
-    "not something to " ++ verb ++ "."
+    "not something you can " ++ verb ++ "."
 
 stopIfInRoom :: String -> Ref -> GameAction ()
 stopIfInRoom verb ref = do
   flag <- isInRoom ref
   name <- getName ref
-  when flag $ stop $ (capitalize name) ++ " is something here, " ++
-    "not something to " ++ verb ++ "."
+  when flag $ stop $ "The " ++ name ++ " is something here, " ++
+    "not something you can " ++ verb ++ "."
 
 stopIfInOpenContainer :: String -> Ref -> GameAction ()
 stopIfInOpenContainer verb ref = do
   flag <- isInOpenContainer ref
   name <- getName ref
-  when flag $ stop $ (capitalize name) ++ " is something in a container, " ++
-    "not something to " ++ verb ++ "."
+  when flag $ stop $ "The " ++ name ++ " is something in a container, " ++
+    "not something you can " ++ verb ++ "."
 
 stopIfExit :: String -> Ref -> GameAction ()
 stopIfExit verb ref = do
   flag <- isExit ref
   name <- getName ref
   when flag $ stop $ (capitalize name) ++ " is a way to go, " ++
-    "not something to " ++ verb ++ "."
+    "not something you can " ++ verb ++ "."
 
 -- Additional stop functions
 
+-- For proper grammar ("The container"), call this after knowing that ref
+-- is an object
 stopIfNotOpenContainer :: Ref -> GameAction ()
 stopIfNotOpenContainer ref = do
   name <- getName ref
   container <- getIsContainer ref
-  unless container $ stop $ (capitalize name) ++ " is not a container."
+  unless container $ stop $ "The " ++ name ++ " is not a container."
   unlocked <- getIsUnlocked ref
-  unless unlocked $ stop $ (capitalize name) ++ " is locked."
+  unless unlocked $ stop $ "The " ++ name ++ " is locked."
 
 stopIfNotObject :: String -> Ref -> GameAction ()
 stopIfNotObject verb ref = do

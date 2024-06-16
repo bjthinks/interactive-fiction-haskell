@@ -72,13 +72,13 @@ doVerb GetAll = do
   mapM_ (doVerb . Get) thingsToGet
 
 doVerb (GetFrom ref container) = do
-  stopIfNotObject "get from" container
-  stopIfInOpenContainer "get from" container
+  stopIfNotObject "get things out of" container
+  stopIfInOpenContainer "get things out of" container
   stopIfNotOpenContainer container
   -- container is open and in either inventory or room
-  stopIfNotObject "get out" ref
-  stopIfInRoom "get out" ref
-  stopIfInInventory "get out" ref
+  stopIfNotObject "get from a container" ref
+  stopIfInRoom "get from a container" ref
+  stopIfInInventory "get from a container" ref
   -- ref is in some container
   refLoc <- getLocation ref
   unless (refLoc == Just container) $ do
