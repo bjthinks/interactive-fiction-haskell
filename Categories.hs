@@ -152,6 +152,12 @@ stopIfNotObject verb ref = do
   stopIfRoom verb ref
   stopIfExit verb ref
 
+stopIfNotInInventory :: String -> Ref -> GameAction ()
+stopIfNotInInventory verb ref = do
+  stopIfNotObject verb ref
+  stopIfInRoom verb ref
+  stopIfInOpenContainer verb ref
+
 -- Utility functions
 
 capitalize :: String -> String
