@@ -12,58 +12,64 @@ newThing :: String -> GameAction Ref
 newThing n = do
   s <- get
   let this = nextThing s
-      t = Thing { thingName = n,
-                  thingAliases = [],
-                  thingDescription = "",
-                  thingDescription2 = "",
-                  thingLocation = Nothing,
-                  thingContents = [],
-                  thingExits = [],
-                  thingPath = Nothing,
-                  thingOnEat = stop "You can\'t eat that.",
-                  thingOnDrink = stop "You can\'t drink that.",
-                  thingOnUse = stop "You can\'t use that.",
-                  thingOnTurnOn = stop "You can\'t turn that on.",
-                  thingOnTurnOff = stop "You can\'t turn that off.",
-                  thingOnGo = return (),
-                  thingOnLight = stop "You can\'t light that.",
-                  thingOnRead = stop "You can\'t read that.",
-                  thingOnGet = do
-                    player <- getPlayer
-                    move this player
-                    name <- getName this
-                    msg $ "You take the " ++ name ++ ".",
-                  thingOnPet = stop "That\'s not an animal you can pet.",
-                  thingOnGetFrom = (\container -> do
-                    player <- getPlayer
-                    move this player
-                    itemName <- getName this
-                    containerName <- getName container
-                    msg $ "You get the " ++ itemName ++ " from the " ++
-                      containerName ++ "."),
-                  thingOnPutIn = (\container -> do
-                    move this container
-                    itemName <- getName this
-                    containerName <- getName container
-                    msg $ "You put the " ++ itemName ++ " in the " ++
-                      containerName ++ "."),
-                  thingOnDrop = do
-                    room <- getRoom
-                    move this room
-                    name <- getName this
-                    msg $ "You drop the " ++ name ++ ".",
-                  thingOnThrow = stop "There is no point in throwing that.",
-                  thingIsContainer = False,
-                  thingOnUnlock = stop "You can\'t unlock that.",
-                  thingOnLock = stop "You can\'t lock that.",
-                  thingIsLocked = False,
-                  thingKey = Nothing,
-                  thingOnSearch = msg "You look everywhere but don\'t find anything."
-                }
+      t = defaultThing n this
       s' = s { things = M.insert this t (things s),
                nextThing = this + 1 }
   put s'
   return this
+
+defaultThing :: String -> Ref -> Thing
+defaultThing n this = Thing {
+  thingName = n,
+  thingAliases = [],
+  thingDescription = "",
+  thingDescription2 = "",
+  thingLocation = Nothing,
+  thingContents = [],
+  thingExits = [],
+  thingPath = Nothing,
+  thingOnEat = stop "You can\'t eat that.",
+  thingOnDrink = stop "You can\'t drink that.",
+  thingOnUse = stop "You can\'t use that.",
+  thingOnTurnOn = stop "You can\'t turn that on.",
+  thingOnTurnOff = stop "You can\'t turn that off.",
+  thingOnGo = return (),
+  thingOnLight = stop "You can\'t light that.",
+  thingOnRead = stop "You can\'t read that.",
+  thingOnGet = do
+      player <- getPlayer
+      move this player
+      name <- getName this
+      msg $ "You take the " ++ name ++ ".",
+  thingOnPet = stop "That\'s not an animal you can pet.",
+  thingOnGetFrom =
+      (\container -> do
+          player <- getPlayer
+          move this player
+          itemName <- getName this
+          containerName <- getName container
+          msg $ "You get the " ++ itemName ++ " from the " ++ containerName ++
+            "."),
+  thingOnPutIn =
+      (\container -> do
+          move this container
+          itemName <- getName this
+          containerName <- getName container
+          msg $ "You put the " ++ itemName ++ " in the " ++ containerName ++
+            "."),
+  thingOnDrop = do
+      room <- getRoom
+      move this room
+      name <- getName this
+      msg $ "You drop the " ++ name ++ ".",
+  thingOnThrow = stop "There is no point in throwing that.",
+  thingIsContainer = False,
+  thingOnUnlock = stop "You can\'t unlock that.",
+  thingOnLock = stop "You can\'t lock that.",
+  thingIsLocked = False,
+  thingKey = Nothing,
+  thingOnSearch = msg "You look everywhere but don\'t find anything."
+  }
 
 newRoom :: String -> String -> GameAction Ref
 newRoom name desc = do
