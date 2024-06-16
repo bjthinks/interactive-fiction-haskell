@@ -182,17 +182,28 @@ doVerb (Pet ref) = do
   action
 
 doVerb (Unlock ref key) = do
-  usable <- isUsable ref
-  exit <- isExit ref
-  unless (usable || exit) $ stop "You can\'t unlock that. It\'s not accessible."
+  let verb = "unlock"
+  stopIfPlayer verb ref
+  stopIfRoom verb ref
+  stopIfInOpenContainer verb ref
+  -- ref is an exit, in the room, or in the inventory
+  -- make sure ref is locked
+  name <- getName ref
   isLocked <- getIsLocked ref
-  unless isLocked $ stop "That isn\'t locked."
-  haveKey <- isInInventory key
+  exit <- isExit ref
+  container <- getIsContainer ref
+  when (not exit && not container) $ stop $
+    "The " ++ name ++ " isn\'t a container."
+  when (exit && not isLocked) $ stop $ capitalize name ++ " isn\'t locked."
+  when (container && not isLocked) $ stop $ "The " ++ name ++ " isn\'t locked."
+  -- ref is either a locked exit or a locked, accessible container
+  stopIfNotInInventory "unlock with" key
+  -- key is in the inventory
   keyName <- getName key
-  unless haveKey $ stop $ "You\'re not carrying the " ++ keyName ++ "."
   maybeKey <- getKey ref
   unless (maybeKey == Just key) $ stop $ "The " ++ keyName ++
-    " is not the right key."
+    " is not the right key to unlock " ++ (if not exit then "the " else "") ++
+    name ++ "."
   action <- getOnUnlock ref
   action
 
