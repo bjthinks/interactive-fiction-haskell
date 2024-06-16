@@ -132,6 +132,7 @@ setProperty updater ref value = do
   thing <- getThing ref
   setThing ref $ updater thing value
 
+setName         = setProperty (\t v -> t { thingName = v })
 setAliases      = setProperty (\t v -> t { thingAliases = v })
 setDescription  = setProperty (\t v -> t { thingDescription = v })
 setDescription2 = setProperty (\t v -> t { thingDescription2 = v })
