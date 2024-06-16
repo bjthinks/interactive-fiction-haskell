@@ -13,7 +13,7 @@ import Categories
 newThing :: String -> GameAction Ref
 newThing n = do
   s <- get
-  let i = nextThing s
+  let this = nextThing s
       t = Thing { thingName = n,
                   thingAliases = [],
                   thingDescription = "",
@@ -32,27 +32,27 @@ newThing n = do
                   thingOnRead = stop "You can\'t read that.",
                   thingOnGet = do
                     player <- getPlayer
-                    move i player
-                    name <- getName i
+                    move this player
+                    name <- getName this
                     msg $ "You take the " ++ name ++ ".",
                   thingOnPet = stop "That\'s not an animal you can pet.",
                   thingOnGetFrom = (\container -> do
                     player <- getPlayer
-                    move i player
-                    itemName <- getName i
+                    move this player
+                    itemName <- getName this
                     containerName <- getName container
                     msg $ "You get the " ++ itemName ++ " from the " ++
                       containerName ++ "."),
                   thingOnPutIn = (\container -> do
-                    move i container
-                    itemName <- getName i
+                    move this container
+                    itemName <- getName this
                     containerName <- getName container
                     msg $ "You put the " ++ itemName ++ " in the " ++
                       containerName ++ "."),
                   thingOnDrop = do
                     room <- getRoom
-                    move i room
-                    name <- getName i
+                    move this room
+                    name <- getName this
                     msg $ "You drop the " ++ name ++ ".",
                   thingOnThrow = stop "There is no point in throwing that.",
                   thingIsContainer = False,
@@ -62,10 +62,10 @@ newThing n = do
                   thingKey = Nothing,
                   thingOnSearch = msg "You look everywhere but don\'t find anything."
                 }
-      s' = s { things = M.insert i t (things s),
-               nextThing = i + 1 }
+      s' = s { things = M.insert this t (things s),
+               nextThing = this + 1 }
   put s'
-  return i
+  return this
 
 newRoom :: String -> String -> GameAction Ref
 newRoom name desc = do
