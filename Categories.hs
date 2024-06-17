@@ -171,3 +171,11 @@ stopIfNotUsable verb ref = do
 capitalize :: String -> String
 capitalize "" = ""
 capitalize (c:cs) = toUpper c : cs
+
+qualifiedName :: Ref -> GameAction String
+qualifiedName ref = do
+  player <- isPlayer ref
+  room <- isRoom ref
+  exit <- isExit ref
+  name <- getName ref
+  if player || room || exit then return name else return $ "the " ++ name

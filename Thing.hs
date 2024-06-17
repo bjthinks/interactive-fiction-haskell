@@ -85,9 +85,8 @@ defaultDrink ref = do
 -- ref could be the current room, because of Gabby's Dollhouse
 defaultUse :: Ref -> GameAction ()
 defaultUse ref = do
-  name <- getName ref
-  room <- isRoom ref
-  stop $ "You can\'t use " ++ (if room then name else "the " ++ name) ++ "."
+  name <- qualifiedName ref
+  stop $ "You can\'t use " ++ name ++ "."
 
 -- Here are the exported functions
 
