@@ -27,8 +27,8 @@ doVerb (Look arg) = do
   path <- getPath ref
   when (isJust path) $ do
     let (src,dest) = fromJust path
-    srcName <- getName src
-    destName <- getName dest
+    srcName <- qualifiedName src
+    destName <- qualifiedName dest
     let pathStr = "This is a way to go from " ++ srcName ++ " to " ++
           destName ++ "."
     locked <- getIsLocked ref
@@ -82,9 +82,9 @@ doVerb (GetFrom ref container) = do
   -- ref is in some container
   refLoc <- getLocation ref
   unless (refLoc == Just container) $ do
-    refName <- getName ref
-    containerName <- getName container
-    stop $ "The " ++ refName ++ " is not in the " ++ containerName ++ "."
+    refName <- qualifiedName ref
+    containerName <- qualifiedName container
+    stop $ capitalize refName ++ " is not in " ++ containerName ++ "."
   -- ref is in container
   action <- getOnGetFrom ref
   action container
@@ -111,8 +111,8 @@ doVerb (PutIn ref container) = do
   -- container is open and in either inventory or room
   stopIfNotInInventory "put into a container" ref
   -- ref is in inventory
-  refName <- getName ref
-  when (ref == container) $ stop $ "You can't put the " ++ refName ++
+  refName <- qualifiedName ref
+  when (ref == container) $ stop $ "You can't put " ++ refName ++
     " inside itself!"
   action <- getOnPutIn ref
   action container
@@ -126,7 +126,7 @@ doVerb (Go ref) = do
   stopIfInOpenContainer verb ref
   -- ref is an exit
   locked <- getIsLocked ref
-  name <- getName ref
+  name <- qualifiedName ref
   when locked $ stop $ "The door going " ++ name ++ " is locked."
   Just (_,dest) <- getPath ref
   -- TODO put move action in onGo
