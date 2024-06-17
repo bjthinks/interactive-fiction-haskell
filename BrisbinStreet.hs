@@ -76,6 +76,7 @@ buildWorld = do
   airConditioner <- newObject living "air conditioner" $
     "You see a beefy, 240 volt window unit air conditioner. It has plastic " ++
     "paneling that is made to look like wood."
+  makeImmobile airConditioner
   setAliases airConditioner ["air", "conditioner", "ac"]
   setDescription2 airConditioner
     "It sure would be nice if you could turn it on."
