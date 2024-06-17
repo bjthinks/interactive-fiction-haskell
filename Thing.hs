@@ -40,29 +40,27 @@ defaultThing ref = Thing {
   thingOnGet = do
       player <- getPlayer
       move ref player
-      name <- getName ref
-      msg $ "You take the " ++ name ++ ".",
+      name <- qualifiedName ref
+      msg $ "You get " ++ name ++ ".",
   thingOnPet = stop "That\'s not an animal you can pet.",
   thingOnGetFrom =
       (\container -> do
           player <- getPlayer
           move ref player
-          itemName <- getName ref
-          containerName <- getName container
-          msg $ "You get the " ++ itemName ++ " from the " ++ containerName ++
-            "."),
+          itemName <- qualifiedName ref
+          containerName <- qualifiedName container
+          msg $ "You get " ++ itemName ++ " from " ++ containerName ++ "."),
   thingOnPutIn =
       (\container -> do
           move ref container
-          itemName <- getName ref
-          containerName <- getName container
-          msg $ "You put the " ++ itemName ++ " in the " ++ containerName ++
-            "."),
+          itemName <- qualifiedName ref
+          containerName <- qualifiedName container
+          msg $ "You put " ++ itemName ++ " in " ++ containerName ++ "."),
   thingOnDrop = do
       room <- getRoom
       move ref room
-      name <- getName ref
-      msg $ "You drop the " ++ name ++ ".",
+      name <- qualifiedName ref
+      msg $ "You drop " ++ name ++ ".",
   thingOnThrow = stop "There is no point in throwing that.",
   thingIsContainer = False,
   thingOnUnlock = stop "You can\'t unlock that.",
@@ -74,13 +72,13 @@ defaultThing ref = Thing {
 
 defaultEat :: Ref -> GameAction ()
 defaultEat ref = do
-  name <- getName ref
-  stop $ "You can\'t eat the " ++ name ++ "."
+  name <- qualifiedName ref
+  stop $ "You can\'t eat " ++ name ++ "."
 
 defaultDrink :: Ref -> GameAction ()
 defaultDrink ref = do
-  name <- getName ref
-  stop $ "You can\'t drink the " ++ name ++ "."
+  name <- qualifiedName ref
+  stop $ "You can\'t drink " ++ name ++ "."
 
 -- ref could be the current room, because of Gabby's Dollhouse
 defaultUse :: Ref -> GameAction ()
