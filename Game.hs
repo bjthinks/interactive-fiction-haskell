@@ -32,8 +32,8 @@ move ref destination = do
 
 makeImmobile :: Ref -> GameAction ()
 makeImmobile ref = setOnGet ref $ do
-  name <- getName ref
-  msg $ "You can\'t take the " ++ name ++ "."
+  name <- qualifiedName ref
+  msg $ "You can\'t take " ++ name ++ "."
 
 disconnect :: Ref -> GameAction ()
 disconnect exit = do
@@ -76,13 +76,13 @@ makeLocked :: Ref -> Ref -> GameAction ()
 makeLocked ref key = do
   setIsLocked ref True
   setKey ref $ Just key
-  keyName <- getName key
+  keyName <- qualifiedName key
   setOnLock ref $ do
     setIsLocked ref True
-    msg $ "You lock it with the " ++ keyName ++ "."
+    msg $ "You lock it with " ++ keyName ++ "."
   setOnUnlock ref $ do
     setIsLocked ref False
-    msg $ "You unlock it with the " ++ keyName ++ "."
+    msg $ "You unlock it with " ++ keyName ++ "."
 
 -- Predicates for help with verbs and elsewhere
 
