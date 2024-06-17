@@ -178,4 +178,4 @@ qualifiedName ref = do
   room <- isRoom ref
   exit <- isExit ref
   name <- getName ref
-  if player || room || exit then return name else return $ "the " ++ name
+  return $ if player || room || exit then name else "the " ++ name
