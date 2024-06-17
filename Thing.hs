@@ -31,7 +31,7 @@ defaultThing ref = Thing {
   thingPath = Nothing,
   thingOnEat = defaultEat ref,
   thingOnDrink = defaultDrink ref,
-  thingOnUse = stop "You can\'t use that.",
+  thingOnUse = defaultUse ref,
   thingOnTurnOn = stop "You can\'t turn that on.",
   thingOnTurnOff = stop "You can\'t turn that off.",
   thingOnGo = return (),
@@ -81,6 +81,15 @@ defaultDrink :: Ref -> GameAction ()
 defaultDrink ref = do
   name <- getName ref
   stop $ "You can\'t drink the " ++ name ++ "."
+
+-- ref could be the current room, because of Gabby's Dollhouse
+defaultUse :: Ref -> GameAction ()
+defaultUse ref = do
+  name <- getName ref
+  room <- isRoom ref
+  stop $ "You can\'t use " ++ (if room then name else "the " ++ name) ++ "."
+
+-- Here are the exported functions
 
 newRoom :: String -> String -> GameAction Ref
 newRoom name desc = do
