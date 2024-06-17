@@ -30,7 +30,7 @@ defaultThing ref = Thing {
   thingExits = [],
   thingPath = Nothing,
   thingOnEat = defaultEat ref,
-  thingOnDrink = stop "You can\'t drink that.",
+  thingOnDrink = defaultDrink ref,
   thingOnUse = stop "You can\'t use that.",
   thingOnTurnOn = stop "You can\'t turn that on.",
   thingOnTurnOff = stop "You can\'t turn that off.",
@@ -76,6 +76,11 @@ defaultEat :: Ref -> GameAction ()
 defaultEat ref = do
   name <- getName ref
   stop $ "You can\'t eat the " ++ name ++ "."
+
+defaultDrink :: Ref -> GameAction ()
+defaultDrink ref = do
+  name <- getName ref
+  stop $ "You can\'t drink the " ++ name ++ "."
 
 newRoom :: String -> String -> GameAction Ref
 newRoom name desc = do
