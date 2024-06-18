@@ -2,7 +2,9 @@ module Things(newRoom, newObject, newExit) where
 
 import Defs
 import Categories
+import ParseInput
 import Game
+import Verbs
 import Control.Monad.RWS
 import qualified Data.Map.Strict as M
 
@@ -34,7 +36,7 @@ defaultThing ref = Thing {
   thingOnUse = cant "use" ref,
   thingOnTurnOn = cant "turn on" ref,
   thingOnTurnOff = cant "turn off" ref,
-  thingOnGo = return (),
+  thingOnGo = defaultGo ref,
   thingOnLight = cant "light" ref,
   thingOnRead = cant "read" ref,
   thingOnGet = defaultGet ref,
@@ -55,6 +57,13 @@ cant :: String -> Ref -> Game ()
 cant verb ref = do
   name <- qualifiedName ref
   stop $ "You can\'t " ++ verb ++ ' ' : name ++ "."
+
+defaultGo :: Ref -> Game ()
+defaultGo ref = do
+  Just (_,dest) <- getPath ref
+  player <- getPlayer
+  move player dest
+  doVerb (Look Nothing)
 
 defaultGet :: Ref -> Game ()
 defaultGet ref = do

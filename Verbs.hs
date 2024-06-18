@@ -7,7 +7,6 @@ import Control.Monad
 import Defs
 import Categories
 import Score
-import Game
 import ParseInput
 
 doVerb :: Verb -> Game ()
@@ -128,13 +127,9 @@ doVerb (Go ref) = do
   locked <- getIsLocked ref
   name <- qualifiedName ref
   when locked $ stop $ "The door going " ++ name ++ " is locked."
-  Just (_,dest) <- getPath ref
   -- TODO put move action in onGo
   action <- getOnGo ref
   action
-  player <- getPlayer
-  move player dest
-  doVerb (Look Nothing)
 
 doVerb (Eat ref) = do
   stopIfNotUsable "eat" ref
