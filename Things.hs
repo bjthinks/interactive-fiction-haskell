@@ -39,13 +39,7 @@ defaultThing ref = Thing {
   thingOnRead = cant "read" ref,
   thingOnGet = defaultGet ref,
   thingOnPet = defaultPet ref,
-  thingOnGetFrom =
-      (\container -> do
-          player <- getPlayer
-          move ref player
-          itemName <- qualifiedName ref
-          containerName <- qualifiedName container
-          msg $ "You get " ++ itemName ++ " from " ++ containerName ++ "."),
+  thingOnGetFrom = defaultGetFrom ref,
   thingOnPutIn =
       (\container -> do
           move ref container
@@ -81,6 +75,14 @@ defaultGet ref = do
 defaultPet ref = do
   name <- qualifiedName ref
   stop $ capitalize name ++ " is not an animal you can pet."
+
+defaultGetFrom :: Ref -> Ref -> GameAction ()
+defaultGetFrom ref container = do
+  player <- getPlayer
+  move ref player
+  itemName <- qualifiedName ref
+  containerName <- qualifiedName container
+  msg $ "You get " ++ itemName ++ " from " ++ containerName ++ "."
 
 -- Here are the exported functions
 
