@@ -571,7 +571,7 @@ buildWorld = do
     "man on the wall, and his eyes move to follow you. There is a writing " ++
     "desk and a basket for umbrellas next to the coat closet."
   hhEntrance <- newExit "south" hauntedYard hhFoyer
-  setOnGo hhEntrance $ msg "You hear footsteps as you enter the house."
+  beforeGo hhEntrance $ msg "You hear footsteps as you enter the house."
   newExit "north" hhFoyer hauntedYard
   writingDesk <- newObject hhFoyer "desk" $
     "This is a small writing desk with multiple drawers for storage and an " ++
@@ -691,7 +691,7 @@ buildWorld = do
   kitchenEntrance <- newExit "south" hhDiningRoom hhKitchen
   addAlias kitchenEntrance "door"
   makeLocked kitchenEntrance skullKey
-  setOnGo kitchenEntrance $ msg $ "Boards creak under your feet, but the " ++
+  beforeGo kitchenEntrance $ msg $ "Boards creak under your feet, but the " ++
     "ghosts don\'t notice."
   newExit "north" hhKitchen hhDiningRoom
 
@@ -720,11 +720,11 @@ buildWorld = do
     ""
   landingEntrance <- newExit "up" hhStaircase hhLanding
   staircaseEntrance <- newExit "down" hhLanding hhStaircase
-  setOnGo landingEntrance $ do
+  beforeGo landingEntrance $ do
     msg $ "The black cat follows you upstairs. You feel like you are being " ++
       "watched."
     move blackCat hhLanding
-  setOnGo staircaseEntrance $ do
+  beforeGo staircaseEntrance $ do
     msg $ "The black cat watches you carefully as you descend the stairs. " ++
       "When you get to the bottom, it takes up position at the base of the " ++
       "stairs, as if it\'s standing guard over the upstairs level."

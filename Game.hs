@@ -83,3 +83,8 @@ makeLocked ref key = do
   setOnUnlock ref $ do
     setIsLocked ref False
     msg $ "You unlock it with " ++ keyName ++ "."
+
+beforeGo :: Ref -> Game () -> Game ()
+beforeGo ref preAction = do
+  action <- getOnGo ref
+  setOnGo ref $ preAction >> action
