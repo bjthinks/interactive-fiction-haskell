@@ -20,12 +20,12 @@ stop when handling the wrong category of Ref.
 
 -- getPlayer is in Defs.hs
 
-getInventory :: GameAction [Ref]
+getInventory :: Game [Ref]
 getInventory = do
   player <- getPlayer
   getContents' player
 
-getRoom :: GameAction Ref
+getRoom :: Game Ref
 getRoom = do
   player <- getPlayer
   maybeRoom <- getLocation player
@@ -34,7 +34,7 @@ getRoom = do
     Just room -> return room
 
 -- Excludes player
-getRoomContents :: GameAction [Ref]
+getRoomContents :: Game [Ref]
 getRoomContents = do
   room <- getRoom
   player <- getPlayer
@@ -42,27 +42,27 @@ getRoomContents = do
   return $ filter (/= player) contents
 
 -- helper function: get all unlocked containers in inventory or room
-getOpenContainers :: GameAction [Ref]
+getOpenContainers :: Game [Ref]
 getOpenContainers = do
   inventory <- getInventory
   roomContents <- getRoomContents
   containers <- filterM getIsContainer (inventory ++ roomContents)
   filterM getIsUnlocked containers
 
-getThingsInOpenContainers :: GameAction [Ref]
+getThingsInOpenContainers :: Game [Ref]
 getThingsInOpenContainers = do
   openContainers <- getOpenContainers
   contents <- mapM getContents' openContainers
   return $ concat contents
 
-getRoomExits :: GameAction [Ref]
+getRoomExits :: Game [Ref]
 getRoomExits = do
   room <- getRoom
   getExits room
 
 -- For the parser
 
-visibleRefs :: GameAction [Ref]
+visibleRefs :: Game [Ref]
 visibleRefs = do
   player <- getPlayer
   inventory <- getInventory
@@ -75,63 +75,63 @@ visibleRefs = do
 
 -- Predicates for distinguishing among categories 1-6
 
-isPlayer :: Ref -> GameAction Bool
+isPlayer :: Ref -> Game Bool
 isPlayer ref = (== ref) <$> getPlayer
 
-isInInventory :: Ref -> GameAction Bool
+isInInventory :: Ref -> Game Bool
 isInInventory ref = elem ref <$> getInventory
 
-isRoom :: Ref -> GameAction Bool
+isRoom :: Ref -> Game Bool
 isRoom ref = (== ref) <$> getRoom
 
 -- Excludes player
-isInRoom :: Ref -> GameAction Bool
+isInRoom :: Ref -> Game Bool
 isInRoom ref = elem ref <$> getRoomContents
 
-isInOpenContainer :: Ref -> GameAction Bool
+isInOpenContainer :: Ref -> Game Bool
 isInOpenContainer ref = elem ref <$> getThingsInOpenContainers
 
-isExit :: Ref -> GameAction Bool
+isExit :: Ref -> Game Bool
 isExit ref = elem ref <$> getRoomExits
 
 -- Stop functions for use in doVerb
 
-stopIfPlayer :: String -> Ref -> GameAction ()
+stopIfPlayer :: String -> Ref -> Game ()
 stopIfPlayer verb ref = do
   flag <- isPlayer ref
   name <- qualifiedName ref
   when flag $ stop $ "You are " ++ name ++ ", not something you can " ++
     verb ++ "."
 
-stopIfInInventory :: String -> Ref -> GameAction ()
+stopIfInInventory :: String -> Ref -> Game ()
 stopIfInInventory verb ref = do
   flag <- isInInventory ref
   name <- qualifiedName ref
   when flag $ stop $ capitalize name ++ " is something you are holding, " ++
     "not something you can " ++ verb ++ "."
 
-stopIfRoom :: String -> Ref -> GameAction ()
+stopIfRoom :: String -> Ref -> Game ()
 stopIfRoom verb ref = do
   flag <- isRoom ref
   name <- qualifiedName ref
   when flag $ stop $ capitalize name ++ " is where you are, " ++
     "not something you can " ++ verb ++ "."
 
-stopIfInRoom :: String -> Ref -> GameAction ()
+stopIfInRoom :: String -> Ref -> Game ()
 stopIfInRoom verb ref = do
   flag <- isInRoom ref
   name <- qualifiedName ref
   when flag $ stop $ capitalize name ++ " is something here, " ++
     "not something you can " ++ verb ++ "."
 
-stopIfInOpenContainer :: String -> Ref -> GameAction ()
+stopIfInOpenContainer :: String -> Ref -> Game ()
 stopIfInOpenContainer verb ref = do
   flag <- isInOpenContainer ref
   name <- qualifiedName ref
   when flag $ stop $ capitalize name ++ " is something in a container, " ++
     "not something you can " ++ verb ++ "."
 
-stopIfExit :: String -> Ref -> GameAction ()
+stopIfExit :: String -> Ref -> Game ()
 stopIfExit verb ref = do
   flag <- isExit ref
   name <- qualifiedName ref
@@ -140,7 +140,7 @@ stopIfExit verb ref = do
 
 -- Additional stop functions
 
-stopIfNotOpenContainer :: Ref -> GameAction ()
+stopIfNotOpenContainer :: Ref -> Game ()
 stopIfNotOpenContainer ref = do
   name <- qualifiedName ref
   container <- getIsContainer ref
@@ -148,20 +148,20 @@ stopIfNotOpenContainer ref = do
   unlocked <- getIsUnlocked ref
   unless unlocked $ stop $ capitalize name ++ " is locked."
 
-stopIfNotObject :: String -> Ref -> GameAction ()
+stopIfNotObject :: String -> Ref -> Game ()
 stopIfNotObject verb ref = do
   stopIfPlayer verb ref
   stopIfRoom verb ref
   stopIfExit verb ref
 
-stopIfNotInInventory :: String -> Ref -> GameAction ()
+stopIfNotInInventory :: String -> Ref -> Game ()
 stopIfNotInInventory verb ref = do
   stopIfNotObject verb ref
   stopIfInRoom verb ref
   stopIfInOpenContainer verb ref
 
 -- Not used for the Use verb, because of Gabby's Dollhouse
-stopIfNotUsable :: String -> Ref -> GameAction ()
+stopIfNotUsable :: String -> Ref -> Game ()
 stopIfNotUsable verb ref = do
   stopIfNotObject verb ref
   stopIfInOpenContainer verb ref
@@ -174,7 +174,7 @@ capitalize (c:cs) = toUpper c : cs
 
 -- For now, this will do.
 -- TODO: put a qualifier field in Thing
-qualifiedName :: Ref -> GameAction String
+qualifiedName :: Ref -> Game String
 qualifiedName ref = do
   -- player <- isPlayer ref
   room <- isRoom ref

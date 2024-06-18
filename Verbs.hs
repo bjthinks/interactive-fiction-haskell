@@ -10,7 +10,7 @@ import Score
 import Game
 import ParseInput
 
-doVerb :: Verb -> GameAction ()
+doVerb :: Verb -> Game ()
 doVerb Blank = return ()
 
 doVerb (Look arg) = do

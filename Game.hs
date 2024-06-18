@@ -6,7 +6,7 @@ import Control.Monad
 import Defs
 import Categories
 
-moveNowhere :: Ref -> GameAction ()
+moveNowhere :: Ref -> Game ()
 moveNowhere ref = do
   maybeLoc <- getLocation ref
   when (isJust maybeLoc) $ do
@@ -18,7 +18,7 @@ moveNowhere ref = do
     -- Set object's location to Nothing
     setLocation ref Nothing
 
-move :: Ref -> Ref -> GameAction ()
+move :: Ref -> Ref -> Game ()
 move ref destination = do
   when (ref == destination) $ error
     "Fatal error: attempt to move item inside itself"
@@ -30,12 +30,12 @@ move ref destination = do
   -- Change object's location to new one
   setLocation ref $ Just destination
 
-makeImmobile :: Ref -> GameAction ()
+makeImmobile :: Ref -> Game ()
 makeImmobile ref = setOnGet ref $ do
   name <- qualifiedName ref
   msg $ "You can\'t take " ++ name ++ "."
 
-disconnect :: Ref -> GameAction ()
+disconnect :: Ref -> Game ()
 disconnect exit = do
   maybePath <- getPath exit
   when (isJust maybePath) $ do
@@ -44,17 +44,17 @@ disconnect exit = do
     setExits src $ filter (/= exit) srcExits
     setPath exit Nothing
 
-connect :: Ref -> Ref -> Ref -> GameAction ()
+connect :: Ref -> Ref -> Ref -> Game ()
 connect exit src dest = do
   disconnect exit
   srcExits <- getExits src
   setExits src $ exit : srcExits
   setPath exit $ Just (src,dest)
 
-makeContainer :: Ref -> GameAction ()
+makeContainer :: Ref -> Game ()
 makeContainer ref = setIsContainer ref True
 
-setUnlockedDescription :: Ref -> String -> GameAction ()
+setUnlockedDescription :: Ref -> String -> Game ()
 setUnlockedDescription ref description = do
   action <- getOnUnlock ref
   setOnUnlock ref $ do
@@ -63,7 +63,7 @@ setUnlockedDescription ref description = do
   unlocked <- getIsUnlocked ref
   when unlocked $ setDescription ref description
 
-setLockedDescription :: Ref -> String -> GameAction ()
+setLockedDescription :: Ref -> String -> Game ()
 setLockedDescription ref description = do
   action <- getOnLock ref
   setOnLock ref $ do
@@ -72,7 +72,7 @@ setLockedDescription ref description = do
   locked <- getIsLocked ref
   when locked $ setDescription ref description
 
-makeLocked :: Ref -> Ref -> GameAction ()
+makeLocked :: Ref -> Ref -> Game ()
 makeLocked ref key = do
   setIsLocked ref True
   setKey ref $ Just key
@@ -87,14 +87,14 @@ makeLocked ref key = do
 -- Predicates for help with verbs and elsewhere
 
 -- Includes room because of dollhouse
-isUsable :: Ref -> GameAction Bool
+isUsable :: Ref -> Game Bool
 isUsable ref = do
   room <- getRoom
   contents <- getRoomContents -- excludes player
   inventory <- getInventory
   return $ elem ref $ room : contents ++ inventory
 
-checkUsable :: Ref -> GameAction ()
+checkUsable :: Ref -> Game ()
 checkUsable ref = do
   canUse <- isUsable ref
   unless canUse $ stop "That\'s not accessible."

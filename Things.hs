@@ -8,7 +8,7 @@ import qualified Data.Map.Strict as M
 
 -- TODO: better variable names in this file
 
-newThing :: GameAction Ref
+newThing :: Game Ref
 newThing = do
   oldState <- get
   let ref = nextThing oldState
@@ -51,12 +51,12 @@ defaultThing ref = Thing {
   thingOnSearch = msg "You look everywhere but don\'t find anything."
   }
 
-cant :: String -> Ref -> GameAction ()
+cant :: String -> Ref -> Game ()
 cant verb ref = do
   name <- qualifiedName ref
   stop $ "You can\'t " ++ verb ++ ' ' : name ++ "."
 
-defaultGet :: Ref -> GameAction ()
+defaultGet :: Ref -> Game ()
 defaultGet ref = do
   player <- getPlayer
   move ref player
@@ -67,7 +67,7 @@ defaultPet ref = do
   name <- qualifiedName ref
   stop $ capitalize name ++ " is not an animal you can pet."
 
-defaultGetFrom :: Ref -> Ref -> GameAction ()
+defaultGetFrom :: Ref -> Ref -> Game ()
 defaultGetFrom ref container = do
   player <- getPlayer
   move ref player
@@ -75,14 +75,14 @@ defaultGetFrom ref container = do
   containerName <- qualifiedName container
   msg $ "You get " ++ itemName ++ " from " ++ containerName ++ "."
 
-defaultPutIn :: Ref -> Ref -> GameAction ()
+defaultPutIn :: Ref -> Ref -> Game ()
 defaultPutIn ref container = do
   move ref container
   itemName <- qualifiedName ref
   containerName <- qualifiedName container
   msg $ "You put " ++ itemName ++ " in " ++ containerName ++ "."
 
-defaultDrop :: Ref -> GameAction ()
+defaultDrop :: Ref -> Game ()
 defaultDrop ref = do
   room <- getRoom
   move ref room
@@ -91,7 +91,7 @@ defaultDrop ref = do
 
 -- Here are the exported functions
 
-newRoom :: String -> String -> GameAction Ref
+newRoom :: String -> String -> Game Ref
 newRoom name desc = do
   ref <- newThing
   setName ref name
@@ -99,7 +99,7 @@ newRoom name desc = do
   addAlias ref "here"
   return ref
 
-newObject :: Ref -> String -> String -> GameAction Ref
+newObject :: Ref -> String -> String -> Game Ref
 newObject loc name desc = do
   ref <- newThing
   setName ref name
@@ -107,7 +107,7 @@ newObject loc name desc = do
   move ref loc
   return ref
 
-newExit :: String -> Ref -> Ref -> GameAction Ref
+newExit :: String -> Ref -> Ref -> Game Ref
 newExit name src dest = do
   ref <- newThing
   setName ref name

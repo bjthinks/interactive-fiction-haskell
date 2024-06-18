@@ -12,7 +12,7 @@ import ParseInput
 import Control.Monad
 import Data.Maybe
 
-buildWorld :: GameAction ()
+buildWorld :: Game ()
 buildWorld = do
 
   brisbin <- newRoom "Brisbin Street" $
