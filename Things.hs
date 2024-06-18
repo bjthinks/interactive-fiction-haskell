@@ -42,7 +42,7 @@ defaultThing ref = Thing {
   thingOnGetFrom = defaultGetFrom ref,
   thingOnPutIn = defaultPutIn ref,
   thingOnDrop = defaultDrop ref,
-  thingOnThrow = stop "There is no point in throwing that.",
+  thingOnThrow = defaultThrow ref,
   thingIsContainer = False,
   thingOnUnlock = stop "You can\'t unlock that.",
   thingOnLock = stop "You can\'t lock that.",
@@ -88,6 +88,11 @@ defaultDrop ref = do
   move ref room
   name <- qualifiedName ref
   msg $ "You drop " ++ name ++ "."
+
+defaultThrow :: Ref -> Game ()
+defaultThrow ref = do
+  name <- qualifiedName ref
+  stop $ "There is no point in throwing " ++ name ++ "."
 
 -- Here are the exported functions
 
