@@ -40,17 +40,8 @@ defaultThing ref = Thing {
   thingOnGet = defaultGet ref,
   thingOnPet = defaultPet ref,
   thingOnGetFrom = defaultGetFrom ref,
-  thingOnPutIn =
-      (\container -> do
-          move ref container
-          itemName <- qualifiedName ref
-          containerName <- qualifiedName container
-          msg $ "You put " ++ itemName ++ " in " ++ containerName ++ "."),
-  thingOnDrop = do
-      room <- getRoom
-      move ref room
-      name <- qualifiedName ref
-      msg $ "You drop " ++ name ++ ".",
+  thingOnPutIn = defaultPutIn ref,
+  thingOnDrop = defaultDrop ref,
   thingOnThrow = stop "There is no point in throwing that.",
   thingIsContainer = False,
   thingOnUnlock = stop "You can\'t unlock that.",
@@ -83,6 +74,20 @@ defaultGetFrom ref container = do
   itemName <- qualifiedName ref
   containerName <- qualifiedName container
   msg $ "You get " ++ itemName ++ " from " ++ containerName ++ "."
+
+defaultPutIn :: Ref -> Ref -> GameAction ()
+defaultPutIn ref container = do
+  move ref container
+  itemName <- qualifiedName ref
+  containerName <- qualifiedName container
+  msg $ "You put " ++ itemName ++ " in " ++ containerName ++ "."
+
+defaultDrop :: Ref -> GameAction ()
+defaultDrop ref = do
+  room <- getRoom
+  move ref room
+  name <- qualifiedName ref
+  msg $ "You drop " ++ name ++ "."
 
 -- Here are the exported functions
 
