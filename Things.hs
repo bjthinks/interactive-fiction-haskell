@@ -38,7 +38,7 @@ defaultThing ref = Thing {
   thingOnLight = cant "light" ref,
   thingOnRead = cant "read" ref,
   thingOnGet = defaultGet ref,
-  thingOnPet = stop "That\'s not an animal you can pet.",
+  thingOnPet = defaultPet ref,
   thingOnGetFrom =
       (\container -> do
           player <- getPlayer
@@ -77,6 +77,10 @@ defaultGet ref = do
   move ref player
   name <- qualifiedName ref
   msg $ "You get " ++ name ++ "."
+
+defaultPet ref = do
+  name <- qualifiedName ref
+  stop $ capitalize name ++ " is not an animal you can pet."
 
 -- Here are the exported functions
 
