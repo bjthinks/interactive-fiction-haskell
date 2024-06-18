@@ -32,7 +32,7 @@ defaultThing ref = Thing {
   thingOnEat = defaultEat ref,
   thingOnDrink = defaultDrink ref,
   thingOnUse = defaultUse ref,
-  thingOnTurnOn = stop "You can\'t turn that on.",
+  thingOnTurnOn = defaultTurnOn ref,
   thingOnTurnOff = stop "You can\'t turn that off.",
   thingOnGo = return (),
   thingOnLight = stop "You can\'t light that.",
@@ -85,6 +85,11 @@ defaultUse :: Ref -> GameAction ()
 defaultUse ref = do
   name <- qualifiedName ref
   stop $ "You can\'t use " ++ name ++ "."
+
+defaultTurnOn :: Ref -> GameAction ()
+defaultTurnOn ref = do
+  name <- qualifiedName ref
+  stop $ "You can\'t turn on " ++ name ++ "."
 
 -- Here are the exported functions
 
