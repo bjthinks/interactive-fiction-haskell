@@ -48,7 +48,7 @@ defaultThing ref = Thing {
   thingOnLock = cant "lock" ref, -- might be impossible to call this
   thingIsLocked = False,
   thingKey = Nothing,
-  thingOnSearch = msg "You look everywhere but don\'t find anything."
+  thingOnSearch = defaultSearch ref
   }
 
 cant :: String -> Ref -> Game ()
@@ -93,6 +93,11 @@ defaultThrow :: Ref -> Game ()
 defaultThrow ref = do
   name <- qualifiedName ref
   stop $ "There is no point in throwing " ++ name ++ "."
+
+defaultSearch :: Ref -> Game ()
+defaultSearch ref = do
+  name <- qualifiedName ref
+  msg $ "You look everywhere in " ++ name ++ " but don\'t find anything."
 
 -- Here are the exported functions
 
