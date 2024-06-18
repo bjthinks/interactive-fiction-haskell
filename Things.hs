@@ -37,11 +37,7 @@ defaultThing ref = Thing {
   thingOnGo = return (),
   thingOnLight = cant "light" ref,
   thingOnRead = cant "read" ref,
-  thingOnGet = do
-      player <- getPlayer
-      move ref player
-      name <- qualifiedName ref
-      msg $ "You get " ++ name ++ ".",
+  thingOnGet = defaultGet ref,
   thingOnPet = stop "That\'s not an animal you can pet.",
   thingOnGetFrom =
       (\container -> do
@@ -74,6 +70,13 @@ cant :: String -> Ref -> GameAction ()
 cant verb ref = do
   name <- qualifiedName ref
   stop $ "You can\'t " ++ verb ++ ' ' : name ++ "."
+
+defaultGet :: Ref -> GameAction ()
+defaultGet ref = do
+  player <- getPlayer
+  move ref player
+  name <- qualifiedName ref
+  msg $ "You get " ++ name ++ "."
 
 -- Here are the exported functions
 
