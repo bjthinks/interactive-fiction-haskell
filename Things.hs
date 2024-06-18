@@ -1,4 +1,4 @@
-module Thing(newRoom, newObject, newExit) where
+module Things(newRoom, newObject, newExit) where
 
 import Defs
 import Categories
