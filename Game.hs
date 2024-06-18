@@ -83,18 +83,3 @@ makeLocked ref key = do
   setOnUnlock ref $ do
     setIsLocked ref False
     msg $ "You unlock it with " ++ keyName ++ "."
-
--- Predicates for help with verbs and elsewhere
-
--- Includes room because of dollhouse
-isUsable :: Ref -> Game Bool
-isUsable ref = do
-  room <- getRoom
-  contents <- getRoomContents -- excludes player
-  inventory <- getInventory
-  return $ elem ref $ room : contents ++ inventory
-
-checkUsable :: Ref -> Game ()
-checkUsable ref = do
-  canUse <- isUsable ref
-  unless canUse $ stop "That\'s not accessible."
