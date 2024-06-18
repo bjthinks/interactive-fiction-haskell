@@ -29,14 +29,14 @@ defaultThing ref = Thing {
   thingContents = [],
   thingExits = [],
   thingPath = Nothing,
-  thingOnEat = defaultEat ref,
-  thingOnDrink = defaultDrink ref,
-  thingOnUse = defaultUse ref,
-  thingOnTurnOn = defaultTurnOn ref,
-  thingOnTurnOff = stop "You can\'t turn that off.",
+  thingOnEat = cant "eat" ref,
+  thingOnDrink = cant "drink" ref,
+  thingOnUse = cant "use" ref,
+  thingOnTurnOn = cant "turn on" ref,
+  thingOnTurnOff = cant "turn off" ref,
   thingOnGo = return (),
-  thingOnLight = stop "You can\'t light that.",
-  thingOnRead = stop "You can\'t read that.",
+  thingOnLight = cant "light" ref,
+  thingOnRead = cant "read" ref,
   thingOnGet = do
       player <- getPlayer
       move ref player
@@ -70,26 +70,10 @@ defaultThing ref = Thing {
   thingOnSearch = msg "You look everywhere but don\'t find anything."
   }
 
-defaultEat :: Ref -> GameAction ()
-defaultEat ref = do
+cant :: String -> Ref -> GameAction ()
+cant verb ref = do
   name <- qualifiedName ref
-  stop $ "You can\'t eat " ++ name ++ "."
-
-defaultDrink :: Ref -> GameAction ()
-defaultDrink ref = do
-  name <- qualifiedName ref
-  stop $ "You can\'t drink " ++ name ++ "."
-
--- ref could be the current room, because of Gabby's Dollhouse
-defaultUse :: Ref -> GameAction ()
-defaultUse ref = do
-  name <- qualifiedName ref
-  stop $ "You can\'t use " ++ name ++ "."
-
-defaultTurnOn :: Ref -> GameAction ()
-defaultTurnOn ref = do
-  name <- qualifiedName ref
-  stop $ "You can\'t turn on " ++ name ++ "."
+  stop $ "You can\'t " ++ verb ++ ' ' : name ++ "."
 
 -- Here are the exported functions
 
