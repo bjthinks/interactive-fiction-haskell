@@ -24,6 +24,7 @@ newThing = do
 defaultThing :: Ref -> Thing
 defaultThing ref = Thing {
   thingName = "",
+  thingArticle = Nothing,
   thingAliases = [],
   thingDescription = "",
   thingDescription2 = "",
@@ -112,7 +113,7 @@ defaultSearch ref = do
 
 newRoom :: String -> String -> Game Ref
 newRoom name desc = do
-  ref <- newThing
+  ref <- newThing -- No article by default
   setName ref name
   setDescription ref desc
   addAlias ref "here"
@@ -122,13 +123,14 @@ newObject :: Ref -> String -> String -> Game Ref
 newObject loc name desc = do
   ref <- newThing
   setName ref name
+  setArticle ref $ Just "the" -- In most cases, this is right
   setDescription ref desc
   move ref loc
   return ref
 
 newExit :: String -> Ref -> Ref -> Game Ref
 newExit name src dest = do
-  ref <- newThing
+  ref <- newThing -- No article by default
   setName ref name
   setAliases ref $ autoAliases name
   connect ref src dest

@@ -10,6 +10,7 @@ type Ref = Int
 
 data Thing = Thing {
   thingName :: String,
+  thingArticle :: Maybe String,
   thingAliases :: [String],
   thingDescription :: String,
   thingDescription2 :: String,
@@ -91,6 +92,7 @@ getProperty :: (Thing -> a) -> Ref -> Game a
 getProperty property = fmap property . getThing
 
 getName         = getProperty thingName
+getArticle      = getProperty thingArticle
 getAliases      = getProperty thingAliases
 getDescription  = getProperty thingDescription
 getDescription2 = getProperty thingDescription2
@@ -133,6 +135,7 @@ setProperty updater ref value = do
   setThing ref $ updater thing value
 
 setName         = setProperty (\t v -> t { thingName = v })
+setArticle      = setProperty (\t v -> t { thingArticle = v })
 setAliases      = setProperty (\t v -> t { thingAliases = v })
 setDescription  = setProperty (\t v -> t { thingDescription = v })
 setDescription2 = setProperty (\t v -> t { thingDescription2 = v })
