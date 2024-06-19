@@ -33,6 +33,8 @@ data Verb = Blank
           | Throw Ref
           | Unlock Ref Ref
           | Lock Ref Ref
+          | UnlockHelp Ref
+          | LockHelp Ref
           | Search
           | Score
           | Help
@@ -115,7 +117,9 @@ parseLine =
   simpleVerb   "examine" (Look Nothing) |||
   simpleVerb   "search" Search |||
   complexVerb  "unlock" "with" Unlock |||
+  verbWithNoun "unlock" UnlockHelp |||
   complexVerb  "close" "with" Lock |||
+  verbWithNoun "close" LockHelp |||
   verbWithNoun "drink" Drink |||
   verbWithNoun "light" Light |||
   simpleVerb   "score" Score |||
@@ -125,10 +129,12 @@ parseLine =
   simpleVerb   "exit" Exit |||
   simpleVerb   "help" Help |||
   complexVerb  "lock" "with" Lock |||
+  verbWithNoun "lock" LockHelp |||
   verbWithNoun "look" (Look . Just) |||
   simpleVerb   "look" (Look Nothing) |||
   verbWithNoun "move" Go |||
   complexVerb  "open" "with" Unlock |||
+  verbWithNoun "open" UnlockHelp |||
   simpleVerb   "quit" Exit |||
   verbWithNoun "read" Read |||
   verbWithNoun "take" Get |||

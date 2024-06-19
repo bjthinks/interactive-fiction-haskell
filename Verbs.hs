@@ -197,9 +197,13 @@ doVerb (Unlock ref key) = do
   keyName <- qualifiedName key
   maybeKey <- getKey ref
   unless (maybeKey == Just key) $ stop $ capitalize keyName ++
-    " is not the right key to unlock " ++ name ++ "."
+    " is not the right key to unlock " ++ name ++ " with."
   action <- getOnUnlock ref
   action
+
+doVerb (UnlockHelp ref) = do
+  name <- qualifiedName ref
+  stop $ "What do you want to unlock " ++ name ++ " with?"
 
 doVerb (Lock ref key) = do
   let verb = "lock"
@@ -222,9 +226,13 @@ doVerb (Lock ref key) = do
   keyName <- qualifiedName key
   maybeKey <- getKey ref
   unless (maybeKey == Just key) $ stop $ capitalize keyName ++
-    " is not the right key to lock " ++ name ++ "."
+    " is not the right key to lock " ++ name ++ " with."
   action <- getOnLock ref
   action
+
+doVerb (LockHelp ref) = do
+  name <- qualifiedName ref
+  stop $ "What do you want to lock " ++ name ++ " with?"
 
 doVerb Search = do
   room <- getRoom
