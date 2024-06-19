@@ -19,13 +19,14 @@ buildWorld = do
     "You are in the middle of Brisbin Street. The street continues to the " ++
     "west and east. To the north is Granny\'s House, and to the south is " ++
     "Nick\'s house."
+  setArticle brisbin Nothing
 
-  player <- newObject brisbin "Yourself" $
+  player <- newObject brisbin "yourself" $
     "You are an eight year old boy with blond hair, " ++
     "wearing jeans, a t-shirt, and tennis shoes with tube socks."
-  addAlias player "player"
   addAlias player "self"
   addAlias player "me"
+  setArticle player Nothing
   setPlayer player
   backpack <- newObject player "backpack" "A blue canvas backpack."
   makeContainer backpack
@@ -39,12 +40,13 @@ buildWorld = do
     setDescription2 mathBook ""
     setOnRead mathBook $ stop "You\'ve already read that."
 
-  frontYard <- newRoom "Granny\'s Front Yard" $
+  frontYard <- newRoom "Granny\'s front yard" $
     "The grass has many holes in it where squirrels have been " ++
     "digging. There is a concrete path connecting the street to the south " ++
     "and the driveway to the northwest. Granny\'s house is north and the " ++
     "side yard is northeast. There are a pine tree and two white oak trees " ++
     "in the yard. A squirrel watches you nervously from one of the oak trees."
+  setArticle frontYard Nothing
   newExit "north" brisbin frontYard
   newExit "south" frontYard brisbin
   acorns <- newObject frontYard "acorns" $
@@ -64,7 +66,7 @@ buildWorld = do
     setOnThrow acorns $ throwAcorns $
       msg "The squirrel catches the acorn and eats it."
 
-  living <- newRoom "Living Room" $
+  living <- newRoom "living room" $
     "This is clearly the living room of Granny\'s House. The floor has " ++
     "plain brown carpet. There are a tan sofa and two rust colored " ++
     "armchairs, and a spindly palm tree sits in the corner next to a " ++
