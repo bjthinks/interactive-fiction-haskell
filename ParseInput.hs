@@ -162,7 +162,13 @@ parseInput names input = runParser parseLine sortedNames "" inputWithPos
   where
     sortedNames = longestFirst $ tokenizeNames names
     longestFirst = sortOn (negate . length . fst)
-    inputWithPos = zipWith (,) [1..] (words input)
+    inputWithPos = zipWith (,) [1..] $ filter notArticle $ words input
+
+notArticle :: String -> Bool
+notArticle "a" = False
+notArticle "an" = False
+notArticle "the" = False
+notArticle _ = True
 
 tokenizeNames :: [(String,Ref)] -> [([Word],Ref)]
 tokenizeNames = map wordizeName
