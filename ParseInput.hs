@@ -131,6 +131,7 @@ parseLine =
   complexVerb  "lock" "with" Lock |||
   verbWithNoun "lock" LockHelp |||
   verbWithNoun "look" (Look . Just) |||
+  compoundVerb ["look", "at"] (Look . Just) |||
   simpleVerb   "look" (Look Nothing) |||
   verbWithNoun "move" Go |||
   complexVerb  "open" "with" Unlock |||
