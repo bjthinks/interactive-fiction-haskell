@@ -21,7 +21,7 @@ buildWorld = do
     "Nick\'s house."
   setArticle brisbin Nothing
 
-  player <- newObject brisbin "yourself" $
+  player <- newObject brisbin "myself" $
     "You are an eight year old boy with blond hair, " ++
     "wearing jeans, a t-shirt, and tennis shoes with tube socks."
   addAlias player "self"
