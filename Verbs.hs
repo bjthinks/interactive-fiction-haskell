@@ -17,7 +17,7 @@ doVerb (Look arg) = do
     Nothing -> getRoom
     Just ref -> return ref
   name <- getName ref
-  msg name
+  msg $ capitalize name
   desc <- getDescription ref
   desc2 <- getDescription2 ref
   when (desc /= "" || desc2 /= "") $
