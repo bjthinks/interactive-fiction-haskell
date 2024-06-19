@@ -18,4 +18,3 @@ use acorns
 read flask / potion
 consider handling plurals in error messages in Categories.hs (e.g. acorns)
 setArticle appropriately in BrisbinStreet.hs
-use articles correctly in ParseInput.hs (allNames?)
