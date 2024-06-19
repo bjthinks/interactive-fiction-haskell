@@ -3,7 +3,7 @@ module Things(newRoom, newObject, newExit) where
 import Defs
 import Categories
 import ParseInput
-import Game
+import Actions
 import Verbs
 import Control.Monad.RWS
 import qualified Data.Map.Strict as M

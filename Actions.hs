@@ -1,4 +1,4 @@
-module Game where
+module Actions where
 
 import Data.Maybe
 import Control.Monad

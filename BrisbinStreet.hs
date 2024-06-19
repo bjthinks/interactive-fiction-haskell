@@ -5,7 +5,7 @@ import Defs
 import Things
 import Categories
 import Score
-import Game
+import Actions
 import Mainloop
 import Verbs
 import ParseInput
