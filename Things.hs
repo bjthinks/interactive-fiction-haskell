@@ -117,7 +117,6 @@ newRoom name desc = do
   setArticle ref $ Just "the" -- In most cases, this is right
   setName ref name
   setDescription ref desc
-  addAlias ref "here"
   return ref
 
 newObject :: Ref -> String -> String -> Game Ref
