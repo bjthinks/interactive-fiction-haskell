@@ -176,3 +176,15 @@ qualifiedName ref = do
   return $ case article of
     Nothing -> name
     Just a -> a ++ ' ' : name
+
+-- Used in the parser
+allNames :: Ref -> Game [String]
+allNames ref = do
+  article <- getArticle ref
+  name <- getName ref
+  aliases <- getAliases ref
+  let prefixes = if isNothing article then [""] else ["", fromJust article]
+  return $ do
+    p <- prefixes
+    n <- name : aliases
+    return $ if p == "" then n else p ++ ' ' : n
