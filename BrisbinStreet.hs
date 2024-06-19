@@ -115,7 +115,7 @@ buildWorld = do
   candle <- newObject dinette "candle" "A plain red candle."
   setDescription2 candle "It is not lit."
 
-  kitchen <- newRoom "Kitchen" $
+  kitchen <- newRoom "kitchen" $
     "This is a small but functional kitchen. There is a fridge in the " ++
     "corner with an ancient AM/FM radio on top of it. Dark brown cupboards " ++
     "go along the west and south walls. There is a gas stove with an oven " ++
@@ -269,6 +269,7 @@ buildWorld = do
     "to the north, and a bedroom to the east."
   basementEntrance <- newExit "down" kitchen basementLanding
   addAlias basementEntrance "door"
+  addAlias basementEntrance "the door"
   makeLocked basementEntrance basementKey
   newExit "up" basementLanding kitchen
   basementShortcut <- newExit "shortcut to Granny\'s basement" brisbin
