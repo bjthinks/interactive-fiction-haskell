@@ -2,7 +2,6 @@ module Game where
 
 import Data.Maybe
 import Control.Monad
-
 import Defs
 import Categories
 

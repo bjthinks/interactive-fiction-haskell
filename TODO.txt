@@ -17,3 +17,4 @@ burn ants
 use acorns
 read flask / potion
 consider handling plurals in error messages in Categories.hs (e.g. acorns)
+use description2 in set(Un)lockedDescription
