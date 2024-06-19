@@ -578,7 +578,6 @@ buildWorld = do
     "upper shelf with paper and fountain pens."
   makeImmobile writingDesk
   makeContainer writingDesk
-  writingDeskDescription <- getDescription writingDesk
   addAlias writingDesk "drawers"
   addAlias writingDesk "drawer"
   newObject writingDesk "notebook" $
@@ -613,10 +612,8 @@ buildWorld = do
     setDescription2 hhReadingRoom ""
   makeLocked writingDesk crookedKey
   -- These two lines should come after makeLocked above
-  setUnlockedDescription writingDesk $ writingDeskDescription ++
-    " The drawers are unlocked."
-  setLockedDescription writingDesk $ writingDeskDescription ++
-    " The drawers are locked."
+  setUnlockedDescription2 writingDesk "The drawers are unlocked."
+  setLockedDescription2 writingDesk "The drawers are locked."
 
   hhBathroom1 <- newRoom "Bathroom" $
     "In this otherwise normal-looking bathroom, there is an open coffin. " ++

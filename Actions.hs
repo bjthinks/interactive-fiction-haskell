@@ -53,23 +53,23 @@ connect exit src dest = do
 makeContainer :: Ref -> Game ()
 makeContainer ref = setIsContainer ref True
 
-setUnlockedDescription :: Ref -> String -> Game ()
-setUnlockedDescription ref description = do
+setUnlockedDescription2 :: Ref -> String -> Game ()
+setUnlockedDescription2 ref description = do
   action <- getOnUnlock ref
   setOnUnlock ref $ do
     action
-    setDescription ref description
+    setDescription2 ref description
   unlocked <- getIsUnlocked ref
-  when unlocked $ setDescription ref description
+  when unlocked $ setDescription2 ref description
 
-setLockedDescription :: Ref -> String -> Game ()
-setLockedDescription ref description = do
+setLockedDescription2 :: Ref -> String -> Game ()
+setLockedDescription2 ref description = do
   action <- getOnLock ref
   setOnLock ref $ do
     action
-    setDescription ref description
+    setDescription2 ref description
   locked <- getIsLocked ref
-  when locked $ setDescription ref description
+  when locked $ setDescription2 ref description
 
 makeLocked :: Ref -> Ref -> Game ()
 makeLocked ref key = do
