@@ -3,7 +3,6 @@ module Actions where
 import Data.Maybe
 import Control.Monad
 import Defs
-import Categories
 
 moveNowhere :: Ref -> Game ()
 moveNowhere ref = do

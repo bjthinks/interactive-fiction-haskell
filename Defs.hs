@@ -168,3 +168,11 @@ addAlias :: Ref -> String -> Game ()
 addAlias ref alias = do
   existingAliases <- getAliases ref
   setAliases ref (alias:existingAliases)
+
+qualifiedName :: Ref -> Game String
+qualifiedName ref = do
+  article <- getArticle ref
+  name <- getName ref
+  return $ case article of
+    Nothing -> name
+    Just a -> a ++ ' ' : name
