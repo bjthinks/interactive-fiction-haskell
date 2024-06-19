@@ -100,7 +100,7 @@ buildWorld = do
   setOnTurnOn airConditioner acFails
   setOnTurnOff airConditioner $ stop "The air conditioner isn\'t running."
 
-  dinette <- newRoom "Dinette" $
+  dinette <- newRoom "dinette" $
     "This is a tiny dining room, most of which is taken up by a normal " ++
     "sized table. It has a plastic veneer which imitates a light brown " ++
     "wood pattern. Four chairs with dark brown plastic seats and backs " ++
