@@ -700,8 +700,7 @@ buildWorld = do
     "upstairs floor. The walnut railing is inlaid with mother of pearl, and " ++
     "the steps are covered in yellow carpet. A very unfriendly black cat is " ++
     "staring at you."
-  -- TODO staircaseEntrance <-
-  newExit "east" hhKitchen hhStaircase
+  staircaseEntrance <- newExit "east" hhKitchen hhStaircase
   newExit "west" hhStaircase hhKitchen
   blackCat <- newObject hhStaircase "black cat" $
     "This cat arches its back and hisses when you look at it. It stares at " ++
@@ -718,13 +717,13 @@ buildWorld = do
 
   hhLanding <- newRoom "Landing" $
     ""
-  landingEntrance <- newExit "up" hhStaircase hhLanding
-  staircaseEntrance <- newExit "down" hhLanding hhStaircase
-  beforeGo landingEntrance $ do
+  upSpiral <- newExit "up" hhStaircase hhLanding
+  downSpiral <- newExit "down" hhLanding hhStaircase
+  beforeGo upSpiral $ do
     msg $ "The black cat follows you upstairs. You feel like you are being " ++
       "watched."
     move blackCat hhLanding
-  beforeGo staircaseEntrance $ do
+  beforeGo downSpiral $ do
     msg $ "The black cat watches you carefully as you descend the stairs. " ++
       "When you get to the bottom, it takes up position at the base of the " ++
       "stairs, as if it\'s standing guard over the upstairs level."
