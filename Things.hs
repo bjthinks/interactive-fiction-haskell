@@ -113,7 +113,8 @@ defaultSearch ref = do
 
 newRoom :: String -> String -> Game Ref
 newRoom name desc = do
-  ref <- newThing -- No article by default
+  ref <- newThing
+  setArticle ref $ Just "the" -- In most cases, this is right
   setName ref name
   setDescription ref desc
   addAlias ref "here"
