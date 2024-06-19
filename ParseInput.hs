@@ -158,9 +158,9 @@ parseLine =
   (eof >> return Blank)
 
 parseInput :: [(String,Ref)] -> String -> Either ParseError Verb
-parseInput names input =
-  runParser parseLine (longestFirst $ tokenizeNames names) "" inputWithPos
+parseInput names input = runParser parseLine sortedNames "" inputWithPos
   where
+    sortedNames = longestFirst $ tokenizeNames names
     longestFirst = sortOn (negate . length . fst)
     inputWithPos = zipWith (,) [1..] (words input)
 
