@@ -8,7 +8,6 @@ import Control.Monad.Trans.Maybe
 import Control.Monad.RWS
 import Data.Char
 import Data.List.Split
-import System.IO.Unsafe
 
 import Defs
 import Categories
@@ -29,7 +28,7 @@ handleInput = do
           Right verb -> doVerb verb
       getNameAndAliasesWithRefs ref = do
         names <- allNames ref
-        let allNamesLowercase = unsafePerformIO (print names) `seq` map toLowerString names
+        let allNamesLowercase = map toLowerString names
         return $ map (\str -> (str,ref)) allNamesLowercase
       toLowerString = map toLower
 
