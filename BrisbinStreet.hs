@@ -706,11 +706,12 @@ buildWorld = do
     "ghosts don\'t notice."
   newExit "north" hhKitchen hhDiningRoom
 
-  hhStaircase <- newRoom "Spiral Staircase" $
+  hhStaircase <- newRoom "spiral staircase" $
     "This room has a very large and opulent spiral staircase going to the " ++
     "upstairs floor. The walnut railing is inlaid with mother of pearl, and " ++
     "the steps are covered in yellow carpet. A very unfriendly black cat is " ++
     "staring at you."
+  addAlias hhStaircase "staircase"
   staircaseEntrance <- newExit "east" hhKitchen hhStaircase
   newExit "west" hhStaircase hhKitchen
   blackCat <- newObject hhStaircase "black cat" $
@@ -723,10 +724,9 @@ buildWorld = do
 
   shortcut <- newExit "secret passage to haunted house kitchen"
     brisbin hhKitchen
-  addAlias shortcut "kitchen"
   addAlias shortcut "k"
 
-  hhLanding <- newRoom "Landing" $
+  hhLanding <- newRoom "landing" $
     ""
   upSpiral <- newExit "up" hhStaircase hhLanding
   downSpiral <- newExit "down" hhLanding hhStaircase
@@ -740,7 +740,7 @@ buildWorld = do
       "stairs, as if it\'s standing guard over the upstairs level."
     move blackCat hhStaircase
 
-  hhAtrium <- newRoom "Atrium" $
+  hhAtrium <- newRoom "atrium" $
     "This room has a large vaulted skylight covering the ceiling. There are " ++
     "numerous houseplants in large pots along the walls, but most of them " ++
     "are yellow from lack of sun. Even though it is cloudless and sunny " ++
