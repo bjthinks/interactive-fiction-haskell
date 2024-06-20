@@ -502,6 +502,7 @@ buildWorld = do
   eastBrisbin <- newRoom "east Brisbin Street" $
     "This is the east end of the block. Mike\'s house is north, and " ++
     "Justin\'s house is south."
+  setArticle eastBrisbin Nothing
   newExit "east" brisbin eastBrisbin
   newExit "west" eastBrisbin brisbin
 
@@ -553,9 +554,10 @@ buildWorld = do
     "Bimbo squirms out of your grasp and jumps to the ground."
   setOnPet bimbo $ msg "Bimbo purrs and rubs up against you."
 
-  westBrisbin <- newRoom "West Brisbin Street" $
+  westBrisbin <- newRoom "west Brisbin Street" $
     "This is the west end of the block. There is a seedy motel to the " ++
     "north, and what looks like a haunted house to the south."
+  setArticle westBrisbin Nothing
   newExit "west" brisbin westBrisbin
   newExit "east" westBrisbin brisbin
 
@@ -568,7 +570,7 @@ buildWorld = do
   newExit "north" westBrisbin motel
   newExit "south" motel westBrisbin
 
-  hauntedYard <- newRoom "Haunted House Yard" $
+  hauntedYard <- newRoom "haunted house yard" $
     "This is a very large white stucco two story house, with a sizeable " ++
     "addition above the garage. There is a lightpost in a tiny clearing in " ++
     "the front yard, with white rocks surrounding it. As you approach the " ++
