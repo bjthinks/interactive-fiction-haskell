@@ -8,7 +8,6 @@ import Score
 import Actions
 import Mainloop
 import Verbs
-import ParseInput
 import Control.Monad
 import Data.Maybe
 

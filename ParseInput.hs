@@ -1,45 +1,19 @@
-module ParseInput(Verb(..), parseInput) where
+module ParseInput(handleInput) where
 
 import Prelude hiding (Word)
 import Control.Monad
+import Control.Monad.RWS
 import Text.Parsec
---import Text.Parsec.String
 import Text.Parsec.Pos
 import Data.List
---import Data.List.Split
+import Data.Char
+import Data.Maybe
 import Defs
+import Categories
+import Verbs
 
 type Word = String
 type Token = (Int, Word) -- (position, word)
-
-data Verb = Blank
-          | Look (Maybe Ref)
-          | Inventory
-          | Get Ref
-          | GetAll
-          | GetFrom Ref Ref
-          | Drop Ref
-          | DropAll
-          | PutIn Ref Ref
-          | Go Ref
-          | Eat Ref
-          | Drink Ref
-          | Use Ref
-          | TurnOn Ref
-          | TurnOff Ref
-          | Light Ref
-          | Read Ref
-          | Pet Ref
-          | Throw Ref
-          | Unlock Ref Ref
-          | Lock Ref Ref
-          | UnlockHelp Ref
-          | LockHelp Ref
-          | Search
-          | Score
-          | Help
-          | Exit
-          deriving Show
 
 type MyParser = Parsec [Token] [([Word],Ref)]
 
@@ -169,3 +143,57 @@ tokenizeNames :: [(String,Ref)] -> [([Word],Ref)]
 tokenizeNames = map wordizeName
   where
     wordizeName (name,ref) = (words name,ref)
+
+handleInput2 :: Game (Either ParseError Verb)
+handleInput2 = do
+  command <- ask
+  refs <- visibleRefs
+  namesAndRefs <- mapM getNameAndAliasesWithRefs refs
+  return $ parseInput (concat namesAndRefs) (toLowerString command)
+  where
+    getNameAndAliasesWithRefs ref = do
+      names <- allNames ref
+      let allNamesLowercase = map toLowerString names
+      return $ map (\str -> (str,ref)) allNamesLowercase
+    toLowerString = map toLower
+
+handleInput :: Game ()
+handleInput = do
+  result <- handleInput2
+  case result of
+    Left err -> printError err
+    Right verb -> doVerb verb
+
+printError :: ParseError -> Game ()
+printError err = do
+  command <- ask
+  let commandWords = words command
+      badWordNumber = sourceColumn $ errorPos err
+      badWordList = drop (badWordNumber - 1) commandWords
+      badWord = if badWordList == []
+        then last commandWords
+        else head badWordList
+  stop $ "I didn\'t understand something at (or shortly after) " ++
+    "\"" ++ badWord ++ "\"."
+
+visibleRefs :: Game [Ref]
+visibleRefs = do
+  player <- getPlayer
+  inventory <- getInventory
+  room <- getRoom
+  roomContents <- getRoomContents -- excludes player
+  containerContents <- getThingsInOpenContainers
+  roomExits <- getRoomExits
+  return $ player : inventory ++ room : roomContents ++ containerContents ++
+    roomExits
+
+allNames :: Ref -> Game [String]
+allNames ref = do
+  article <- getArticle ref
+  name <- getName ref
+  aliases <- getAliases ref
+  let prefixes = if isNothing article then [""] else ["", fromJust article]
+  return $ do
+    p <- prefixes
+    n <- name : aliases
+    return $ if p == "" then n else p ++ ' ' : n

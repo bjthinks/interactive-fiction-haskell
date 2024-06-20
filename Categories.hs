@@ -60,19 +60,6 @@ getRoomExits = do
   room <- getRoom
   getExits room
 
--- For the parser
-
-visibleRefs :: Game [Ref]
-visibleRefs = do
-  player <- getPlayer
-  inventory <- getInventory
-  room <- getRoom
-  roomContents <- getRoomContents -- excludes player
-  containerContents <- getThingsInOpenContainers
-  roomExits <- getRoomExits
-  return $ player : inventory ++ room : roomContents ++ containerContents ++
-    roomExits
-
 -- Predicates for distinguishing among categories 1-6
 
 isPlayer :: Ref -> Game Bool

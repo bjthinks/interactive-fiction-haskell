@@ -1,4 +1,4 @@
-module Verbs(doVerb) where
+module Verbs(Verb(..), doVerb) where
 
 import Data.List
 import Data.Maybe
@@ -7,7 +7,35 @@ import Control.Monad
 import Defs
 import Categories
 import Score
-import ParseInput
+
+data Verb = Blank
+          | Look (Maybe Ref)
+          | Inventory
+          | Get Ref
+          | GetAll
+          | GetFrom Ref Ref
+          | Drop Ref
+          | DropAll
+          | PutIn Ref Ref
+          | Go Ref
+          | Eat Ref
+          | Drink Ref
+          | Use Ref
+          | TurnOn Ref
+          | TurnOff Ref
+          | Light Ref
+          | Read Ref
+          | Pet Ref
+          | Throw Ref
+          | Unlock Ref Ref
+          | Lock Ref Ref
+          | UnlockHelp Ref
+          | LockHelp Ref
+          | Search
+          | Score
+          | Help
+          | Exit
+          deriving Show
 
 doVerb :: Verb -> Game ()
 doVerb Blank = return ()

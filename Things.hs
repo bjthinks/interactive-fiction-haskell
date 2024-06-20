@@ -2,7 +2,6 @@ module Things(newRoom, newObject, newExit) where
 
 import Defs
 import Categories
-import ParseInput
 import Actions
 import Verbs
 import Control.Monad.RWS
