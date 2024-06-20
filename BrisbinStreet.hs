@@ -79,7 +79,7 @@ buildWorld = do
     "You see a beefy, 240 volt window unit air conditioner. It has plastic " ++
     "paneling that is made to look like wood."
   makeImmobile airConditioner
-  setAliases airConditioner ["air", "conditioner", "ac"]
+  addAliases airConditioner ["air", "conditioner", "ac"]
   setDescription2 airConditioner
     "It sure would be nice if you could turn it on."
   let acFails = msg $ "You press the on button, but nothing happens. " ++
@@ -315,7 +315,7 @@ buildWorld = do
   newExit "east" diningRoom basementLanding
   circuitBreakerBox <- newObject diningRoom "circuit breaker box" $
     "This is an ordinary circuit breaker box with 100 Amp service."
-  setAliases circuitBreakerBox
+  addAliases circuitBreakerBox
     ["circuit breaker", "circuit breakers", "breaker box", "breaker",
      "breakers", "box"]
   makeImmobile circuitBreakerBox
@@ -366,7 +366,7 @@ buildWorld = do
   spirits <- newObject basementBar "spirits" $
     "Behind the bar are numerous bottles of whiskey and other spirits, " ++
     "all capped with pour spouts."
-  setAliases spirits ["alcohol", "whiskey", "booze", "liquor"]
+  addAliases spirits ["alcohol", "whiskey", "booze", "liquor"]
   setOnGet spirits $ msg $ "As you are underage, you don't think you should " ++
     "be walking around with opened liquor bottles."
   setOnDrink spirits $ msg $ "An eight year old boy such as yourself should " ++
@@ -519,7 +519,7 @@ buildWorld = do
     "nose, long ears, imploring eyes, a tiny little tail, and a pink " ++
     "collar. She would like it if you pet her."
   setArticle misty Nothing
-  setAliases misty ["bunny", "rabbit", "the bunny", "the rabbit"]
+  addAliases misty ["bunny", "rabbit", "the bunny", "the rabbit"]
   setOnGet misty $ msg $ "Misty doesn\'t know you very well, so she hops " ++
     "away from your outstreched arms."
   let happyMisty = msg $ "You gently pet Misty between her eyes and nose. " ++

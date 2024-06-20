@@ -132,7 +132,7 @@ newExit :: String -> Ref -> Ref -> Game Ref
 newExit name src dest = do
   ref <- newThing -- No article by default
   setName ref name
-  setAliases ref $ autoAliases name
+  addAliases ref $ autoAliases name
   connect ref src dest
   return ref
     where

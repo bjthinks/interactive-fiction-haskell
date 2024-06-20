@@ -136,7 +136,7 @@ setProperty updater ref value = do
 
 setName         = setProperty (\t v -> t { thingName = v })
 setArticle      = setProperty (\t v -> t { thingArticle = v })
-setAliases      = setProperty (\t v -> t { thingAliases = v })
+-- setAliases is not exported to avoid bugs where aliases are overwritten
 setDescription  = setProperty (\t v -> t { thingDescription = v })
 setDescription2 = setProperty (\t v -> t { thingDescription2 = v })
 setLocation     = setProperty (\t v -> t { thingLocation = v })
@@ -168,6 +168,11 @@ addAlias :: Ref -> String -> Game ()
 addAlias ref alias = do
   existingAliases <- getAliases ref
   setAliases ref (alias:existingAliases)
+    where
+      setAliases = setProperty (\t v -> t { thingAliases = v })
+
+addAliases :: Ref -> [String] -> Game ()
+addAliases ref = mapM_ $ addAlias ref
 
 qualifiedName :: Ref -> Game String
 qualifiedName ref = do
