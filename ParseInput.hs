@@ -132,37 +132,28 @@ parseLine =
   implicitGo |||
   (eof >> return Blank)
 
-parseInput :: [(String,Ref)] -> String -> Either ParseError Verb
-parseInput names input = runParser parseLine sortedNames "" inputWithPos
-  where
-    sortedNames = longestFirst $ tokenizeNames names
-    longestFirst = sortOn (negate . length . fst)
-    inputWithPos = zipWith (,) [1..] $ words input
-
-tokenizeNames :: [(String,Ref)] -> [([Word],Ref)]
-tokenizeNames = map wordizeName
-  where
-    wordizeName (name,ref) = (words name,ref)
-
-handleInput2 :: Game (Either ParseError Verb)
-handleInput2 = do
+handleInput :: Game ()
+handleInput = do
   command <- ask
   refs <- visibleRefs
   namesAndRefs <- mapM getNameAndAliasesWithRefs refs
-  return $ parseInput (concat namesAndRefs) (toLowerString command)
+  let names = concat namesAndRefs
+  let input = toLowerString command
+  let result = runParser parseLine( sortedNames names) "" (inputWithPos input)
+  case result of
+    Left err -> printError err
+    Right verb -> doVerb verb
   where
     getNameAndAliasesWithRefs ref = do
       names <- allNames ref
       let allNamesLowercase = map toLowerString names
       return $ map (\str -> (str,ref)) allNamesLowercase
     toLowerString = map toLower
-
-handleInput :: Game ()
-handleInput = do
-  result <- handleInput2
-  case result of
-    Left err -> printError err
-    Right verb -> doVerb verb
+    sortedNames = longestFirst . tokenizeNames
+    longestFirst = sortOn (negate . length . fst)
+    inputWithPos = zipWith (,) [1..] . words
+    tokenizeNames = map wordizeName
+    wordizeName (name,ref) = (words name,ref)
 
 printError :: ParseError -> Game ()
 printError err = do
