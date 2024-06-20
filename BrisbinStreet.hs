@@ -172,14 +172,14 @@ buildWorld = do
   setOnUse candle useCandleAction
   setOnLight candle useCandleAction
 
-  hallway <- newRoom "Hallway" $
+  hallway <- newRoom "hallway" $
     "This simple east-west hallway has a tiny five watt light fixture on " ++
     "the ceiling. There is a wicker hamper which, on inspection, appears " ++
     "to contain a stack of clean placemats."
   newExit "south" hallway living
   newExit "north" living hallway
 
-  masterBedroom <- newRoom "Master Bedroom" $
+  masterBedroom <- newRoom "master bedroom" $
     "Someone has clearly spend some money filling this bedroom with nice " ++
     "furniture. There are a desk, a highboy dresser, another long dresser, " ++
     "and a queen size bed with a flower-print bedspread. A touch tone " ++
@@ -195,24 +195,27 @@ buildWorld = do
     "This is an ordinery-looking key that opens the basement. Type \"unlock " ++
     "down with basement key\" to use it."
 
-  childBedroom <- newRoom "Child\'s Bedroom" $
+  childBedroom <- newRoom "child\'s bedroom" $
     "This bedroom clearly belongs to a young boy. There " ++
     "are toys strewn about the floor, and a half-empty toybox is against " ++
     "the west wall. There are three moderately-sized dressers, and a " ++
     "large bookcase sits atop the biggest one. A twin bed is in the corner."
   newExit "west" childBedroom hallway
   newExit "east" hallway childBedroom
-  dollhouse <- newObject childBedroom "Gabby\'s Dollhouse" $
+  dollhouse <- newObject childBedroom "Gabby\'s dollhouse" $
     "This dollhouse is pink and blue, and looks like a giant cat. There " ++
     "are three floors connected by an elevator, with one room on each side " ++
     "of the elevator on each floor. Everything inside the dollhouse looks " ++
     "like a cartoon. Try \"use dollhouse\" to enter or exit the dollhouse."
   makeContainer dollhouse
+  setArticle dollhouse Nothing
   addAlias dollhouse "dollhouse"
-  gabby <- newObject childBedroom "Gabby doll" $
+  addAlias dollhouse "the dollhouse"
+  gabby <- newObject childBedroom "Gabby" $
     "This is a Gabby doll. It looks like she wants to be in her dollhouse."
-  addAlias gabby "Gabby"
+  setArticle gabby Nothing
   addAlias gabby "doll"
+  addAlias gabby "the doll"
   setOnUse dollhouse $ do
     playerLoc <- getRoom
     maybeDollhouseLoc <- getLocation dollhouse
@@ -248,7 +251,7 @@ buildWorld = do
     defaultPutGabbyIn container
     when (container == dollhouse) goInDollhouse)
 
-  bathroom <- newRoom "Bathroom" $
+  bathroom <- newRoom "bathroom" $
     "This is a small but servicable bathroom. The counter is a pale " ++
     "yellow, with a plain sink inset into it. There are built in cupboards " ++
     "below the counter, and a cupboard door stands wide open to allow heat " ++
@@ -262,7 +265,7 @@ buildWorld = do
   setDescription2 bathtub "Type \"use bathtub\" to fill it with water."
   makeImmobile bathtub
 
-  basementLanding <- newRoom "Basement Landing" $
+  basementLanding <- newRoom "basement landing" $
     "The stairway, and the floor of this entire level, is a thin green " ++
     "carpet. There are several rooms connected to the landing: a dining " ++
     "room to the west, an unfinished laundry room to the south, a bathroom " ++
@@ -276,7 +279,7 @@ buildWorld = do
     basementLanding
   addAlias basementShortcut "b"
 
-  laundryRoom <- newRoom "Laundry Room" $
+  laundryRoom <- newRoom "laundry room" $
     "This room used to double as a kitchen. There are a gas stove and a " ++
     "refrigerator along the west wall, and cupboards and a kitchen sink " ++
     "against the east wall. The floor and exterior walls are exposed " ++
