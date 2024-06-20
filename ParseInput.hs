@@ -134,26 +134,31 @@ parseLine =
 
 handleInput :: Game ()
 handleInput = do
-  command <- ask
+  input <- ask
+  let inputLowercase = toLowerString input
+      inputWords = words inputLowercase
+      inputWithPositions = zipWith (,) [1..] inputWords
   refs <- visibleRefs
-  namesAndRefs <- mapM getNameAndAliasesWithRefs refs
+  namesAndRefs <- mapM getNameAndAliasesWithRef refs
   let names = concat namesAndRefs
-  let input = toLowerString command
-  let result = runParser parseLine( sortedNames names) "" (inputWithPos input)
+  let result = runParser parseLine( sortedNames names) "" inputWithPositions
   case result of
     Left err -> printError err
     Right verb -> doVerb verb
   where
-    getNameAndAliasesWithRefs ref = do
-      names <- allNames ref
-      let allNamesLowercase = map toLowerString names
-      return $ map (\str -> (str,ref)) allNamesLowercase
-    toLowerString = map toLower
     sortedNames = longestFirst . tokenizeNames
     longestFirst = sortOn (negate . length . fst)
-    inputWithPos = zipWith (,) [1..] . words
     tokenizeNames = map wordizeName
     wordizeName (name,ref) = (words name,ref)
+
+getNameAndAliasesWithRef :: Ref -> Game [(String,Ref)]
+getNameAndAliasesWithRef ref = do
+  names <- allNames ref
+  let allNamesLowercase = map toLowerString names
+  return $ map (\str -> (str,ref)) allNamesLowercase
+
+toLowerString :: String -> String
+toLowerString = map toLower
 
 printError :: ParseError -> Game ()
 printError err = do
