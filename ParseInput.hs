@@ -146,7 +146,6 @@ handleInput = do
   case result of
     Left err -> printError err
     Right verb -> doVerb verb
-  where
 
 tokensWithRef :: Ref -> Game [([Word],Ref)]
 tokensWithRef ref = do
