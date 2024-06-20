@@ -141,7 +141,7 @@ handleInput = do
   refs <- visibleRefs
   namesAndRefs <- mapM getNameAndAliasesWithRef refs
   let names = concat namesAndRefs
-  let result = runParser parseLine( sortedNames names) "" inputWithPositions
+  let result = runParser parseLine (sortedNames names) "" inputWithPositions
   case result of
     Left err -> printError err
     Right verb -> doVerb verb
