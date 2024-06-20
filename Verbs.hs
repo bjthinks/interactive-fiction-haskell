@@ -255,8 +255,7 @@ doVerb Help = do
   msg "get item from container, or put item in container"
   msg $ "You can type the name of an exit to go that direction, and there " ++
     "are shorthand names for commonly named exits. So \"go n\" or just " ++
-    "\"n\" is short for \"go north\". You can also use semicolons to " ++
-    "separate multiple commands."
+    "\"n\" is short for \"go north\"."
 
 doVerb Exit = stopPlaying
 

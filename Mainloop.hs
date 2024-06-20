@@ -7,7 +7,6 @@ import Control.Monad
 import Control.Monad.Trans.Maybe
 import Control.Monad.RWS
 import Data.Char
-import Data.List.Split
 
 import Defs
 import Categories
@@ -17,20 +16,18 @@ import WordWrap
 
 handleInput :: Game ()
 handleInput = do
-  commands <- reader $ splitOn ";"
-  mapM_ runCommand commands
-    where
-      runCommand command = do
-        refs <- visibleRefs
-        stuff <- mapM getNameAndAliasesWithRefs refs
-        case parseInput (concat stuff) (toLowerString command) of
-          Left err -> printError (words command) err
-          Right verb -> doVerb verb
-      getNameAndAliasesWithRefs ref = do
-        names <- allNames ref
-        let allNamesLowercase = map toLowerString names
-        return $ map (\str -> (str,ref)) allNamesLowercase
-      toLowerString = map toLower
+  command <- ask
+  refs <- visibleRefs
+  namesAndRefs <- mapM getNameAndAliasesWithRefs refs
+  case parseInput (concat namesAndRefs) (toLowerString command) of
+    Left err -> printError (words command) err
+    Right verb -> doVerb verb
+  where
+    getNameAndAliasesWithRefs ref = do
+      names <- allNames ref
+      let allNamesLowercase = map toLowerString names
+      return $ map (\str -> (str,ref)) allNamesLowercase
+    toLowerString = map toLower
 
 printError :: [String] -> ParseError -> Game ()
 printError commandWords err = do
