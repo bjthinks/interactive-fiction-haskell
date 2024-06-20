@@ -304,7 +304,7 @@ buildWorld = do
     setDescription2 laundryRoom ""
     setOnSearch laundryRoom defaultSearchLaundryRoom
 
-  diningRoom <- newRoom "Dining Room" $
+  diningRoom <- newRoom "dining room" $
     "This small room is nearly filled with a huge round oaken table. " ++
     "There are six large padded wooden chairs surrounding it. This must " ++
     "be where Granny and her family share meals on special occasions. A " ++
@@ -336,7 +336,7 @@ buildWorld = do
   setOnTurnOff circuitBreakerBox $ stop
     "You shouldn\'t pointlessly monkey around with circuit breakers."
 
-  basementBedroom <- newRoom "Basement Bedroom" $
+  basementBedroom <- newRoom "basement bedroom" $
     "This bedroom has a huge king-size bed and a very old vacuum tube " ++
     "television that sits directly on the floor. Granny\'s nightstand " ++
     "sits by the bed. There is a tan recliner facing the TV."
@@ -355,7 +355,7 @@ buildWorld = do
     "glass\" to use it."
   addAlias magnifyingGlass "glass"
 
-  basementBar <- newRoom "Bar" $
+  basementBar <- newRoom "bar" $
     "This area is half filled with a large wet bar. The bar is quite wide, " ++
     "and has a light colored wood pattern on its plastic top; the sides " ++
     "are dark wood. There are three tall bar chairs with black padded " ++
@@ -397,7 +397,7 @@ buildWorld = do
   setOnTurnOn barLight lightOn
   setOnTurnOff barLight lightAlreadyOff
 
-  basementBathroom <- newRoom "Bathroom" $
+  basementBathroom <- newRoom "bathroom" $
     "This is a full bathroom, with a large counter and vanity with three " ++
     "mirrors and two cabinets, a toilet, and " ++
     "a shower stall with small green square tile. There is a little round " ++
