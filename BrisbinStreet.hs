@@ -579,7 +579,7 @@ buildWorld = do
   newExit "south" westBrisbin hauntedYard
   newExit "north" hauntedYard westBrisbin
 
-  hhFoyer <- newRoom "Foyer" $
+  hhFoyer <- newRoom "foyer" $
     "This is the front room of the haunted house. The whole house appears " ++
     "to be done in lavish wood paneling. There is a picture of an elderly " ++
     "man on the wall, and his eyes move to follow you. There is a writing " ++
@@ -599,7 +599,7 @@ buildWorld = do
   potion <- newObject writingDesk "potion" $
     "The label reads \"Invisibility\"."
 
-  hhReadingRoom <- newRoom "Reading Room" $
+  hhReadingRoom <- newRoom "reading room" $
     "There are three high backed reading chairs upholstered in red suede " ++
     "in this room. The walls are covered in bookshelves, with gaps for two " ++
     "small windows. A colony of orb weaver spiders has made this room their " ++
@@ -629,7 +629,7 @@ buildWorld = do
   setUnlockedDescription2 writingDesk "The drawers are unlocked."
   setLockedDescription2 writingDesk "The drawers are locked."
 
-  hhBathroom1 <- newRoom "Bathroom" $
+  hhBathroom1 <- newRoom "bathroom" $
     "In this otherwise normal-looking bathroom, there is an open coffin. " ++
     "It takes up most of the space on the floor. Other than that, you see " ++
     "a sink, a toilet, and a shower. There is a medicine cabinet behind the " ++
@@ -649,7 +649,7 @@ buildWorld = do
   setOnDrink flask $ msg $ "You have a feeling the contents of this flask " ++
     "are too important to drink."
 
-  hhDiningRoom <- newRoom "Dining Room" $
+  hhDiningRoom <- newRoom "dining room" $
     "This dining room has a huge octagonal hardwood table with eight chairs " ++
     "on all sides of it. There is a chandelier with real candles in it, " ++
     "which have been recently lit. In the middle of the table is a big " ++
@@ -693,14 +693,14 @@ buildWorld = do
   setOnDrink potion usePotion
   setOnUse potion usePotion
 
-  hhKitchen <- newRoom "Kitchen" $
+  hhKitchen <- newRoom "kitchen" $
     "This kitchen is a complete mess. Someone has thrown all of the dishes " ++
     "all over the room and broken them. Sharp pieces of ceramic litter the " ++
     "floor and countertops. There is no food anywhere to be seen, and the " ++
     "fridge is standing open and completely empty. You watch your step " ++
     "very carefully as you pass through this room."
   kitchenEntrance <- newExit "south" hhDiningRoom hhKitchen
-  addAlias kitchenEntrance "door"
+  addAliases kitchenEntrance ["door", "the door"]
   makeLocked kitchenEntrance skullKey
   beforeGo kitchenEntrance $ msg $ "Boards creak under your feet, but the " ++
     "ghosts don\'t notice."
