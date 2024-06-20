@@ -423,7 +423,7 @@ buildWorld = do
     msg "10. Play with a toy"
     msg $ "Finally, you must solve the mystery of the Haunted House."
 
-  driveway <- newRoom "Driveway" $
+  driveway <- newRoom "driveway" $
     "A concrete driveway extends along the west side of Granny\'s House. " ++
     "Granny\'s side door is to the east. The front yard is to the " ++
     "southeast and the backyard is to the northeast. The garage is north."
@@ -448,7 +448,7 @@ buildWorld = do
       "There are a great many dead and burned ants littering the concrete " ++
       "driveway. You smile at your deed."
 
-  garage <- newRoom "Garage" $
+  garage <- newRoom "garage" $
     "Two cars are squeezed into this garage: a 1970s era yellow " ++
     "Oldsmobile, and a very old green car with patched rust spots all over " ++
     "its body. There is a side door going to the back yard to the east."
@@ -463,7 +463,7 @@ buildWorld = do
     "spin outs."
   setOnGet bigWheel $ msg "The big wheel is too big to carry around."
 
-  backyard <- newRoom "Backyard" $
+  backyard <- newRoom "backyard" $
     "This is the largest part of Granny\'s yard. There are numerous shrubs " ++
     "along the property line to the east, an empty sandbox near the house " ++
     "to the south, a small garden with moss roses in the middle of the " ++
@@ -476,7 +476,7 @@ buildWorld = do
   newExit "west" backyard garage
   newExit "east" garage backyard
 
-  sideYard <- newRoom "Side Yard" $
+  sideYard <- newRoom "side yard" $
     "This narrow bit of property runs along the east side of Granny\'s " ++
     "house. There is a window unit air conditioner sticking out of the " ++
     "house, and a lightning rod and a TV antenna have been installed with " ++
@@ -490,33 +490,36 @@ buildWorld = do
   newExit "southwest" sideYard frontYard
   newExit "northeast" frontYard sideYard
 
-  nickYard <- newRoom "Nick\'s Yard" $
+  nickYard <- newRoom "Nick\'s yard" $
     "This house is in a very poor state of disrepair. It is green, like " ++
     "Granny\'s house, but could use a coat of paint, to say the least. " ++
     "The lawn is in serious need of weeding. There is a paper wasp nest " ++
     "out of reach, on the outside of the second floor."
+  setArticle nickYard Nothing
   newExit "north" nickYard brisbin
   newExit "south" brisbin nickYard
 
-  eastBrisbin <- newRoom "East Brisbin Street" $
+  eastBrisbin <- newRoom "east Brisbin Street" $
     "This is the east end of the block. Mike\'s house is north, and " ++
     "Justin\'s house is south."
   newExit "east" brisbin eastBrisbin
   newExit "west" eastBrisbin brisbin
 
-  mikeYard <- newRoom "Mike\'s Yard" $
+  mikeYard <- newRoom "Mike\'s yard" $
     "Mike\'s house is large and L-shaped. The driveway goes around the " ++
     "house to the adjacent avenue. There is a planter in the shape of " ++
     "an old-fashioned well with petunias growing out of it, and you also " ++
     "see a flower bed next to the house. A garage stands at the back of " ++
     "the lot. A pet bunny named Misty is here."
+  setArticle mikeYard Nothing
   newExit "north" eastBrisbin mikeYard
   newExit "south" mikeYard eastBrisbin
   misty <- newObject mikeYard "Misty" $
     "Misty is a small bunny with a grey coat, a white underbelly, a cute " ++
     "nose, long ears, imploring eyes, a tiny little tail, and a pink " ++
     "collar. She would like it if you pet her."
-  setAliases misty ["bunny", "rabbit"]
+  setArticle misty Nothing
+  setAliases misty ["bunny", "rabbit", "the bunny", "the rabbit"]
   setOnGet misty $ msg $ "Misty doesn\'t know you very well, so she hops " ++
     "away from your outstreched arms."
   let happyMisty = msg $ "You gently pet Misty between her eyes and nose. " ++
@@ -526,10 +529,11 @@ buildWorld = do
     addPoints 10 "being so loving to a deserving animal"
     setOnPet misty happyMisty
 
-  justinYard <- newRoom "Justin\'s Yard" $
+  justinYard <- newRoom "Justin\'s yard" $
     "You stand in front of Justin\'s house. It is a large home with a " ++
     "noticable addition and multiple floors. There is a crabapple tree " ++
     "here."
+  setArticle justinYard Nothing
   setDescription2 justinYard "Bimbo the cat is hanging out in the yard."
   newExit "south" eastBrisbin justinYard
   newExit "north" justinYard eastBrisbin
@@ -542,7 +546,9 @@ buildWorld = do
   bimbo <- newObject justinYard "Bimbo" $
     "Bimbo, who is oddly a male cat, has grey and white stripes covering " ++
     "all of his body."
+  setArticle bimbo Nothing
   addAlias bimbo "cat"
+  addAlias bimbo "the cat"
   setOnGet bimbo $ msg
     "Bimbo squirms out of your grasp and jumps to the ground."
   setOnPet bimbo $ msg "Bimbo purrs and rubs up against you."
