@@ -139,23 +139,20 @@ handleInput = do
       inputWords = words inputLowercase
       inputWithPositions = zipWith (,) [1..] inputWords
   refs <- visibleRefs
-  namesAndRefs <- mapM getNameAndAliasesWithRef refs
-  let names = concat namesAndRefs
-  let result = runParser parseLine (sortedNames names) "" inputWithPositions
+  allTokensWithRefs <- concat <$> mapM tokensWithRef refs
+  let nouns = longestFirst allTokensWithRefs
+      longestFirst = sortOn (negate . length . fst)
+      result = runParser parseLine nouns "" inputWithPositions
   case result of
     Left err -> printError err
     Right verb -> doVerb verb
   where
-    sortedNames = longestFirst . tokenizeNames
-    longestFirst = sortOn (negate . length . fst)
-    tokenizeNames = map wordizeName
-    wordizeName (name,ref) = (words name,ref)
 
-getNameAndAliasesWithRef :: Ref -> Game [(String,Ref)]
-getNameAndAliasesWithRef ref = do
+tokensWithRef :: Ref -> Game [([Word],Ref)]
+tokensWithRef ref = do
   names <- allNames ref
   let allNamesLowercase = map toLowerString names
-  return $ map (\str -> (str,ref)) allNamesLowercase
+  return $ map (\str -> (words str,ref)) allNamesLowercase
 
 toLowerString :: String -> String
 toLowerString = map toLower
