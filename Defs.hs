@@ -191,3 +191,8 @@ qualifiedName ref = do
   return $ case article of
     Nothing -> name
     Just a -> a ++ ' ' : name
+
+debugName :: Ref -> Game String
+debugName ref = do
+  name <- getName ref
+  return $ name ++ " (Ref: " ++ show ref ++ ")"

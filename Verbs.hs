@@ -45,7 +45,9 @@ doVerb (Look arg) = do
   ref <- case arg of
     Nothing -> getRoom
     Just ref -> return ref
-  name <- getName ref
+  debug <- getDebug
+  let myName = if debug then debugName else getName
+  name <- myName ref
   msg $ capitalize name
   desc <- getDescription ref
   desc2 <- getDescription2 ref
@@ -70,11 +72,11 @@ doVerb (Look arg) = do
   player <- getPlayer
   let objects = filter (/= player) contents
   when (unlocked && objects /= []) $ do
-    objectNames <- mapM getName objects
+    objectNames <- mapM myName objects
     msg $ "Contents: " ++ humanFriendlyList objectNames ++ "."
   exits <- getExits ref
   when (exits /= []) $ do
-    exitNames <- mapM getName exits
+    exitNames <- mapM myName exits
     msg $ "Exits: " ++ humanFriendlyList exitNames ++ "."
 
 doVerb Inventory = do
