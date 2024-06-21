@@ -305,6 +305,10 @@ doVerb (Examine ref) = do
   msg $ "Article: " ++ show article
   aliases <- getAliases ref
   msg $ "Aliases: " ++ show aliases
+  desc <- getDescription ref
+  msg $ "Description: " ++ show desc
+  desc2 <- getDescription2 ref
+  msg $ "Description2: " ++ show desc2
 
 -- helper function for look and inventory
 humanFriendlyList :: [String] -> String
