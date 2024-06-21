@@ -299,6 +299,12 @@ doVerb (Examine ref) = do
   unless debug $ stop $ "This command is only available in debug mode."
   exists <- ifExists ref
   unless exists $ stop $ "There is nothing with Ref " ++ show ref ++ "."
+  name <- getName ref
+  msg $ "Name: " ++ name
+  article <- getArticle ref
+  msg $ "Article: " ++ show article
+  aliases <- getAliases ref
+  msg $ "Aliases: " ++ show aliases
 
 -- helper function for look and inventory
 humanFriendlyList :: [String] -> String
