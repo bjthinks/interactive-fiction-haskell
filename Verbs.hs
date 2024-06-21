@@ -36,6 +36,7 @@ data Verb = Blank
           | Help
           | Exit
           | Debug Bool
+          | Examine Ref
           deriving Show
 
 doVerb :: Verb -> Game ()
@@ -292,6 +293,8 @@ doVerb Exit = stopPlaying
 doVerb (Debug flag) = do
   setDebug flag
   msg $ "Debug mode is " ++ (if flag then "on" else "off") ++ "."
+
+doVerb (Examine _) = return ()
 
 -- helper function for look and inventory
 humanFriendlyList :: [String] -> String

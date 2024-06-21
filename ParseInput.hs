@@ -8,6 +8,7 @@ import Text.Parsec.Pos
 import Data.List
 import Data.Char
 import Data.Maybe
+import Text.Read
 import Defs
 import Categories
 import Verbs
@@ -30,6 +31,13 @@ matchToken x = token showToken posFromToken testToken >> return ()
 
 matchTokens :: [Word] -> MyParser ()
 matchTokens xs = mapM_ matchToken xs
+
+parseRef :: MyParser Ref
+parseRef = token showToken posFromToken testToken
+  where
+    showToken    (_,w) = show w
+    posFromToken (p,_) = newPos "" 1 p
+    testToken    (_,w) = readMaybe w
 
 noun :: MyParser Ref
 noun = do
@@ -84,11 +92,16 @@ implicitGo = do
   eof
   return $ Go ref
 
+examine :: MyParser Verb
+examine = do
+  matchToken "examine"
+  ref <- parseRef
+  return $ Examine ref
+
 parseLine :: MyParser Verb
 parseLine =
   simpleVerb   "inventory" Inventory |||
-  verbWithNoun "examine" (Look . Just) |||
-  simpleVerb   "examine" (Look Nothing) |||
+  examine |||
   simpleVerb   "search" Search |||
   complexVerb  "unlock" "with" Unlock |||
   verbWithNoun "unlock" UnlockHelp |||
