@@ -140,11 +140,15 @@ handleInput = do
   let inputLowercase = toLowerString input
       inputWords = words inputLowercase
       inputWithPositions = zipWith (,) [1..] inputWords
+  debug <- getDebug
+  when debug $ msg $ "Parsing " ++ show inputWords
   refs <- visibleRefs
+  when debug $ msg "Noun list:"
   allTokensWithRefs <- concat <$> mapM tokensWithRef refs
   let nouns = longestFirst allTokensWithRefs
       longestFirst = sortOn (negate . length . fst)
       result = runParser parseLine nouns "" inputWithPositions
+  when debug $ msg $ "Result: " ++ show result
   case result of
     Left err -> printError err
     Right verb -> doVerb verb
@@ -152,6 +156,8 @@ handleInput = do
 tokensWithRef :: Ref -> Game [([Word],Ref)]
 tokensWithRef ref = do
   names <- allNames ref
+  debug <- getDebug
+  when debug $ msg $ "Ref " ++ show ref ++ ": " ++ show names
   let allNamesLowercase = map toLowerString names
   return $ map (\str -> (words str,ref)) allNamesLowercase
 
