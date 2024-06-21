@@ -155,7 +155,6 @@ doVerb (Go ref) = do
   locked <- getIsLocked ref
   name <- qualifiedName ref
   when locked $ stop $ "The door going " ++ name ++ " is locked."
-  -- TODO put move action in onGo
   action <- getOnGo ref
   action
 

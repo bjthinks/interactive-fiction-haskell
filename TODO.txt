@@ -7,7 +7,6 @@ get all from container
 boards creak in different place?
 describe hhLanding
 git grep TODO
-turn on sprinkler
 burn ants
 consider handling plurals in error messages in Categories.hs (e.g. acorns)?
 light candle with match
