@@ -92,16 +92,17 @@ implicitGo = do
   eof
   return $ Go ref
 
-examine :: MyParser Verb
-examine = do
-  matchToken "examine"
+developer :: String -> (Ref -> Verb) -> MyParser Verb
+developer name def = do
+  matchToken name
   ref <- parseRef
-  return $ Examine ref
+  return $ def ref
 
 parseLine :: MyParser Verb
 parseLine =
   simpleVerb   "inventory" Inventory |||
-  examine |||
+  developer    "teleport" Teleport |||
+  developer    "examine" Examine |||
   simpleVerb   "search" Search |||
   complexVerb  "unlock" "with" Unlock |||
   verbWithNoun "unlock" UnlockHelp |||

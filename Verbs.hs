@@ -37,6 +37,7 @@ data Verb = Blank
           | Exit
           | Debug Bool
           | Examine Ref
+          | Teleport Ref
           deriving Show
 
 doVerb :: Verb -> Game ()
@@ -323,6 +324,8 @@ doVerb (Examine ref) = do
   msg $ "isLocked: " ++ show isLocked
   key <- getKey ref
   msg $ "Key: " ++ show key
+
+doVerb (Teleport _) = undefined
 
 -- helper function for look and inventory
 humanFriendlyList :: [String] -> String
