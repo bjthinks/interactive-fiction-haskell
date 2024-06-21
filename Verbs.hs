@@ -311,6 +311,8 @@ doVerb (Examine ref) = do
   msg $ "Description2: " ++ show desc2
   location <- getLocation ref
   msg $ "Location: " ++ show location
+  contents <- getContents' ref
+  msg $ "Contents: " ++ show contents
 
 -- helper function for look and inventory
 humanFriendlyList :: [String] -> String
