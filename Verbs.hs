@@ -325,7 +325,12 @@ doVerb (Examine ref) = do
   key <- getKey ref
   msg $ "Key: " ++ show key
 
-doVerb (Teleport _) = undefined
+doVerb (Teleport ref) = do
+  debug <- getDebug
+  unless debug $ stop $ "This command is only available in debug mode."
+  exists <- ifExists ref
+  unless exists $ stop $ "There is nothing with Ref " ++ show ref ++ "."
+  undefined
 
 -- helper function for look and inventory
 humanFriendlyList :: [String] -> String
