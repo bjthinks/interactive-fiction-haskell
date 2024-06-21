@@ -47,14 +47,16 @@ data GameState = GameState { things :: M.Map Ref Thing,
                              maybePlayer :: Maybe Ref,
                              score :: Int,
                              maxScore :: Int,
-                             keepPlaying :: Bool }
+                             keepPlaying :: Bool,
+                             debug :: Bool }
 
 startState = GameState { things = M.empty,
                          nextThing = 0,
                          maybePlayer = Nothing,
                          score = 0,
                          maxScore = 0,
-                         keepPlaying = True }
+                         keepPlaying = True,
+                         debug = False }
 
 type MoveInput = String
 type MoveOutput = String
