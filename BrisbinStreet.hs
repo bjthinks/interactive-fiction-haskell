@@ -753,16 +753,19 @@ buildWorld = do
         disconnect bathroomEntrance
         connect staircaseEntrance hhKitchen hhStaircase
         setOnGet book onGetBook2
+        setOnUse book onGetBook2
       onGetBook2 = do
         getBookMessage
         disconnect staircaseEntrance
         connect bathroomEntrance hhReadingRoom hhBathroom1
         setOnGet book onGetBook1
+        setOnUse book onGetBook1
       getBookMessage = msg $
         "You try to pick up the red book, but it appears to be attached " ++
         "to some kind of mechanism. You hear walls moving, and the floor " ++
         "plan of the house changes!"
   setOnGet book onGetBook2
+  setOnUse book onGetBook2
 
   setOnUse sprinkler $ do
     let goodGrassLocs =
