@@ -597,6 +597,7 @@ buildWorld = do
     "This is a common spiral bound notebook with a puce cover."
   potion <- newObject writingDesk "potion" $
     "The label reads \"Invisibility\"."
+  setOnRead potion $ doVerb $ Look (Just potion)
 
   hhReadingRoom <- newRoom "reading room" $
     "There are three high backed reading chairs upholstered in red suede " ++
@@ -647,6 +648,7 @@ buildWorld = do
   addAlias flask "holy water"
   setOnDrink flask $ msg $ "You have a feeling the contents of this flask " ++
     "are too important to drink."
+  setOnRead flask $ doVerb $ Look (Just flask)
 
   hhDiningRoom <- newRoom "dining room" $
     "This dining room has a huge octagonal hardwood table with eight chairs " ++
