@@ -48,7 +48,7 @@ data GameState = GameState { things :: M.Map Ref Thing,
                              score :: Int,
                              maxScore :: Int,
                              keepPlaying :: Bool,
-                             debug :: Bool }
+                             debugFlag :: Bool }
 
 startState = GameState { things = M.empty,
                          nextThing = 0,
@@ -56,7 +56,7 @@ startState = GameState { things = M.empty,
                          score = 0,
                          maxScore = 0,
                          keepPlaying = True,
-                         debug = False }
+                         debugFlag = False }
 
 type MoveInput = String
 type MoveOutput = String
@@ -88,12 +88,12 @@ stopPlaying = do
   put $ st { keepPlaying = False }
 
 getDebug :: Game Bool
-getDebug = debug <$> get
+getDebug = debugFlag <$> get
 
 setDebug :: Bool -> Game ()
 setDebug flag = do
   st <- get
-  put $ st { debug = flag }
+  put $ st { debugFlag = flag }
 
 getThing :: Ref -> Game Thing
 getThing ref = (fromJust . M.lookup ref . things) <$> get
