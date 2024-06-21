@@ -300,7 +300,7 @@ doVerb (Examine ref) = do
   exists <- ifExists ref
   unless exists $ stop $ "There is nothing with Ref " ++ show ref ++ "."
   name <- getName ref
-  msg $ "Name: " ++ name
+  msg $ "Name: " ++ show name
   article <- getArticle ref
   msg $ "Article: " ++ show article
   aliases <- getAliases ref
@@ -313,6 +313,16 @@ doVerb (Examine ref) = do
   msg $ "Location: " ++ show location
   contents <- getContents' ref
   msg $ "Contents: " ++ show contents
+  exits <- getExits ref
+  msg $ "Exits: " ++ show exits
+  path <- getPath ref
+  msg $ "Path: " ++ show path
+  isContainer <- getIsContainer ref
+  msg $ "isContainer: " ++ show isContainer
+  isLocked <- getIsLocked ref
+  msg $ "isLocked: " ++ show isLocked
+  key <- getKey ref
+  msg $ "Key: " ++ show key
 
 -- helper function for look and inventory
 humanFriendlyList :: [String] -> String
