@@ -287,7 +287,9 @@ doVerb Help = do
 
 doVerb Exit = stopPlaying
 
-doVerb (Debug _) = undefined
+doVerb (Debug flag) = do
+  setDebug flag
+  msg $ "Debug mode is " ++ (if flag then "on" else "off") ++ "."
 
 -- helper function for look and inventory
 humanFriendlyList :: [String] -> String

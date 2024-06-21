@@ -72,7 +72,7 @@ stop str = msg str >> mzero
 
 getPlayer :: Game Ref
 getPlayer = do
-  mp <- fmap maybePlayer get
+  mp <- maybePlayer <$> get
   case mp of
     Just player -> return player
     Nothing -> error "Internal error: player not set"
@@ -87,8 +87,16 @@ stopPlaying = do
   st <- get
   put $ st { keepPlaying = False }
 
+getDebug :: Game Bool
+getDebug = debug <$> get
+
+setDebug :: Bool -> Game ()
+setDebug flag = do
+  st <- get
+  put $ st { debug = flag }
+
 getThing :: Ref -> Game Thing
-getThing ref = fmap (fromJust . M.lookup ref . things) get
+getThing ref = (fromJust . M.lookup ref . things) <$> get
 
 getProperty :: (Thing -> a) -> Ref -> Game a
 getProperty property = fmap property . getThing
