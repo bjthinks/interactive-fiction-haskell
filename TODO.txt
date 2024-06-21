@@ -10,3 +10,4 @@ git grep TODO
 burn ants
 consider handling plurals in error messages in Categories.hs (e.g. acorns)?
 light candle with match
+See if I can do better when the ParseError is an unexpected end of input
