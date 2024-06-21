@@ -62,10 +62,10 @@ compoundVerb name def = do
   eof
   return $ def ref
 
-verbWithAll :: Word -> Verb -> MyParser Verb
-verbWithAll name def = do
+verbWithWord :: Word -> Word -> Verb -> MyParser Verb
+verbWithWord name arg def = do
   matchToken name
-  matchToken "all"
+  matchToken arg
   eof
   return def
 
@@ -94,12 +94,14 @@ parseLine =
   verbWithNoun "unlock" UnlockHelp |||
   complexVerb  "close" "with" Lock |||
   verbWithNoun "close" LockHelp |||
+  verbWithWord "debug" "off" (Debug False) |||
+  verbWithWord "debug" "on" (Debug True) |||
   verbWithNoun "drink" Drink |||
   verbWithNoun "light" Light |||
   simpleVerb   "score" Score |||
   verbWithNoun "throw" Throw |||
   verbWithNoun "drop" Drop |||
-  verbWithAll  "drop" DropAll |||
+  verbWithWord "drop" "all" DropAll |||
   simpleVerb   "exit" Exit |||
   simpleVerb   "help" Help |||
   complexVerb  "lock" "with" Lock |||
@@ -113,13 +115,13 @@ parseLine =
   simpleVerb   "quit" Exit |||
   verbWithNoun "read" Read |||
   verbWithNoun "take" Get |||
-  verbWithAll  "take" GetAll |||
+  verbWithWord "take" "all" GetAll |||
   complexVerb  "take" "from" GetFrom |||
   compoundVerb ["turn", "off"] TurnOff |||
   compoundVerb ["turn", "on"] TurnOn |||
   verbWithNoun "eat" Eat |||
   verbWithNoun "get" Get |||
-  verbWithAll  "get" GetAll |||
+  verbWithWord "get" "all" GetAll |||
   complexVerb  "get" "from" GetFrom |||
   verbWithNoun "pet" Pet |||
   complexVerb  "put" "into" PutIn |||

@@ -35,6 +35,7 @@ data Verb = Blank
           | Score
           | Help
           | Exit
+          | Debug Bool
           deriving Show
 
 doVerb :: Verb -> Game ()
@@ -285,6 +286,8 @@ doVerb Help = do
     "\"n\" is short for \"go north\"."
 
 doVerb Exit = stopPlaying
+
+doVerb (Debug _) = undefined
 
 -- helper function for look and inventory
 humanFriendlyList :: [String] -> String
