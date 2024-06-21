@@ -7,8 +7,6 @@ import Verbs
 import Control.Monad.RWS
 import qualified Data.Map.Strict as M
 
--- TODO: better variable names in this file
-
 newThing :: Game Ref
 newThing = do
   oldState <- get
