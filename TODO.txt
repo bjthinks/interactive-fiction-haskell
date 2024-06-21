@@ -7,12 +7,10 @@ get all from container
 boards creak in different place?
 describe hhLanding
 clean up error logic in Mainloop.hs
-addAlias "here" in newRoom
 git grep TODO
 turn on sprinkler
 defaultThing needs its own file
 connect bathroom to bar
 burn ants
-use acorns
 consider handling plurals in error messages in Categories.hs (e.g. acorns)
 light candle with match
