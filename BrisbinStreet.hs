@@ -772,24 +772,29 @@ buildWorld = do
   setOnGet book onGetBook2
   setOnUse book onGetBook2
 
-  setOnUse sprinkler $ do
-    let goodGrassLocs =
-          [backyard, frontYard, nickYard, mikeYard, justinYard, motel,
-           hauntedYard]
-        defaultStop = stop "There isn\'t any grass to water here."
-        healthyGrassStr = "The grass here is green and healthy."
-    maybeSprinklerLoc <- getLocation sprinkler
-    when (isNothing maybeSprinklerLoc) defaultStop
-    let sprinklerLoc = fromJust maybeSprinklerLoc
-    when (sprinklerLoc == player) $ stop "You should drop the sprinkler first."
-    when (elem sprinklerLoc goodGrassLocs) $ stop healthyGrassStr
-    when (sprinklerLoc /= sideYard) defaultStop
-    msg $ "You hook up the sprinkler to the hose and turn it on. The " ++
-      "grass greens up right away."
-    addPoints 10 "watering the grass"
-    setOnUse sprinkler $ stop "The sprinkler is already running."
-    setOnGet sprinkler $ stop "You would get wet."
-    setDescription2 sideYard healthyGrassStr
+  let useSprinkler = do
+        let goodGrassLocs =
+              [backyard, frontYard, nickYard, mikeYard, justinYard, motel,
+               hauntedYard]
+            defaultStop = stop "There isn\'t any grass to water here."
+            healthyGrassStr = "The grass here is green and healthy."
+            alreadyRunning = stop "The sprinkler is already running."
+        maybeSprinklerLoc <- getLocation sprinkler
+        when (isNothing maybeSprinklerLoc) defaultStop
+        let sprinklerLoc = fromJust maybeSprinklerLoc
+        when (sprinklerLoc == player) $ stop
+          "You should drop the sprinkler first."
+        when (elem sprinklerLoc goodGrassLocs) $ stop healthyGrassStr
+        when (sprinklerLoc /= sideYard) defaultStop
+        msg $ "You hook up the sprinkler to the hose and turn it on. The " ++
+          "grass greens up right away."
+        addPoints 10 "watering the grass"
+        setOnUse sprinkler alreadyRunning
+        setOnTurnOn sprinkler alreadyRunning
+        setOnGet sprinkler $ stop "You would get wet."
+        setDescription2 sideYard healthyGrassStr
+  setOnUse sprinkler useSprinkler
+  setOnTurnOn sprinkler useSprinkler
 
   setMaxScore 95
 
