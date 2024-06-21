@@ -98,6 +98,10 @@ setDebug flag = do
 getThing :: Ref -> Game Thing
 getThing ref = (fromJust . M.lookup ref . things) <$> get
 
+-- Used by debug mode commands only
+ifExists :: Ref -> Game Bool
+ifExists ref = (isJust . M.lookup ref . things) <$> get
+
 getProperty :: (Thing -> a) -> Ref -> Game a
 getProperty property = fmap property . getThing
 

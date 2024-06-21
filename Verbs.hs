@@ -294,7 +294,11 @@ doVerb (Debug flag) = do
   setDebug flag
   msg $ "Debug mode is " ++ (if flag then "on" else "off") ++ "."
 
-doVerb (Examine _) = return ()
+doVerb (Examine ref) = do
+  debug <- getDebug
+  unless debug $ stop $ "This command is only available in debug mode."
+  exists <- ifExists ref
+  unless exists $ stop $ "There is nothing with Ref " ++ show ref ++ "."
 
 -- helper function for look and inventory
 humanFriendlyList :: [String] -> String
