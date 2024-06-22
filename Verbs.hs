@@ -168,7 +168,13 @@ doVerb (PutAllIn container) = do
   stopIfNotObject "put things into" container
   stopIfInOpenContainer "put things into" container
   stopIfNotOpenContainer container
-  undefined
+  inventory <- getInventory
+  let thingsToPutIn = filter (/= container) inventory
+  containerName <- qualifiedName container
+  when (thingsToPutIn == []) $ stop $ "You don\'t have anything to put in " ++
+    containerName ++ "."
+  let putInContainer = flip PutIn container
+  mapM_ (doVerb . putInContainer) thingsToPutIn
 
 doVerb (Go ref) = do
   let verb = "go to or through"
