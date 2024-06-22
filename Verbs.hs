@@ -56,9 +56,9 @@ doVerb (Look arg) = do
   msg $ capitalize name
   desc <- getDescription ref
   desc2 <- getDescription2 ref
-  when (desc /= "" || desc2 /= "") $
-    if desc == "" then msg desc2 else if desc2 == "" then msg desc else
-      msg $ desc ++ ' ' : desc2
+  when (desc /= "" || desc2 /= "") $ msg $
+    if desc == "" then desc2 else if desc2 == "" then desc else
+      desc ++ ' ' : desc2
   path <- getPath ref
   when (isJust path) $ do
     let (src,dest) = fromJust path
