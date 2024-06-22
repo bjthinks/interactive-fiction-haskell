@@ -191,12 +191,12 @@ doVerb (Go ref) = do
   action
 
 doVerb (Eat ref) = do
-  stopIfNotUsable "eat" ref
+  stopIfNotAccessible "eat" ref
   action <- getOnEat ref
   action
 
 doVerb (Drink ref) = do
-  stopIfNotUsable "drink" ref
+  stopIfNotAccessible "drink" ref
   action <- getOnDrink ref
   action
 
@@ -211,27 +211,27 @@ doVerb (Use ref) = do
   action
 
 doVerb (TurnOn ref) = do
-  stopIfNotUsable "turn on" ref
+  stopIfNotAccessible "turn on" ref
   action <- getOnTurnOn ref
   action
 
 doVerb (TurnOff ref) = do
-  stopIfNotUsable "turn off" ref
+  stopIfNotAccessible "turn off" ref
   action <- getOnTurnOff ref
   action
 
 doVerb (Light ref) = do
-  stopIfNotUsable "light" ref
+  stopIfNotAccessible "light" ref
   action <- getOnLight ref
   action
 
 doVerb (Read ref) = do
-  stopIfNotUsable "read" ref
+  stopIfNotAccessible "read" ref
   action <- getOnRead ref
   action
 
 doVerb (Pet ref) = do
-  stopIfNotUsable "pet" ref
+  stopIfNotAccessible "pet" ref
   action <- getOnPet ref
   action
 

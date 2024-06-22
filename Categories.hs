@@ -148,8 +148,8 @@ stopIfNotInInventory verb ref = do
   stopIfInOpenContainer verb ref
 
 -- Not used for the Use verb, because of Gabby's Dollhouse
-stopIfNotUsable :: String -> Ref -> Game ()
-stopIfNotUsable verb ref = do
+stopIfNotAccessible :: String -> Ref -> Game ()
+stopIfNotAccessible verb ref = do
   stopIfNotObject verb ref
   stopIfInOpenContainer verb ref
 
