@@ -538,7 +538,8 @@ buildWorld = do
     "noticable addition and multiple floors. There is a crabapple tree " ++
     "here."
   setArticle justinYard Nothing
-  setDescription2 justinYard "Bimbo the cat is hanging out in the yard."
+  let bimboIsHere = "Bimbo the cat is hanging out in the yard."
+  setDescription2 justinYard bimboIsHere
   newExit "south" eastBrisbin justinYard
   newExit "north" justinYard eastBrisbin
   crabapple <- newObject justinYard "crabapple" $
@@ -695,6 +696,11 @@ buildWorld = do
             "He squirms out of your grasp and runs into the backyard!"
           moveNowhere bimbo
           setDescription2 justinYard ""
+          queueAction 3 $ do
+            room <- getRoom
+            when (room == justinYard) $ msg "Bimbo returns to the front yard."
+            move bimbo justinYard
+            setDescription2 justinYard bimboIsHere
   setOnDrink potion usePotion
   setOnUse potion usePotion
 

@@ -92,6 +92,11 @@ setDelayedActions actions = do
   st <- get
   put $ st { delayedActions = actions }
 
+queueAction :: Int -> Game () -> Game ()
+queueAction turns action = do
+  actions <- getDelayedActions
+  setDelayedActions $ (turns, action) : actions
+
 stopPlaying :: Game ()
 stopPlaying = do
   st <- get
