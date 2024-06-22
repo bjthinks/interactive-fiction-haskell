@@ -8,3 +8,8 @@ burn ants (with magnifying glass)
 consider handling plurals in error messages in Categories.hs (e.g. acorns)?
 light candle with match -- complicated
 See if I can do better when the ParseError is an unexpected end of input
+pet bimbo while invisible should be changed
+get misty while invisible
+pet misty while invisible -- get points? unclear.
+black cat while invisible too???
+maybe there should be a different way to get the skull key from the ghosts!
