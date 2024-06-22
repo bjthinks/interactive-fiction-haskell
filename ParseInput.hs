@@ -96,6 +96,7 @@ developer :: String -> (Ref -> Verb) -> MyParser Verb
 developer name def = do
   matchToken name
   ref <- parseRef
+  eof
   return $ def ref
 
 parseLine :: MyParser Verb
