@@ -72,11 +72,12 @@ doVerb (Look arg) = do
           else pathStr
     msg message
   contents <- getContents' ref
+  container <- getIsContainer ref
   unlocked <- getIsUnlocked ref
   -- You don't see yourself
   player <- getPlayer
   let objects = filter (/= player) contents
-  when (unlocked && objects /= []) $ do
+  when (container && unlocked && objects /= []) $ do
     objectNames <- mapM myName objects
     msg $ "Contents: " ++ humanFriendlyList objectNames ++ "."
   exits <- getExits ref

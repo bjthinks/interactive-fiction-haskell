@@ -27,6 +27,7 @@ buildWorld = do
   addAlias player "me"
   setArticle player Nothing
   setPlayer player
+  makeContainer player
   backpack <- newObject player "backpack" "A blue canvas backpack."
   makeContainer backpack
   mathBook <- newObject backpack "math book" $

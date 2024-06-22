@@ -114,6 +114,7 @@ newRoom name desc = do
   setArticle ref $ Just "the" -- In most cases, this is right
   setName ref name
   setDescription ref desc
+  makeContainer ref
   return ref
 
 newObject :: Ref -> String -> String -> Game Ref
