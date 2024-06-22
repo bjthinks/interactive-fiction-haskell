@@ -15,7 +15,7 @@ processDelayedActions input = process [] [] input
   where
     process nows laters [] = (nows, laters)
     process nows laters ((t,a):is)
-      | t <= 1    = process (a:nows) laters is
+      | t <= 0    = process (a:nows) laters is
       | otherwise = process nows ((t-1,a):laters) is
 
 runActions :: [Game ()] -> GameState -> MaybeT (InputT IO) GameState
@@ -28,11 +28,11 @@ runActions (action:actions) oldState = do
 mainloop :: GameState -> MaybeT (InputT IO) ()
 mainloop oldState = do
   line <- MaybeT $ getInputLine "> "
-  let (nows, laters) = processDelayedActions $ delayedActions oldState
-      newState = oldState { delayedActions = laters }
-  newState2 <- runActions nows newState
-  let (newState3, response) = execRWS (runMaybeT handleInput) line newState2
+  let (newState, response) = execRWS (runMaybeT handleInput) line oldState
   liftIO $ putStr $ wordWrap response
+  let (nows, laters) = processDelayedActions $ delayedActions newState
+      newState2 = newState { delayedActions = laters }
+  newState3 <- runActions nows newState2
   when (keepPlaying newState3) (mainloop newState3)
 
 startup :: Game () -> Game ()
