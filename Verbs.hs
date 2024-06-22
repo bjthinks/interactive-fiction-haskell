@@ -6,6 +6,7 @@ import Control.Monad
 
 import Defs
 import Categories
+import Actions
 import Score
 
 data Verb = Blank
@@ -330,7 +331,9 @@ doVerb (Teleport ref) = do
   unless debug $ stop $ "This command is only available in debug mode."
   exists <- ifExists ref
   unless exists $ stop $ "There is nothing with Ref " ++ show ref ++ "."
-  undefined
+  player <- getPlayer
+  move player ref
+  doVerb (Look Nothing)
 
 -- helper function for look and inventory
 humanFriendlyList :: [String] -> String
