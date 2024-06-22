@@ -19,6 +19,7 @@ data Verb = Blank
           | Drop Ref
           | DropAll
           | PutIn Ref Ref
+          | PutAllIn Ref
           | Go Ref
           | Eat Ref
           | Drink Ref
@@ -162,6 +163,12 @@ doVerb (PutIn ref container) = do
     " inside itself!"
   action <- getOnPutIn ref
   action container
+
+doVerb (PutAllIn container) = do
+  stopIfNotObject "put things into" container
+  stopIfInOpenContainer "put things into" container
+  stopIfNotOpenContainer container
+  undefined
 
 doVerb (Go ref) = do
   let verb = "go to or through"
