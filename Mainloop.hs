@@ -10,12 +10,27 @@ import ParseInput
 import Verbs
 import WordWrap
 
+processDelayedActions :: [(Int, Game())] -> ([Game ()], [(Int, Game())])
+processDelayedActions input = process [] [] input
+  where
+    process nows laters [] = (nows, laters)
+    process nows laters ((t,a):is)
+      | t <= 1    = process (a:nows) laters is
+      | otherwise = process nows ((t-1,a):laters) is
+
+runActions :: [Game ()] -> GameState -> MaybeT (InputT IO) GameState
+runActions [] st = return st
+runActions _ _ = undefined
+
 mainloop :: GameState -> MaybeT (InputT IO) ()
 mainloop oldState = do
   line <- MaybeT $ getInputLine "> "
-  let (newState, response) = execRWS (runMaybeT handleInput) line oldState
+  let (nows, laters) = processDelayedActions $ delayedActions oldState
+      newState = oldState { delayedActions = laters }
+  newState2 <- runActions nows newState
+  let (newState3, response) = execRWS (runMaybeT handleInput) line newState2
   liftIO $ putStr $ wordWrap response
-  when (keepPlaying newState) (mainloop newState)
+  when (keepPlaying newState3) (mainloop newState3)
 
 startup :: Game () -> Game ()
 startup buildWorld = do
