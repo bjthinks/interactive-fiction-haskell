@@ -138,6 +138,7 @@ parseLine =
   verbWithNoun "get" Get |||
   verbWithWord "get" "all" GetAll |||
   complexVerb  "get" "from" GetFrom |||
+  compoundVerb ["get", "all", "from"] GetAllFrom |||
   verbWithNoun "pet" Pet |||
   complexVerb  "put" "into" PutIn |||
   complexVerb  "put" "in" PutIn |||

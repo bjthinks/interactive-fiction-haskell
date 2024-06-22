@@ -15,6 +15,7 @@ data Verb = Blank
           | Get Ref
           | GetAll
           | GetFrom Ref Ref
+          | GetAllFrom Ref
           | Drop Ref
           | DropAll
           | PutIn Ref Ref
@@ -121,6 +122,18 @@ doVerb (GetFrom ref container) = do
   -- ref is in container
   action <- getOnGetFrom ref
   action container
+
+doVerb (GetAllFrom container) = do
+  stopIfNotObject "get things out of" container
+  stopIfInOpenContainer "get things out of" container
+  stopIfNotOpenContainer container
+  contents <- getContents' container
+  -- The player's room is already excluded by stopIfNotObject, so
+  -- contents will not include the player
+  containerName <- qualifiedName container
+  when (contents == []) $ stop $ capitalize containerName ++ " is empty."
+  let getFromContainer = flip GetFrom container
+  mapM_ (doVerb . getFromContainer) contents
 
 doVerb (Drop ref) = do
   stopIfNotInInventory "drop" ref
