@@ -20,7 +20,10 @@ processDelayedActions input = process [] [] input
 
 runActions :: [Game ()] -> GameState -> MaybeT (InputT IO) GameState
 runActions [] st = return st
-runActions _ _ = undefined
+runActions (action:actions) oldState = do
+  let (newState, response) = execRWS (runMaybeT action) "" oldState
+  liftIO $ putStr $ wordWrap response
+  runActions actions newState
 
 mainloop :: GameState -> MaybeT (InputT IO) ()
 mainloop oldState = do
