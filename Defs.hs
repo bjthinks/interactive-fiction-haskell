@@ -84,6 +84,14 @@ setPlayer player = do
   st <- get
   put $ st { maybePlayer = Just player }
 
+getDelayedActions :: Game [(Int, Game ())]
+getDelayedActions = delayedActions <$> get
+
+setDelayedActions :: [(Int, Game ())] -> Game ()
+setDelayedActions actions = do
+  st <- get
+  put $ st { delayedActions = actions }
+
 stopPlaying :: Game ()
 stopPlaying = do
   st <- get
