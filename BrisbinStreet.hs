@@ -759,9 +759,6 @@ buildWorld = do
     msg "You look in the cupboards and find some cans of tuna."
     addPoints 5 "finding something delicious"
     setOnSearch hhKitchen defaultSearchKitchen
-  setOpener tuna (Just canOpener)
-  setOnOpen tuna $ do
-    msg "You open the can of tuna with the can opener."
 
   hhStaircase <- newRoom "spiral staircase" $
     "This room has a very large and opulent spiral staircase going to the " ++
@@ -778,6 +775,26 @@ buildWorld = do
   setOnGet blackCat $ msg $ "The cat bares its claws and hisses. There is " ++
     "no way you would try to pick up such an unfriendly cat."
   setOnPet blackCat $ msg "There is no way to pet such an unfriendly cat."
+
+  defaultDropTuna <- getOnDrop tuna
+  let checkIfKittyEatsTuna = do
+        tunaLoc <- getLocation tuna
+        when (tunaLoc == Just hhStaircase) $ do
+          msg $ "The black cat eats the tuna from the can in no time. She " ++
+            "must have been hungry!"
+          setName tuna "empty can of tuna"
+          setDescription tuna "This is just an empty can now."
+          setOnDrop tuna defaultDropTuna
+  setOpener tuna (Just canOpener)
+  setOnOpen tuna $ do
+    msg "You open the can of tuna with the can opener."
+    setName tuna "open can of tuna"
+    addAlias tuna "can of tuna"
+    setDescription tuna "Any cat would eat this tuna right up."
+    setOnDrop tuna $ do
+      defaultDropTuna
+      checkIfKittyEatsTuna
+    checkIfKittyEatsTuna -- in case it is opened while in the right place
 
   shortcut <- newExit "secret passage to haunted house kitchen"
     brisbin hhKitchen
