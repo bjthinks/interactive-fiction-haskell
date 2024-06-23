@@ -782,9 +782,12 @@ buildWorld = do
         when (tunaLoc == Just hhStaircase) $ do
           msg $ "The black cat eats the tuna from the can in no time. She " ++
             "must have been hungry!"
+          friendlyKitty
           setName tuna "empty can of tuna"
           setDescription tuna "This is just an empty can now."
           setOnDrop tuna defaultDropTuna
+      friendlyKitty = do
+        return () -- TODO
   setOpener tuna (Just canOpener)
   setOnOpen tuna $ do
     msg "You open the can of tuna with the can opener."
@@ -802,17 +805,8 @@ buildWorld = do
 
   hhLanding <- newRoom "landing" $
     ""
-  upSpiral <- newExit "up" hhStaircase hhLanding
-  downSpiral <- newExit "down" hhLanding hhStaircase
-  beforeGo upSpiral $ do
-    msg $ "The black cat follows you upstairs. You feel like you are being " ++
-      "watched."
-    move blackCat hhLanding
-  beforeGo downSpiral $ do
-    msg $ "The black cat watches you carefully as you descend the stairs. " ++
-      "When you get to the bottom, it takes up position at the base of the " ++
-      "stairs, as if it\'s standing guard over the upstairs level."
-    move blackCat hhStaircase
+  newExit "up" hhStaircase hhLanding
+  newExit "down" hhLanding hhStaircase
 
   hhAtrium <- newRoom "atrium" $
     "This room has a large vaulted skylight covering the ceiling. There are " ++
