@@ -607,8 +607,16 @@ buildWorld = do
         msg "You put on the ghost costume."
         setDescription2 player $ "You are wearing a classic ghost costume " ++
           "over your clothes."
+      putCostume destination = do
+        move costume destination
+        msg "You take off the ghost costume."
+        setDescription2 player ""
   setOnGet costume getCostume
   setOnGetFrom costume $ \_ -> getCostume
+  setOnDrop costume $ do
+    room <- getRoom
+    putCostume room
+  setOnPutIn costume putCostume
   setOnGet bimbo $ do
     costumeLocation <- getLocation costume
     unless (costumeLocation == Just player) $ stop $
