@@ -540,8 +540,13 @@ buildWorld = do
   addAliases misty ["bunny", "rabbit", "the bunny", "the rabbit"]
   setOnGet misty $ msg $ "Misty doesn\'t know you very well, so she hops " ++
     "away from your outstreched arms."
-  let happyMisty = msg $ "You gently pet Misty between her eyes and nose. " ++
-        "She excitedly hops about; she loves being pet there."
+  let happyMisty = do
+        msg $ "You gently pet Misty between her eyes and nose. " ++
+          "She excitedly hops about; she loves being pet there."
+        queueAction 2 $ do
+          room <- getRoom
+          when (room == mikeYard) $ msg $ "Misty hops up to you and wants " ++
+            "to be pet again."
   setOnPet misty $ do
     happyMisty
     addPoints 10 "being so loving to a deserving animal"
