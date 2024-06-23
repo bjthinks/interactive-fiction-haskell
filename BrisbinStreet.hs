@@ -600,9 +600,9 @@ buildWorld = do
   addAlias writingDesk "drawer"
   newObject writingDesk "notebook" $
     "This is a common spiral bound notebook with a puce cover."
-  potion <- newObject writingDesk "potion" $
-    "The label reads \"Invisibility\"."
-  setOnRead potion $ doVerb $ Look (Just potion)
+  costume <- newObject writingDesk "ghost costume" $
+    "This is a plain white sheet with two holes for your eyes. The corners " ++
+    "have been cut off to make it circular. A classic Halloween costume!"
 
   hhReadingRoom <- newRoom "reading room" $
     "There are three high backed reading chairs upholstered in red suede " ++
@@ -675,34 +675,17 @@ buildWorld = do
     "This key has a tiny metal skull on its handle. Who knows what it " ++
     "unlocks?"
   defaultGetSkullKey <- getOnGet skullKey
-  setOnGet skullKey $ msg $
-    "You approach the table to pick up the key, but the ghosts all turn " ++
-    "towards you and bare their huge ghostly teeth! You are too scared to " ++
-    "go on."
-  let usePotion = do
-        msg $ "You drink the potion, and watch in amazement as you turn " ++
-          "invisible, clothes and all!"
-        moveNowhere potion
-        setDescription2 player $
-          "At least, you think that\'s what you\'re wearing; it\'s hard to " ++
-          "tell now that you\'re invisible!"
-        setOnGet skullKey $ do
-          msg "You sneak up to the table, and the ghosts don\'t see you!"
-          defaultGetSkullKey
-          addPoints 5 "turning the tables on the three ghosts"
-          setOnGet skullKey defaultGetSkullKey
-        setOnGet bimbo $ do
-          msg $ "Bimbo is shocked to be picked up by an invisible person. " ++
-            "He squirms out of your grasp and runs into the backyard!"
-          moveNowhere bimbo
-          setDescription2 justinYard ""
-          queueAction 3 $ do
-            room <- getRoom
-            when (room == justinYard) $ msg "Bimbo returns to the front yard."
-            move bimbo justinYard
-            setDescription2 justinYard bimboIsHere
-  setOnDrink potion usePotion
-  setOnUse potion usePotion
+  setOnGet skullKey $ do
+    costumeLocation <- getLocation costume
+    unless (costumeLocation == Just player) $ stop $
+      "You approach the table to pick up the key, but the ghosts all turn " ++
+      "towards you and bare their huge ghostly teeth! You are too scared to " ++
+      "go on."
+    msg $ "Wearing your ghost costume, you walk right up to the table and " ++
+      "take the skull key from the ghosts."
+    defaultGetSkullKey
+    addPoints 5 "turning the tables on the three ghosts"
+    setOnGet skullKey defaultGetSkullKey
 
   hhKitchen <- newRoom "kitchen" $
     "This kitchen is a complete mess. Someone has thrown all of the dishes " ++
