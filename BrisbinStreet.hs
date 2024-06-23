@@ -759,6 +759,9 @@ buildWorld = do
     msg "You look in the cupboards and find some cans of tuna."
     addPoints 5 "finding something delicious"
     setOnSearch hhKitchen defaultSearchKitchen
+  setOpener tuna (Just canOpener)
+  setOnOpen tuna $ do
+    msg "You open the can of tuna with the can opener."
 
   hhStaircase <- newRoom "spiral staircase" $
     "This room has a very large and opulent spiral staircase going to the " ++

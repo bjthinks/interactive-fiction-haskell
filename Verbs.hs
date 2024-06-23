@@ -297,13 +297,18 @@ doVerb (LockHelp ref) = do
   stop $ "What do you want to lock " ++ name ++ " with?"
 
 doVerb (Open item tool) = do
-  maybeAction <- getOnOpen item
-  case maybeAction of
+  maybeOpener <- getOpener item
+  itemName <- qualifiedName item
+  toolName <- qualifiedName tool
+  case maybeOpener of
     Nothing -> doVerb (Unlock item tool)
-    Just action -> do
+    Just opener -> do
       stopIfNotAccessible "open" item
       stopIfNotAccessible "open with" tool
-      action tool
+      unless (opener == tool) $ stop $ capitalize toolName ++
+        " is not the right tool to open " ++ itemName ++ " with."
+      action <- getOnOpen item
+      action
 
 doVerb (OpenHelp item) = do
   name <- qualifiedName item
