@@ -98,7 +98,21 @@ buildWorld = do
         setOnTurnOff airConditioner $ stop $ "You don\'t want to turn " ++
           "it off. It would get hot and muggy again."
         setDescription2 living "It feels cool and pleasant in here."
-        setDescription2 airConditioner "The unit hums noisily as it runs."
+        let acDesc2On = "The unit hums noisily as it runs."
+            acCyclesOn = do
+              room <- getRoom
+              when (room == living) $ msg $ "The air conditioner cycles on. " ++
+                acDesc2On
+              setDescription2 airConditioner acDesc2On
+              queueAction 4 acCyclesOff
+            acCyclesOff = do
+              room <- getRoom
+              when (room == living) $ msg $ "The air conditioner cycles " ++
+                "off. It is suddenly quiet."
+              setDescription2 airConditioner ""
+              queueAction 4 acCyclesOn
+        setDescription2 airConditioner acDesc2On
+        queueAction 5 acCyclesOff
   setOnUse airConditioner acFails
   setOnTurnOn airConditioner acFails
   setOnTurnOff airConditioner $ stop "The air conditioner isn\'t running."
