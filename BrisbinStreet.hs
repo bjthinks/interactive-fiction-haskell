@@ -776,6 +776,19 @@ buildWorld = do
     "no way you would try to pick up such an unfriendly cat."
   setOnPet blackCat $ msg "There is no way to pet such an unfriendly cat."
 
+  shortcut <- newExit "secret passage to haunted house kitchen"
+    brisbin hhKitchen
+  addAlias shortcut "k"
+
+  hhLanding <- newRoom "landing" $
+    ""
+  upSpiral <- newExit "up" hhStaircase hhLanding
+  newExit "down" hhLanding hhStaircase
+  defaultGoUpSpiral <- getOnGo upSpiral
+  setOnGo upSpiral $ stop $ "The black cat positions herself on the first " ++
+    "step of the spiral staircase, bares her claws, arches her back, and " ++
+    "hisses at you loudly! You are too scared to go past her."
+
   defaultDropTuna <- getOnDrop tuna
   let checkIfKittyEatsTuna = do
         tunaLoc <- getLocation tuna
@@ -787,7 +800,7 @@ buildWorld = do
           setDescription tuna "This is just an empty can now."
           setOnDrop tuna defaultDropTuna
       friendlyKitty = do
-        return () -- TODO
+        setOnGo upSpiral defaultGoUpSpiral
   setOpener tuna (Just canOpener)
   setOnOpen tuna $ do
     msg "You open the can of tuna with the can opener."
@@ -798,15 +811,6 @@ buildWorld = do
       defaultDropTuna
       checkIfKittyEatsTuna
     checkIfKittyEatsTuna -- in case it is opened while in the right place
-
-  shortcut <- newExit "secret passage to haunted house kitchen"
-    brisbin hhKitchen
-  addAlias shortcut "k"
-
-  hhLanding <- newRoom "landing" $
-    ""
-  newExit "up" hhStaircase hhLanding
-  newExit "down" hhLanding hhStaircase
 
   hhAtrium <- newRoom "atrium" $
     "This room has a large vaulted skylight covering the ceiling. There are " ++
