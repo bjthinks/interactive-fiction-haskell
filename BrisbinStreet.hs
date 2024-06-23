@@ -601,6 +601,14 @@ buildWorld = do
   costume <- newObject writingDesk "ghost costume" $
     "This is a plain white sheet with two holes for your eyes. The corners " ++
     "have been cut off to make it circular. A classic Halloween costume!"
+  addAlias costume "costume"
+  let getCostume = do
+        move costume player
+        msg "You put on the ghost costume."
+        setDescription2 player $ "You are wearing a classic ghost costume " ++
+          "over your clothes."
+  setOnGet costume getCostume
+  setOnGetFrom costume $ \_ -> getCostume
   setOnGet bimbo $ do
     costumeLocation <- getLocation costume
     unless (costumeLocation == Just player) $ stop $

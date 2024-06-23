@@ -8,4 +8,3 @@ burn ants (with magnifying glass)
 consider handling plurals in error messages in Categories.hs (e.g. acorns)?
 light candle with match -- complicated
 See if I can do better when the ParseError is an unexpected end of input
-alias costume for ghost costume
