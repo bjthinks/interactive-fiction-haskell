@@ -554,8 +554,6 @@ buildWorld = do
   setArticle bimbo Nothing
   addAlias bimbo "cat"
   addAlias bimbo "the cat"
-  setOnGet bimbo $ msg
-    "Bimbo squirms out of your grasp and jumps to the ground."
   setOnPet bimbo $ msg "Bimbo purrs and rubs up against you."
 
   westBrisbin <- newRoom "west Brisbin Street" $
@@ -603,6 +601,19 @@ buildWorld = do
   costume <- newObject writingDesk "ghost costume" $
     "This is a plain white sheet with two holes for your eyes. The corners " ++
     "have been cut off to make it circular. A classic Halloween costume!"
+  setOnGet bimbo $ do
+    costumeLocation <- getLocation costume
+    unless (costumeLocation == Just player) $ stop $
+      "Bimbo squirms out of your grasp and jumps to the ground."
+    msg $ "Bimbo is scared by your ghost costume. " ++
+      "He squirms out of your grasp and runs into the backyard!"
+    moveNowhere bimbo
+    setDescription2 justinYard ""
+    queueAction 3 $ do
+      room <- getRoom
+      when (room == justinYard) $ msg "Bimbo returns to the front yard."
+      move bimbo justinYard
+      setDescription2 justinYard bimboIsHere
 
   hhReadingRoom <- newRoom "reading room" $
     "There are three high backed reading chairs upholstered in red suede " ++
