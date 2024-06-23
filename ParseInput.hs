@@ -107,8 +107,8 @@ parseLine =
   simpleVerb   "search" Search |||
   complexVerb  "unlock" "with" Unlock |||
   verbWithNoun "unlock" UnlockHelp |||
-  complexVerb  "close" "with" Lock |||
-  verbWithNoun "close" LockHelp |||
+  complexVerb  "close" "with" Lock ||| -- ??
+  verbWithNoun "close" LockHelp |||    -- ??
   verbWithWord "debug" "off" (Debug False) |||
   verbWithWord "debug" "on" (Debug True) |||
   verbWithNoun "drink" Drink |||
@@ -125,8 +125,8 @@ parseLine =
   compoundVerb ["look", "at"] (Look . Just) |||
   simpleVerb   "look" (Look Nothing) |||
   verbWithNoun "move" Go |||
-  complexVerb  "open" "with" Unlock |||
-  verbWithNoun "open" UnlockHelp |||
+  complexVerb  "open" "with" Open |||
+  verbWithNoun "open" OpenHelp |||
   simpleVerb   "quit" Exit |||
   verbWithNoun "read" Read |||
   verbWithNoun "take" Get |||

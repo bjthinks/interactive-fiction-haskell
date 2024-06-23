@@ -48,6 +48,7 @@ defaultThing ref = Thing {
   thingOnLock = cant "lock" ref, -- might be impossible to call this
   thingIsLocked = False,
   thingKey = Nothing,
+  thingOnOpen = Nothing, -- defers to Unlock unless set
   thingOnSearch = defaultSearch ref
   }
 

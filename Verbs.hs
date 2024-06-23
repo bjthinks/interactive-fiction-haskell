@@ -34,6 +34,8 @@ data Verb = Blank
           | Lock Ref Ref
           | UnlockHelp Ref
           | LockHelp Ref
+          | Open Ref Ref
+          | OpenHelp Ref
           | Search
           | Score
           | Help
@@ -293,6 +295,13 @@ doVerb (Lock ref key) = do
 doVerb (LockHelp ref) = do
   name <- qualifiedName ref
   stop $ "What do you want to lock " ++ name ++ " with?"
+
+doVerb (Open item tool) = do
+  doVerb (Unlock item tool)
+
+doVerb (OpenHelp item) = do
+  name <- qualifiedName item
+  stop $ "What do you want to open " ++ name ++ " with?"
 
 doVerb Search = do
   room <- getRoom

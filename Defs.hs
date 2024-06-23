@@ -39,6 +39,7 @@ data Thing = Thing {
   thingOnLock :: Game (),
   thingIsLocked :: Bool,
   thingKey :: Maybe Ref,
+  thingOnOpen :: Maybe (Ref -> Game ()), -- if Nothing, defers to Unlock
   thingOnSearch :: Game ()
   }
 
@@ -148,6 +149,7 @@ getOnUnlock     = getProperty thingOnUnlock
 getOnLock       = getProperty thingOnLock
 getIsLocked     = getProperty thingIsLocked
 getKey          = getProperty thingKey
+getOnOpen       = getProperty thingOnOpen
 getOnSearch     = getProperty thingOnSearch
 
 getIsUnlocked :: Ref -> Game Bool
@@ -191,6 +193,7 @@ setOnUnlock     = setProperty (\t v -> t { thingOnUnlock = v })
 setOnLock       = setProperty (\t v -> t { thingOnLock = v })
 setIsLocked     = setProperty (\t v -> t { thingIsLocked = v })
 setKey          = setProperty (\t v -> t { thingKey = v })
+setOnOpen       = setProperty (\t v -> t { thingOnOpen = v })
 setOnSearch     = setProperty (\t v -> t { thingOnSearch = v })
 
 addAlias :: Ref -> String -> Game ()
