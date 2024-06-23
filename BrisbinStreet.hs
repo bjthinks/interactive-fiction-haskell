@@ -745,6 +745,20 @@ buildWorld = do
   beforeGo kitchenEntrance $ msg $ "Boards creak under your feet, but the " ++
     "ghosts don\'t notice."
   newExit "north" hhKitchen hhDiningRoom
+  canOpener <- newObject hhKitchen "can opener" $
+    "This is a metal and plastic can opener of a common style that you " ++
+    "have seen many times before. The handles are red."
+  addAlias canOpener "opener"
+  tuna <- newObject hhKitchen "can of tuna"
+    "A can of StarKist brand skipjack tuna."
+  addAliases tuna ["tuna", "can"]
+  moveNowhere tuna
+  defaultSearchKitchen <- getOnSearch hhKitchen
+  setOnSearch hhKitchen $ do
+    move tuna hhKitchen
+    msg "You look in the cupboards and find some cans of tuna."
+    addPoints 5 "finding something delicious"
+    setOnSearch hhKitchen defaultSearchKitchen
 
   hhStaircase <- newRoom "spiral staircase" $
     "This room has a very large and opulent spiral staircase going to the " ++
