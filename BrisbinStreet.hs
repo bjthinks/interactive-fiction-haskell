@@ -851,7 +851,7 @@ buildWorld = do
           "against you affectionately."
         queueAction 3 prowl4
       prowl4 = do
-        kittyMessage "The black cat walks south to the Atrium."
+        kittyMessage "The black cat walks south to the atrium."
         move blackCat hhAtrium
         kittyMessage $ "The black cat arrives from the north. She curls up " ++
           "into a ball and takes a catnap."
@@ -863,7 +863,11 @@ buildWorld = do
           "and sharpens her claws on the carpet."
         queueAction 3 prowl6
       prowl6 = do
-        return ()
+        kittyMessage "The black cat runs down the spiral staircase!"
+        move blackCat hhStaircase
+        kittyMessage $ "The black cat scampers down the staircase from " ++
+          "above. She settles into her spot on the first step."
+        queueAction 3 prowl1
       kittyMessage message = do
         room <- getRoom
         kittyLocation <- getLocation blackCat
