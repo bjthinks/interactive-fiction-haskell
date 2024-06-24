@@ -50,35 +50,21 @@ noun = do
       tryNoun :: ([Word],Ref) -> MyParser Ref
       tryNoun (name,ref) = matchTokens name >> return ref
 
-simpleVerb :: Word -> Verb -> MyParser Verb
-simpleVerb name def = do
+verb0 :: Word -> Verb -> MyParser Verb
+verb0 name def = do
   matchToken name
   eof
   return def
 
-verbWithNoun :: Word -> (Ref -> Verb) -> MyParser Verb
-verbWithNoun name def = do
+verb1 :: Word -> (Ref -> Verb) -> MyParser Verb
+verb1 name def = do
   matchToken name
   ref <- noun
   eof
   return $ def ref
 
-compoundVerb :: [Word] -> (Ref -> Verb) -> MyParser Verb
-compoundVerb name def = do
-  matchTokens name
-  ref <- noun
-  eof
-  return $ def ref
-
-verbWithWord :: Word -> Word -> Verb -> MyParser Verb
-verbWithWord name arg def = do
-  matchToken name
-  matchToken arg
-  eof
-  return def
-
-complexVerb :: Word -> Word -> (Ref -> Ref -> Verb) -> MyParser Verb
-complexVerb name1 name2 def = do
+verb2 :: Word -> Word -> (Ref -> Ref -> Verb) -> MyParser Verb
+verb2 name1 name2 def = do
   matchToken name1
   ref1 <- noun
   matchToken name2
@@ -86,14 +72,28 @@ complexVerb name1 name2 def = do
   eof
   return $ def ref1 ref2
 
+verb0m :: Word -> Word -> Verb -> MyParser Verb
+verb0m name arg def = do
+  matchToken name
+  matchToken arg
+  eof
+  return def
+
+verb1m :: [Word] -> (Ref -> Verb) -> MyParser Verb
+verb1m name def = do
+  matchTokens name
+  ref <- noun
+  eof
+  return $ def ref
+
 implicitGo :: MyParser Verb
 implicitGo = do
   ref <- noun
   eof
   return $ Go ref
 
-developer :: String -> (Ref -> Verb) -> MyParser Verb
-developer name def = do
+debug :: String -> (Ref -> Verb) -> MyParser Verb
+debug name def = do
   matchToken name
   ref <- parseRef
   eof
@@ -101,55 +101,55 @@ developer name def = do
 
 parseLine :: MyParser Verb
 parseLine =
-  simpleVerb   "inventory" Inventory |||
-  developer    "teleport" Teleport |||
-  developer    "examine" Examine |||
-  simpleVerb   "search" Search |||
-  complexVerb  "unlock" "with" Unlock |||
-  verbWithNoun "unlock" UnlockHelp |||
-  complexVerb  "close" "with" Lock ||| -- ??
-  verbWithNoun "close" LockHelp |||    -- ??
-  verbWithWord "debug" "off" (Debug False) |||
-  verbWithWord "debug" "on" (Debug True) |||
-  verbWithNoun "drink" Drink |||
-  verbWithNoun "light" Light |||
-  simpleVerb   "score" Score |||
-  verbWithNoun "throw" Throw |||
-  verbWithNoun "drop" Drop |||
-  verbWithWord "drop" "all" DropAll |||
-  simpleVerb   "exit" Exit |||
-  simpleVerb   "help" Help |||
-  complexVerb  "lock" "with" Lock |||
-  verbWithNoun "lock" LockHelp |||
-  verbWithNoun "look" (Look . Just) |||
-  compoundVerb ["look", "at"] (Look . Just) |||
-  simpleVerb   "look" (Look Nothing) |||
-  verbWithNoun "move" Go |||
-  complexVerb  "open" "with" Open |||
-  verbWithNoun "open" OpenHelp |||
-  simpleVerb   "quit" Exit |||
-  verbWithNoun "read" Read |||
-  verbWithNoun "take" Get |||
-  verbWithWord "take" "all" GetAll |||
-  complexVerb  "take" "from" GetFrom |||
-  compoundVerb ["take", "all", "from"] GetAllFrom |||
-  compoundVerb ["turn", "off"] TurnOff |||
-  compoundVerb ["turn", "on"] TurnOn |||
-  simpleVerb   "wait" Wait |||
-  verbWithNoun "eat" Eat |||
-  verbWithNoun "get" Get |||
-  verbWithWord "get" "all" GetAll |||
-  complexVerb  "get" "from" GetFrom |||
-  compoundVerb ["get", "all", "from"] GetAllFrom |||
-  compoundVerb ["put", "all", "in"] PutAllIn |||
-  verbWithNoun "pet" Pet |||
-  complexVerb  "put" "into" PutIn |||
-  complexVerb  "put" "in" PutIn |||
-  verbWithNoun "use" Use |||
-  verbWithNoun "go" Go |||
-  simpleVerb   "i" Inventory |||
-  verbWithNoun "l" (Look . Just) |||
-  simpleVerb   "l" (Look Nothing) |||
+  verb0  "inventory" Inventory |||
+  debug  "teleport" Teleport |||
+  debug  "examine" Examine |||
+  verb0  "search" Search |||
+  verb2  "unlock" "with" Unlock |||
+  verb1  "unlock" UnlockHelp |||
+  verb2  "close" "with" Lock ||| -- ??
+  verb1  "close" LockHelp |||    -- ??
+  verb0m "debug" "off" (Debug False) |||
+  verb0m "debug" "on" (Debug True) |||
+  verb1  "drink" Drink |||
+  verb1  "light" Light |||
+  verb0  "score" Score |||
+  verb1  "throw" Throw |||
+  verb1  "drop" Drop |||
+  verb0m "drop" "all" DropAll |||
+  verb0  "exit" Exit |||
+  verb0  "help" Help |||
+  verb2  "lock" "with" Lock |||
+  verb1  "lock" LockHelp |||
+  verb1  "look" (Look . Just) |||
+  verb1m ["look", "at"] (Look . Just) |||
+  verb0  "look" (Look Nothing) |||
+  verb1  "move" Go |||
+  verb2  "open" "with" Open |||
+  verb1  "open" OpenHelp |||
+  verb0  "quit" Exit |||
+  verb1  "read" Read |||
+  verb1  "take" Get |||
+  verb0m "take" "all" GetAll |||
+  verb2  "take" "from" GetFrom |||
+  verb1m ["take", "all", "from"] GetAllFrom |||
+  verb1m ["turn", "off"] TurnOff |||
+  verb1m ["turn", "on"] TurnOn |||
+  verb0  "wait" Wait |||
+  verb1  "eat" Eat |||
+  verb1  "get" Get |||
+  verb0m "get" "all" GetAll |||
+  verb2  "get" "from" GetFrom |||
+  verb1m ["get", "all", "from"] GetAllFrom |||
+  verb1m ["put", "all", "in"] PutAllIn |||
+  verb1  "pet" Pet |||
+  verb2  "put" "into" PutIn |||
+  verb2  "put" "in" PutIn |||
+  verb1  "use" Use |||
+  verb1  "go" Go |||
+  verb0  "i" Inventory |||
+  verb1  "l" (Look . Just) |||
+  verb0  "l" (Look Nothing) |||
   implicitGo |||
   (eof >> return Blank)
 
@@ -159,15 +159,15 @@ handleInput = do
   let inputLowercase = toLowerString input
       inputWords = words inputLowercase
       inputWithPositions = zipWith (,) [1..] inputWords
-  debug <- getDebug
-  when debug $ msg $ "Parsing " ++ show inputWords
+  flag <- getDebug
+  when flag $ msg $ "Parsing " ++ show inputWords
   refs <- visibleRefs
-  when debug $ msg "Noun list:"
+  when flag $ msg "Noun list:"
   allTokensWithRefs <- concat <$> mapM tokensWithRef refs
   let nouns = longestFirst allTokensWithRefs
       longestFirst = sortOn (negate . length . fst)
       result = runParser parseLine nouns "" inputWithPositions
-  when debug $ msg $ "Result: " ++ show result
+  when flag $ msg $ "Result: " ++ show result
   case result of
     Left err -> printError err
     Right verb -> doVerb verb
@@ -175,8 +175,8 @@ handleInput = do
 tokensWithRef :: Ref -> Game [([Word],Ref)]
 tokensWithRef ref = do
   names <- allNames ref
-  debug <- getDebug
-  when debug $ msg $ "Ref " ++ show ref ++ ": " ++ show names
+  flag <- getDebug
+  when flag $ msg $ "Ref " ++ show ref ++ ": " ++ show names
   let allNamesLowercase = map toLowerString names
   return $ map (\str -> (words str,ref)) allNamesLowercase
 
