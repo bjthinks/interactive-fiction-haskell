@@ -387,8 +387,8 @@ buildWorld = do
   addAliases spirits ["alcohol", "whiskey", "booze", "liquor"]
   setOnGet spirits $ msg $ "As you are underage, you don't think you should " ++
     "be walking around with opened liquor bottles."
-  setOnDrink spirits $ msg $ "An eight year old boy such as yourself should " ++
-    "not be drinking booze."
+  setVerb1 spirits "drink" $ msg $ "An eight year old boy such as yourself " ++
+    "should not be drinking booze."
 
   barLight <- newObject basementBar "light" $ "This is a small round light " ++
     "mounted on the far wall. The word BAR is on its globe in large, ornate " ++
@@ -698,8 +698,8 @@ buildWorld = do
     "This is a stoppered flask of clear liquid. It has a label which reads " ++
     "\"Holy Water\"."
   addAlias flask "holy water"
-  setOnDrink flask $ msg $ "You have a feeling the contents of this flask " ++
-    "are too important to drink."
+  setVerb1 flask "drink" $ msg $ "You have a feeling the contents of " ++
+    "this flask are too important to drink."
   setOnRead flask $ doVerb $ Look (Just flask)
 
   hhDiningRoom <- newRoom "dining room" $

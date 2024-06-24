@@ -22,7 +22,6 @@ data Verb = Blank
           | PutAllIn Ref
           | Go Ref
           | Eat Ref
-          | Drink Ref
           | Use Ref
           | TurnOn Ref
           | TurnOff Ref
@@ -198,11 +197,6 @@ doVerb (Go ref) = do
 doVerb (Eat ref) = do
   stopIfNotAccessible "eat" ref
   action <- getOnEat ref
-  action
-
-doVerb (Drink ref) = do
-  stopIfNotAccessible "drink" ref
-  action <- getOnDrink ref
   action
 
 doVerb (Use ref) = do

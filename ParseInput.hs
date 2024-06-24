@@ -85,6 +85,13 @@ verb1m names def = do
   eof
   return $ def ref
 
+verb1' :: Word -> MyParser Verb
+verb1' name = do
+  matchToken name
+  ref <- noun
+  eof
+  return $ Verb1 ref name
+
 verb1m' :: [Word] -> MyParser Verb
 verb1m' names = do
   matchTokens names
@@ -111,7 +118,7 @@ parseLine =
   verb2  "close" "with" Lock ||| -- ??
   verb0m ["debug", "off"] (Debug False) |||
   verb0m ["debug", "on"] (Debug True) |||
-  verb1  "drink" Drink |||
+  verb1' "drink" |||
   verb1  "drop" Drop |||
   verb0m ["drop", "all"] DropAll |||
   verb1  "eat" Eat |||

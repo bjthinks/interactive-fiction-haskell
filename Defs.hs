@@ -21,7 +21,6 @@ data Thing = Thing {
   thingExits :: [Ref],
   thingPath :: Maybe (Ref,Ref),
   thingOnEat :: Game (),
-  thingOnDrink :: Game (),
   thingOnUse :: Game (),
   thingOnTurnOn :: Game (),
   thingOnTurnOff :: Game (),
@@ -149,7 +148,6 @@ getContents'    = getProperty thingContents
 getExits        = getProperty thingExits
 getPath         = getProperty thingPath
 getOnEat        = getProperty thingOnEat
-getOnDrink      = getProperty thingOnDrink
 getOnUse        = getProperty thingOnUse
 getOnTurnOn     = getProperty thingOnTurnOn
 getOnTurnOff    = getProperty thingOnTurnOff
@@ -195,7 +193,6 @@ setContents     = setProperty (\t v -> t { thingContents = v })
 setExits        = setProperty (\t v -> t { thingExits = v })
 setPath         = setProperty (\t v -> t { thingPath = v })
 setOnEat        = setProperty (\t v -> t { thingOnEat = v })
-setOnDrink      = setProperty (\t v -> t { thingOnDrink = v })
 setOnUse        = setProperty (\t v -> t { thingOnUse = v })
 setOnTurnOn     = setProperty (\t v -> t { thingOnTurnOn = v })
 setOnTurnOff    = setProperty (\t v -> t { thingOnTurnOff = v })

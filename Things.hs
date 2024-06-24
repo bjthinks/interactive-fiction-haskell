@@ -30,7 +30,6 @@ defaultThing ref = Thing {
   thingExits = [],
   thingPath = Nothing,
   thingOnEat = cant "eat" ref,
-  thingOnDrink = cant "drink" ref,
   thingOnUse = cant "use" ref,
   thingOnTurnOn = cant "turn on" ref,
   thingOnTurnOff = cant "turn off" ref,
