@@ -847,6 +847,12 @@ buildWorld = do
           "against you affectionately."
         queueAction 3 prowl4
       prowl4 = do
+        kittyMessage "The black cat walks south to the Atrium."
+        move blackCat hhAtrium
+        kittyMessage $ "The black cat arrives from the north. She curls up " ++
+          "into a ball and takes a catnap."
+        queueAction 3 prowl5
+      prowl5 = do
         return ()
       kittyMessage message = do
         room <- getRoom
