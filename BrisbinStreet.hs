@@ -270,7 +270,8 @@ buildWorld = do
 
   bathroom <- newRoom "bathroom" $
     "This is a small but servicable bathroom. The counter is a pale " ++
-    "yellow, with a plain sink inset into it. There are built in cupboards " ++
+    "yellow, with a plain white sink inset into it. There are built in " ++
+    "cupboards " ++
     "below the counter, and a cupboard door stands wide open to allow heat " ++
     "into the bathroom from a vent enclosed by the cabinetry."
   newExit "north" hallway bathroom
