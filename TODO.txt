@@ -6,6 +6,9 @@ boards creak in different place?
 describe hhLanding
 burn ants (with magnifying glass)
 use glass on ants?
+"water grass with magnifying glass" will burn the ants
+maybe it's time to use a Map String (Game ()) for verbs instead of all these
+  individual actions
 throw acorn at squirrel
 consider handling plurals in error messages in Categories.hs (e.g. acorns)?
 light candle with match -- complicated
