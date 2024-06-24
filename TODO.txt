@@ -10,6 +10,7 @@ use glass on ants?
 maybe it's time to use a Map String (Game ()) for verbs instead of all these
   individual actions
 throw acorn at squirrel
+water grass (with sprinkler)
 consider handling plurals in error messages in Categories.hs (e.g. acorns)?
 light candle with match -- complicated
 See if I can do better when the ParseError is an unexpected end of input

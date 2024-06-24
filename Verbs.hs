@@ -36,7 +36,6 @@ data Verb = Blank
           | LockHelp Ref
           | Open Ref Ref
           | OpenHelp Ref
-          | WaterGrassHelp
           | Search
           | Score
           | Wait
@@ -315,8 +314,6 @@ doVerb (Open item tool) = do
 doVerb (OpenHelp item) = do
   name <- qualifiedName item
   stop $ "What do you want to open " ++ name ++ " with?"
-
-doVerb WaterGrassHelp = stop "What do you want to water the grass with?"
 
 doVerb Search = do
   room <- getRoom

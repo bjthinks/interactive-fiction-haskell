@@ -149,8 +149,6 @@ parseLine =
   verb2  "unlock" "with" Unlock |||
   verb1  "use" Use |||
   verb0  "wait" Wait |||
-  verb0m ["water", "grass"] WaterGrassHelp |||
-  verb1m ["water", "grass", "with"] Use |||
   implicitGo |||
   (eof >> return Blank)
 
