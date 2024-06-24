@@ -100,55 +100,55 @@ debug name def = do
 
 parseLine :: MyParser Verb
 parseLine =
-  verb0  "inventory" Inventory |||
-  debug  "teleport" Teleport |||
-  debug  "examine" Examine |||
-  verb0  "search" Search |||
-  verb2  "unlock" "with" Unlock |||
-  verb1  "unlock" UnlockHelp |||
-  verb2  "close" "with" Lock ||| -- ??
   verb1  "close" LockHelp |||    -- ??
+  verb2  "close" "with" Lock ||| -- ??
   verb0m ["debug", "off"] (Debug False) |||
   verb0m ["debug", "on"] (Debug True) |||
   verb1  "drink" Drink |||
-  verb1  "light" Light |||
-  verb0  "score" Score |||
-  verb1  "throw" Throw |||
   verb1  "drop" Drop |||
   verb0m ["drop", "all"] DropAll |||
-  verb0  "exit" Exit |||
-  verb0  "help" Help |||
-  verb2  "lock" "with" Lock |||
-  verb1  "lock" LockHelp |||
-  verb1  "look" (Look . Just) |||
-  verb1m ["look", "at"] (Look . Just) |||
-  verb0  "look" (Look Nothing) |||
-  verb1  "move" Go |||
-  verb2  "open" "with" Open |||
-  verb1  "open" OpenHelp |||
-  verb0  "quit" Exit |||
-  verb1  "read" Read |||
-  verb1  "take" Get |||
-  verb0m ["take", "all"] GetAll |||
-  verb2  "take" "from" GetFrom |||
-  verb1m ["take", "all", "from"] GetAllFrom |||
-  verb1m ["turn", "off"] TurnOff |||
-  verb1m ["turn", "on"] TurnOn |||
-  verb0  "wait" Wait |||
   verb1  "eat" Eat |||
+  debug  "examine" Examine |||
+  verb0  "exit" Exit |||
   verb1  "get" Get |||
   verb0m ["get", "all"] GetAll |||
   verb2  "get" "from" GetFrom |||
   verb1m ["get", "all", "from"] GetAllFrom |||
-  verb1m ["put", "all", "in"] PutAllIn |||
-  verb1  "pet" Pet |||
-  verb2  "put" "into" PutIn |||
-  verb2  "put" "in" PutIn |||
-  verb1  "use" Use |||
   verb1  "go" Go |||
+  verb0  "help" Help |||
   verb0  "i" Inventory |||
-  verb1  "l" (Look . Just) |||
+  verb0  "inventory" Inventory |||
   verb0  "l" (Look Nothing) |||
+  verb1  "l" (Look . Just) |||
+  verb1  "light" Light |||
+  verb1  "lock" LockHelp |||
+  verb2  "lock" "with" Lock |||
+  verb0  "look" (Look Nothing) |||
+  verb1  "look" (Look . Just) |||
+  verb1m ["look", "at"] (Look . Just) |||
+  verb1  "move" Go |||
+  verb1  "open" OpenHelp |||
+  verb2  "open" "with" Open |||
+  verb1  "pet" Pet |||
+  verb2  "put" "in" PutIn |||
+  verb2  "put" "into" PutIn |||
+  verb1m ["put", "all", "in"] PutAllIn |||
+  verb0  "quit" Exit |||
+  verb1  "read" Read |||
+  verb0  "score" Score |||
+  verb0  "search" Search |||
+  verb1  "take" Get |||
+  verb0m ["take", "all"] GetAll |||
+  verb2  "take" "from" GetFrom |||
+  verb1m ["take", "all", "from"] GetAllFrom |||
+  debug  "teleport" Teleport |||
+  verb1  "throw" Throw |||
+  verb1m ["turn", "off"] TurnOff |||
+  verb1m ["turn", "on"] TurnOn |||
+  verb1  "unlock" UnlockHelp |||
+  verb2  "unlock" "with" Unlock |||
+  verb1  "use" Use |||
+  verb0  "wait" Wait |||
   implicitGo |||
   (eof >> return Blank)
 
