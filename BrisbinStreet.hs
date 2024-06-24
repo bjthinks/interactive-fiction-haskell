@@ -775,7 +775,8 @@ buildWorld = do
   addAlias blackCat "cat"
   setOnGet blackCat $ msg $ "The cat bares its claws and hisses. There is " ++
     "no way you would try to pick up such an unfriendly cat."
-  setOnPet blackCat $ msg "There is no way to pet such an unfriendly cat."
+  setOnPet blackCat $ msg $ "There is no way to pet such an unfriendly cat. " ++
+    "Maybe she is hungry?"
 
   shortcut <- newExit "secret passage to haunted house kitchen"
     brisbin hhKitchen
@@ -788,7 +789,8 @@ buildWorld = do
   defaultGoUpSpiral <- getOnGo upSpiral
   setOnGo upSpiral $ stop $ "The black cat positions herself on the first " ++
     "step of the spiral staircase, bares her claws, arches her back, and " ++
-    "hisses at you loudly! You are too scared to go past her."
+    "hisses at you loudly! You are too scared to go past her. There must " ++
+    "be a way to get on this cat\'s good side."
 
   hhAtrium <- newRoom "atrium" $
     "This room has a large vaulted skylight covering the ceiling. There are " ++
@@ -811,7 +813,7 @@ buildWorld = do
         tunaLoc <- getLocation tuna
         when (tunaLoc == Just hhStaircase) $ do
           msg $ "The black cat eats the tuna from the can in no time. She " ++
-            "must have been hungry!"
+            "must have been starving!"
           addPoints 5 "feeding the kitty"
           friendlyKitty
           setName tuna "empty can of tuna"
