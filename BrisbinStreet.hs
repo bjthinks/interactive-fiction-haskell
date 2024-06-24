@@ -796,15 +796,19 @@ buildWorld = do
     "This room has a large vaulted skylight covering the ceiling. There are " ++
     "numerous houseplants in large pots along the walls, but most of them " ++
     "are yellow from lack of sun. Even though it is cloudless and sunny " ++
-    "today, there is no sun entering through the skylight."
+    "today, there is no sun entering through the skylight. " ++
+    "There is an ornate door to the west: it must be the master bedroom. " ++
+    "Strangely, there is no doorknob or handle to be seen; only a keyhole " ++
+    "to unlock it."
   newExit "west" hhLanding hhAtrium
   newExit "east" hhAtrium hhLanding
 
   hhHallway <- newRoom "hallway" $
     "The wood paneling in this part of the house is particularly elegant. " ++
-    "There is an ornate door to the west; it must be the master bedroom. " ++
-    "Strangely, there is no doorknob or handle to be seen; only a keyhole " ++
-    "to unlock it. Several more rooms are in other directions."
+    "A large grandfather clock stands against the west wall. Its pendulum " ++
+    "makes a soft ticking sound as it swings back and forth. You watch it " ++
+    "for a while, and start to feel sleepy. Maybe you should move on before " ++
+    "you fall into a hypnotic trance..."
   newExit "north" hhAtrium hhHallway
   newExit "south" hhHallway hhAtrium
 
