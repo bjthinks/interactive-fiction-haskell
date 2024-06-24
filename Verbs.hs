@@ -336,6 +336,7 @@ doVerb Help = do
   msg "go, look, get, drop, throw, use, eat, drink, or pet followed by a noun"
   msg "unlock item/direction/door with key"
   msg "get item from container, or put item in container"
+  msg "open item with tool"
   msg $ "You can type the name of an exit to go that direction, and there " ++
     "are shorthand names for commonly named exits. So \"go n\" or just " ++
     "\"n\" is short for \"go north\"."
