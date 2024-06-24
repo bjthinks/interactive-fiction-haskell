@@ -11,6 +11,3 @@ See if I can do better when the ParseError is an unexpected end of input
 what do you want to lock, unlock, open it with?
 kitty stuff:
 spiral staircase description(2)
-kitty description
-pet cat
-get cat

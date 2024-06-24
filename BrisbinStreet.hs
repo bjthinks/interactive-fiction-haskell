@@ -795,12 +795,19 @@ buildWorld = do
         when (tunaLoc == Just hhStaircase) $ do
           msg $ "The black cat eats the tuna from the can in no time. She " ++
             "must have been hungry!"
+          addPoints 5 "feeding the kitty"
           friendlyKitty
           setName tuna "empty can of tuna"
           setDescription tuna "This is just an empty can now."
           setOnDrop tuna defaultDropTuna
       friendlyKitty = do
         setOnGo upSpiral defaultGoUpSpiral
+        setDescription blackCat $ "Now what you\'ve fed her, this seems " ++
+          "like a pretty friendly cat."
+        setOnGet blackCat $ msg $ "You try to pick her up, but she still " ++
+          "wiggles out of your grasp."
+        setOnPet blackCat $ msg $ "The black cat purrs at you. What a " ++
+          "change in her behavior!"
   setOpener tuna (Just canOpener)
   setOnOpen tuna $ do
     msg "You open the can of tuna with the can opener."
