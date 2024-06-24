@@ -31,7 +31,6 @@ data Thing = Thing {
   thingOnPutIn :: Ref -> Game (), -- put this thing into ref
   thingOnGetFrom :: Ref -> Game (), -- get this thing from ref
   thingOnDrop :: Game (),
-  thingOnThrow :: Game (),
   thingIsContainer :: Bool,
   thingOnUnlock :: Game (),
   thingOnLock :: Game (),
@@ -44,7 +43,7 @@ data Thing = Thing {
   }
 
 data GameState = GameState { things :: M.Map Ref Thing,
-                             default1Map :: M.Map String (Game ()),
+                             default1Map :: M.Map String (Ref -> Game ()),
                              nextThing :: Ref,
                              maybePlayer :: Maybe Ref,
                              delayedActions :: [(Int, Game ())],
@@ -80,14 +79,17 @@ cant verb ref = do
   name <- qualifiedName ref
   stop $ "You can\'t " ++ verb ++ ' ' : name ++ "."
 
-getDefault1 :: Ref -> String -> Game (Game ())
-getDefault1 ref name = do
+getDefault1 :: String -> Game (Ref -> Game ())
+getDefault1 name = do
   m <- default1Map <$> get
-  let d = cant name ref
+  let d = cant name
   return $ M.findWithDefault d name m
 
 setDefault1 :: String -> (Ref -> Game ()) -> Game ()
-setDefault1 = undefined
+setDefault1 name action = do
+  st <- get
+  let m' = M.insert name action (default1Map st)
+  put $ st { default1Map = m' }
 
 getPlayer :: Game Ref
 getPlayer = do
@@ -157,7 +159,6 @@ getOnPet        = getProperty thingOnPet
 getOnPutIn      = getProperty thingOnPutIn
 getOnGetFrom    = getProperty thingOnGetFrom
 getOnDrop       = getProperty thingOnDrop
-getOnThrow      = getProperty thingOnThrow
 getIsContainer  = getProperty thingIsContainer
 getOnUnlock     = getProperty thingOnUnlock
 getOnLock       = getProperty thingOnLock
@@ -201,7 +202,6 @@ setOnPet        = setProperty (\t v -> t { thingOnPet = v })
 setOnPutIn      = setProperty (\t v -> t { thingOnPutIn = v })
 setOnGetFrom    = setProperty (\t v -> t { thingOnGetFrom = v })
 setOnDrop       = setProperty (\t v -> t { thingOnDrop = v })
-setOnThrow      = setProperty (\t v -> t { thingOnThrow = v })
 setIsContainer  = setProperty (\t v -> t { thingIsContainer = v })
 setOnUnlock     = setProperty (\t v -> t { thingOnUnlock = v })
 setOnLock       = setProperty (\t v -> t { thingOnLock = v })
@@ -238,8 +238,8 @@ debugName ref = do
 getVerb1 :: Ref -> String -> Game (Game ())
 getVerb1 ref name = do
   m <- getVerb1Map ref
-  d <- getDefault1 ref name
-  return $ M.findWithDefault d name m
+  d <- getDefault1 name
+  return $ M.findWithDefault (d ref) name m
 
 setVerb1 :: Ref -> String -> Game () -> Game ()
 setVerb1 ref name action = do

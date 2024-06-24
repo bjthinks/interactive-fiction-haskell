@@ -156,7 +156,7 @@ parseLine =
   verb2  "take" "from" GetFrom |||
   verb1m ["take", "all", "from"] GetAllFrom |||
   debug  "teleport" Teleport |||
-  verb1  "throw" Throw |||
+  verb1' "throw" |||
   verb1m ["turn", "off"] TurnOff |||
   verb1m ["turn", "on"] TurnOn |||
   verb1  "unlock" UnlockHelp |||

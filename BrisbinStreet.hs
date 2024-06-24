@@ -63,10 +63,10 @@ buildWorld = do
         msg $ "You throw an acorn at the squirrel. She catches the acorn, " ++
           "runs up the tree, and eats the acorn hungrily."
         addPoints 10 "improving your aim"
-        setOnThrow acorns $ throwAcorns subsequentThrow
+        setVerb1 acorns "throw" $ throwAcorns subsequentThrow
         setOnUse acorns $ throwAcorns subsequentThrow
       subsequentThrow = msg "The squirrel catches the acorn and eats it."
-  setOnThrow acorns $ throwAcorns firstThrow
+  setVerb1 acorns "throw" $ throwAcorns firstThrow
   setOnUse acorns $ throwAcorns firstThrow
 
   living <- newRoom "living room" $

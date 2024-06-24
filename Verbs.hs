@@ -27,7 +27,6 @@ data Verb = Blank
           | Light Ref
           | Read Ref
           | Pet Ref
-          | Throw Ref
           | Unlock Ref Ref
           | Lock Ref Ref
           | UnlockHelp Ref
@@ -142,11 +141,6 @@ doVerb (GetAllFrom container) = do
 doVerb (Drop ref) = do
   stopIfNotInInventory "drop" ref
   action <- getOnDrop ref
-  action
-
-doVerb (Throw ref) = do
-  stopIfNotInInventory "throw" ref
-  action <- getOnThrow ref
   action
 
 doVerb DropAll = do

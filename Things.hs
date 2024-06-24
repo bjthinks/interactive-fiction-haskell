@@ -1,4 +1,4 @@
-module Things(newRoom, newObject, newExit) where
+module Things(setDefaults, newRoom, newObject, newExit) where
 
 import Defs
 import Categories
@@ -40,7 +40,6 @@ defaultThing ref = Thing {
   thingOnGetFrom = defaultGetFrom ref,
   thingOnPutIn = defaultPutIn ref,
   thingOnDrop = defaultDrop ref,
-  thingOnThrow = defaultThrow ref,
   thingIsContainer = False,
   thingOnUnlock = cant "unlock" ref, -- might be impossible to call this
   thingOnLock = cant "lock" ref, -- might be impossible to call this
@@ -51,6 +50,10 @@ defaultThing ref = Thing {
   thingOnSearch = defaultSearch ref,
   thingVerb1Map = M.empty
   }
+
+setDefaults :: Game ()
+setDefaults = do
+  setDefault1 "throw" defaultThrow
 
 defaultGo :: Ref -> Game ()
 defaultGo ref = do
