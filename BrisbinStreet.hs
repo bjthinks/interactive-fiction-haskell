@@ -790,6 +790,14 @@ buildWorld = do
     "step of the spiral staircase, bares her claws, arches her back, and " ++
     "hisses at you loudly! You are too scared to go past her."
 
+  hhAtrium <- newRoom "atrium" $
+    "This room has a large vaulted skylight covering the ceiling. There are " ++
+    "numerous houseplants in large pots along the walls, but most of them " ++
+    "are yellow from lack of sun. Even though it is cloudless and sunny " ++
+    "today, there is no sun entering through the skylight."
+  newExit "west" hhLanding hhAtrium
+  newExit "east" hhAtrium hhLanding
+
   defaultDropTuna <- getOnDrop tuna
   let checkIfKittyEatsTuna = do
         tunaLoc <- getLocation tuna
@@ -811,6 +819,23 @@ buildWorld = do
           "change in her behavior!"
         setDescription2 hhStaircase $ "The black cat is no longer guarding " ++
           "the stairs."
+        queueAction 4 prowl1
+      prowl1 = do
+        kittyMessage "The black cat walks up the spiral staircase."
+        move blackCat hhLanding
+        kittyMessage "The black cat arrives from below."
+        queueAction 3 prowl2
+      prowl2 = do
+        kittyMessage "The black cat heads west."
+        move blackCat hhAtrium
+        kittyMessage "The black cat arrives from the east."
+        queueAction 3 prowl3
+      prowl3 = do
+        return ()
+      kittyMessage message = do
+        room <- getRoom
+        kittyLocation <- getLocation blackCat
+        when (Just room == kittyLocation) $ msg message
   setOpener tuna (Just canOpener)
   setOnOpen tuna $ do
     msg "You open the can of tuna with the can opener."
@@ -821,14 +846,6 @@ buildWorld = do
       defaultDropTuna
       checkIfKittyEatsTuna
     checkIfKittyEatsTuna -- in case it is opened while in the right place
-
-  hhAtrium <- newRoom "atrium" $
-    "This room has a large vaulted skylight covering the ceiling. There are " ++
-    "numerous houseplants in large pots along the walls, but most of them " ++
-    "are yellow from lack of sun. Even though it is cloudless and sunny " ++
-    "today, there is no sun entering through the skylight."
-  newExit "west" hhLanding hhAtrium
-  newExit "east" hhAtrium hhLanding
 
   disconnect bathroomEntrance
   let onGetBook1 = do
