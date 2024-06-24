@@ -772,7 +772,7 @@ buildWorld = do
   blackCat <- newObject hhStaircase "black cat" $
     "This cat arches its back and hisses when you look at it. It stares at " ++
     "you creepily."
-  addAlias blackCat "cat"
+  addAliases blackCat ["cat", "kitty"]
   setOnGet blackCat $ msg $ "The cat bares its claws and hisses. There is " ++
     "no way you would try to pick up such an unfriendly cat."
   setOnPet blackCat $ msg $ "There is no way to pet such an unfriendly cat. " ++
