@@ -763,7 +763,8 @@ buildWorld = do
   hhStaircase <- newRoom "spiral staircase" $
     "This room has a very large and opulent spiral staircase going to the " ++
     "upstairs floor. The walnut railing is inlaid with mother of pearl, and " ++
-    "the steps are covered in yellow carpet. A very unfriendly black cat is " ++
+    "the steps are covered in yellow carpet."
+  setDescription2 hhStaircase $ "A very unfriendly black cat is " ++
     "staring at you."
   addAlias hhStaircase "staircase"
   staircaseEntrance <- newExit "east" hhKitchen hhStaircase
@@ -808,6 +809,8 @@ buildWorld = do
           "wiggles out of your grasp."
         setOnPet blackCat $ msg $ "The black cat purrs at you. What a " ++
           "change in her behavior!"
+        setDescription2 hhStaircase $ "The black cat is no longer guarding " ++
+          "the stairs."
   setOpener tuna (Just canOpener)
   setOnOpen tuna $ do
     msg "You open the can of tuna with the can opener."
