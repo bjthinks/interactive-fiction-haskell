@@ -246,3 +246,9 @@ setVerb1 ref name action = do
   m <- getVerb1Map ref
   let m' = M.insert name action m
   setVerb1Map ref m'
+
+clearVerb1 :: Ref -> String -> Game ()
+clearVerb1 ref name = do
+  m <- getVerb1Map ref
+  let m' = M.delete name m
+  setVerb1Map ref m'

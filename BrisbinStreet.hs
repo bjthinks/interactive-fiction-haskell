@@ -754,6 +754,7 @@ buildWorld = do
     "A can of StarKist brand skipjack tuna."
   addAliases tuna ["tuna", "can"]
   moveNowhere tuna
+  setVerb1 tuna "eat" $ msg "You haven\'t opened the can of tuna."
   defaultSearchKitchen <- getOnSearch hhKitchen
   setOnSearch hhKitchen $ do
     move tuna hhKitchen
@@ -824,6 +825,7 @@ buildWorld = do
           setName tuna "empty can of tuna"
           setDescription tuna "This is just an empty can now."
           setOnDrop tuna defaultDropTuna
+          clearVerb1 tuna "eat"
       friendlyKitty = do
         setOnGo upSpiral defaultGoUpSpiral
         setDescription blackCat $ "Now what you\'ve fed her, this seems " ++
@@ -883,6 +885,8 @@ buildWorld = do
     setOnDrop tuna $ do
       defaultDropTuna
       checkIfKittyEatsTuna
+    setVerb1 tuna "eat" $ msg $ "You don\'t think you should be the one to " ++
+      "eat this delicious can of tuna."
     checkIfKittyEatsTuna -- in case it is opened while in the right place
 
   disconnect bathroomEntrance
