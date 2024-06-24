@@ -63,10 +63,10 @@ buildWorld = do
           "runs up the tree, and eats the acorn hungrily."
         addPoints 10 "improving your aim"
         setVerb1 acorns "throw" $ throwAcorns subsequentThrow
-        setOnUse acorns $ throwAcorns subsequentThrow
+        setVerb1 acorns "use" $ throwAcorns subsequentThrow
       subsequentThrow = msg "The squirrel catches the acorn and eats it."
   setVerb1 acorns "throw" $ throwAcorns firstThrow
-  setOnUse acorns $ throwAcorns firstThrow
+  setVerb1 acorns "use" $ throwAcorns firstThrow
 
   living <- newRoom "living room" $
     "This is clearly the living room of Granny\'s House. The floor has " ++
@@ -92,7 +92,7 @@ buildWorld = do
           "better in here."
         addPoints 5 "becoming an HVAC specialist"
         let acAlreadyOn = stop "The air conditioner is already running."
-        setOnUse airConditioner acAlreadyOn
+        setVerb1 airConditioner "use" acAlreadyOn
         setOnTurnOn airConditioner acAlreadyOn
         setOnTurnOff airConditioner $ stop $ "You don\'t want to turn " ++
           "it off. It would get hot and muggy again."
@@ -112,7 +112,7 @@ buildWorld = do
               queueAction 4 acCyclesOn
         setDescription2 airConditioner acDesc2On
         queueAction 5 acCyclesOff
-  setOnUse airConditioner acFails
+  setVerb1 airConditioner "use" acFails
   setOnTurnOn airConditioner acFails
   setOnTurnOff airConditioner $ stop "The air conditioner isn\'t running."
 
@@ -147,13 +147,13 @@ buildWorld = do
   let useStove = msg $ "You turn on a burner, and it lights from the pilot " ++
         "light. You let it burn for a little bit, then, having nothing to " ++
         "cook, turn it off."
-  setOnUse stove useStove
+  setVerb1 stove "use" useStove
   setOnLight stove useStove
   setOnTurnOn stove useStove
   setOnTurnOff stove $ stop "The stove is already off."
   matches <- newObject kitchen "matches" "A simple book of paper matches."
   addAlias matches "match"
-  setOnUse matches $
+  setVerb1 matches "use" $
     msg $ "Instead of using the matches, please use the thing you\'re " ++
       "trying to light."
   setOnLight matches $
@@ -182,10 +182,10 @@ buildWorld = do
         msg "You light the candle and it burns brightly."
         addPoints 10 "leveling up your pyromaniac skills"
         let alreadyLit = stop "The candle is already lit."
-        setOnUse candle alreadyLit
+        setVerb1 candle "use" alreadyLit
         setOnLight candle alreadyLit
         setDescription2 candle "It is burning brightly."
-  setOnUse candle useCandleAction
+  setVerb1 candle "use" useCandleAction
   setOnLight candle useCandleAction
 
   hallway <- newRoom "hallway" $
@@ -205,8 +205,8 @@ buildWorld = do
   perfume <- newObject masterBedroom "perfume" $
     "A collection of tiny vials of perfume, probably collected from store " ++
     "samples."
-  setOnUse perfume $ do
-    msg "You wipe perfume on your neck. You smell like cheap perfume now."
+  setVerb1 perfume "use" $ do
+    msg "You wipe perfume on your neck. You smell like perfume now..."
   basementKey <- newObject masterBedroom "basement key" $
     "This is an ordinery-looking key that opens the basement. Type \"unlock " ++
     "down with basement key\" to use it."
@@ -232,7 +232,7 @@ buildWorld = do
   setArticle gabby Nothing
   addAlias gabby "doll"
   addAlias gabby "the doll"
-  setOnUse dollhouse $ do
+  setVerb1 dollhouse "use" $ do
     playerLoc <- getRoom
     maybeDollhouseLoc <- getLocation dollhouse
     let failUseDollhouse = stop "You can\'t use that now."
@@ -344,11 +344,11 @@ buildWorld = do
         addPoints 5 "being an electrician"
         let goodBreakers = "All of the breakers are in the on position."
         setDescription2 circuitBreakerBox goodBreakers
-        setOnUse circuitBreakerBox $ stop goodBreakers
+        setVerb1 circuitBreakerBox "use" $ stop goodBreakers
         setOnTurnOn circuitBreakerBox $ stop goodBreakers
-        setOnUse airConditioner acWorks
+        setVerb1 airConditioner "use" acWorks
         setOnTurnOn airConditioner acWorks
-  setOnUse circuitBreakerBox resetBreaker
+  setVerb1 circuitBreakerBox "use" resetBreaker
   setOnTurnOn circuitBreakerBox resetBreaker
   setOnTurnOff circuitBreakerBox $ stop
     "You shouldn\'t pointlessly monkey around with circuit breakers."
@@ -398,19 +398,19 @@ buildWorld = do
   let lightOn = do
         msg "You turn the bar light on."
         setDescription2 barLight lightOnDesc
-        setOnUse barLight lightOff
+        setVerb1 barLight "use" lightOff
         setOnTurnOn barLight lightAlreadyOn
         setOnTurnOff barLight lightOff
       lightAlreadyOn = stop "The bar light is already on."
       lightOff = do
         msg "You turn the bar light off."
         setDescription2 barLight lightOffDesc
-        setOnUse barLight lightOn
+        setVerb1 barLight "use" lightOn
         setOnTurnOn barLight lightOn
         setOnTurnOff barLight lightAlreadyOff
       lightAlreadyOff = stop "The bar light is already off."
   setDescription2 barLight lightOffDesc
-  setOnUse barLight lightOn
+  setVerb1 barLight "use" lightOn
   setOnTurnOn barLight lightOn
   setOnTurnOff barLight lightAlreadyOff
 
@@ -455,12 +455,12 @@ buildWorld = do
 
   let noUseGlass = stop
         "There isn\'t anything to burn with the sun around here."
-  setOnUse magnifyingGlass $ do
+  setVerb1 magnifyingGlass "use" $ do
     room <- getRoom
     unless (room == driveway) noUseGlass
     msg "You burn ant after ant with the sun, killing many of them."
     addPoints 10 "being an exterminator"
-    setOnUse magnifyingGlass noUseGlass
+    setVerb1 magnifyingGlass "use" noUseGlass
     setDescription2 driveway $
       "There are a great many dead and burned ants littering the concrete " ++
       "driveway. You smile at your deed."
@@ -894,19 +894,19 @@ buildWorld = do
         disconnect bathroomEntrance
         connect staircaseEntrance hhKitchen hhStaircase
         setOnGet book onGetBook2
-        setOnUse book onGetBook2
+        setVerb1 book "use" onGetBook2
       onGetBook2 = do
         getBookMessage
         disconnect staircaseEntrance
         connect bathroomEntrance hhReadingRoom hhBathroom1
         setOnGet book onGetBook1
-        setOnUse book onGetBook1
+        setVerb1 book "use" onGetBook1
       getBookMessage = msg $
         "You try to pick up the red book, but it appears to be attached " ++
         "to some kind of mechanism. You hear walls moving, and the floor " ++
         "plan of the house changes!"
   setOnGet book onGetBook2
-  setOnUse book onGetBook2
+  setVerb1 book "use" onGetBook2
 
   let useSprinkler = do
         stopIfNotAccessible "water grass with" sprinkler
@@ -926,11 +926,11 @@ buildWorld = do
         msg $ "You hook up the sprinkler to the hose and turn it on. The " ++
           "grass greens up right away."
         addPoints 10 "watering the grass"
-        setOnUse sprinkler alreadyRunning
+        setVerb1 sprinkler "use" alreadyRunning
         setOnTurnOn sprinkler alreadyRunning
         setOnGet sprinkler $ stop "You would get wet."
         setDescription2 sideYard healthyGrassStr
-  setOnUse sprinkler useSprinkler
+  setVerb1 sprinkler "use" useSprinkler
   setOnTurnOn sprinkler useSprinkler
   setVerb1 sprinkler "water grass with" useSprinkler
 

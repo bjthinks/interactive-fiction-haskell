@@ -161,7 +161,7 @@ parseLine =
   verb1m ["turn", "on"] TurnOn |||
   verb1  "unlock" UnlockHelp |||
   verb2  "unlock" "with" Unlock |||
-  verb1  "use" Use |||
+  verb1' "use" |||
   verb0  "wait" Wait |||
   -- Need "water grass" -> "What do you want to water the grass with?"
   verb1m' ["water", "grass", "with"] |||

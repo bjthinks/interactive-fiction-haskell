@@ -20,7 +20,6 @@ data Thing = Thing {
   -- Typically, exits go somewhere, but other things don't
   thingExits :: [Ref],
   thingPath :: Maybe (Ref,Ref),
-  thingOnUse :: Game (),
   thingOnTurnOn :: Game (),
   thingOnTurnOff :: Game (),
   thingOnGo :: Game (),
@@ -147,7 +146,6 @@ getLocation     = getProperty thingLocation
 getContents'    = getProperty thingContents
 getExits        = getProperty thingExits
 getPath         = getProperty thingPath
-getOnUse        = getProperty thingOnUse
 getOnTurnOn     = getProperty thingOnTurnOn
 getOnTurnOff    = getProperty thingOnTurnOff
 getOnGo         = getProperty thingOnGo
@@ -189,7 +187,6 @@ setLocation     = setProperty (\t v -> t { thingLocation = v })
 setContents     = setProperty (\t v -> t { thingContents = v })
 setExits        = setProperty (\t v -> t { thingExits = v })
 setPath         = setProperty (\t v -> t { thingPath = v })
-setOnUse        = setProperty (\t v -> t { thingOnUse = v })
 setOnTurnOn     = setProperty (\t v -> t { thingOnTurnOn = v })
 setOnTurnOff    = setProperty (\t v -> t { thingOnTurnOff = v })
 setOnGo         = setProperty (\t v -> t { thingOnGo = v })

@@ -20,7 +20,6 @@ data Verb = Blank
           | PutIn Ref Ref
           | PutAllIn Ref
           | Go Ref
-          | Use Ref
           | TurnOn Ref
           | TurnOff Ref
           | Light Ref
@@ -179,16 +178,6 @@ doVerb (Go ref) = do
   name <- qualifiedName ref
   when locked $ stop $ "The door going " ++ name ++ " is locked."
   action <- getOnGo ref
-  action
-
-doVerb (Use ref) = do
-  let verb = "use"
-  stopIfPlayer verb ref
-  stopIfExit verb ref
-  stopIfInOpenContainer verb ref
-  -- ref is either the room (needed by Gabby's Dollhouse), in the room,
-  -- or in the inventory
-  action <- getOnUse ref
   action
 
 doVerb (TurnOn ref) = do
