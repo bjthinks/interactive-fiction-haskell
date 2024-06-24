@@ -906,6 +906,7 @@ buildWorld = do
   setOnUse book onGetBook2
 
   let useSprinkler = do
+        stopIfNotAccessible "water grass with" sprinkler
         let goodGrassLocs =
               [backyard, frontYard, nickYard, mikeYard, justinYard, motel,
                hauntedYard]
