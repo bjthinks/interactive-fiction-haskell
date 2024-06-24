@@ -20,11 +20,10 @@ buildWorld = do
     "Nick\'s house."
   setArticle brisbin Nothing
 
-  player <- newObject brisbin "myself" $
+  player <- newObject brisbin "yourself" $
     "You are an eight year old boy with blond hair, " ++
     "wearing jeans, a t-shirt, and tennis shoes with tube socks."
-  addAlias player "self"
-  addAlias player "me"
+  addAliases player ["you", "self", "me"]
   setArticle player Nothing
   setPlayer player
   makeContainer player
