@@ -97,6 +97,7 @@ defaultDrop ref = do
 
 defaultThrow :: Ref -> Game ()
 defaultThrow ref = do
+  stopIfNotObject' "throw" ref
   name <- qualifiedName ref
   stop $ "There is no point in throwing " ++ name ++ "."
 

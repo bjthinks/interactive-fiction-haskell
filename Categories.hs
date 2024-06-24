@@ -125,6 +125,42 @@ stopIfExit verb ref = do
   when flag $ stop $ (capitalize name) ++ " is a way to go, " ++
     "not something you can " ++ verb ++ "."
 
+stopIfPlayer' :: String -> Ref -> Game ()
+stopIfPlayer' verb ref = do
+  flag <- isPlayer ref
+  when flag $ cant verb ref
+{-
+stopIfInInventory :: String -> Ref -> Game ()
+stopIfInInventory verb ref = do
+  flag <- isInInventory ref
+  name <- qualifiedName ref
+  when flag $ stop $ capitalize name ++ " is something you are holding, " ++
+    "not something you can " ++ verb ++ "."
+-}
+stopIfRoom' :: String -> Ref -> Game ()
+stopIfRoom' verb ref = do
+  flag <- isRoom ref
+  when flag $ cant verb ref
+{-
+stopIfInRoom :: String -> Ref -> Game ()
+stopIfInRoom verb ref = do
+  flag <- isInRoom ref
+  name <- qualifiedName ref
+  when flag $ stop $ capitalize name ++ " is something here, " ++
+    "not something you can " ++ verb ++ "."
+
+stopIfInOpenContainer :: String -> Ref -> Game ()
+stopIfInOpenContainer verb ref = do
+  flag <- isInOpenContainer ref
+  name <- qualifiedName ref
+  when flag $ stop $ capitalize name ++ " is something in a container, " ++
+    "not something you can " ++ verb ++ "."
+-}
+stopIfExit' :: String -> Ref -> Game ()
+stopIfExit' verb ref = do
+  flag <- isExit ref
+  when flag $ cant verb ref
+
 -- Additional stop functions
 
 stopIfNotOpenContainer :: Ref -> Game ()
@@ -140,6 +176,12 @@ stopIfNotObject verb ref = do
   stopIfPlayer verb ref
   stopIfRoom verb ref
   stopIfExit verb ref
+
+stopIfNotObject' :: String -> Ref -> Game ()
+stopIfNotObject' verb ref = do
+  stopIfPlayer' verb ref
+  stopIfRoom' verb ref
+  stopIfExit' verb ref
 
 stopIfNotInInventory :: String -> Ref -> Game ()
 stopIfNotInInventory verb ref = do
