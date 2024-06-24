@@ -38,6 +38,7 @@ data Verb = Blank
           | OpenHelp Ref
           | Search
           | Score
+          | Wait
           | Help
           | Exit
           | Debug Bool
@@ -326,10 +327,12 @@ doVerb Score = do
     show maxPoints ++ "."
   maybeShowWinMessage
 
+doVerb Wait = msg "You wait for a little while."
+
 doVerb Help = do
   msg "Commands are of the form VERB, VERB NOUN, or VERB NOUN PREPOSITION NOUN."
   msg "Some of the verbs I understand are:"
-  msg "inventory, search, quit"
+  msg "inventory, search, wait, quit"
   msg "go, look, get, drop, throw, use, eat, drink, or pet followed by a noun"
   msg "unlock item/direction/door with key"
   msg "get item from container, or put item in container"

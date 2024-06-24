@@ -135,6 +135,7 @@ parseLine =
   compoundVerb ["take", "all", "from"] GetAllFrom |||
   compoundVerb ["turn", "off"] TurnOff |||
   compoundVerb ["turn", "on"] TurnOn |||
+  simpleVerb   "wait" Wait |||
   verbWithNoun "eat" Eat |||
   verbWithNoun "get" Get |||
   verbWithWord "get" "all" GetAll |||
