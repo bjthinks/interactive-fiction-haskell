@@ -853,6 +853,12 @@ buildWorld = do
           "into a ball and takes a catnap."
         queueAction 3 prowl5
       prowl5 = do
+        kittyMessage "The black cat slinks off to the east."
+        move blackCat hhLanding
+        kittyMessage $ "The black cat arrives from the west. She stretches " ++
+          "and sharpens her claws on the carpet."
+        queueAction 3 prowl6
+      prowl6 = do
         return ()
       kittyMessage message = do
         room <- getRoom
