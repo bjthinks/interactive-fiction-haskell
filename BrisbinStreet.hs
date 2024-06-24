@@ -798,6 +798,14 @@ buildWorld = do
   newExit "west" hhLanding hhAtrium
   newExit "east" hhAtrium hhLanding
 
+  hhHallway <- newRoom "hallway" $
+    "The wood paneling in this part of the house is particularly elegant. " ++
+    "There is an ornate door to the west; it must be the master bedroom. " ++
+    "Strangely, there is no doorknob or handle to be seen; only a keyhole " ++
+    "to unlock it. Several more rooms are in other directions."
+  newExit "north" hhAtrium hhHallway
+  newExit "south" hhHallway hhAtrium
+
   defaultDropTuna <- getOnDrop tuna
   let checkIfKittyEatsTuna = do
         tunaLoc <- getLocation tuna
@@ -823,7 +831,7 @@ buildWorld = do
       prowl1 = do
         kittyMessage "The black cat walks up the spiral staircase."
         move blackCat hhLanding
-        kittyMessage "The black cat arrives from below."
+        kittyMessage "The black cat arrives from below and purrs at you."
         queueAction 3 prowl2
       prowl2 = do
         kittyMessage "The black cat heads west."
@@ -831,6 +839,12 @@ buildWorld = do
         kittyMessage "The black cat arrives from the east."
         queueAction 3 prowl3
       prowl3 = do
+        kittyMessage "The black cat departs to the north."
+        move blackCat hhHallway
+        kittyMessage $ "The black cat arrives from the south. She rubs up " ++
+          "against you affectionately."
+        queueAction 3 prowl4
+      prowl4 = do
         return ()
       kittyMessage message = do
         room <- getRoom
