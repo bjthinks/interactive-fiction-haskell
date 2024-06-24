@@ -39,7 +39,6 @@ defaultThing ref = Thing {
   thingOnPet = defaultPet ref,
   thingOnGetFrom = defaultGetFrom ref,
   thingOnPutIn = defaultPutIn ref,
-  thingOnDrop = defaultDrop ref,
   thingIsContainer = False,
   thingOnUnlock = cant "unlock" ref, -- might be impossible to call this
   thingOnLock = cant "lock" ref, -- might be impossible to call this
@@ -53,6 +52,7 @@ defaultThing ref = Thing {
 
 setDefaults :: Game ()
 setDefaults = do
+  setDefault1 "drop" defaultDrop
   setDefault1 "throw" defaultThrow
 
 defaultGo :: Ref -> Game ()
@@ -90,6 +90,7 @@ defaultPutIn ref container = do
 
 defaultDrop :: Ref -> Game ()
 defaultDrop ref = do
+  stopIfNotInInventory' "drop" ref
   room <- getRoom
   move ref room
   name <- qualifiedName ref

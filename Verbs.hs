@@ -16,7 +16,6 @@ data Verb = Blank
           | GetAll
           | GetFrom Ref Ref
           | GetAllFrom Ref
-          | Drop Ref
           | DropAll
           | PutIn Ref Ref
           | PutAllIn Ref
@@ -138,15 +137,10 @@ doVerb (GetAllFrom container) = do
   let getFromContainer = flip GetFrom container
   mapM_ (doVerb . getFromContainer) contents
 
-doVerb (Drop ref) = do
-  stopIfNotInInventory "drop" ref
-  action <- getOnDrop ref
-  action
-
 doVerb DropAll = do
   thingsToDrop <- getInventory
   when (thingsToDrop == []) $ stop "You\'re not carrying anything."
-  mapM_ (doVerb . Drop) thingsToDrop
+  mapM_ (doVerb . flip Verb1 "drop") thingsToDrop
 
 doVerb (PutIn ref container) = do
   stopIfNotObject "put things into" container

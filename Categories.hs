@@ -130,32 +130,26 @@ stopIfPlayer' verb ref = do
   flag <- isPlayer ref
   when flag $ cant verb ref
 {-
-stopIfInInventory :: String -> Ref -> Game ()
-stopIfInInventory verb ref = do
+stopIfInInventory' :: String -> Ref -> Game ()
+stopIfInInventory' verb ref = do
   flag <- isInInventory ref
-  name <- qualifiedName ref
-  when flag $ stop $ capitalize name ++ " is something you are holding, " ++
-    "not something you can " ++ verb ++ "."
+  when flag $ cant verb ref
 -}
 stopIfRoom' :: String -> Ref -> Game ()
 stopIfRoom' verb ref = do
   flag <- isRoom ref
   when flag $ cant verb ref
-{-
-stopIfInRoom :: String -> Ref -> Game ()
-stopIfInRoom verb ref = do
-  flag <- isInRoom ref
-  name <- qualifiedName ref
-  when flag $ stop $ capitalize name ++ " is something here, " ++
-    "not something you can " ++ verb ++ "."
 
-stopIfInOpenContainer :: String -> Ref -> Game ()
-stopIfInOpenContainer verb ref = do
+stopIfInRoom' :: String -> Ref -> Game ()
+stopIfInRoom' verb ref = do
+  flag <- isInRoom ref
+  when flag $ cant verb ref
+
+stopIfInOpenContainer' :: String -> Ref -> Game ()
+stopIfInOpenContainer' verb ref = do
   flag <- isInOpenContainer ref
-  name <- qualifiedName ref
-  when flag $ stop $ capitalize name ++ " is something in a container, " ++
-    "not something you can " ++ verb ++ "."
--}
+  when flag $ cant verb ref
+
 stopIfExit' :: String -> Ref -> Game ()
 stopIfExit' verb ref = do
   flag <- isExit ref
@@ -188,6 +182,12 @@ stopIfNotInInventory verb ref = do
   stopIfNotObject verb ref
   stopIfInRoom verb ref
   stopIfInOpenContainer verb ref
+
+stopIfNotInInventory' :: String -> Ref -> Game ()
+stopIfNotInInventory' verb ref = do
+  stopIfNotObject' verb ref
+  stopIfInRoom' verb ref
+  stopIfInOpenContainer' verb ref
 
 -- Not used for the Use verb, because of Gabby's Dollhouse
 stopIfNotAccessible :: String -> Ref -> Game ()

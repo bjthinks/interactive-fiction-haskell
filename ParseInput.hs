@@ -119,7 +119,7 @@ parseLine =
   verb0m ["debug", "off"] (Debug False) |||
   verb0m ["debug", "on"] (Debug True) |||
   verb1' "drink" |||
-  verb1  "drop" Drop |||
+  verb1' "drop" |||
   verb0m ["drop", "all"] DropAll |||
   verb1' "eat" |||
   debug  "examine" Examine |||

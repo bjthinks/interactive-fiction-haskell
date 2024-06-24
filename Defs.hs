@@ -30,7 +30,6 @@ data Thing = Thing {
   thingOnPet :: Game (),
   thingOnPutIn :: Ref -> Game (), -- put this thing into ref
   thingOnGetFrom :: Ref -> Game (), -- get this thing from ref
-  thingOnDrop :: Game (),
   thingIsContainer :: Bool,
   thingOnUnlock :: Game (),
   thingOnLock :: Game (),
@@ -158,7 +157,6 @@ getOnGet        = getProperty thingOnGet
 getOnPet        = getProperty thingOnPet
 getOnPutIn      = getProperty thingOnPutIn
 getOnGetFrom    = getProperty thingOnGetFrom
-getOnDrop       = getProperty thingOnDrop
 getIsContainer  = getProperty thingIsContainer
 getOnUnlock     = getProperty thingOnUnlock
 getOnLock       = getProperty thingOnLock
@@ -201,7 +199,6 @@ setOnGet        = setProperty (\t v -> t { thingOnGet = v })
 setOnPet        = setProperty (\t v -> t { thingOnPet = v })
 setOnPutIn      = setProperty (\t v -> t { thingOnPutIn = v })
 setOnGetFrom    = setProperty (\t v -> t { thingOnGetFrom = v })
-setOnDrop       = setProperty (\t v -> t { thingOnDrop = v })
 setIsContainer  = setProperty (\t v -> t { thingIsContainer = v })
 setOnUnlock     = setProperty (\t v -> t { thingOnUnlock = v })
 setOnLock       = setProperty (\t v -> t { thingOnLock = v })

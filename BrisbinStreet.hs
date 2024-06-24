@@ -249,17 +249,17 @@ buildWorld = do
       move player dollhouse
       doVerb $ Look Nothing
       else failUseDollhouse
-  defaultDropGabby <- getOnDrop gabby
+  defaultDropGabby <- getVerb1 gabby "drop"
   defaultPutGabbyIn <- getOnPutIn gabby
   let goInDollhouse = do
         msg $ "Gabby turns into her cartoon self and looks very happy to be " ++
           "in her dollhouse!"
         addPoints 10 "returning Gabby to her home"
-        setOnDrop gabby defaultDropGabby
+        setVerb1 gabby "drop" defaultDropGabby
         setOnPutIn gabby defaultPutGabbyIn
         setDescription gabby
           "This is cartoon Gabby. She likes being in her dollhouse."
-  setOnDrop gabby $ do
+  setVerb1 gabby "drop" $ do
     defaultDropGabby
     maybeGabbyLoc <- getLocation gabby
     when (maybeGabbyLoc == Just dollhouse) goInDollhouse
@@ -632,7 +632,7 @@ buildWorld = do
         setDescription2 player ""
   setOnGet costume getCostume
   setOnGetFrom costume $ \_ -> getCostume
-  setOnDrop costume $ do
+  setVerb1 costume "drop" $ do
     room <- getRoom
     putCostume room
   setOnPutIn costume putCostume
@@ -813,7 +813,7 @@ buildWorld = do
   newExit "north" hhAtrium hhHallway
   newExit "south" hhHallway hhAtrium
 
-  defaultDropTuna <- getOnDrop tuna
+  defaultDropTuna <- getVerb1 tuna "drop"
   let checkIfKittyEatsTuna = do
         tunaLoc <- getLocation tuna
         when (tunaLoc == Just hhStaircase) $ do
@@ -823,7 +823,7 @@ buildWorld = do
           friendlyKitty
           setName tuna "empty can of tuna"
           setDescription tuna "This is just an empty can now."
-          setOnDrop tuna defaultDropTuna
+          setVerb1 tuna "drop" defaultDropTuna
           clearVerb1 tuna "eat"
       friendlyKitty = do
         setOnGo upSpiral defaultGoUpSpiral
@@ -881,7 +881,7 @@ buildWorld = do
     addAlias tuna "can of tuna"
     setDescription tuna "Any cat would eat this tuna right up."
     setOnOpen tuna $ msg "The can of tuna is already open."
-    setOnDrop tuna $ do
+    setVerb1 tuna "drop" $ do
       defaultDropTuna
       checkIfKittyEatsTuna
     setVerb1 tuna "eat" $ msg $ "You don\'t think you should be the one to " ++
