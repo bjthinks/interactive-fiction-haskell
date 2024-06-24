@@ -836,7 +836,7 @@ buildWorld = do
       prowl2 = do
         kittyMessage "The black cat heads west."
         move blackCat hhAtrium
-        kittyMessage "The black cat arrives from the east."
+        kittyMessage "The black cat arrives from the east and meows at you."
         queueAction 3 prowl3
       prowl3 = do
         kittyMessage "The black cat departs to the north."
