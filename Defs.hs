@@ -46,6 +46,7 @@ data Thing = Thing {
   }
 
 data GameState = GameState { things :: M.Map Ref Thing,
+                             default1Map :: M.Map String (Game ()),
                              nextThing :: Ref,
                              maybePlayer :: Maybe Ref,
                              delayedActions :: [(Int, Game ())],
@@ -55,6 +56,7 @@ data GameState = GameState { things :: M.Map Ref Thing,
                              debugFlag :: Bool }
 
 startState = GameState { things = M.empty,
+                         default1Map = M.empty,
                          nextThing = 0,
                          maybePlayer = Nothing,
                          delayedActions = [],
@@ -74,6 +76,20 @@ msg str = tell str >> tell "\n"
 -- into the MaybeT monad transformer.
 stop :: String -> Game ()
 stop str = msg str >> mzero
+
+cant :: String -> Ref -> Game ()
+cant verb ref = do
+  name <- qualifiedName ref
+  stop $ "You can\'t " ++ verb ++ ' ' : name ++ "."
+
+getDefault1 :: Ref -> String -> Game (Game ())
+getDefault1 ref name = do
+  m <- default1Map <$> get
+  let d = cant name ref
+  return $ M.findWithDefault d name m
+
+setDefault1 :: String -> (Ref -> Game ()) -> Game ()
+setDefault1 = undefined
 
 getPlayer :: Game Ref
 getPlayer = do
@@ -228,7 +244,8 @@ debugName ref = do
 getVerb1 :: Ref -> String -> Game (Game ())
 getVerb1 ref name = do
   m <- getVerb1Map ref
-  return $ M.findWithDefault (return ()) name m
+  d <- getDefault1 ref name
+  return $ M.findWithDefault d name m
 
 setVerb1 :: Ref -> String -> Game () -> Game ()
 setVerb1 ref name action = do

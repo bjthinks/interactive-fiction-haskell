@@ -54,11 +54,6 @@ defaultThing ref = Thing {
   thingVerb1Map = M.empty
   }
 
-cant :: String -> Ref -> Game ()
-cant verb ref = do
-  name <- qualifiedName ref
-  stop $ "You can\'t " ++ verb ++ ' ' : name ++ "."
-
 defaultGo :: Ref -> Game ()
 defaultGo ref = do
   Just (_,dest) <- getPath ref
