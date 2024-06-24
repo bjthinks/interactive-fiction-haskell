@@ -72,10 +72,9 @@ verb2 name1 name2 def = do
   eof
   return $ def ref1 ref2
 
-verb0m :: Word -> Word -> Verb -> MyParser Verb
-verb0m name arg def = do
-  matchToken name
-  matchToken arg
+verb0m :: [Word] -> Verb -> MyParser Verb
+verb0m name def = do
+  matchTokens name
   eof
   return def
 
@@ -109,14 +108,14 @@ parseLine =
   verb1  "unlock" UnlockHelp |||
   verb2  "close" "with" Lock ||| -- ??
   verb1  "close" LockHelp |||    -- ??
-  verb0m "debug" "off" (Debug False) |||
-  verb0m "debug" "on" (Debug True) |||
+  verb0m ["debug", "off"] (Debug False) |||
+  verb0m ["debug", "on"] (Debug True) |||
   verb1  "drink" Drink |||
   verb1  "light" Light |||
   verb0  "score" Score |||
   verb1  "throw" Throw |||
   verb1  "drop" Drop |||
-  verb0m "drop" "all" DropAll |||
+  verb0m ["drop", "all"] DropAll |||
   verb0  "exit" Exit |||
   verb0  "help" Help |||
   verb2  "lock" "with" Lock |||
@@ -130,7 +129,7 @@ parseLine =
   verb0  "quit" Exit |||
   verb1  "read" Read |||
   verb1  "take" Get |||
-  verb0m "take" "all" GetAll |||
+  verb0m ["take", "all"] GetAll |||
   verb2  "take" "from" GetFrom |||
   verb1m ["take", "all", "from"] GetAllFrom |||
   verb1m ["turn", "off"] TurnOff |||
@@ -138,7 +137,7 @@ parseLine =
   verb0  "wait" Wait |||
   verb1  "eat" Eat |||
   verb1  "get" Get |||
-  verb0m "get" "all" GetAll |||
+  verb0m ["get", "all"] GetAll |||
   verb2  "get" "from" GetFrom |||
   verb1m ["get", "all", "from"] GetAllFrom |||
   verb1m ["put", "all", "in"] PutAllIn |||
