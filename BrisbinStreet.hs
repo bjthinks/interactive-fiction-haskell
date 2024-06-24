@@ -929,7 +929,7 @@ buildWorld = do
   setOnUse sprinkler useSprinkler
   setOnTurnOn sprinkler useSprinkler
 
-  setMaxScore 95
+  setMaxScore 105
 
   return ()
 
