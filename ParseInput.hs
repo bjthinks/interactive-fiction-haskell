@@ -73,17 +73,24 @@ verb2 name1 name2 def = do
   return $ def ref1 ref2
 
 verb0m :: [Word] -> Verb -> MyParser Verb
-verb0m name def = do
-  matchTokens name
+verb0m names def = do
+  matchTokens names
   eof
   return def
 
 verb1m :: [Word] -> (Ref -> Verb) -> MyParser Verb
-verb1m name def = do
-  matchTokens name
+verb1m names def = do
+  matchTokens names
   ref <- noun
   eof
   return $ def ref
+
+verb1m' :: [Word] -> MyParser Verb
+verb1m' names = do
+  matchTokens names
+  ref <- noun
+  eof
+  return $ Verb1 ref $ unwords names
 
 implicitGo :: MyParser Verb
 implicitGo = do
@@ -149,6 +156,8 @@ parseLine =
   verb2  "unlock" "with" Unlock |||
   verb1  "use" Use |||
   verb0  "wait" Wait |||
+  -- Need "water grass" -> "What do you want to water the grass with?"
+  verb1m' ["water", "grass", "with"] |||
   implicitGo |||
   (eof >> return Blank)
 

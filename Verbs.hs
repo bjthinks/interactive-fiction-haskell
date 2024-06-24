@@ -41,6 +41,7 @@ data Verb = Blank
           | Wait
           | Help
           | Exit
+          | Verb1 Ref String
           | Debug Bool
           | Examine Ref
           | Teleport Ref
@@ -342,6 +343,10 @@ doVerb Help = do
     "\"n\" is short for \"go north\"."
 
 doVerb Exit = stopPlaying
+
+doVerb (Verb1 ref name) = do
+  action <- getVerb1 ref name
+  action
 
 doVerb (Debug flag) = do
   setDebug flag

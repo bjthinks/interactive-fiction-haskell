@@ -928,6 +928,7 @@ buildWorld = do
         setDescription2 sideYard healthyGrassStr
   setOnUse sprinkler useSprinkler
   setOnTurnOn sprinkler useSprinkler
+  setVerb1 sprinkler "water grass with" useSprinkler
 
   setMaxScore 105
 
