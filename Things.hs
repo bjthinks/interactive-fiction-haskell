@@ -29,7 +29,6 @@ defaultThing ref = Thing {
   thingContents = [],
   thingExits = [],
   thingPath = Nothing,
-  thingOnEat = cant "eat" ref,
   thingOnUse = cant "use" ref,
   thingOnTurnOn = cant "turn on" ref,
   thingOnTurnOff = cant "turn off" ref,

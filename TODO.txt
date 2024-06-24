@@ -15,3 +15,4 @@ consider handling plurals in error messages in Categories.hs (e.g. acorns)?
 light candle with match -- complicated
 See if I can do better when the ParseError is an unexpected end of input
 what do you want to lock, unlock, open it with?
+eat the open can of tuna

@@ -121,7 +121,7 @@ parseLine =
   verb1' "drink" |||
   verb1  "drop" Drop |||
   verb0m ["drop", "all"] DropAll |||
-  verb1  "eat" Eat |||
+  verb1' "eat" |||
   debug  "examine" Examine |||
   verb0  "exit" Exit |||
   verb1  "get" Get |||

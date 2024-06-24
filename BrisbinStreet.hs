@@ -52,7 +52,7 @@ buildWorld = do
   acorns <- newObject frontYard "acorns" $
     "Ordinary white oak acorns. Could you throw them at a squirrel?"
   addAlias acorns "acorn"
-  setOnEat acorns $
+  setVerb1 acorns "eat" $
     msg $ "You try one, but they taste terribly bitter. Maybe a squirrel " ++
       "would like them if you threw them at it?"
   let throwAcorns finalAction = do
@@ -161,17 +161,17 @@ buildWorld = do
     msg $ "You light a match and watch as it burns down towards your " ++
     "fingers. You blow out the match and throw it away."
   apple <- newObject kitchen "apple" "A red delicious apple."
-  setOnEat apple $ do
+  setVerb1 apple "eat" $ do
     msg "The apple tastes sweet and slightly astringent."
     moveNowhere apple
     addPoints 5 "tasting an apple"
   banana <- newObject kitchen "banana" "The bottom half of a banana."
-  setOnEat banana $ do
+  setVerb1 banana "eat" $ do
     msg "The half banana tastes great and is surprisingly filling."
     moveNowhere banana
     addPoints 5 "finishing a banana"
   orange <- newObject kitchen "orange" "A large seedless navel orange."
-  setOnEat orange $ msg "Oranges don\'t agree with you."
+  setVerb1 orange "eat" $ msg "Oranges don\'t agree with you."
 
   let useCandleAction = do
         maybeCandleLoc <- getLocation candle
@@ -564,7 +564,7 @@ buildWorld = do
   newExit "north" justinYard eastBrisbin
   crabapple <- newObject justinYard "crabapple" $
     "This crabapple looks like it might have a worm in it. Yuck!"
-  setOnEat crabapple $ do
+  setVerb1 crabapple "eat" $ do
     msg "You eat the crabapple, worm and all! YUCK!"
     moveNowhere crabapple
     addPoints (-10) "grossing yourself out"

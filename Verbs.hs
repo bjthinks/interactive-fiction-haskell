@@ -21,7 +21,6 @@ data Verb = Blank
           | PutIn Ref Ref
           | PutAllIn Ref
           | Go Ref
-          | Eat Ref
           | Use Ref
           | TurnOn Ref
           | TurnOff Ref
@@ -192,11 +191,6 @@ doVerb (Go ref) = do
   name <- qualifiedName ref
   when locked $ stop $ "The door going " ++ name ++ " is locked."
   action <- getOnGo ref
-  action
-
-doVerb (Eat ref) = do
-  stopIfNotAccessible "eat" ref
-  action <- getOnEat ref
   action
 
 doVerb (Use ref) = do
