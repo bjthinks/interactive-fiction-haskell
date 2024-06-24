@@ -858,6 +858,7 @@ buildWorld = do
     setName tuna "open can of tuna"
     addAlias tuna "can of tuna"
     setDescription tuna "Any cat would eat this tuna right up."
+    setOnOpen tuna $ msg "The can of tuna is already open."
     setOnDrop tuna $ do
       defaultDropTuna
       checkIfKittyEatsTuna
