@@ -42,7 +42,7 @@ data Thing = Thing {
   thingOpener :: Maybe Ref, -- if Nothing, defers to Unlock
   thingOnOpen :: Game (),
   thingOnSearch :: Game (),
-  thingVerb1 :: M.Map String (Game ())
+  thingVerb1Map :: M.Map String (Game ())
   }
 
 data GameState = GameState { things :: M.Map Ref Thing,
@@ -154,7 +154,7 @@ getKey          = getProperty thingKey
 getOpener       = getProperty thingOpener
 getOnOpen       = getProperty thingOnOpen
 getOnSearch     = getProperty thingOnSearch
-getVerb1        = getProperty thingVerb1
+getVerb1Map     = getProperty thingVerb1Map
 
 getIsUnlocked :: Ref -> Game Bool
 getIsUnlocked = fmap not . getIsLocked
@@ -200,7 +200,7 @@ setKey          = setProperty (\t v -> t { thingKey = v })
 setOpener       = setProperty (\t v -> t { thingOpener = v })
 setOnOpen       = setProperty (\t v -> t { thingOnOpen = v })
 setOnSearch     = setProperty (\t v -> t { thingOnSearch = v })
-setVerb1        = setProperty (\t v -> t { thingVerb1 = v })
+setVerb1Map     = setProperty (\t v -> t { thingVerb1Map = v })
 
 addAlias :: Ref -> String -> Game ()
 addAlias ref alias = do
@@ -224,3 +224,14 @@ debugName :: Ref -> Game String
 debugName ref = do
   name <- getName ref
   return $ name ++ " (Ref: " ++ show ref ++ ")"
+
+getVerb1 :: Ref -> String -> Game (Game ())
+getVerb1 ref name = do
+  m <- getVerb1Map ref
+  return $ M.findWithDefault (return ()) name m
+
+setVerb1 :: Ref -> String -> Game () -> Game ()
+setVerb1 ref name action = do
+  m <- getVerb1Map ref
+  let m' = M.insert name action m
+  setVerb1Map ref m'

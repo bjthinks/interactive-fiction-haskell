@@ -51,7 +51,7 @@ defaultThing ref = Thing {
   thingOpener = Nothing, -- defers to Unlock unless set
   thingOnOpen = return (),
   thingOnSearch = defaultSearch ref,
-  thingVerb1 = M.empty
+  thingVerb1Map = M.empty
   }
 
 cant :: String -> Ref -> Game ()
