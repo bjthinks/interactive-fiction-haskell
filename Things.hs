@@ -40,7 +40,6 @@ defaultThing ref = Thing {
   thingKey = Nothing,
   thingOpener = Nothing, -- defers to Unlock unless set
   thingOnOpen = return (),
-  thingOnSearch = defaultSearch ref,
   thingVerb1Map = M.empty
   }
 
@@ -48,6 +47,7 @@ setDefaults :: Game ()
 setDefaults = do
   setDefault1 "drop" defaultDrop
   setDefault1 "pet" defaultPet
+  setDefault1 "search" defaultSearch
   setDefault1 "throw" defaultThrow
 
 defaultGo :: Ref -> Game ()

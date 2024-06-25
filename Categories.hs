@@ -167,8 +167,17 @@ setGuard name action = do
 setGuards :: Game ()
 setGuards = do
   setGuard "drop" (stopIfNotInInventory "drop")
+  setGuard "search" searchGuard
   setGuard "throw" (stopIfNotInInventory "throw")
   setGuard "use" useGuard
+
+-- TODO: note the following two guards are identical
+searchGuard :: Ref -> Game ()
+searchGuard ref = do
+  let verb = "search"
+  stopIfPlayer verb ref
+  stopIfExit verb ref
+  stopIfInOpenContainer verb ref
 
 useGuard :: Ref -> Game ()
 useGuard ref = do

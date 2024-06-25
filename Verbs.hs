@@ -253,7 +253,7 @@ doVerb (OpenHelp item) = do
 
 doVerb Search = do
   room <- getRoom
-  action <- getOnSearch room
+  action <- getVerb1 "search" room
   action
 
 doVerb Score = do

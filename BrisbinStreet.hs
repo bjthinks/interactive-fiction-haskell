@@ -317,12 +317,12 @@ buildWorld = do
   upstairsKey <- newObject laundryDesk "upstairs key" $
     "This is an ordinary looking key to the upstairs level of Granny\'s House."
   moveNowhere upstairsKey
-  defaultSearchLaundryRoom <- getOnSearch laundryRoom
-  setOnSearch laundryRoom $ do
+  defaultSearchLaundryRoom <- getVerb1 "search" laundryRoom
+  setVerb1 "search" laundryRoom $ do
     msg "You search the room thoroughly, and find something in the desk."
     move upstairsKey laundryDesk
     setDescription2 laundryRoom ""
-    setOnSearch laundryRoom defaultSearchLaundryRoom
+    setVerb1 "search" laundryRoom defaultSearchLaundryRoom
 
   diningRoom <- newRoom "dining room" $
     "This small room is nearly filled with a huge round oaken table. " ++
@@ -670,13 +670,13 @@ buildWorld = do
   setDescription2 hhReadingRoom $
     "There is a lot of clutter on the floor. Maybe there is something " ++
     "important hidden here?"
-  defaultSearchAction <- getOnSearch hhReadingRoom
-  setOnSearch hhReadingRoom $ do
+  defaultSearchAction <- getVerb1 "search" hhReadingRoom
+  setVerb1 "search" hhReadingRoom $ do
     msg $ "You look everywhere, and find a crooked key under one of the " ++
       "armchairs."
     move crookedKey hhReadingRoom
     addPoints 5 "finding a useful key"
-    setOnSearch hhReadingRoom defaultSearchAction
+    setVerb1 "search" hhReadingRoom defaultSearchAction
     setDescription2 hhReadingRoom ""
   makeLocked writingDesk crookedKey
   -- These two lines should come after makeLocked above
@@ -757,12 +757,12 @@ buildWorld = do
   addAliases tuna ["tuna", "can"]
   moveNowhere tuna
   setVerb1 "eat" tuna $ msg "You haven\'t opened the can of tuna."
-  defaultSearchKitchen <- getOnSearch hhKitchen
-  setOnSearch hhKitchen $ do
+  defaultSearchKitchen <- getVerb1 "search" hhKitchen
+  setVerb1 "search" hhKitchen $ do
     move tuna hhKitchen
     msg "You look in the cupboards and find some cans of tuna."
     addPoints 5 "finding something delicious"
-    setOnSearch hhKitchen defaultSearchKitchen
+    setVerb1 "search" hhKitchen defaultSearchKitchen
 
   hhStaircase <- newRoom "spiral staircase" $
     "This room has a very large and opulent spiral staircase going to the " ++

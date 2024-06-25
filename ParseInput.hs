@@ -131,6 +131,7 @@ parseLine =
   verb1' "read" |||
   verb0  "score" Score |||
   verb0  "search" Search |||
+  verb1' "search" |||
   verb1  "take" Get |||
   verb0  "take all" GetAll |||
   verb2  "take" "from" GetFrom |||

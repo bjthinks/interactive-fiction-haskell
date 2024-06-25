@@ -31,7 +31,6 @@ data Thing = Thing {
   thingKey :: Maybe Ref,
   thingOpener :: Maybe Ref, -- if Nothing, defers to Unlock
   thingOnOpen :: Game (),
-  thingOnSearch :: Game (),
   thingVerb1Map :: M.Map String (Game ())
   }
 
@@ -137,7 +136,6 @@ getIsLocked     = getProperty thingIsLocked
 getKey          = getProperty thingKey
 getOpener       = getProperty thingOpener
 getOnOpen       = getProperty thingOnOpen
-getOnSearch     = getProperty thingOnSearch
 getVerb1Map     = getProperty thingVerb1Map
 
 getIsUnlocked :: Ref -> Game Bool
@@ -173,7 +171,6 @@ setIsLocked     = setProperty (\t v -> t { thingIsLocked = v })
 setKey          = setProperty (\t v -> t { thingKey = v })
 setOpener       = setProperty (\t v -> t { thingOpener = v })
 setOnOpen       = setProperty (\t v -> t { thingOnOpen = v })
-setOnSearch     = setProperty (\t v -> t { thingOnSearch = v })
 setVerb1Map     = setProperty (\t v -> t { thingVerb1Map = v })
 
 addAlias :: Ref -> String -> Game ()
