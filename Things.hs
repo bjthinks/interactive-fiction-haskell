@@ -29,7 +29,6 @@ defaultThing ref = Thing {
   thingContents = [],
   thingExits = [],
   thingPath = Nothing,
-  thingOnTurnOn = cant "turn on" ref,
   thingOnTurnOff = cant "turn off" ref,
   thingOnGo = defaultGo ref,
   thingOnLight = cant "light" ref,

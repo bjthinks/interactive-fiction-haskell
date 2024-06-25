@@ -158,7 +158,7 @@ parseLine =
   debug  "teleport" Teleport |||
   verb1' "throw" |||
   verb1m ["turn", "off"] TurnOff |||
-  verb1m ["turn", "on"] TurnOn |||
+  verb1m' ["turn", "on"] |||
   verb1  "unlock" UnlockHelp |||
   verb2  "unlock" "with" Unlock |||
   verb1' "use" |||
