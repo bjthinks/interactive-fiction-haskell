@@ -32,12 +32,12 @@ buildWorld = do
   mathBook <- newObject backpack "math book" $
     "A second grade math textbook."
   setDescription2 mathBook "You might learn something if you read it."
-  setOnRead mathBook $ do
+  setVerb1 "read" mathBook $ do
     msg $ "You read some second grade math and feel smarter about carrying " ++
       "and borrowing."
     addPoints 5 "learning something"
     setDescription2 mathBook ""
-    setOnRead mathBook $ stop "You\'ve already read that."
+    setVerb1 "read" mathBook $ stop "You\'ve already read that."
 
   frontYard <- newRoom "Granny\'s front yard" $
     "The grass has many holes in it where squirrels have been " ++
@@ -127,7 +127,8 @@ buildWorld = do
   newExit "east" dinette living
   newspaper <- newObject dinette "newspaper" $
     "This is today\'s issue of the Minneapolis Star and Tribune."
-  setOnRead newspaper $ msg $ "You read the sports section. It\'s all about " ++
+  setVerb1 "read" newspaper $ msg $
+    "You read the sports section. It\'s all about " ++
     "how the Minnesota Twins won the 1987 World Series."
   candle <- newObject dinette "candle" "A plain red candle."
   setDescription2 candle "It is not lit."
@@ -428,7 +429,7 @@ buildWorld = do
   note <- newObject basementBathroom "note" $
     "This helpful note lists ways to earn points in this game. Reading it " ++
     "is considered cheating!"
-  setOnRead note $ do
+  setVerb1 "read" note $ do
     msg "Ways to Earn Points:"
     msg "1. Learn some math"
     msg "2. Pet a bunny"
@@ -701,7 +702,7 @@ buildWorld = do
   addAlias flask "holy water"
   setVerb1 "drink" flask $ msg $ "You have a feeling the contents of " ++
     "this flask are too important to drink."
-  setOnRead flask $ doVerb $ Look (Just flask)
+  setVerb1 "read" flask $ doVerb $ Look (Just flask)
 
   hhDiningRoom <- newRoom "dining room" $
     "This dining room has a huge octagonal hardwood table with eight chairs " ++
