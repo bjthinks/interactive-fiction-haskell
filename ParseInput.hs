@@ -77,13 +77,17 @@ verb1' name = do
   matchTokens $ words name
   ref <- noun
   eof
-  return $ Verb1 name ref
+  return $ Verb1 (alias1 name) ref
+
+alias1 :: String -> String
+alias1 "move" = "go"
+alias1 x = x
 
 implicitGo :: MyParser Verb
 implicitGo = do
   ref <- noun
   eof
-  return $ Go ref
+  return $ Verb1 "go" ref
 
 debug :: String -> (Ref -> Verb) -> MyParser Verb
 debug name def = do
@@ -108,7 +112,7 @@ parseLine =
   verb0  "get all" GetAll |||
   verb2  "get" "from" GetFrom |||
   verb1  "get all from" GetAllFrom |||
-  verb1  "go" Go |||
+  verb1' "go" |||
   verb0  "help" Help |||
   verb0  "i" Inventory |||
   verb0  "inventory" Inventory |||
@@ -120,7 +124,7 @@ parseLine =
   verb0  "look" (Look Nothing) |||
   verb1  "look" (Look . Just) |||
   verb1  "look at" (Look . Just) |||
-  verb1  "move" Go |||
+  verb1' "move" |||
   verb1  "open" OpenHelp |||
   verb2  "open" "with" Open |||
   verb1' "pet" |||

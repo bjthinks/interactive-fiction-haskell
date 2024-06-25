@@ -19,7 +19,6 @@ data Verb = Blank
           | DropAll
           | PutIn Ref Ref
           | PutAllIn Ref
-          | Go Ref
           | Unlock Ref Ref
           | Lock Ref Ref
           | UnlockHelp Ref
@@ -160,20 +159,6 @@ doVerb (PutAllIn container) = do
     containerName ++ "."
   let putInContainer = flip PutIn container
   mapM_ (doVerb . putInContainer) thingsToPutIn
-
-doVerb (Go ref) = do
-  let verb = "go to or through"
-  stopIfPlayer verb ref
-  stopIfInInventory verb ref
-  stopIfRoom verb ref
-  stopIfInRoom verb ref
-  stopIfInOpenContainer verb ref
-  -- ref is an exit
-  locked <- getIsLocked ref
-  name <- qualifiedName ref
-  when locked $ stop $ "The door going " ++ name ++ " is locked."
-  action <- getOnGo ref
-  action
 
 doVerb (Unlock ref key) = do
   let verb = "unlock"

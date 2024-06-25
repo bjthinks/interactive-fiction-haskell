@@ -790,11 +790,11 @@ buildWorld = do
     ""
   upSpiral <- newExit "up" hhStaircase hhLanding
   newExit "down" hhLanding hhStaircase
-  defaultGoUpSpiral <- getOnGo upSpiral
-  setOnGo upSpiral $ stop $ "The black cat positions herself on the first " ++
-    "step of the spiral staircase, bares her claws, arches her back, and " ++
-    "hisses at you loudly! You are too scared to go past her. There must " ++
-    "be a way to get on this cat\'s good side."
+  defaultGoUpSpiral <- getVerb1 "go" upSpiral
+  setVerb1 "go" upSpiral $ stop $ "The black cat positions herself on " ++
+    "the first step of the spiral staircase, bares her claws, arches " ++
+    "her back, and hisses at you loudly! You are too scared to go " ++
+    "past her. There must be a way to get on this cat\'s good side."
 
   hhAtrium <- newRoom "atrium" $
     "This room has a large vaulted skylight covering the ceiling. There are " ++
@@ -829,7 +829,7 @@ buildWorld = do
           setVerb1 "drop" tuna defaultDropTuna
           clearVerb1 "eat" tuna
       friendlyKitty = do
-        setOnGo upSpiral defaultGoUpSpiral
+        setVerb1 "go" upSpiral defaultGoUpSpiral
         setDescription blackCat $ "Now what you\'ve fed her, this seems " ++
           "like a pretty friendly cat."
         setOnGet blackCat $ msg $ "You try to pick her up, but she still " ++

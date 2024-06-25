@@ -4,6 +4,7 @@ import Defs
 import Categories
 import Actions
 import Verbs
+import Control.Monad
 import Control.Monad.RWS
 import qualified Data.Map.Strict as M
 
@@ -29,7 +30,6 @@ defaultThing ref = Thing {
   thingContents = [],
   thingExits = [],
   thingPath = Nothing,
-  thingOnGo = defaultGo ref,
   thingOnGet = defaultGet ref,
   thingOnGetFrom = defaultGetFrom ref,
   thingOnPutIn = defaultPutIn ref,
@@ -46,16 +46,10 @@ defaultThing ref = Thing {
 setDefaults :: Game ()
 setDefaults = do
   setDefault1 "drop" defaultDrop
+  setDefault1 "go" defaultGo
   setDefault1 "pet" defaultPet
   setDefault1 "search" defaultSearch
   setDefault1 "throw" defaultThrow
-
-defaultGo :: Ref -> Game ()
-defaultGo ref = do
-  Just (_,dest) <- getPath ref
-  player <- getPlayer
-  move player dest
-  doVerb (Look Nothing)
 
 defaultGet :: Ref -> Game ()
 defaultGet ref = do
@@ -85,6 +79,16 @@ defaultDrop ref = do
   move ref room
   name <- qualifiedName ref
   msg $ "You drop " ++ name ++ "."
+
+defaultGo :: Ref -> Game ()
+defaultGo ref = do
+  locked <- getIsLocked ref
+  name <- qualifiedName ref
+  when locked $ stop $ "The door going " ++ name ++ " is locked."
+  Just (_,dest) <- getPath ref
+  player <- getPlayer
+  move player dest
+  doVerb (Look Nothing)
 
 defaultPet :: Ref -> Game ()
 defaultPet ref = do

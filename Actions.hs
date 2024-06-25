@@ -84,5 +84,5 @@ makeLocked ref key = do
 
 beforeGo :: Ref -> Game () -> Game ()
 beforeGo ref preAction = do
-  action <- getOnGo ref
-  setOnGo ref $ preAction >> action
+  action <- getVerb1 "go" ref
+  setVerb1 "go" ref $ preAction >> action
