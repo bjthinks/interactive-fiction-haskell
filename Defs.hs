@@ -226,6 +226,8 @@ setDefault1 name action = do
 getVerb1 :: String -> Ref -> Game (Game ())
 getVerb1 name ref = do
   m <- getVerb1Map ref
+  debug <- getDebug
+  when debug $ msg $ "Verb1 keys: " ++ show (M.keys m)
   d <- getDefault1 name
   return $ M.findWithDefault (d ref) name m
 
