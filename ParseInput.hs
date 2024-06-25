@@ -90,14 +90,14 @@ verb1' name = do
   matchToken name
   ref <- noun
   eof
-  return $ Verb1 ref name
+  return $ Verb1 name ref
 
 verb1m' :: [Word] -> MyParser Verb
 verb1m' names = do
   matchTokens names
   ref <- noun
   eof
-  return $ Verb1 ref $ unwords names
+  return $ Verb1 (unwords names) ref
 
 implicitGo :: MyParser Verb
 implicitGo = do

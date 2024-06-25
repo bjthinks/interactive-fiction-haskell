@@ -35,7 +35,7 @@ data Verb = Blank
           | Wait
           | Help
           | Exit
-          | Verb1 Ref String
+          | Verb1 String Ref
           | Debug Bool
           | Examine Ref
           | Teleport Ref
@@ -138,7 +138,7 @@ doVerb (GetAllFrom container) = do
 doVerb DropAll = do
   thingsToDrop <- getInventory
   when (thingsToDrop == []) $ stop "You\'re not carrying anything."
-  mapM_ (doVerb . flip Verb1 "drop") thingsToDrop
+  mapM_ (doVerb . Verb1 "drop") thingsToDrop
 
 doVerb (PutIn ref container) = do
   stopIfNotObject "put things into" container
@@ -303,7 +303,7 @@ doVerb Help = do
 
 doVerb Exit = stopPlaying
 
-doVerb (Verb1 ref name) = do
+doVerb (Verb1 name ref) = do
   action <- getVerb1 ref name
   action
 
