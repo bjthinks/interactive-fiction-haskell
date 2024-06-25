@@ -304,7 +304,7 @@ doVerb Help = do
 doVerb Exit = stopPlaying
 
 doVerb (Verb1 name ref) = do
-  action <- getVerb1 ref name
+  action <- getVerb1 name ref
   action
 
 doVerb (Debug flag) = do

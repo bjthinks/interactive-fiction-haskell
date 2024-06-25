@@ -51,7 +51,7 @@ buildWorld = do
   acorns <- newObject frontYard "acorns" $
     "Ordinary white oak acorns. Could you throw them at a squirrel?"
   addAlias acorns "acorn"
-  setVerb1 acorns "eat" $
+  setVerb1 "eat" acorns $
     msg $ "You try one, but they taste terribly bitter. Maybe a squirrel " ++
       "would like them if you threw them at it?"
   let throwAcorns finalAction = do
@@ -62,11 +62,11 @@ buildWorld = do
         msg $ "You throw an acorn at the squirrel. She catches the acorn, " ++
           "runs up the tree, and eats the acorn hungrily."
         addPoints 10 "improving your aim"
-        setVerb1 acorns "throw" $ throwAcorns subsequentThrow
-        setVerb1 acorns "use" $ throwAcorns subsequentThrow
+        setVerb1 "throw" acorns $ throwAcorns subsequentThrow
+        setVerb1 "use" acorns $ throwAcorns subsequentThrow
       subsequentThrow = msg "The squirrel catches the acorn and eats it."
-  setVerb1 acorns "throw" $ throwAcorns firstThrow
-  setVerb1 acorns "use" $ throwAcorns firstThrow
+  setVerb1 "throw" acorns $ throwAcorns firstThrow
+  setVerb1 "use" acorns $ throwAcorns firstThrow
 
   living <- newRoom "living room" $
     "This is clearly the living room of Granny\'s House. The floor has " ++
@@ -92,8 +92,8 @@ buildWorld = do
           "better in here."
         addPoints 5 "becoming an HVAC specialist"
         let acAlreadyOn = stop "The air conditioner is already running."
-        setVerb1 airConditioner "use" acAlreadyOn
-        setVerb1 airConditioner "turn on" acAlreadyOn
+        setVerb1 "use" airConditioner acAlreadyOn
+        setVerb1 "turn on" airConditioner acAlreadyOn
         setOnTurnOff airConditioner $ stop $ "You don\'t want to turn " ++
           "it off. It would get hot and muggy again."
         setDescription2 living "It feels cool and pleasant in here."
@@ -112,8 +112,8 @@ buildWorld = do
               queueAction 4 acCyclesOn
         setDescription2 airConditioner acDesc2On
         queueAction 5 acCyclesOff
-  setVerb1 airConditioner "use" acFails
-  setVerb1 airConditioner "turn on" acFails
+  setVerb1 "use" airConditioner acFails
+  setVerb1 "turn on" airConditioner acFails
   setOnTurnOff airConditioner $ stop "The air conditioner isn\'t running."
 
   dinette <- newRoom "dinette" $
@@ -147,30 +147,30 @@ buildWorld = do
   let useStove = msg $ "You turn on a burner, and it lights from the pilot " ++
         "light. You let it burn for a little bit, then, having nothing to " ++
         "cook, turn it off."
-  setVerb1 stove "use" useStove
+  setVerb1 "use" stove useStove
   setOnLight stove useStove
-  setVerb1 stove "turn on" useStove
+  setVerb1 "turn on" stove useStove
   setOnTurnOff stove $ stop "The stove is already off."
   matches <- newObject kitchen "matches" "A simple book of paper matches."
   addAlias matches "match"
-  setVerb1 matches "use" $
+  setVerb1 "use" matches $
     msg $ "Instead of using the matches, please use the thing you\'re " ++
       "trying to light."
   setOnLight matches $
     msg $ "You light a match and watch as it burns down towards your " ++
     "fingers. You blow out the match and throw it away."
   apple <- newObject kitchen "apple" "A red delicious apple."
-  setVerb1 apple "eat" $ do
+  setVerb1 "eat" apple $ do
     msg "The apple tastes sweet and slightly astringent."
     moveNowhere apple
     addPoints 5 "tasting an apple"
   banana <- newObject kitchen "banana" "The bottom half of a banana."
-  setVerb1 banana "eat" $ do
+  setVerb1 "eat" banana $ do
     msg "The half banana tastes great and is surprisingly filling."
     moveNowhere banana
     addPoints 5 "finishing a banana"
   orange <- newObject kitchen "orange" "A large seedless navel orange."
-  setVerb1 orange "eat" $ msg "Oranges don\'t agree with you."
+  setVerb1 "eat" orange $ msg "Oranges don\'t agree with you."
 
   let useCandleAction = do
         maybeCandleLoc <- getLocation candle
@@ -182,10 +182,10 @@ buildWorld = do
         msg "You light the candle and it burns brightly."
         addPoints 10 "leveling up your pyromaniac skills"
         let alreadyLit = stop "The candle is already lit."
-        setVerb1 candle "use" alreadyLit
+        setVerb1 "use" candle alreadyLit
         setOnLight candle alreadyLit
         setDescription2 candle "It is burning brightly."
-  setVerb1 candle "use" useCandleAction
+  setVerb1 "use" candle useCandleAction
   setOnLight candle useCandleAction
 
   hallway <- newRoom "hallway" $
@@ -205,7 +205,7 @@ buildWorld = do
   perfume <- newObject masterBedroom "perfume" $
     "A collection of tiny vials of perfume, probably collected from store " ++
     "samples."
-  setVerb1 perfume "use" $ do
+  setVerb1 "use" perfume $ do
     msg "You wipe perfume on your neck. You smell like perfume now..."
   basementKey <- newObject masterBedroom "basement key" $
     "This is an ordinery-looking key that opens the basement. Type \"unlock " ++
@@ -232,7 +232,7 @@ buildWorld = do
   setArticle gabby Nothing
   addAlias gabby "doll"
   addAlias gabby "the doll"
-  setVerb1 dollhouse "use" $ do
+  setVerb1 "use" dollhouse $ do
     playerLoc <- getRoom
     maybeDollhouseLoc <- getLocation dollhouse
     let failUseDollhouse = stop "You can\'t use that now."
@@ -249,17 +249,17 @@ buildWorld = do
       move player dollhouse
       doVerb $ Look Nothing
       else failUseDollhouse
-  defaultDropGabby <- getVerb1 gabby "drop"
+  defaultDropGabby <- getVerb1 "drop" gabby
   defaultPutGabbyIn <- getOnPutIn gabby
   let goInDollhouse = do
         msg $ "Gabby turns into her cartoon self and looks very happy to be " ++
           "in her dollhouse!"
         addPoints 10 "returning Gabby to her home"
-        setVerb1 gabby "drop" defaultDropGabby
+        setVerb1 "drop" gabby defaultDropGabby
         setOnPutIn gabby defaultPutGabbyIn
         setDescription gabby
           "This is cartoon Gabby. She likes being in her dollhouse."
-  setVerb1 gabby "drop" $ do
+  setVerb1 "drop" gabby $ do
     defaultDropGabby
     maybeGabbyLoc <- getLocation gabby
     when (maybeGabbyLoc == Just dollhouse) goInDollhouse
@@ -344,12 +344,12 @@ buildWorld = do
         addPoints 5 "being an electrician"
         let goodBreakers = "All of the breakers are in the on position."
         setDescription2 circuitBreakerBox goodBreakers
-        setVerb1 circuitBreakerBox "use" $ stop goodBreakers
-        setVerb1 circuitBreakerBox "turn on" $ stop goodBreakers
-        setVerb1 airConditioner "use" acWorks
-        setVerb1 airConditioner "turn on" acWorks
-  setVerb1 circuitBreakerBox "use" resetBreaker
-  setVerb1 circuitBreakerBox "turn on" resetBreaker
+        setVerb1 "use" circuitBreakerBox $ stop goodBreakers
+        setVerb1 "turn on" circuitBreakerBox $ stop goodBreakers
+        setVerb1 "use" airConditioner acWorks
+        setVerb1 "turn on" airConditioner acWorks
+  setVerb1 "use" circuitBreakerBox resetBreaker
+  setVerb1 "turn on" circuitBreakerBox resetBreaker
   setOnTurnOff circuitBreakerBox $ stop
     "You shouldn\'t pointlessly monkey around with circuit breakers."
 
@@ -386,7 +386,7 @@ buildWorld = do
   addAliases spirits ["alcohol", "whiskey", "booze", "liquor"]
   setOnGet spirits $ msg $ "As you are underage, you don't think you should " ++
     "be walking around with opened liquor bottles."
-  setVerb1 spirits "drink" $ msg $ "An eight year old boy such as yourself " ++
+  setVerb1 "drink" spirits $ msg $ "An eight year old boy such as yourself " ++
     "should not be drinking booze."
 
   barLight <- newObject basementBar "light" $ "This is a small round light " ++
@@ -398,20 +398,20 @@ buildWorld = do
   let lightOn = do
         msg "You turn the bar light on."
         setDescription2 barLight lightOnDesc
-        setVerb1 barLight "use" lightOff
-        setVerb1 barLight "turn on" lightAlreadyOn
+        setVerb1 "use" barLight lightOff
+        setVerb1 "turn on" barLight lightAlreadyOn
         setOnTurnOff barLight lightOff
       lightAlreadyOn = stop "The bar light is already on."
       lightOff = do
         msg "You turn the bar light off."
         setDescription2 barLight lightOffDesc
-        setVerb1 barLight "use" lightOn
-        setVerb1 barLight "turn on" lightOn
+        setVerb1 "use" barLight lightOn
+        setVerb1 "turn on" barLight lightOn
         setOnTurnOff barLight lightAlreadyOff
       lightAlreadyOff = stop "The bar light is already off."
   setDescription2 barLight lightOffDesc
-  setVerb1 barLight "use" lightOn
-  setVerb1 barLight "turn on" lightOn
+  setVerb1 "use" barLight lightOn
+  setVerb1 "turn on" barLight lightOn
   setOnTurnOff barLight lightAlreadyOff
 
   basementBathroom <- newRoom "bathroom" $
@@ -455,12 +455,12 @@ buildWorld = do
 
   let noUseGlass = stop
         "There isn\'t anything to burn with the sun around here."
-  setVerb1 magnifyingGlass "use" $ do
+  setVerb1 "use" magnifyingGlass $ do
     room <- getRoom
     unless (room == driveway) noUseGlass
     msg "You burn ant after ant with the sun, killing many of them."
     addPoints 10 "being an exterminator"
-    setVerb1 magnifyingGlass "use" noUseGlass
+    setVerb1 "use" magnifyingGlass noUseGlass
     setDescription2 driveway $
       "There are a great many dead and burned ants littering the concrete " ++
       "driveway. You smile at your deed."
@@ -563,7 +563,7 @@ buildWorld = do
   newExit "north" justinYard eastBrisbin
   crabapple <- newObject justinYard "crabapple" $
     "This crabapple looks like it might have a worm in it. Yuck!"
-  setVerb1 crabapple "eat" $ do
+  setVerb1 "eat" crabapple $ do
     msg "You eat the crabapple, worm and all! YUCK!"
     moveNowhere crabapple
     addPoints (-10) "grossing yourself out"
@@ -632,7 +632,7 @@ buildWorld = do
         setDescription2 player ""
   setOnGet costume getCostume
   setOnGetFrom costume $ \_ -> getCostume
-  setVerb1 costume "drop" $ do
+  setVerb1 "drop" costume $ do
     room <- getRoom
     putCostume room
   setOnPutIn costume putCostume
@@ -697,7 +697,7 @@ buildWorld = do
     "This is a stoppered flask of clear liquid. It has a label which reads " ++
     "\"Holy Water\"."
   addAlias flask "holy water"
-  setVerb1 flask "drink" $ msg $ "You have a feeling the contents of " ++
+  setVerb1 "drink" flask $ msg $ "You have a feeling the contents of " ++
     "this flask are too important to drink."
   setOnRead flask $ doVerb $ Look (Just flask)
 
@@ -753,7 +753,7 @@ buildWorld = do
     "A can of StarKist brand skipjack tuna."
   addAliases tuna ["tuna", "can"]
   moveNowhere tuna
-  setVerb1 tuna "eat" $ msg "You haven\'t opened the can of tuna."
+  setVerb1 "eat" tuna $ msg "You haven\'t opened the can of tuna."
   defaultSearchKitchen <- getOnSearch hhKitchen
   setOnSearch hhKitchen $ do
     move tuna hhKitchen
@@ -813,7 +813,7 @@ buildWorld = do
   newExit "north" hhAtrium hhHallway
   newExit "south" hhHallway hhAtrium
 
-  defaultDropTuna <- getVerb1 tuna "drop"
+  defaultDropTuna <- getVerb1 "drop" tuna
   let checkIfKittyEatsTuna = do
         tunaLoc <- getLocation tuna
         when (tunaLoc == Just hhStaircase) $ do
@@ -823,8 +823,8 @@ buildWorld = do
           friendlyKitty
           setName tuna "empty can of tuna"
           setDescription tuna "This is just an empty can now."
-          setVerb1 tuna "drop" defaultDropTuna
-          clearVerb1 tuna "eat"
+          setVerb1 "drop" tuna defaultDropTuna
+          clearVerb1 "eat" tuna
       friendlyKitty = do
         setOnGo upSpiral defaultGoUpSpiral
         setDescription blackCat $ "Now what you\'ve fed her, this seems " ++
@@ -881,10 +881,10 @@ buildWorld = do
     addAlias tuna "can of tuna"
     setDescription tuna "Any cat would eat this tuna right up."
     setOnOpen tuna $ msg "The can of tuna is already open."
-    setVerb1 tuna "drop" $ do
+    setVerb1 "drop" tuna $ do
       defaultDropTuna
       checkIfKittyEatsTuna
-    setVerb1 tuna "eat" $ msg $ "You don\'t think you should be the one to " ++
+    setVerb1 "eat" tuna $ msg $ "You don\'t think you should be the one to " ++
       "eat this delicious can of tuna."
     checkIfKittyEatsTuna -- in case it is opened while in the right place
 
@@ -894,19 +894,19 @@ buildWorld = do
         disconnect bathroomEntrance
         connect staircaseEntrance hhKitchen hhStaircase
         setOnGet book onGetBook2
-        setVerb1 book "use" onGetBook2
+        setVerb1 "use" book onGetBook2
       onGetBook2 = do
         getBookMessage
         disconnect staircaseEntrance
         connect bathroomEntrance hhReadingRoom hhBathroom1
         setOnGet book onGetBook1
-        setVerb1 book "use" onGetBook1
+        setVerb1 "use" book onGetBook1
       getBookMessage = msg $
         "You try to pick up the red book, but it appears to be attached " ++
         "to some kind of mechanism. You hear walls moving, and the floor " ++
         "plan of the house changes!"
   setOnGet book onGetBook2
-  setVerb1 book "use" onGetBook2
+  setVerb1 "use" book onGetBook2
 
   let useSprinkler = do
         stopIfNotAccessible "water grass with" sprinkler
@@ -926,13 +926,14 @@ buildWorld = do
         msg $ "You hook up the sprinkler to the hose and turn it on. The " ++
           "grass greens up right away."
         addPoints 10 "watering the grass"
-        setVerb1 sprinkler "use" alreadyRunning
-        setVerb1 sprinkler "turn on" alreadyRunning
+        setVerb1 "use" sprinkler alreadyRunning
+        setVerb1 "turn on" sprinkler alreadyRunning
+        setVerb1 "water grass with" sprinkler alreadyRunning
         setOnGet sprinkler $ stop "You would get wet."
         setDescription2 sideYard healthyGrassStr
-  setVerb1 sprinkler "use" useSprinkler
-  setVerb1 sprinkler "turn on" useSprinkler
-  setVerb1 sprinkler "water grass with" useSprinkler
+  setVerb1 "use" sprinkler useSprinkler
+  setVerb1 "turn on" sprinkler useSprinkler
+  setVerb1 "water grass with" sprinkler useSprinkler
 
   setMaxScore 105
 

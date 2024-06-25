@@ -226,20 +226,20 @@ debugName ref = do
   name <- getName ref
   return $ name ++ " (Ref: " ++ show ref ++ ")"
 
-getVerb1 :: Ref -> String -> Game (Game ())
-getVerb1 ref name = do
+getVerb1 :: String -> Ref -> Game (Game ())
+getVerb1 name ref = do
   m <- getVerb1Map ref
   d <- getDefault1 name
   return $ M.findWithDefault (d ref) name m
 
-setVerb1 :: Ref -> String -> Game () -> Game ()
-setVerb1 ref name action = do
+setVerb1 :: String -> Ref -> Game () -> Game ()
+setVerb1 name ref action = do
   m <- getVerb1Map ref
   let m' = M.insert name action m
   setVerb1Map ref m'
 
-clearVerb1 :: Ref -> String -> Game ()
-clearVerb1 ref name = do
+clearVerb1 :: String -> Ref -> Game ()
+clearVerb1 name ref = do
   m <- getVerb1Map ref
   let m' = M.delete name m
   setVerb1Map ref m'
