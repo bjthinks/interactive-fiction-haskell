@@ -122,31 +122,6 @@ stopIfExit verb ref = do
   when flag $ stop $ "You can\'t " ++ verb ++ " " ++ name ++ ", which is " ++
     "a way to go."
 
-stopIfPlayer' :: String -> Ref -> Game ()
-stopIfPlayer' verb ref = do
-  flag <- isPlayer ref
-  when flag $ cant verb ref
-
-stopIfRoom' :: String -> Ref -> Game ()
-stopIfRoom' verb ref = do
-  flag <- isRoom ref
-  when flag $ cant verb ref
-
-stopIfInRoom' :: String -> Ref -> Game ()
-stopIfInRoom' verb ref = do
-  flag <- isInRoom ref
-  when flag $ cant verb ref
-
-stopIfInOpenContainer' :: String -> Ref -> Game ()
-stopIfInOpenContainer' verb ref = do
-  flag <- isInOpenContainer ref
-  when flag $ cant verb ref
-
-stopIfExit' :: String -> Ref -> Game ()
-stopIfExit' verb ref = do
-  flag <- isExit ref
-  when flag $ cant verb ref
-
 -- Additional stop functions
 
 stopIfNotOpenContainer :: Ref -> Game ()
@@ -163,23 +138,11 @@ stopIfNotObject verb ref = do
   stopIfRoom verb ref
   stopIfExit verb ref
 
-stopIfNotObject' :: String -> Ref -> Game ()
-stopIfNotObject' verb ref = do
-  stopIfPlayer' verb ref
-  stopIfRoom' verb ref
-  stopIfExit' verb ref
-
 stopIfNotInInventory :: String -> Ref -> Game ()
 stopIfNotInInventory verb ref = do
   stopIfNotObject verb ref
   stopIfInRoom verb ref
   stopIfInOpenContainer verb ref
-
-stopIfNotInInventory' :: String -> Ref -> Game ()
-stopIfNotInInventory' verb ref = do
-  stopIfNotObject' verb ref
-  stopIfInRoom' verb ref
-  stopIfInOpenContainer' verb ref
 
 -- Not used for the Use verb, because of Gabby's Dollhouse
 stopIfNotAccessible :: String -> Ref -> Game ()
