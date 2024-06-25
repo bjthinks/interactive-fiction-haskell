@@ -206,6 +206,19 @@ setGuard name action = do
   let m' = M.insert name action (guardMap st)
   put $ st { guardMap = m' }
 
+setGuards :: Game ()
+setGuards = do
+  setGuard "drop" (stopIfNotInInventory "drop")
+  setGuard "throw" (stopIfNotInInventory "throw")
+  setGuard "use" useGuard
+
+useGuard :: Ref -> Game ()
+useGuard ref = do
+  let verb = "use"
+  stopIfPlayer verb ref
+  stopIfExit verb ref
+  stopIfInOpenContainer verb ref
+
 -- Utility functions
 
 capitalize :: String -> String

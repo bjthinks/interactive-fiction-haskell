@@ -10,6 +10,7 @@ import ParseInput
 import Verbs
 import WordWrap
 import Things
+import Categories
 
 processDelayedActions :: [(Int, Game())] -> ([Game ()], [(Int, Game())])
 processDelayedActions input = process [] [] input
@@ -39,6 +40,7 @@ mainloop oldState = do
 startup :: Game () -> Game ()
 startup buildWorld = do
   setDefaults
+  setGuards
   buildWorld
   doVerb (Look Nothing)
   msg "Type help for a list of commands."
