@@ -126,12 +126,7 @@ stopIfPlayer' :: String -> Ref -> Game ()
 stopIfPlayer' verb ref = do
   flag <- isPlayer ref
   when flag $ cant verb ref
-{-
-stopIfInInventory' :: String -> Ref -> Game ()
-stopIfInInventory' verb ref = do
-  flag <- isInInventory ref
-  when flag $ cant verb ref
--}
+
 stopIfRoom' :: String -> Ref -> Game ()
 stopIfRoom' verb ref = do
   flag <- isRoom ref

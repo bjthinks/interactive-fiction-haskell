@@ -81,7 +81,6 @@ defaultPutIn ref container = do
 
 defaultDrop :: Ref -> Game ()
 defaultDrop ref = do
-  stopIfNotInInventory' "drop" ref
   room <- getRoom
   move ref room
   name <- qualifiedName ref
@@ -94,7 +93,6 @@ defaultPet ref = do
 
 defaultThrow :: Ref -> Game ()
 defaultThrow ref = do
-  stopIfNotObject' "throw" ref
   name <- qualifiedName ref
   stop $ "There is no point in throwing " ++ name ++ "."
 
