@@ -88,44 +88,39 @@ isExit ref = elem ref <$> getRoomExits
 stopIfPlayer :: String -> Ref -> Game ()
 stopIfPlayer verb ref = do
   flag <- isPlayer ref
-  name <- qualifiedName ref
-  when flag $ stop $ "You are " ++ name ++ ", not something you can " ++
-    verb ++ "."
+  -- name <- qualifiedName ref
+  when flag $ stop $ "You can\'t " ++ verb ++ " yourself."
 
 stopIfInInventory :: String -> Ref -> Game ()
 stopIfInInventory verb ref = do
   flag <- isInInventory ref
-  name <- qualifiedName ref
-  when flag $ stop $ capitalize name ++ " is something you are holding, " ++
-    "not something you can " ++ verb ++ "."
+  -- name <- qualifiedName ref
+  when flag $ stop $ "You can\'t " ++ verb ++ " something you are holding."
 
 stopIfRoom :: String -> Ref -> Game ()
 stopIfRoom verb ref = do
   flag <- isRoom ref
   name <- qualifiedName ref
-  when flag $ stop $ capitalize name ++ " is where you are, " ++
-    "not something you can " ++ verb ++ "."
+  when flag $ stop $ "You can\'t " ++ verb ++ " " ++ name ++ "."
 
 stopIfInRoom :: String -> Ref -> Game ()
 stopIfInRoom verb ref = do
   flag <- isInRoom ref
-  name <- qualifiedName ref
-  when flag $ stop $ capitalize name ++ " is something here, " ++
-    "not something you can " ++ verb ++ "."
+  -- name <- qualifiedName ref
+  when flag $ stop $ "You can\'t " ++ verb ++ " something in the area with you."
 
 stopIfInOpenContainer :: String -> Ref -> Game ()
 stopIfInOpenContainer verb ref = do
   flag <- isInOpenContainer ref
-  name <- qualifiedName ref
-  when flag $ stop $ capitalize name ++ " is something in a container, " ++
-    "not something you can " ++ verb ++ "."
+  -- name <- qualifiedName ref
+  when flag $ stop $ "You can\'t " ++ verb ++ " something in a container."
 
 stopIfExit :: String -> Ref -> Game ()
 stopIfExit verb ref = do
   flag <- isExit ref
   name <- qualifiedName ref
-  when flag $ stop $ (capitalize name) ++ " is a way to go, " ++
-    "not something you can " ++ verb ++ "."
+  when flag $ stop $ "You can\'t " ++ verb ++ " " ++ name ++ ", which is " ++
+    "a way to go."
 
 stopIfPlayer' :: String -> Ref -> Game ()
 stopIfPlayer' verb ref = do
