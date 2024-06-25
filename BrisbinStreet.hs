@@ -819,7 +819,7 @@ buildWorld = do
         tunaLoc <- getLocation tuna
         when (tunaLoc == Just hhStaircase) $ do
           msg $ "The black cat eats the tuna from the can in no time. She " ++
-            "must have been starving!"
+            "must have been very hungry!"
           addPoints 5 "feeding the kitty"
           friendlyKitty
           setName tuna "empty can of tuna"
