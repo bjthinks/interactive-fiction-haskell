@@ -71,23 +71,6 @@ msg str = tell str >> tell "\n"
 stop :: String -> Game ()
 stop str = msg str >> mzero
 
-cant :: String -> Ref -> Game ()
-cant verb ref = do
-  name <- qualifiedName ref
-  stop $ "You can\'t " ++ verb ++ ' ' : name ++ "."
-
-getDefault1 :: String -> Game (Ref -> Game ())
-getDefault1 name = do
-  m <- default1Map <$> get
-  let d = cant name
-  return $ M.findWithDefault d name m
-
-setDefault1 :: String -> (Ref -> Game ()) -> Game ()
-setDefault1 name action = do
-  st <- get
-  let m' = M.insert name action (default1Map st)
-  put $ st { default1Map = m' }
-
 getPlayer :: Game Ref
 getPlayer = do
   mp <- maybePlayer <$> get
@@ -225,6 +208,23 @@ debugName :: Ref -> Game String
 debugName ref = do
   name <- getName ref
   return $ name ++ " (Ref: " ++ show ref ++ ")"
+
+cant :: String -> Ref -> Game ()
+cant verb ref = do
+  name <- qualifiedName ref
+  stop $ "You can\'t " ++ verb ++ ' ' : name ++ "."
+
+getDefault1 :: String -> Game (Ref -> Game ())
+getDefault1 name = do
+  m <- default1Map <$> get
+  let d = cant name
+  return $ M.findWithDefault d name m
+
+setDefault1 :: String -> (Ref -> Game ()) -> Game ()
+setDefault1 name action = do
+  st <- get
+  let m' = M.insert name action (default1Map st)
+  put $ st { default1Map = m' }
 
 getVerb1 :: String -> Ref -> Game (Game ())
 getVerb1 name ref = do
