@@ -37,6 +37,7 @@ data Thing = Thing {
 
 data GameState = GameState { things :: M.Map Ref Thing,
                              default1Map :: M.Map String (Ref -> Game ()),
+                             guardMap :: M.Map String (Ref -> Game ()),
                              nextThing :: Ref,
                              maybePlayer :: Maybe Ref,
                              delayedActions :: [(Int, Game ())],
@@ -47,6 +48,7 @@ data GameState = GameState { things :: M.Map Ref Thing,
 
 startState = GameState { things = M.empty,
                          default1Map = M.empty,
+                         guardMap = M.empty,
                          nextThing = 0,
                          maybePlayer = Nothing,
                          delayedActions = [],

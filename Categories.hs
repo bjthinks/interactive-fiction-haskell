@@ -2,6 +2,8 @@ module Categories where
 
 import Control.Monad
 import Data.Char
+import Control.Monad.RWS
+import qualified Data.Map.Strict as M
 
 import Defs
 
@@ -194,6 +196,20 @@ stopIfNotAccessible :: String -> Ref -> Game ()
 stopIfNotAccessible verb ref = do
   stopIfNotObject verb ref
   stopIfInOpenContainer verb ref
+
+-- Guard functions
+
+getGuard :: String -> Game (Ref -> Game ())
+getGuard name = do
+  m <- guardMap <$> get
+  let d = stopIfNotAccessible name
+  return $ M.findWithDefault d name m
+
+setGuard :: String -> (Ref -> Game ()) -> Game ()
+setGuard name action = do
+  st <- get
+  let m' = M.insert name action (guardMap st)
+  put $ st { guardMap = m' }
 
 -- Utility functions
 
