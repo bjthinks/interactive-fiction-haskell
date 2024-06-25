@@ -175,7 +175,8 @@ buildWorld = do
 
   let useCandleAction = do
         maybeCandleLoc <- getLocation candle
-        when (maybeCandleLoc == Just player) $ stop
+        room <- getRoom
+        unless (maybeCandleLoc == Just room) $ stop
           "You should drop the candle before lighting it."
         maybeMatchesLoc <- getLocation matches
         unless (maybeMatchesLoc == Just player) $ stop
