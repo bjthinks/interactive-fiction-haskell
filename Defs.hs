@@ -221,7 +221,8 @@ getVerb1 :: String -> Ref -> Game (Game ())
 getVerb1 name ref = do
   m <- getVerb1Map ref
   debug <- getDebug
-  when debug $ msg $ "Verb1 keys: " ++ show (M.keys m)
+  n <- qualifiedName ref
+  when debug $ msg $ "Verb1 keys for " ++ n ++ ": " ++ show (M.keys m)
   d <- getDefault1 name
   return $ M.findWithDefault (d ref) name m
 
