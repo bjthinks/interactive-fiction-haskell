@@ -20,7 +20,6 @@ data Verb = Blank
           | PutIn Ref Ref
           | PutAllIn Ref
           | Go Ref
-          | TurnOff Ref
           | Light Ref
           | Read Ref
           | Pet Ref
@@ -177,11 +176,6 @@ doVerb (Go ref) = do
   name <- qualifiedName ref
   when locked $ stop $ "The door going " ++ name ++ " is locked."
   action <- getOnGo ref
-  action
-
-doVerb (TurnOff ref) = do
-  stopIfNotAccessible "turn off" ref
-  action <- getOnTurnOff ref
   action
 
 doVerb (Light ref) = do

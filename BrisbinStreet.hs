@@ -94,8 +94,8 @@ buildWorld = do
         let acAlreadyOn = stop "The air conditioner is already running."
         setVerb1 "use" airConditioner acAlreadyOn
         setVerb1 "turn on" airConditioner acAlreadyOn
-        setOnTurnOff airConditioner $ stop $ "You don\'t want to turn " ++
-          "it off. It would get hot and muggy again."
+        setVerb1 "turn off" airConditioner $ stop $
+          "You don\'t want to turn it off. It would get hot and muggy again."
         setDescription2 living "It feels cool and pleasant in here."
         let acDesc2On = "The unit hums noisily as it runs."
             acCyclesOn = do
@@ -114,7 +114,8 @@ buildWorld = do
         queueAction 5 acCyclesOff
   setVerb1 "use" airConditioner acFails
   setVerb1 "turn on" airConditioner acFails
-  setOnTurnOff airConditioner $ stop "The air conditioner isn\'t running."
+  setVerb1 "turn off" airConditioner $
+    stop "The air conditioner isn\'t running."
 
   dinette <- newRoom "dinette" $
     "This is a tiny dining room, most of which is taken up by a normal " ++
@@ -150,7 +151,7 @@ buildWorld = do
   setVerb1 "use" stove useStove
   setOnLight stove useStove
   setVerb1 "turn on" stove useStove
-  setOnTurnOff stove $ stop "The stove is already off."
+  setVerb1 "turn off" stove $ stop "The stove is already off."
   matches <- newObject kitchen "matches" "A simple book of paper matches."
   addAlias matches "match"
   setVerb1 "use" matches $
@@ -350,7 +351,7 @@ buildWorld = do
         setVerb1 "turn on" airConditioner acWorks
   setVerb1 "use" circuitBreakerBox resetBreaker
   setVerb1 "turn on" circuitBreakerBox resetBreaker
-  setOnTurnOff circuitBreakerBox $ stop
+  setVerb1 "turn off" circuitBreakerBox $ stop
     "You shouldn\'t pointlessly monkey around with circuit breakers."
 
   basementBedroom <- newRoom "basement bedroom" $
@@ -400,19 +401,19 @@ buildWorld = do
         setDescription2 barLight lightOnDesc
         setVerb1 "use" barLight lightOff
         setVerb1 "turn on" barLight lightAlreadyOn
-        setOnTurnOff barLight lightOff
+        setVerb1 "turn off" barLight lightOff
       lightAlreadyOn = stop "The bar light is already on."
       lightOff = do
         msg "You turn the bar light off."
         setDescription2 barLight lightOffDesc
         setVerb1 "use" barLight lightOn
         setVerb1 "turn on" barLight lightOn
-        setOnTurnOff barLight lightAlreadyOff
+        setVerb1 "turn off" barLight lightAlreadyOff
       lightAlreadyOff = stop "The bar light is already off."
   setDescription2 barLight lightOffDesc
   setVerb1 "use" barLight lightOn
   setVerb1 "turn on" barLight lightOn
-  setOnTurnOff barLight lightAlreadyOff
+  setVerb1 "turn off" barLight lightAlreadyOff
 
   basementBathroom <- newRoom "bathroom" $
     "This is a full bathroom, with a large counter and vanity with three " ++
