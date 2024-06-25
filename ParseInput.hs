@@ -52,13 +52,13 @@ noun = do
 
 verb0 :: Word -> Verb -> MyParser Verb
 verb0 name def = do
-  matchToken name
+  matchTokens $ words name
   eof
   return def
 
 verb1 :: Word -> (Ref -> Verb) -> MyParser Verb
 verb1 name def = do
-  matchToken name
+  matchTokens $ words name
   ref <- noun
   eof
   return $ def ref
@@ -72,32 +72,12 @@ verb2 name1 name2 def = do
   eof
   return $ def ref1 ref2
 
-verb0m :: [Word] -> Verb -> MyParser Verb
-verb0m names def = do
-  matchTokens names
-  eof
-  return def
-
-verb1m :: [Word] -> (Ref -> Verb) -> MyParser Verb
-verb1m names def = do
-  matchTokens names
-  ref <- noun
-  eof
-  return $ def ref
-
 verb1' :: Word -> MyParser Verb
 verb1' name = do
-  matchToken name
+  matchTokens $ words name
   ref <- noun
   eof
   return $ Verb1 name ref
-
-verb1m' :: [Word] -> MyParser Verb
-verb1m' names = do
-  matchTokens names
-  ref <- noun
-  eof
-  return $ Verb1 (unwords names) ref
 
 implicitGo :: MyParser Verb
 implicitGo = do
@@ -116,18 +96,18 @@ parseLine :: MyParser Verb
 parseLine =
   verb1  "close" LockHelp |||    -- ??
   verb2  "close" "with" Lock ||| -- ??
-  verb0m ["debug", "off"] (Debug False) |||
-  verb0m ["debug", "on"] (Debug True) |||
+  verb0  "debug off" (Debug False) |||
+  verb0  "debug on" (Debug True) |||
   verb1' "drink" |||
   verb1' "drop" |||
-  verb0m ["drop", "all"] DropAll |||
+  verb0  "drop all" DropAll |||
   verb1' "eat" |||
   debug  "examine" Examine |||
   verb0  "exit" Exit |||
   verb1  "get" Get |||
-  verb0m ["get", "all"] GetAll |||
+  verb0  "get all" GetAll |||
   verb2  "get" "from" GetFrom |||
-  verb1m ["get", "all", "from"] GetAllFrom |||
+  verb1  "get all from" GetAllFrom |||
   verb1  "go" Go |||
   verb0  "help" Help |||
   verb0  "i" Inventory |||
@@ -139,32 +119,32 @@ parseLine =
   verb2  "lock" "with" Lock |||
   verb0  "look" (Look Nothing) |||
   verb1  "look" (Look . Just) |||
-  verb1m ["look", "at"] (Look . Just) |||
+  verb1  "look at" (Look . Just) |||
   verb1  "move" Go |||
   verb1  "open" OpenHelp |||
   verb2  "open" "with" Open |||
   verb1  "pet" Pet |||
   verb2  "put" "in" PutIn |||
   verb2  "put" "into" PutIn |||
-  verb1m ["put", "all", "in"] PutAllIn |||
+  verb1  "put all in" PutAllIn |||
   verb0  "quit" Exit |||
   verb1  "read" Read |||
   verb0  "score" Score |||
   verb0  "search" Search |||
   verb1  "take" Get |||
-  verb0m ["take", "all"] GetAll |||
+  verb0  "take all" GetAll |||
   verb2  "take" "from" GetFrom |||
-  verb1m ["take", "all", "from"] GetAllFrom |||
+  verb1  "take all from" GetAllFrom |||
   debug  "teleport" Teleport |||
   verb1' "throw" |||
-  verb1m ["turn", "off"] TurnOff |||
-  verb1m' ["turn", "on"] |||
+  verb1  "turn off" TurnOff |||
+  verb1' "turn on" |||
   verb1  "unlock" UnlockHelp |||
   verb2  "unlock" "with" Unlock |||
   verb1' "use" |||
   verb0  "wait" Wait |||
   -- Need "water grass" -> "What do you want to water the grass with?"
-  verb1m' ["water", "grass", "with"] |||
+  verb1' "water grass with" |||
   implicitGo |||
   (eof >> return Blank)
 
