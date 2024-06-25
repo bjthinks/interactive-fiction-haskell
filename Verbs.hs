@@ -280,6 +280,8 @@ doVerb Help = do
 doVerb Exit = stopPlaying
 
 doVerb (Verb1 name ref) = do
+  g <- getGuard name
+  g ref
   action <- getVerb1 name ref
   action
 
