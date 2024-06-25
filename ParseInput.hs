@@ -123,7 +123,7 @@ parseLine =
   verb1  "move" Go |||
   verb1  "open" OpenHelp |||
   verb2  "open" "with" Open |||
-  verb1  "pet" Pet |||
+  verb1' "pet" |||
   verb2  "put" "in" PutIn |||
   verb2  "put" "into" PutIn |||
   verb1  "put all in" PutAllIn |||

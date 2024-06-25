@@ -31,7 +31,6 @@ defaultThing ref = Thing {
   thingPath = Nothing,
   thingOnGo = defaultGo ref,
   thingOnGet = defaultGet ref,
-  thingOnPet = defaultPet ref,
   thingOnGetFrom = defaultGetFrom ref,
   thingOnPutIn = defaultPutIn ref,
   thingIsContainer = False,
@@ -48,6 +47,7 @@ defaultThing ref = Thing {
 setDefaults :: Game ()
 setDefaults = do
   setDefault1 "drop" defaultDrop
+  setDefault1 "pet" defaultPet
   setDefault1 "throw" defaultThrow
 
 defaultGo :: Ref -> Game ()
@@ -63,10 +63,6 @@ defaultGet ref = do
   move ref player
   name <- qualifiedName ref
   msg $ "You get " ++ name ++ "."
-
-defaultPet ref = do
-  name <- qualifiedName ref
-  stop $ capitalize name ++ " is not an animal you can pet."
 
 defaultGetFrom :: Ref -> Ref -> Game ()
 defaultGetFrom ref container = do
@@ -90,6 +86,11 @@ defaultDrop ref = do
   move ref room
   name <- qualifiedName ref
   msg $ "You drop " ++ name ++ "."
+
+defaultPet :: Ref -> Game ()
+defaultPet ref = do
+  name <- qualifiedName ref
+  stop $ capitalize name ++ " is not an animal you can pet."
 
 defaultThrow :: Ref -> Game ()
 defaultThrow ref = do

@@ -550,10 +550,10 @@ buildWorld = do
           room <- getRoom
           when (room == mikeYard) $ msg $ "Misty hops up to you and wants " ++
             "to be pet again."
-  setOnPet misty $ do
+  setVerb1 "pet" misty $ do
     happyMisty
     addPoints 10 "being so loving to a deserving animal"
-    setOnPet misty happyMisty
+    setVerb1 "pet" misty happyMisty
 
   justinYard <- newRoom "Justin\'s yard" $
     "You stand in front of Justin\'s house. It is a large home with a " ++
@@ -576,7 +576,7 @@ buildWorld = do
   setArticle bimbo Nothing
   addAlias bimbo "cat"
   addAlias bimbo "the cat"
-  setOnPet bimbo $ msg "Bimbo purrs and rubs up against you."
+  setVerb1 "pet" bimbo $ msg "Bimbo purrs and rubs up against you."
 
   westBrisbin <- newRoom "west Brisbin Street" $
     "This is the west end of the block. There is a seedy motel to the " ++
@@ -779,8 +779,8 @@ buildWorld = do
   addAliases blackCat ["cat", "kitty"]
   setOnGet blackCat $ msg $ "The cat bares its claws and hisses. There is " ++
     "no way you would try to pick up such an unfriendly cat."
-  setOnPet blackCat $ msg $ "There is no way to pet such an unfriendly cat. " ++
-    "Maybe she is hungry?"
+  setVerb1 "pet" blackCat $ msg
+    "There is no way to pet such an unfriendly cat. Maybe she is hungry?"
 
   shortcut <- newExit "secret passage to haunted house kitchen"
     brisbin hhKitchen
@@ -834,7 +834,7 @@ buildWorld = do
           "like a pretty friendly cat."
         setOnGet blackCat $ msg $ "You try to pick her up, but she still " ++
           "wiggles out of your grasp."
-        setOnPet blackCat $ msg $ "The black cat purrs at you. What a " ++
+        setVerb1 "pet" blackCat $ msg $ "The black cat purrs at you. What a " ++
           "change in her behavior!"
         setDescription2 hhStaircase $ "The black cat is no longer guarding " ++
           "the stairs."

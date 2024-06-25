@@ -22,7 +22,6 @@ data Thing = Thing {
   thingPath :: Maybe (Ref,Ref),
   thingOnGo :: Game (),
   thingOnGet :: Game (),
-  thingOnPet :: Game (),
   thingOnPutIn :: Ref -> Game (), -- put this thing into ref
   thingOnGetFrom :: Ref -> Game (), -- get this thing from ref
   thingIsContainer :: Bool,
@@ -127,7 +126,6 @@ getExits        = getProperty thingExits
 getPath         = getProperty thingPath
 getOnGo         = getProperty thingOnGo
 getOnGet        = getProperty thingOnGet
-getOnPet        = getProperty thingOnPet
 getOnPutIn      = getProperty thingOnPutIn
 getOnGetFrom    = getProperty thingOnGetFrom
 getIsContainer  = getProperty thingIsContainer
@@ -164,7 +162,6 @@ setExits        = setProperty (\t v -> t { thingExits = v })
 setPath         = setProperty (\t v -> t { thingPath = v })
 setOnGo         = setProperty (\t v -> t { thingOnGo = v })
 setOnGet        = setProperty (\t v -> t { thingOnGet = v })
-setOnPet        = setProperty (\t v -> t { thingOnPet = v })
 setOnPutIn      = setProperty (\t v -> t { thingOnPutIn = v })
 setOnGetFrom    = setProperty (\t v -> t { thingOnGetFrom = v })
 setIsContainer  = setProperty (\t v -> t { thingIsContainer = v })
