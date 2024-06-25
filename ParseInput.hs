@@ -114,7 +114,7 @@ parseLine =
   verb0  "inventory" Inventory |||
   verb0  "l" (Look Nothing) |||
   verb1  "l" (Look . Just) |||
-  verb1  "light" Light |||
+  verb1' "light" |||
   verb1  "lock" LockHelp |||
   verb2  "lock" "with" Lock |||
   verb0  "look" (Look Nothing) |||

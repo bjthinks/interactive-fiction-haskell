@@ -30,7 +30,6 @@ defaultThing ref = Thing {
   thingExits = [],
   thingPath = Nothing,
   thingOnGo = defaultGo ref,
-  thingOnLight = cant "light" ref,
   thingOnRead = cant "read" ref,
   thingOnGet = defaultGet ref,
   thingOnPet = defaultPet ref,

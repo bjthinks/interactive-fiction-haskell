@@ -149,7 +149,7 @@ buildWorld = do
         "light. You let it burn for a little bit, then, having nothing to " ++
         "cook, turn it off."
   setVerb1 "use" stove useStove
-  setOnLight stove useStove
+  setVerb1 "light" stove useStove
   setVerb1 "turn on" stove useStove
   setVerb1 "turn off" stove $ stop "The stove is already off."
   matches <- newObject kitchen "matches" "A simple book of paper matches."
@@ -157,7 +157,7 @@ buildWorld = do
   setVerb1 "use" matches $
     msg $ "Instead of using the matches, please use the thing you\'re " ++
       "trying to light."
-  setOnLight matches $
+  setVerb1 "light" matches $
     msg $ "You light a match and watch as it burns down towards your " ++
     "fingers. You blow out the match and throw it away."
   apple <- newObject kitchen "apple" "A red delicious apple."
@@ -184,10 +184,10 @@ buildWorld = do
         addPoints 10 "leveling up your pyromaniac skills"
         let alreadyLit = stop "The candle is already lit."
         setVerb1 "use" candle alreadyLit
-        setOnLight candle alreadyLit
+        setVerb1 "light" candle alreadyLit
         setDescription2 candle "It is burning brightly."
   setVerb1 "use" candle useCandleAction
-  setOnLight candle useCandleAction
+  setVerb1 "light" candle useCandleAction
 
   hallway <- newRoom "hallway" $
     "This simple east-west hallway has a tiny five watt light fixture on " ++

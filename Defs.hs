@@ -21,7 +21,6 @@ data Thing = Thing {
   thingExits :: [Ref],
   thingPath :: Maybe (Ref,Ref),
   thingOnGo :: Game (),
-  thingOnLight :: Game (),
   thingOnRead :: Game (),
   thingOnGet :: Game (),
   thingOnPet :: Game (),
@@ -128,7 +127,6 @@ getContents'    = getProperty thingContents
 getExits        = getProperty thingExits
 getPath         = getProperty thingPath
 getOnGo         = getProperty thingOnGo
-getOnLight      = getProperty thingOnLight
 getOnRead       = getProperty thingOnRead
 getOnGet        = getProperty thingOnGet
 getOnPet        = getProperty thingOnPet
@@ -167,7 +165,6 @@ setContents     = setProperty (\t v -> t { thingContents = v })
 setExits        = setProperty (\t v -> t { thingExits = v })
 setPath         = setProperty (\t v -> t { thingPath = v })
 setOnGo         = setProperty (\t v -> t { thingOnGo = v })
-setOnLight      = setProperty (\t v -> t { thingOnLight = v })
 setOnRead       = setProperty (\t v -> t { thingOnRead = v })
 setOnGet        = setProperty (\t v -> t { thingOnGet = v })
 setOnPet        = setProperty (\t v -> t { thingOnPet = v })

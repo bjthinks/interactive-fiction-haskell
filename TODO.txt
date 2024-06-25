@@ -23,3 +23,4 @@ use words in parser to eliminate verb1m'
 water grass -> What do you want to water the grass with?
 drop empty can of tuna -- restore default behavior. Check all defaults in
   BrisbinStreet. Search for default and for getVerb1.
+lit candle should be put out if you put it in a container
