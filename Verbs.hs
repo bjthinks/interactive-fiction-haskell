@@ -13,7 +13,6 @@ import Score
 
 data Verb = Blank
           | Look (Maybe Ref)
-          | Inventory
           | GetAll
           | GetFrom Ref Ref
           | DropAll
@@ -41,11 +40,6 @@ doVerb (Look arg) = do
     Nothing -> getRoom
     Just ref -> return ref
   doVerb (Verb1 "look" ref)
-
-doVerb Inventory = do
-  inventory <- getInventory
-  names <- mapM getName inventory
-  msg $ "You are carrying: " ++ humanFriendlyList names ++ "."
 
 doVerb GetAll = do
   thingsToGet <- getRoomContents -- excludes player

@@ -63,6 +63,7 @@ verb0' name = do
   return $ Verb0 (alias0 name)
 
 alias0 :: String -> String
+alias0 "i" = "inventory"
 alias0 x = x
 
 verb1 :: Word -> MyParser Verb
@@ -121,7 +122,7 @@ parseLine =
   verb1  "get all from" |||
   verb1  "go" |||
   verb0  "help" Help |||
-  verb0  "i" Inventory |||
+  verb0' "i" |||
   verb0' "inventory" |||
   verb0  "l" (Look Nothing) |||
   verb1  "l" |||
