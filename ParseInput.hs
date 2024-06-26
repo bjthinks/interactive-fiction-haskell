@@ -106,58 +106,61 @@ debug name def = do
 
 parseLine :: MyParser Verb
 parseLine =
-  verb1  "close" |||
-  verb2  "close" "with" Lock |||
   verb0  "debug off" (Debug False) |||
   verb0  "debug on" (Debug True) |||
-  verb1  "drink" |||
-  verb1  "drop" |||
   verb0  "drop all" DropAll |||
-  verb1  "eat" |||
-  debug  "examine" Examine |||
   verb0  "exit" Exit |||
-  verb1  "get" |||
   verb0  "get all" GetAll |||
-  verb2  "get" "from" GetFrom |||
-  verb1  "get all from" |||
-  verb1  "go" |||
   verb0  "help" Help |||
   verb0' "i" |||
   verb0' "inventory" |||
   verb0  "l" (Look Nothing) |||
-  verb1  "l" |||
-  verb1  "light" |||
-  verb1  "lock" |||
-  verb2  "lock" "with" Lock |||
   verb0  "look" (Look Nothing) |||
-  verb1  "look" |||
-  verb1  "look at" |||
-  verb1  "move" |||
-  verb1  "open" |||
-  verb2  "open" "with" Open |||
-  verb1  "pet" |||
-  verb2  "put" "in" PutIn |||
-  verb2  "put" "into" PutIn |||
-  verb1  "put all in" |||
-  verb1  "put all into" |||
   verb0  "quit" Exit |||
-  verb1  "read" |||
   verb0  "score" Score |||
   verb0  "search" Search |||
-  verb1  "search" |||
-  verb1  "take" |||
   verb0  "take all" GetAll |||
-  verb2  "take" "from" GetFrom |||
-  verb1  "take all from" |||
-  debug  "teleport" Teleport |||
-  verb1  "throw" |||
-  verb1  "turn off" |||
-  verb1  "turn on" |||
-  verb1  "unlock" |||
-  verb2  "unlock" "with" Unlock |||
-  verb1  "use" |||
   verb0' "wait" |||
-  verb1  "water grass with" |||
+
+  verb1 "close"            |||
+  verb1 "drink"            |||
+  verb1 "drop"             |||
+  verb1 "eat"              |||
+  verb1 "get"              |||
+  verb1 "get all from"     |||
+  verb1 "go"               |||
+  verb1 "l"                |||
+  verb1 "light"            |||
+  verb1 "lock"             |||
+  verb1 "look"             |||
+  verb1 "look at"          |||
+  verb1 "move"             |||
+  verb1 "open"             |||
+  verb1 "pet"              |||
+  verb1 "put all in"       |||
+  verb1 "put all into"     |||
+  verb1 "read"             |||
+  verb1 "search"           |||
+  verb1 "take"             |||
+  verb1 "take all from"    |||
+  verb1 "throw"            |||
+  verb1 "turn off"         |||
+  verb1 "turn on"          |||
+  verb1 "unlock"           |||
+  verb1 "use"              |||
+  verb1 "water grass with" |||
+
+  verb2  "close" "with" Lock |||
+  verb2  "get" "from" GetFrom |||
+  verb2  "lock" "with" Lock |||
+  verb2  "open" "with" Open |||
+  verb2  "put" "in" PutIn |||
+  verb2  "put" "into" PutIn |||
+  verb2  "take" "from" GetFrom |||
+  verb2  "unlock" "with" Unlock |||
+
+  debug "examine" Examine |||
+  debug "teleport" Teleport |||
   implicitGo |||
   (eof >> return Blank)
 
