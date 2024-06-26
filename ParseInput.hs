@@ -56,15 +56,6 @@ verb0 name def = do
   eof
   return def
 
-verb2 :: Word -> Word -> (Ref -> Ref -> Verb) -> MyParser Verb
-verb2 name1 name2 def = do
-  matchToken name1
-  ref1 <- noun
-  matchToken name2
-  ref2 <- noun
-  eof
-  return $ def ref1 ref2
-
 verb1 :: Word -> MyParser Verb
 verb1 name = do
   matchTokens $ words name
@@ -80,6 +71,15 @@ alias1 "take" = "get"
 alias1 "take all from" = "get all from"
 alias1 "put all into" = "put all in"
 alias1 x = x
+
+verb2 :: Word -> Word -> (Ref -> Ref -> Verb) -> MyParser Verb
+verb2 name1 name2 def = do
+  matchToken name1
+  ref1 <- noun
+  matchToken name2
+  ref2 <- noun
+  eof
+  return $ def ref1 ref2
 
 implicitGo :: MyParser Verb
 implicitGo = do
