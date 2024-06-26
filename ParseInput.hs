@@ -100,8 +100,8 @@ debug name def = do
 
 parseLine :: MyParser Verb
 parseLine =
-  verb1  "close" LockHelp |||    -- ??
-  verb2  "close" "with" Lock ||| -- ??
+  verb1' "close" |||
+  verb2  "close" "with" Lock |||
   verb0  "debug off" (Debug False) |||
   verb0  "debug on" (Debug True) |||
   verb1' "drink" |||

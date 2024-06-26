@@ -307,6 +307,7 @@ setGuard name action = do
 
 setGuards :: Game ()
 setGuards = do
+  setGuard "close" $ stopWith "close"
   setGuard "drop" (stopIfNotInInventory "drop")
   setGuard "get" getTakeGuard
   setGuard "get all from" getAllFromGuard
@@ -314,6 +315,11 @@ setGuards = do
   setGuard "search" searchGuard
   setGuard "throw" (stopIfNotInInventory "throw")
   setGuard "use" useGuard
+
+stopWith :: String -> Ref -> Game ()
+stopWith verb ref = do
+  name <- qualifiedName ref
+  stop $ "What would you like to " ++ verb ++ " " ++ name ++ " with?"
 
 getTakeGuard :: Ref -> Game ()
 getTakeGuard ref = do
