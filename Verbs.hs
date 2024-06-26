@@ -21,7 +21,6 @@ data Verb = Blank
           | PutAllIn Ref
           | Unlock Ref Ref
           | Lock Ref Ref
-          | UnlockHelp Ref
           | Open Ref Ref
           | OpenHelp Ref
           | Search
@@ -159,10 +158,6 @@ doVerb (Unlock ref key) = do
     " is not the right key to unlock " ++ name ++ " with."
   action <- getOnUnlock ref
   action
-
-doVerb (UnlockHelp ref) = do
-  name <- qualifiedName ref
-  stop $ "What do you want to unlock " ++ name ++ " with?"
 
 doVerb (Lock ref key) = do
   let verb = "lock"
@@ -309,8 +304,10 @@ setGuards = do
   setGuard "get all from" getAllFromGuard
   setGuard "go" goGuard
   s setGuard stopWith "lock"
+  s setGuard stopWith "open"
   setGuard "search" searchGuard
   s setGuard stopIfNotInInventory "throw"
+  s setGuard stopWith "unlock"
   setGuard "use" useGuard
 
 stopWith :: String -> Ref -> Game ()

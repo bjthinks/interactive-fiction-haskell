@@ -127,7 +127,7 @@ parseLine =
   verb1  "look" (Look . Just) |||
   verb1  "look at" (Look . Just) |||
   verb1' "move" |||
-  verb1  "open" OpenHelp |||
+  verb1' "open" |||
   verb2  "open" "with" Open |||
   verb1' "pet" |||
   verb2  "put" "in" PutIn |||
@@ -146,7 +146,7 @@ parseLine =
   verb1' "throw" |||
   verb1' "turn off" |||
   verb1' "turn on" |||
-  verb1  "unlock" UnlockHelp |||
+  verb1' "unlock" |||
   verb2  "unlock" "with" Unlock |||
   verb1' "use" |||
   verb0  "wait" Wait |||
