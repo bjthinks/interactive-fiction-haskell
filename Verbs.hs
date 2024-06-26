@@ -26,7 +26,6 @@ data Verb = Blank
           | Exit
           | Verb0 String
           | Verb1 String Ref
-          | Debug Bool
           | Examine Ref
           | Teleport Ref
           deriving Show
@@ -181,10 +180,6 @@ doVerb (Verb1 name ref) = do
   action <- getVerb1 name ref
   action
 
-doVerb (Debug flag) = do
-  setDebug flag
-  msg $ "Debug mode is " ++ (if flag then "on" else "off") ++ "."
-
 doVerb (Examine ref) = do
   debug <- getDebug
   unless debug $ stop $ "This command is only available in debug mode."
@@ -309,8 +304,10 @@ useGuard ref = do
 
 setDefaults :: Game ()
 setDefaults = do
-  setVerb0 "wait" $ msg "You wait for a little while."
+  setVerb0 "debug off" $ doDebug False
+  setVerb0 "debug on"  $ doDebug True
   setVerb0 "inventory" doInventory
+  setVerb0 "wait" $ msg "You wait for a little while."
   setDefault1 "drop" defaultDrop
   setDefault1 "get" defaultGet
   setDefault1 "get all from" defaultGetAllFrom
@@ -320,6 +317,11 @@ setDefaults = do
   setDefault1 "put all in" defaultPutAllIn
   setDefault1 "search" defaultSearch
   setDefault1 "throw" defaultThrow
+
+doDebug :: Bool -> Game ()
+doDebug flag = do
+  setDebug flag
+  msg $ "Debug mode is " ++ (if flag then "on" else "off") ++ "."
 
 doInventory :: Game ()
 doInventory = do
