@@ -21,7 +21,6 @@ data Verb = Blank
           | Unlock Ref Ref
           | Lock Ref Ref
           | Open Ref Ref
-          | OpenHelp Ref
           | Search
           | Score
           | Wait
@@ -152,10 +151,6 @@ doVerb (Open item tool) = do
         " is not the right tool to open " ++ itemName ++ " with."
       action <- getOnOpen item
       action
-
-doVerb (OpenHelp item) = do
-  name <- qualifiedName item
-  stop $ "What do you want to open " ++ name ++ " with?"
 
 doVerb Search = do
   room <- getRoom
