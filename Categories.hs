@@ -2,8 +2,6 @@ module Categories where
 
 import Control.Monad
 import Data.Char
-import Control.Monad.RWS
-import qualified Data.Map.Strict as M
 
 import Defs
 
@@ -148,60 +146,6 @@ stopIfNotInInventory verb ref = do
 stopIfNotAccessible :: String -> Ref -> Game ()
 stopIfNotAccessible verb ref = do
   stopIfNotObject verb ref
-  stopIfInOpenContainer verb ref
-
--- Guard functions
-
-getGuard :: String -> Game (Ref -> Game ())
-getGuard name = do
-  m <- guardMap <$> get
-  let d = stopIfNotAccessible name
-  return $ M.findWithDefault d name m
-
-setGuard :: String -> (Ref -> Game ()) -> Game ()
-setGuard name action = do
-  st <- get
-  let m' = M.insert name action (guardMap st)
-  put $ st { guardMap = m' }
-
-setGuards :: Game ()
-setGuards = do
-  setGuard "drop" (stopIfNotInInventory "drop")
-  setGuard "get" getTakeGuard
-  setGuard "go" goGuard
-  setGuard "search" searchGuard
-  setGuard "throw" (stopIfNotInInventory "throw")
-  setGuard "use" useGuard
-
-getTakeGuard :: Ref -> Game ()
-getTakeGuard ref = do
-  let verb = "get"
-  stopIfNotObject verb ref
-  stopIfInInventory verb ref
-  -- ref is either in the room, or in an open container
-
-goGuard :: Ref -> Game ()
-goGuard ref = do
-  let verb = "go to or through"
-  stopIfPlayer verb ref
-  stopIfInInventory verb ref
-  stopIfRoom verb ref
-  stopIfInRoom verb ref
-  stopIfInOpenContainer verb ref
-
--- TODO: note the following two guards are identical
-searchGuard :: Ref -> Game ()
-searchGuard ref = do
-  let verb = "search"
-  stopIfPlayer verb ref
-  stopIfExit verb ref
-  stopIfInOpenContainer verb ref
-
-useGuard :: Ref -> Game ()
-useGuard ref = do
-  let verb = "use"
-  stopIfPlayer verb ref
-  stopIfExit verb ref
   stopIfInOpenContainer verb ref
 
 -- Utility functions

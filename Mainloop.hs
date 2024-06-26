@@ -10,7 +10,6 @@ import ParseInput
 import Verbs
 import WordWrap
 import Things
-import Categories
 
 processDelayedActions :: [(Int, Game())] -> ([Game ()], [(Int, Game())])
 processDelayedActions input = process [] [] input

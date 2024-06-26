@@ -7,7 +7,6 @@ import Verbs
 import Control.Monad
 import Control.Monad.RWS
 import qualified Data.Map.Strict as M
-import Data.Maybe
 
 newThing :: Game Ref
 newThing = do
@@ -76,22 +75,10 @@ defaultDrop ref = do
 
 defaultGet :: Ref -> Game ()
 defaultGet ref = do
-  -- Ref is either in the room or a container
-  -- Possible problem: the container logic can be overridden by setVerb1 "get"
-  -- TODO consider changing getGuard to reject "get item" when item is in
-  -- a container, and instead require "get item from container", like it was
-  -- longer ago.
-  -- Maybe get item can be redirected to "get item from container" in the
-  -- getVerbGuard?
-  inRoom <- isInRoom ref
-  if inRoom then do
-    player <- getPlayer
-    move ref player
-    name <- qualifiedName ref
-    msg $ "You get " ++ name ++ "."
-    else do -- In a container
-    justContainer <- getLocation ref
-    doVerb $ GetFrom ref $ fromJust justContainer
+  player <- getPlayer
+  move ref player
+  name <- qualifiedName ref
+  msg $ "You get " ++ name ++ "."
 
 defaultGo :: Ref -> Game ()
 defaultGo ref = do
