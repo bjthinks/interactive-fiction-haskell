@@ -167,14 +167,14 @@ setGuard name action = do
 setGuards :: Game ()
 setGuards = do
   setGuard "drop" (stopIfNotInInventory "drop")
-  setGuard "get" getVerbGuard
+  setGuard "get" getTakeGuard
   setGuard "go" goGuard
   setGuard "search" searchGuard
   setGuard "throw" (stopIfNotInInventory "throw")
   setGuard "use" useGuard
 
-getVerbGuard :: Ref -> Game ()
-getVerbGuard ref = do
+getTakeGuard :: Ref -> Game ()
+getTakeGuard ref = do
   let verb = "get"
   stopIfNotObject verb ref
   stopIfInInventory verb ref

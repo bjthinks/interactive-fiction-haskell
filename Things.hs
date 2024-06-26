@@ -81,6 +81,8 @@ defaultGet ref = do
   -- TODO consider changing getGuard to reject "get item" when item is in
   -- a container, and instead require "get item from container", like it was
   -- longer ago.
+  -- Maybe get item can be redirected to "get item from container" in the
+  -- getVerbGuard?
   inRoom <- isInRoom ref
   if inRoom then do
     player <- getPlayer
