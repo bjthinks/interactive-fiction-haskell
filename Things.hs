@@ -46,6 +46,7 @@ setDefaults :: Game ()
 setDefaults = do
   setDefault1 "drop" defaultDrop
   setDefault1 "get" defaultGet
+  setDefault1 "get all from" defaultGetAllFrom
   setDefault1 "go" defaultGo
   setDefault1 "pet" defaultPet
   setDefault1 "search" defaultSearch
@@ -79,6 +80,16 @@ defaultGet ref = do
   move ref player
   name <- qualifiedName ref
   msg $ "You get " ++ name ++ "."
+
+defaultGetAllFrom :: Ref -> Game ()
+defaultGetAllFrom container = do
+  contents <- getContents' container
+  -- The player's room is already excluded by stopIfNotObject, so
+  -- contents will not include the player
+  containerName <- qualifiedName container
+  when (contents == []) $ stop $ capitalize containerName ++ " is empty."
+  let getFromContainer = flip GetFrom container
+  mapM_ (doVerb . getFromContainer) contents
 
 defaultGo :: Ref -> Game ()
 defaultGo ref = do

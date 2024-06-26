@@ -82,6 +82,7 @@ verb1' name = do
 alias1 :: String -> String
 alias1 "move" = "go"
 alias1 "take" = "get"
+alias1 "take all from" = "get all from"
 alias1 x = x
 
 implicitGo :: MyParser Verb
@@ -112,7 +113,7 @@ parseLine =
   verb1' "get" |||
   verb0  "get all" GetAll |||
   verb2  "get" "from" GetFrom |||
-  verb1  "get all from" GetAllFrom |||
+  verb1' "get all from" |||
   verb1' "go" |||
   verb0  "help" Help |||
   verb0  "i" Inventory |||
@@ -140,7 +141,7 @@ parseLine =
   verb1' "take" |||
   verb0  "take all" GetAll |||
   verb2  "take" "from" GetFrom |||
-  verb1  "take all from" GetAllFrom |||
+  verb1' "take all from" |||
   debug  "teleport" Teleport |||
   verb1' "throw" |||
   verb1' "turn off" |||
