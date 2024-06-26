@@ -121,7 +121,7 @@ parseLine =
   verb0  "l" (Look Nothing) |||
   verb1  "l" (Look . Just) |||
   verb1' "light" |||
-  verb1  "lock" LockHelp |||
+  verb1' "lock" |||
   verb2  "lock" "with" Lock |||
   verb0  "look" (Look Nothing) |||
   verb1  "look" (Look . Just) |||

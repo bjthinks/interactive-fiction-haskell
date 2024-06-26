@@ -22,7 +22,6 @@ data Verb = Blank
           | Unlock Ref Ref
           | Lock Ref Ref
           | UnlockHelp Ref
-          | LockHelp Ref
           | Open Ref Ref
           | OpenHelp Ref
           | Search
@@ -190,10 +189,6 @@ doVerb (Lock ref key) = do
   action <- getOnLock ref
   action
 
-doVerb (LockHelp ref) = do
-  name <- qualifiedName ref
-  stop $ "What do you want to lock " ++ name ++ " with?"
-
 doVerb (Open item tool) = do
   maybeOpener <- getOpener item
   itemName <- qualifiedName item
@@ -307,13 +302,15 @@ setGuard name action = do
 
 setGuards :: Game ()
 setGuards = do
-  setGuard "close" $ stopWith "close"
-  setGuard "drop" (stopIfNotInInventory "drop")
+  let s f g x = f x (g x)
+  s setGuard stopWith "close"
+  s setGuard stopIfNotInInventory "drop"
   setGuard "get" getTakeGuard
   setGuard "get all from" getAllFromGuard
   setGuard "go" goGuard
+  s setGuard stopWith "lock"
   setGuard "search" searchGuard
-  setGuard "throw" (stopIfNotInInventory "throw")
+  s setGuard stopIfNotInInventory "throw"
   setGuard "use" useGuard
 
 stopWith :: String -> Ref -> Game ()
