@@ -1,10 +1,7 @@
-module Things(setDefaults, newRoom, newObject, newExit) where
+module Things(newRoom, newObject, newExit) where
 
 import Defs
-import Categories
 import Actions
-import Verbs
-import Control.Monad
 import Control.Monad.RWS
 import qualified Data.Map.Strict as M
 
@@ -42,17 +39,6 @@ defaultThing ref = Thing {
   thingVerb1Map = M.empty
   }
 
-setDefaults :: Game ()
-setDefaults = do
-  setDefault1 "drop" defaultDrop
-  setDefault1 "get" defaultGet
-  setDefault1 "get all from" defaultGetAllFrom
-  setDefault1 "go" defaultGo
-  setDefault1 "pet" defaultPet
-  setDefault1 "put all in" defaultPutAllIn
-  setDefault1 "search" defaultSearch
-  setDefault1 "throw" defaultThrow
-
 defaultGetFrom :: Ref -> Ref -> Game ()
 defaultGetFrom ref container = do
   player <- getPlayer
@@ -67,65 +53,6 @@ defaultPutIn ref container = do
   itemName <- qualifiedName ref
   containerName <- qualifiedName container
   msg $ "You put " ++ itemName ++ " in " ++ containerName ++ "."
-
-defaultDrop :: Ref -> Game ()
-defaultDrop ref = do
-  room <- getRoom
-  move ref room
-  name <- qualifiedName ref
-  msg $ "You drop " ++ name ++ "."
-
-defaultGet :: Ref -> Game ()
-defaultGet ref = do
-  player <- getPlayer
-  move ref player
-  name <- qualifiedName ref
-  msg $ "You get " ++ name ++ "."
-
-defaultGetAllFrom :: Ref -> Game ()
-defaultGetAllFrom container = do
-  contents <- getContents' container
-  -- The player's room is already excluded by stopIfNotObject, so
-  -- contents will not include the player
-  containerName <- qualifiedName container
-  when (contents == []) $ stop $ capitalize containerName ++ " is empty."
-  let getFromContainer = flip GetFrom container
-  mapM_ (doVerb . getFromContainer) contents
-
-defaultGo :: Ref -> Game ()
-defaultGo ref = do
-  locked <- getIsLocked ref
-  name <- qualifiedName ref
-  when locked $ stop $ "The door going " ++ name ++ " is locked."
-  Just (_,dest) <- getPath ref
-  player <- getPlayer
-  move player dest
-  doVerb (Look Nothing)
-
-defaultPet :: Ref -> Game ()
-defaultPet ref = do
-  name <- qualifiedName ref
-  stop $ capitalize name ++ " is not an animal you can pet."
-
-defaultPutAllIn :: Ref -> Game ()
-defaultPutAllIn container = do
-  inventory <- getInventory
-  let thingsToPutIn = filter (/= container) inventory
-  containerName <- qualifiedName container
-  when (thingsToPutIn == []) $ stop $ "You don\'t have anything to put in " ++
-    containerName ++ "."
-  let putInContainer = flip PutIn container
-  mapM_ (doVerb . putInContainer) thingsToPutIn
-
-defaultSearch :: Ref -> Game ()
-defaultSearch ref = do
-  name <- qualifiedName ref
-  msg $ "You look everywhere in " ++ name ++ " but don\'t find anything."
-
-defaultThrow :: Ref -> Game ()
-defaultThrow ref = do
-  name <- qualifiedName ref
-  stop $ "There is no point in throwing " ++ name ++ "."
 
 -- Here are the exported functions
 

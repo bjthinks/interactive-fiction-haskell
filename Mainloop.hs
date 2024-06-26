@@ -4,12 +4,10 @@ import System.Console.Haskeline
 import Control.Monad
 import Control.Monad.Trans.Maybe
 import Control.Monad.RWS
-
 import Defs
 import ParseInput
 import Verbs
 import WordWrap
-import Things
 
 processDelayedActions :: [(Int, Game())] -> ([Game ()], [(Int, Game())])
 processDelayedActions input = process [] [] input

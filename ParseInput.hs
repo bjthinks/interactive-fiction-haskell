@@ -56,13 +56,6 @@ verb0 name def = do
   eof
   return def
 
-verb1 :: Word -> (Ref -> Verb) -> MyParser Verb
-verb1 name def = do
-  matchTokens $ words name
-  ref <- noun
-  eof
-  return $ def ref
-
 verb2 :: Word -> Word -> (Ref -> Ref -> Verb) -> MyParser Verb
 verb2 name1 name2 def = do
   matchToken name1
@@ -80,6 +73,8 @@ verb1' name = do
   return $ Verb1 (alias1 name) ref
 
 alias1 :: String -> String
+alias1 "l" = "look"
+alias1 "look at" = "look"
 alias1 "move" = "go"
 alias1 "take" = "get"
 alias1 "take all from" = "get all from"
@@ -120,13 +115,13 @@ parseLine =
   verb0  "i" Inventory |||
   verb0  "inventory" Inventory |||
   verb0  "l" (Look Nothing) |||
-  verb1  "l" (Look . Just) |||
+  verb1' "l" |||
   verb1' "light" |||
   verb1' "lock" |||
   verb2  "lock" "with" Lock |||
   verb0  "look" (Look Nothing) |||
-  verb1  "look" (Look . Just) |||
-  verb1  "look at" (Look . Just) |||
+  verb1' "look" |||
+  verb1' "look at" |||
   verb1' "move" |||
   verb1' "open" |||
   verb2  "open" "with" Open |||

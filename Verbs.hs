@@ -1,7 +1,7 @@
-module Verbs(Verb(..), doVerb, setGuards) where
+module Verbs(Verb(..), doVerb, setGuards, setDefaults) where
 
-import Data.List
 import Data.Maybe
+import Data.List
 import Control.Monad
 import Control.Monad.RWS
 import qualified Data.Map.Strict as M
@@ -40,40 +40,7 @@ doVerb (Look arg) = do
   ref <- case arg of
     Nothing -> getRoom
     Just ref -> return ref
-  debug <- getDebug
-  let myName = if debug then debugName else getName
-  name <- myName ref
-  msg $ capitalize name
-  desc <- getDescription ref
-  desc2 <- getDescription2 ref
-  when (desc /= "" || desc2 /= "") $ msg $
-    if desc == "" then desc2 else if desc2 == "" then desc else
-      desc ++ ' ' : desc2
-  path <- getPath ref
-  when (isJust path) $ do
-    let (src,dest) = fromJust path
-    srcName <- qualifiedName src
-    destName <- qualifiedName dest
-    let pathStr = "This is a way to go from " ++ srcName ++ " to " ++
-          destName ++ "."
-    locked <- getIsLocked ref
-    let message = if locked
-          then (pathStr ++ " The door is locked.")
-          else pathStr
-    msg message
-  contents <- getContents' ref
-  container <- getIsContainer ref
-  unlocked <- getIsUnlocked ref
-  -- You don't see yourself
-  player <- getPlayer
-  let objects = filter (/= player) contents
-  when (container && unlocked && objects /= []) $ do
-    objectNames <- mapM myName objects
-    msg $ "Contents: " ++ humanFriendlyList objectNames ++ "."
-  exits <- getExits ref
-  when (exits /= []) $ do
-    exitNames <- mapM myName exits
-    msg $ "Exits: " ++ humanFriendlyList exitNames ++ "."
+  doVerb (Verb1 "look" ref)
 
 doVerb Inventory = do
   inventory <- getInventory
@@ -291,6 +258,7 @@ setGuards = do
   setGuard "get all from" $ containerGuard "get things out of"
   setGuard "go" goGuard
   s setGuard stopWith "lock"
+  setGuard "look" $ \_ -> return ()
   s setGuard stopWith "open"
   setGuard "put all in" $ containerGuard "put things into"
   setGuard "search" searchGuard
@@ -347,6 +315,114 @@ useGuard ref = do
   stopIfPlayer verb ref
   stopIfExit verb ref
   stopIfInOpenContainer verb ref
+
+setDefaults :: Game ()
+setDefaults = do
+  setDefault1 "drop" defaultDrop
+  setDefault1 "get" defaultGet
+  setDefault1 "get all from" defaultGetAllFrom
+  setDefault1 "go" defaultGo
+  setDefault1 "look" defaultLook
+  setDefault1 "pet" defaultPet
+  setDefault1 "put all in" defaultPutAllIn
+  setDefault1 "search" defaultSearch
+  setDefault1 "throw" defaultThrow
+
+defaultDrop :: Ref -> Game ()
+defaultDrop ref = do
+  room <- getRoom
+  move ref room
+  name <- qualifiedName ref
+  msg $ "You drop " ++ name ++ "."
+
+defaultGet :: Ref -> Game ()
+defaultGet ref = do
+  player <- getPlayer
+  move ref player
+  name <- qualifiedName ref
+  msg $ "You get " ++ name ++ "."
+
+defaultGetAllFrom :: Ref -> Game ()
+defaultGetAllFrom container = do
+  contents <- getContents' container
+  -- The player's room is already excluded by stopIfNotObject, so
+  -- contents will not include the player
+  containerName <- qualifiedName container
+  when (contents == []) $ stop $ capitalize containerName ++ " is empty."
+  let getFromContainer = flip GetFrom container
+  mapM_ (doVerb . getFromContainer) contents
+
+defaultGo :: Ref -> Game ()
+defaultGo ref = do
+  locked <- getIsLocked ref
+  name <- qualifiedName ref
+  when locked $ stop $ "The door going " ++ name ++ " is locked."
+  Just (_,dest) <- getPath ref
+  player <- getPlayer
+  move player dest
+  doVerb (Look Nothing)
+
+defaultLook :: Ref -> Game ()
+defaultLook ref = do
+  debug <- getDebug
+  let myName = if debug then debugName else getName
+  name <- myName ref
+  msg $ capitalize name
+  desc <- getDescription ref
+  desc2 <- getDescription2 ref
+  when (desc /= "" || desc2 /= "") $ msg $
+    if desc == "" then desc2 else if desc2 == "" then desc else
+      desc ++ ' ' : desc2
+  path <- getPath ref
+  when (isJust path) $ do
+    let (src,dest) = fromJust path
+    srcName <- qualifiedName src
+    destName <- qualifiedName dest
+    let pathStr = "This is a way to go from " ++ srcName ++ " to " ++
+          destName ++ "."
+    locked <- getIsLocked ref
+    let message = if locked
+          then (pathStr ++ " The door is locked.")
+          else pathStr
+    msg message
+  contents <- getContents' ref
+  container <- getIsContainer ref
+  unlocked <- getIsUnlocked ref
+  -- You don't see yourself
+  player <- getPlayer
+  let objects = filter (/= player) contents
+  when (container && unlocked && objects /= []) $ do
+    objectNames <- mapM myName objects
+    msg $ "Contents: " ++ humanFriendlyList objectNames ++ "."
+  exits <- getExits ref
+  when (exits /= []) $ do
+    exitNames <- mapM myName exits
+    msg $ "Exits: " ++ humanFriendlyList exitNames ++ "."
+
+defaultPet :: Ref -> Game ()
+defaultPet ref = do
+  name <- qualifiedName ref
+  stop $ capitalize name ++ " is not an animal you can pet."
+
+defaultPutAllIn :: Ref -> Game ()
+defaultPutAllIn container = do
+  inventory <- getInventory
+  let thingsToPutIn = filter (/= container) inventory
+  containerName <- qualifiedName container
+  when (thingsToPutIn == []) $ stop $ "You don\'t have anything to put in " ++
+    containerName ++ "."
+  let putInContainer = flip PutIn container
+  mapM_ (doVerb . putInContainer) thingsToPutIn
+
+defaultSearch :: Ref -> Game ()
+defaultSearch ref = do
+  name <- qualifiedName ref
+  msg $ "You look everywhere in " ++ name ++ " but don\'t find anything."
+
+defaultThrow :: Ref -> Game ()
+defaultThrow ref = do
+  name <- qualifiedName ref
+  stop $ "There is no point in throwing " ++ name ++ "."
 
 -- helper function for look and inventory
 humanFriendlyList :: [String] -> String
