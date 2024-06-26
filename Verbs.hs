@@ -304,6 +304,8 @@ doVerb (Teleport ref) = do
 
 -- Guard functions
 
+-- This uses a function in Categories.hs, so it can't be in Defs.hs or the
+-- module imports would form a cycle
 getGuard :: String -> Game (Ref -> Game ())
 getGuard name = do
   m <- guardMap <$> get
