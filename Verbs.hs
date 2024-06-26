@@ -22,7 +22,6 @@ data Verb = Blank
           | Open Ref Ref
           | Search
           | Score
-          | Wait
           | Help
           | Exit
           | Verb0 String
@@ -157,8 +156,6 @@ doVerb Score = do
   msg $ "Your score is " ++ show points ++ " out of a maximum of " ++
     show maxPoints ++ "."
   maybeShowWinMessage
-
-doVerb Wait = msg "You wait for a little while."
 
 doVerb Help = do
   msg "Commands are of the form VERB, VERB NOUN, or VERB NOUN PREPOSITION NOUN."
@@ -312,6 +309,7 @@ useGuard ref = do
 
 setDefaults :: Game ()
 setDefaults = do
+  setVerb0 "wait" $ msg "You wait for a little while."
   setVerb0 "inventory" doInventory
   setDefault1 "drop" defaultDrop
   setDefault1 "get" defaultGet
