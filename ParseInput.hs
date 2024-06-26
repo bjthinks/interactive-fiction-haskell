@@ -83,6 +83,7 @@ alias1 :: String -> String
 alias1 "move" = "go"
 alias1 "take" = "get"
 alias1 "take all from" = "get all from"
+alias1 "put all into" = "put all in"
 alias1 x = x
 
 implicitGo :: MyParser Verb
@@ -133,6 +134,7 @@ parseLine =
   verb2  "put" "in" PutIn |||
   verb2  "put" "into" PutIn |||
   verb1' "put all in" |||
+  verb1' "put all into" |||
   verb0  "quit" Exit |||
   verb1' "read" |||
   verb0  "score" Score |||
