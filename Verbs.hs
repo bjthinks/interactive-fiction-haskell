@@ -27,6 +27,7 @@ data Verb = Blank
           | Wait
           | Help
           | Exit
+          | Verb0 String
           | Verb1 String Ref
           | Debug Bool
           | Examine Ref
@@ -184,6 +185,10 @@ doVerb Help = do
 
 doVerb Exit = stopPlaying
 
+doVerb (Verb0 name) = do
+  action <- getVerb0 name
+  action
+
 doVerb (Verb1 name ref) = do
   g <- getGuard name
   g ref
@@ -318,6 +323,7 @@ useGuard ref = do
 
 setDefaults :: Game ()
 setDefaults = do
+  setVerb0 "inventory" doInventory
   setDefault1 "drop" defaultDrop
   setDefault1 "get" defaultGet
   setDefault1 "get all from" defaultGetAllFrom
@@ -327,6 +333,12 @@ setDefaults = do
   setDefault1 "put all in" defaultPutAllIn
   setDefault1 "search" defaultSearch
   setDefault1 "throw" defaultThrow
+
+doInventory :: Game ()
+doInventory = do
+  inventory <- getInventory
+  names <- mapM getName inventory
+  msg $ "You are carrying: " ++ humanFriendlyList names ++ "."
 
 defaultDrop :: Ref -> Game ()
 defaultDrop ref = do

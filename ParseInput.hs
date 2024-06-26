@@ -56,6 +56,15 @@ verb0 name def = do
   eof
   return def
 
+verb0' :: Word -> MyParser Verb
+verb0' name = do
+  matchTokens $ words name
+  eof
+  return $ Verb0 (alias0 name)
+
+alias0 :: String -> String
+alias0 x = x
+
 verb1 :: Word -> MyParser Verb
 verb1 name = do
   matchTokens $ words name
@@ -113,7 +122,7 @@ parseLine =
   verb1  "go" |||
   verb0  "help" Help |||
   verb0  "i" Inventory |||
-  verb0  "inventory" Inventory |||
+  verb0' "inventory" |||
   verb0  "l" (Look Nothing) |||
   verb1  "l" |||
   verb1  "light" |||
