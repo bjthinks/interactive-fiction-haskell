@@ -49,6 +49,7 @@ setDefaults = do
   setDefault1 "get all from" defaultGetAllFrom
   setDefault1 "go" defaultGo
   setDefault1 "pet" defaultPet
+  setDefault1 "put all in" defaultPutAllIn
   setDefault1 "search" defaultSearch
   setDefault1 "throw" defaultThrow
 
@@ -105,6 +106,16 @@ defaultPet :: Ref -> Game ()
 defaultPet ref = do
   name <- qualifiedName ref
   stop $ capitalize name ++ " is not an animal you can pet."
+
+defaultPutAllIn :: Ref -> Game ()
+defaultPutAllIn container = do
+  inventory <- getInventory
+  let thingsToPutIn = filter (/= container) inventory
+  containerName <- qualifiedName container
+  when (thingsToPutIn == []) $ stop $ "You don\'t have anything to put in " ++
+    containerName ++ "."
+  let putInContainer = flip PutIn container
+  mapM_ (doVerb . putInContainer) thingsToPutIn
 
 defaultSearch :: Ref -> Game ()
 defaultSearch ref = do

@@ -132,7 +132,7 @@ parseLine =
   verb1' "pet" |||
   verb2  "put" "in" PutIn |||
   verb2  "put" "into" PutIn |||
-  verb1  "put all in" PutAllIn |||
+  verb1' "put all in" |||
   verb0  "quit" Exit |||
   verb1' "read" |||
   verb0  "score" Score |||

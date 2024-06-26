@@ -18,7 +18,6 @@ data Verb = Blank
           | GetFrom Ref Ref
           | DropAll
           | PutIn Ref Ref
-          | PutAllIn Ref
           | Unlock Ref Ref
           | Lock Ref Ref
           | Open Ref Ref
@@ -121,18 +120,6 @@ doVerb (PutIn ref container) = do
     " inside itself!"
   action <- getOnPutIn ref
   action container
-
-doVerb (PutAllIn container) = do
-  stopIfNotObject "put things into" container
-  stopIfInOpenContainer "put things into" container
-  stopIfNotOpenContainer container
-  inventory <- getInventory
-  let thingsToPutIn = filter (/= container) inventory
-  containerName <- qualifiedName container
-  when (thingsToPutIn == []) $ stop $ "You don\'t have anything to put in " ++
-    containerName ++ "."
-  let putInContainer = flip PutIn container
-  mapM_ (doVerb . putInContainer) thingsToPutIn
 
 doVerb (Unlock ref key) = do
   let verb = "unlock"
@@ -301,10 +288,11 @@ setGuards = do
   s setGuard stopWith "close"
   s setGuard stopIfNotInInventory "drop"
   setGuard "get" getTakeGuard
-  setGuard "get all from" getAllFromGuard
+  setGuard "get all from" $ containerGuard "get things out of"
   setGuard "go" goGuard
   s setGuard stopWith "lock"
   s setGuard stopWith "open"
+  setGuard "put all in" $ containerGuard "put things into"
   setGuard "search" searchGuard
   s setGuard stopIfNotInInventory "throw"
   s setGuard stopWith "unlock"
@@ -330,10 +318,10 @@ getTakeGuard ref = do
     doVerb (GetFrom ref container)
     mzero
 
-getAllFromGuard :: Ref -> Game ()
-getAllFromGuard ref = do
-  stopIfNotObject "get things out of" ref
-  stopIfInOpenContainer "get things out of" ref
+containerGuard :: String -> Ref -> Game ()
+containerGuard verb ref = do
+  stopIfNotObject verb ref
+  stopIfInOpenContainer verb ref
   stopIfNotOpenContainer ref
 
 goGuard :: Ref -> Game ()
