@@ -33,6 +33,7 @@ data Thing = Thing {
   }
 
 data GameState = GameState { things :: M.Map Ref Thing,
+                             default0Map :: M.Map String (Game ()),
                              default1Map :: M.Map String (Ref -> Game ()),
                              guardMap :: M.Map String (Ref -> Game ()),
                              nextThing :: Ref,
@@ -44,6 +45,7 @@ data GameState = GameState { things :: M.Map Ref Thing,
                              debugFlag :: Bool }
 
 startState = GameState { things = M.empty,
+                         default0Map = M.empty,
                          default1Map = M.empty,
                          guardMap = M.empty,
                          nextThing = 0,
