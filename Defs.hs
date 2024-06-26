@@ -33,7 +33,7 @@ data Thing = Thing {
   }
 
 data GameState = GameState { things :: M.Map Ref Thing,
-                             default0Map :: M.Map String (Game ()),
+                             verb0Map :: M.Map String (Game ()),
                              default1Map :: M.Map String (Ref -> Game ()),
                              guardMap :: M.Map String (Ref -> Game ()),
                              nextThing :: Ref,
@@ -45,7 +45,7 @@ data GameState = GameState { things :: M.Map Ref Thing,
                              debugFlag :: Bool }
 
 startState = GameState { things = M.empty,
-                         default0Map = M.empty,
+                         verb0Map = M.empty,
                          default1Map = M.empty,
                          guardMap = M.empty,
                          nextThing = 0,
@@ -192,6 +192,18 @@ debugName ref = do
   name <- getName ref
   return $ name ++ " (Ref: " ++ show ref ++ ")"
 
+getVerb0 :: String -> Game (Game ())
+getVerb0 name = do
+  m <- verb0Map <$> get
+  let d = stop "I don\'t understand what you typed."
+  return $ M.findWithDefault d name m
+
+setVerb0 :: String -> Game () -> Game ()
+setVerb0 name action = do
+  st <- get
+  let m' = M.insert name action $ verb0Map st
+  put st { verb0Map = m' }
+
 cant :: String -> Ref -> Game ()
 cant verb ref = do
   name <- qualifiedName ref
@@ -206,7 +218,7 @@ getDefault1 name = do
 setDefault1 :: String -> (Ref -> Game ()) -> Game ()
 setDefault1 name action = do
   st <- get
-  let m' = M.insert name action (default1Map st)
+  let m' = M.insert name action $ default1Map st
   put $ st { default1Map = m' }
 
 getVerb1 :: String -> Ref -> Game (Game ())
