@@ -29,7 +29,7 @@ move ref destination = do
   setLocation ref $ Just destination
 
 makeImmobile :: Ref -> Game ()
-makeImmobile ref = setOnGet ref $ do
+makeImmobile ref = setVerb1 "get" ref $ do
   name <- qualifiedName ref
   msg $ "You can\'t take " ++ name ++ "."
 

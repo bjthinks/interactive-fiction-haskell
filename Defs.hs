@@ -20,7 +20,6 @@ data Thing = Thing {
   -- Typically, exits go somewhere, but other things don't
   thingExits :: [Ref],
   thingPath :: Maybe (Ref,Ref),
-  thingOnGet :: Game (),
   thingOnPutIn :: Ref -> Game (), -- put this thing into ref
   thingOnGetFrom :: Ref -> Game (), -- get this thing from ref
   thingIsContainer :: Bool,
@@ -124,7 +123,6 @@ getLocation     = getProperty thingLocation
 getContents'    = getProperty thingContents
 getExits        = getProperty thingExits
 getPath         = getProperty thingPath
-getOnGet        = getProperty thingOnGet
 getOnPutIn      = getProperty thingOnPutIn
 getOnGetFrom    = getProperty thingOnGetFrom
 getIsContainer  = getProperty thingIsContainer
@@ -158,7 +156,6 @@ setLocation     = setProperty (\t v -> t { thingLocation = v })
 setContents     = setProperty (\t v -> t { thingContents = v })
 setExits        = setProperty (\t v -> t { thingExits = v })
 setPath         = setProperty (\t v -> t { thingPath = v })
-setOnGet        = setProperty (\t v -> t { thingOnGet = v })
 setOnPutIn      = setProperty (\t v -> t { thingOnPutIn = v })
 setOnGetFrom    = setProperty (\t v -> t { thingOnGetFrom = v })
 setIsContainer  = setProperty (\t v -> t { thingIsContainer = v })

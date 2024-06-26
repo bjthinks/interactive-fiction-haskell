@@ -7,6 +7,7 @@ import Verbs
 import Control.Monad
 import Control.Monad.RWS
 import qualified Data.Map.Strict as M
+import Data.Maybe
 
 newThing :: Game Ref
 newThing = do
@@ -30,7 +31,6 @@ defaultThing ref = Thing {
   thingContents = [],
   thingExits = [],
   thingPath = Nothing,
-  thingOnGet = defaultGet ref,
   thingOnGetFrom = defaultGetFrom ref,
   thingOnPutIn = defaultPutIn ref,
   thingIsContainer = False,
@@ -46,17 +46,11 @@ defaultThing ref = Thing {
 setDefaults :: Game ()
 setDefaults = do
   setDefault1 "drop" defaultDrop
+  setDefault1 "get" defaultGet
   setDefault1 "go" defaultGo
   setDefault1 "pet" defaultPet
   setDefault1 "search" defaultSearch
   setDefault1 "throw" defaultThrow
-
-defaultGet :: Ref -> Game ()
-defaultGet ref = do
-  player <- getPlayer
-  move ref player
-  name <- qualifiedName ref
-  msg $ "You get " ++ name ++ "."
 
 defaultGetFrom :: Ref -> Ref -> Game ()
 defaultGetFrom ref container = do
@@ -80,6 +74,23 @@ defaultDrop ref = do
   name <- qualifiedName ref
   msg $ "You drop " ++ name ++ "."
 
+defaultGet :: Ref -> Game ()
+defaultGet ref = do
+  -- Ref is either in the room or a container
+  -- Possible problem: the container logic can be overridden by setVerb1 "get"
+  -- TODO consider changing getGuard to reject "get item" when item is in
+  -- a container, and instead require "get item from container", like it was
+  -- longer ago.
+  inRoom <- isInRoom ref
+  if inRoom then do
+    player <- getPlayer
+    move ref player
+    name <- qualifiedName ref
+    msg $ "You get " ++ name ++ "."
+    else do -- In a container
+    justContainer <- getLocation ref
+    doVerb $ GetFrom ref $ fromJust justContainer
+
 defaultGo :: Ref -> Game ()
 defaultGo ref = do
   locked <- getIsLocked ref
@@ -95,15 +106,15 @@ defaultPet ref = do
   name <- qualifiedName ref
   stop $ capitalize name ++ " is not an animal you can pet."
 
-defaultThrow :: Ref -> Game ()
-defaultThrow ref = do
-  name <- qualifiedName ref
-  stop $ "There is no point in throwing " ++ name ++ "."
-
 defaultSearch :: Ref -> Game ()
 defaultSearch ref = do
   name <- qualifiedName ref
   msg $ "You look everywhere in " ++ name ++ " but don\'t find anything."
+
+defaultThrow :: Ref -> Game ()
+defaultThrow ref = do
+  name <- qualifiedName ref
+  stop $ "There is no point in throwing " ++ name ++ "."
 
 -- Here are the exported functions
 

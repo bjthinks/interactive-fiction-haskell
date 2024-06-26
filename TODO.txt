@@ -26,3 +26,4 @@ drop empty can of tuna -- restore default behavior. Check all defaults in
 lit candle should be put out if you put it in a container
 light matches should not work if matches are in backpack
 consider read math book -> (After taking it out of the backpack) ?
+consider allowing get misty

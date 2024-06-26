@@ -387,8 +387,8 @@ buildWorld = do
     "Behind the bar are numerous bottles of whiskey and other spirits, " ++
     "all capped with pour spouts."
   addAliases spirits ["alcohol", "whiskey", "booze", "liquor"]
-  setOnGet spirits $ msg $ "As you are underage, you don't think you should " ++
-    "be walking around with opened liquor bottles."
+  setVerb1 "get" spirits $ msg $ "As you are underage, you don't think " ++
+    "you should be walking around with opened liquor bottles."
   setVerb1 "drink" spirits $ msg $ "An eight year old boy such as yourself " ++
     "should not be drinking booze."
 
@@ -481,7 +481,7 @@ buildWorld = do
     "blue and black plastic adorned with Batman logos, with a 16 inch " ++
     "front wheel and a hand brake, presumably to facilitate intentional " ++
     "spin outs."
-  setOnGet bigWheel $ msg "The big wheel is too big to carry around."
+  setVerb1 "get" bigWheel $ msg "The big wheel is too big to carry around."
 
   backyard <- newRoom "backyard" $
     "This is the largest part of Granny\'s yard. There are numerous shrubs " ++
@@ -541,8 +541,8 @@ buildWorld = do
     "collar. She would like it if you pet her."
   setArticle misty Nothing
   addAliases misty ["bunny", "rabbit", "the bunny", "the rabbit"]
-  setOnGet misty $ msg $ "Misty doesn\'t know you very well, so she hops " ++
-    "away from your outstreched arms."
+  setVerb1 "get" misty $ msg $ "Misty doesn\'t know you very well, " ++
+    "so she hops away from your outstreched arms."
   let happyMisty = do
         msg $ "You gently pet Misty between her eyes and nose. " ++
           "She excitedly hops about; she loves being pet there."
@@ -633,13 +633,13 @@ buildWorld = do
         move costume destination
         msg "You take off the ghost costume."
         setDescription2 player ""
-  setOnGet costume getCostume
+  setVerb1 "get" costume getCostume
   setOnGetFrom costume $ \_ -> getCostume
   setVerb1 "drop" costume $ do
     room <- getRoom
     putCostume room
   setOnPutIn costume putCostume
-  setOnGet bimbo $ do
+  setVerb1 "get" bimbo $ do
     costumeLocation <- getLocation costume
     unless (costumeLocation == Just player) $ stop $
       "Bimbo squirms out of your grasp and jumps to the ground."
@@ -714,7 +714,8 @@ buildWorld = do
   eyeballs <- newObject hhDiningRoom "jar" $
     "The jar is labeled \"Eyeballs\". You try not to think about what might " ++
     "be inside."
-  setOnGet eyeballs $ msg "You read the label on the jar and shiver nervously."
+  setVerb1 "get" eyeballs $ msg
+    "You read the label on the jar and shiver nervously."
   ghosts <- newObject hhDiningRoom "three ghosts" $
     "Three big ghosts circle the dining room table. It looks like they are " ++
     "guarding something."
@@ -723,8 +724,8 @@ buildWorld = do
   skullKey <- newObject hhDiningRoom "skull key" $
     "This key has a tiny metal skull on its handle. Who knows what it " ++
     "unlocks?"
-  defaultGetSkullKey <- getOnGet skullKey
-  setOnGet skullKey $ do
+  defaultGetSkullKey <- getVerb1 "get" skullKey
+  setVerb1 "get" skullKey $ do
     costumeLocation <- getLocation costume
     unless (costumeLocation == Just player) $ stop $
       "You approach the table to pick up the key, but the ghosts all turn " ++
@@ -734,7 +735,7 @@ buildWorld = do
       "take the skull key from the ghosts."
     defaultGetSkullKey
     addPoints 5 "turning the tables on the three ghosts"
-    setOnGet skullKey defaultGetSkullKey
+    setVerb1 "get" skullKey defaultGetSkullKey
 
   hhKitchen <- newRoom "kitchen" $
     "This kitchen is a complete mess. Someone has thrown all of the dishes " ++
@@ -777,8 +778,8 @@ buildWorld = do
     "This cat arches its back and hisses when you look at it. It stares at " ++
     "you creepily."
   addAliases blackCat ["cat", "kitty"]
-  setOnGet blackCat $ msg $ "The cat bares its claws and hisses. There is " ++
-    "no way you would try to pick up such an unfriendly cat."
+  setVerb1 "get" blackCat $ msg $ "The cat bares its claws and hisses. " ++
+    "There is no way you would try to pick up such an unfriendly cat."
   setVerb1 "pet" blackCat $ msg
     "There is no way to pet such an unfriendly cat. Maybe she is hungry?"
 
@@ -832,8 +833,8 @@ buildWorld = do
         setVerb1 "go" upSpiral defaultGoUpSpiral
         setDescription blackCat $ "Now what you\'ve fed her, this seems " ++
           "like a pretty friendly cat."
-        setOnGet blackCat $ msg $ "You try to pick her up, but she still " ++
-          "wiggles out of your grasp."
+        setVerb1 "get" blackCat $ msg $ "You try to pick her up, but " ++
+          "she still wiggles out of your grasp."
         setVerb1 "pet" blackCat $ msg $ "The black cat purrs at you. What a " ++
           "change in her behavior!"
         setDescription2 hhStaircase $ "The black cat is no longer guarding " ++
@@ -896,19 +897,19 @@ buildWorld = do
         getBookMessage
         disconnect bathroomEntrance
         connect staircaseEntrance hhKitchen hhStaircase
-        setOnGet book onGetBook2
+        setVerb1 "get" book onGetBook2
         setVerb1 "use" book onGetBook2
       onGetBook2 = do
         getBookMessage
         disconnect staircaseEntrance
         connect bathroomEntrance hhReadingRoom hhBathroom1
-        setOnGet book onGetBook1
+        setVerb1 "get" book onGetBook1
         setVerb1 "use" book onGetBook1
       getBookMessage = msg $
         "You try to pick up the red book, but it appears to be attached " ++
         "to some kind of mechanism. You hear walls moving, and the floor " ++
         "plan of the house changes!"
-  setOnGet book onGetBook2
+  setVerb1 "get" book onGetBook2
   setVerb1 "use" book onGetBook2
 
   let useSprinkler = do
@@ -932,7 +933,7 @@ buildWorld = do
         setVerb1 "use" sprinkler alreadyRunning
         setVerb1 "turn on" sprinkler alreadyRunning
         setVerb1 "water grass with" sprinkler alreadyRunning
-        setOnGet sprinkler $ stop "You would get wet."
+        setVerb1 "get" sprinkler $ stop "You would get wet."
         setDescription2 sideYard healthyGrassStr
   setVerb1 "use" sprinkler useSprinkler
   setVerb1 "turn on" sprinkler useSprinkler

@@ -12,7 +12,6 @@ import Score
 data Verb = Blank
           | Look (Maybe Ref)
           | Inventory
-          | Get Ref
           | GetAll
           | GetFrom Ref Ref
           | GetAllFrom Ref
@@ -83,22 +82,10 @@ doVerb Inventory = do
   names <- mapM getName inventory
   msg $ "You are carrying: " ++ humanFriendlyList names ++ "."
 
-doVerb (Get ref) = do
-  stopIfNotObject "get" ref
-  stopIfInInventory "get" ref
-  -- ref is either in the room, or in an open container
-  inRoom <- isInRoom ref
-  if inRoom then do
-    action <- getOnGet ref
-    action
-    else do
-    justContainer <- getLocation ref
-    doVerb $ GetFrom ref $ fromJust justContainer
-
 doVerb GetAll = do
   thingsToGet <- getRoomContents -- excludes player
   when (thingsToGet == []) $ stop "There isn\'t anything to get."
-  mapM_ (doVerb . Get) thingsToGet
+  mapM_ (doVerb . Verb1 "get") thingsToGet
 
 doVerb (GetFrom ref container) = do
   stopIfNotObject "get things out of" container
