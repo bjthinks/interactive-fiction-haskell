@@ -91,12 +91,12 @@ verb2 name1 name2 def = do
 verb2' :: String -> String -> MyParser Verb
 verb2' verb prep = do
   matchTokens $ words verb
-  subject <- noun
+  dobj <- noun
   matchTokens $ words prep
-  object <- noun
+  iobj <- noun
   eof
   let (verb', prep') = alias2 verb prep
-  return $ Verb2 verb' subject prep' object
+  return $ Verb2 verb' dobj prep' iobj
 
 alias2 :: String -> String -> (String, String)
 alias2 verb prep = (verb, prep)

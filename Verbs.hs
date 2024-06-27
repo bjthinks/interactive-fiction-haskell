@@ -132,10 +132,11 @@ doVerb (Verb1 name ref) = do
   action <- getVerb1 name ref
   action
 
-doVerb (Verb2 verb subject prep object) = do
-  -- TODO guards
-  action <- getVerb2 verb subject prep
-  action object
+doVerb (Verb2 verb dobj prep iobj) = do
+  g <- getGuard2 verb prep
+  g dobj iobj
+  action <- getVerb2 verb dobj prep
+  action iobj
 
 doVerb (Examine ref) = do
   debug <- getDebug
@@ -191,6 +192,23 @@ setGuard1 name action = do
   st <- get
   let m' = M.insert name action (guardMap1 st)
   put $ st { guardMap1 = m' }
+
+getGuard2 :: String -> String -> Game (Ref -> Ref -> Game ())
+getGuard2 verb prep = do
+  m <- guardMap2 <$> get
+  let d = flip (defaultGuard2 verb) prep
+  return $ M.findWithDefault d (verb, prep) m
+{-
+setGuard2 :: String -> String -> (Ref -> Ref -> Game ()) -> Game ()
+setGuard2 verb prep action = do
+  st <- get
+  let m' = M.insert (verb, prep) action (guardMap2 st)
+  put $ st { guardMap2 = m' }
+-}
+defaultGuard2 :: String -> Ref -> String -> Ref -> Game ()
+defaultGuard2 verb dobj prep iobj = do
+  stopIfNotAccessible verb dobj
+  stopIfNotAccessible (verb ++ ' ' : prep) iobj
 
 setGuards :: Game ()
 setGuards = do
@@ -281,7 +299,6 @@ setDefaults = do
   setDefault1 "put all in" defaultPutAllIn
   setDefault1 "search" defaultSearch
   setDefault1 "throw" defaultThrow
-  setDefault2 "foo" "with" (\d i -> msg ("Foo " ++ show d ++ " " ++ show i)) -- TODO delete
 
 doDebug :: Bool -> Game ()
 doDebug flag = do
