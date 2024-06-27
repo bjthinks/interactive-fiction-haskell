@@ -281,6 +281,7 @@ setDefaults = do
   setDefault1 "put all in" defaultPutAllIn
   setDefault1 "search" defaultSearch
   setDefault1 "throw" defaultThrow
+  setDefault2 "foo" "with" (\d i -> msg ("Foo " ++ show d ++ " " ++ show i)) -- TODO delete
 
 doDebug :: Bool -> Game ()
 doDebug flag = do
