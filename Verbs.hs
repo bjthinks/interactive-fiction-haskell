@@ -17,8 +17,6 @@ data Verb = Blank
           | Unlock Ref Ref
           | Lock Ref Ref
           | Open Ref Ref
-          | Search
-          | Score
           | Verb0 String
           | Verb1 String Ref
           | Examine Ref
@@ -122,18 +120,6 @@ doVerb (Open item tool) = do
         " is not the right tool to open " ++ itemName ++ " with."
       action <- getOnOpen item
       action
-
-doVerb Search = do
-  room <- getRoom
-  action <- getVerb1 "search" room
-  action
-
-doVerb Score = do
-  points <- getScore
-  maxPoints <- getMaxScore
-  msg $ "Your score is " ++ show points ++ " out of a maximum of " ++
-    show maxPoints ++ "."
-  maybeShowWinMessage
 
 doVerb (Verb0 name) = do
   action <- getVerb0 name
@@ -277,6 +263,8 @@ setDefaults = do
   setVerb0 "help" doHelp
   setVerb0 "inventory" doInventory
   setVerb0 "look" doLook
+  setVerb0 "score" doScore
+  setVerb0 "search" doSearch
   setVerb0 "wait" $ msg "You wait for a little while."
   setDefault1 "drop" defaultDrop
   setDefault1 "get" defaultGet
@@ -329,6 +317,20 @@ doLook :: Game ()
 doLook = do
   ref <- getRoom
   doVerb (Verb1 "look" ref)
+
+doScore :: Game ()
+doScore = do
+  points <- getScore
+  maxPoints <- getMaxScore
+  msg $ "Your score is " ++ show points ++ " out of a maximum of " ++
+    show maxPoints ++ "."
+  maybeShowWinMessage
+
+doSearch :: Game ()
+doSearch = do
+  room <- getRoom
+  action <- getVerb1 "search" room
+  action
 
 defaultDrop :: Ref -> Game ()
 defaultDrop ref = do

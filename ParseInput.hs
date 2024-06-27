@@ -50,14 +50,8 @@ noun = do
       tryNoun :: ([Word],Ref) -> MyParser Ref
       tryNoun (name,ref) = matchTokens name >> return ref
 
-verb0 :: Word -> Verb -> MyParser Verb
-verb0 name def = do
-  matchTokens $ words name
-  eof
-  return def
-
-verb0' :: Word -> MyParser Verb
-verb0' name = do
+verb0 :: String -> MyParser Verb
+verb0 name = do
   matchTokens $ words name
   eof
   return $ Verb0 (alias0 name)
@@ -69,7 +63,7 @@ alias0 "quit" = "exit"
 alias0 "take all" = "get all"
 alias0 x = x
 
-verb1 :: Word -> MyParser Verb
+verb1 :: String -> MyParser Verb
 verb1 name = do
   matchTokens $ words name
   ref <- noun
@@ -109,21 +103,21 @@ debug name def = do
 
 parseLine :: MyParser Verb
 parseLine =
-  verb0' "debug off" |||
-  verb0' "debug on"  |||
-  verb0' "drop all"  |||
-  verb0' "exit"      |||
-  verb0' "get all"   |||
-  verb0' "help"      |||
-  verb0' "i"         |||
-  verb0' "inventory" |||
-  verb0' "l"         |||
-  verb0' "look"      |||
-  verb0' "quit"      |||
-  verb0  "score" Score |||
-  verb0  "search" Search |||
-  verb0' "take all"  |||
-  verb0' "wait"      |||
+  verb0 "debug off" |||
+  verb0 "debug on"  |||
+  verb0 "drop all"  |||
+  verb0 "exit"      |||
+  verb0 "get all"   |||
+  verb0 "help"      |||
+  verb0 "i"         |||
+  verb0 "inventory" |||
+  verb0 "l"         |||
+  verb0 "look"      |||
+  verb0 "quit"      |||
+  verb0 "score"     |||
+  verb0 "search"    |||
+  verb0 "take all"  |||
+  verb0 "wait"      |||
 
   verb1 "close"            |||
   verb1 "drink"            |||
