@@ -108,7 +108,7 @@ parseLine :: MyParser Verb
 parseLine =
   verb0' "debug off" |||
   verb0' "debug on" |||
-  verb0  "drop all" DropAll |||
+  verb0' "drop all" |||
   verb0  "exit" Exit |||
   verb0  "get all" GetAll |||
   verb0  "help" Help |||

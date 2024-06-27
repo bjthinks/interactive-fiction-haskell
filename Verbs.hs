@@ -15,7 +15,6 @@ data Verb = Blank
           | Look (Maybe Ref)
           | GetAll
           | GetFrom Ref Ref
-          | DropAll
           | PutIn Ref Ref
           | Unlock Ref Ref
           | Lock Ref Ref
@@ -61,11 +60,6 @@ doVerb (GetFrom ref container) = do
   -- ref is in container
   action <- getOnGetFrom ref
   action container
-
-doVerb DropAll = do
-  thingsToDrop <- getInventory
-  when (thingsToDrop == []) $ stop "You\'re not carrying anything."
-  mapM_ (doVerb . Verb1 "drop") thingsToDrop
 
 doVerb (PutIn ref container) = do
   stopIfNotObject "put things into" container
@@ -305,7 +299,8 @@ useGuard ref = do
 setDefaults :: Game ()
 setDefaults = do
   setVerb0 "debug off" $ doDebug False
-  setVerb0 "debug on"  $ doDebug True
+  setVerb0 "debug on" $ doDebug True
+  setVerb0 "drop all" doDropAll
   setVerb0 "inventory" doInventory
   setVerb0 "wait" $ msg "You wait for a little while."
   setDefault1 "drop" defaultDrop
@@ -322,6 +317,12 @@ doDebug :: Bool -> Game ()
 doDebug flag = do
   setDebug flag
   msg $ "Debug mode is " ++ (if flag then "on" else "off") ++ "."
+
+doDropAll :: Game ()
+doDropAll = do
+  thingsToDrop <- getInventory
+  when (thingsToDrop == []) $ stop "You\'re not carrying anything."
+  mapM_ (doVerb . Verb1 "drop") thingsToDrop
 
 doInventory :: Game ()
 doInventory = do
