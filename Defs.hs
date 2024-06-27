@@ -248,3 +248,44 @@ clearVerb1 name ref = do
   m <- getVerb1Map ref
   let m' = M.delete name m
   setVerb1Map ref m'
+
+cant2 :: String -> Ref -> String -> Ref -> Game ()
+cant2 verb subject prep object = do
+  subjectName <- qualifiedName subject
+  objectName <- qualifiedName object
+  stop $ "You can\'t " ++ verb ++ ' ' : subjectName ++ ' ' : prep ++
+    ' ' : objectName ++ "."
+
+getDefault2 :: String -> String -> Game (Ref -> Ref -> Game ())
+getDefault2 verb prep = do
+  m <- default2Map <$> get
+  let d = flip (cant2 verb) prep
+  return $ M.findWithDefault d (verb, prep) m
+
+setDefault2 :: String -> String -> (Ref -> Ref -> Game ()) -> Game ()
+setDefault2 verb prep action = do
+  st <- get
+  let m' = M.insert (verb, prep) action $ default2Map st
+  put $ st { default2Map = m' }
+
+getVerb2 :: String -> Ref -> String -> Game (Ref -> Game ())
+getVerb2 verb subject prep = do
+  m <- getVerb2Map subject
+  debug <- getDebug
+  n <- qualifiedName subject
+  when debug $ msg $ "Verb2 keys for " ++ n ++ ": " ++ show (M.keys m)
+  d <- getDefault2 verb prep
+  return $ M.findWithDefault (d subject) (verb, prep) m
+{-
+setVerb1 :: String -> Ref -> Game () -> Game ()
+setVerb1 name ref action = do
+  m <- getVerb1Map ref
+  let m' = M.insert name action m
+  setVerb1Map ref m'
+
+clearVerb1 :: String -> Ref -> Game ()
+clearVerb1 name ref = do
+  m <- getVerb1Map ref
+  let m' = M.delete name m
+  setVerb1Map ref m'
+-}

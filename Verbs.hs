@@ -19,6 +19,7 @@ data Verb = Blank
           | Open Ref Ref
           | Verb0 String
           | Verb1 String Ref
+          | Verb2 String Ref String Ref
           | Examine Ref
           | Teleport Ref
           deriving Show
@@ -130,6 +131,11 @@ doVerb (Verb1 name ref) = do
   g ref
   action <- getVerb1 name ref
   action
+
+doVerb (Verb2 verb subject prep object) = do
+  -- TODO guards
+  action <- getVerb2 verb subject prep
+  action object
 
 doVerb (Examine ref) = do
   debug <- getDebug

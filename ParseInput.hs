@@ -88,6 +88,16 @@ verb2 name1 name2 def = do
   eof
   return $ def ref1 ref2
 
+verb2' :: String -> String -> MyParser Verb
+verb2' verb prep = do
+  matchTokens $ words verb
+  subject <- noun
+  matchTokens $ words prep
+  object <- noun
+  eof
+  -- TODO aliases
+  return $ Verb2 verb subject prep object
+
 implicitGo :: MyParser Verb
 implicitGo = do
   ref <- noun
@@ -155,6 +165,7 @@ parseLine =
   verb2  "put" "into" PutIn |||
   verb2  "take" "from" GetFrom |||
   verb2  "unlock" "with" Unlock |||
+  verb2' "foo" "with" ||| -- TODO remove
 
   debug "examine" Examine |||
   debug "teleport" Teleport |||
