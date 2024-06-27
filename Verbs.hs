@@ -22,7 +22,6 @@ data Verb = Blank
           | Search
           | Score
           | Help
-          | Exit
           | Verb0 String
           | Verb1 String Ref
           | Examine Ref
@@ -162,8 +161,6 @@ doVerb Help = do
     "are shorthand names for commonly named exits. So \"go n\" or just " ++
     "\"n\" is short for \"go north\"."
 
-doVerb Exit = stopPlaying
-
 doVerb (Verb0 name) = do
   action <- getVerb0 name
   action
@@ -301,6 +298,7 @@ setDefaults = do
   setVerb0 "debug off" $ doDebug False
   setVerb0 "debug on" $ doDebug True
   setVerb0 "drop all" doDropAll
+  setVerb0 "exit" stopPlaying
   setVerb0 "inventory" doInventory
   setVerb0 "wait" $ msg "You wait for a little while."
   setDefault1 "drop" defaultDrop
