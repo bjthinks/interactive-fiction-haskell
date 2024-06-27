@@ -39,7 +39,7 @@ startup buildWorld = do
   setDefaults
   setGuards
   buildWorld
-  doVerb (Look Nothing)
+  doVerb $ Verb0 "look"
   msg "Type help for a list of commands."
 
 playGame :: Game () -> IO ()

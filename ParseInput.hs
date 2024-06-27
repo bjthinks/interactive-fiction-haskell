@@ -64,6 +64,7 @@ verb0' name = do
 
 alias0 :: String -> String
 alias0 "i" = "inventory"
+alias0 "l" = "look"
 alias0 "quit" = "exit"
 alias0 "take all" = "get all"
 alias0 x = x
@@ -116,8 +117,8 @@ parseLine =
   verb0' "help"      |||
   verb0' "i"         |||
   verb0' "inventory" |||
-  verb0  "l" (Look Nothing) |||
-  verb0  "look" (Look Nothing) |||
+  verb0' "l"         |||
+  verb0' "look"      |||
   verb0' "quit"      |||
   verb0  "score" Score |||
   verb0  "search" Search |||

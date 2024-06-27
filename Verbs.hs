@@ -12,7 +12,6 @@ import Actions
 import Score
 
 data Verb = Blank
-          | Look (Maybe Ref)
           | GetFrom Ref Ref
           | PutIn Ref Ref
           | Unlock Ref Ref
@@ -28,12 +27,6 @@ data Verb = Blank
 
 doVerb :: Verb -> Game ()
 doVerb Blank = return ()
-
-doVerb (Look arg) = do
-  ref <- case arg of
-    Nothing -> getRoom
-    Just ref -> return ref
-  doVerb (Verb1 "look" ref)
 
 doVerb (GetFrom ref container) = do
   stopIfNotObject "get things out of" container
@@ -189,7 +182,7 @@ doVerb (Teleport ref) = do
   unless exists $ stop $ "There is nothing with Ref " ++ show ref ++ "."
   player <- getPlayer
   move player ref
-  doVerb (Look Nothing)
+  doVerb $ Verb1 "look" ref
 
 -- Guard functions
 
@@ -283,6 +276,7 @@ setDefaults = do
   setVerb0 "get all" doGetAll
   setVerb0 "help" doHelp
   setVerb0 "inventory" doInventory
+  setVerb0 "look" doLook
   setVerb0 "wait" $ msg "You wait for a little while."
   setDefault1 "drop" defaultDrop
   setDefault1 "get" defaultGet
@@ -331,6 +325,11 @@ doInventory = do
   names <- mapM getName inventory
   msg $ "You are carrying: " ++ humanFriendlyList names ++ "."
 
+doLook :: Game ()
+doLook = do
+  ref <- getRoom
+  doVerb (Verb1 "look" ref)
+
 defaultDrop :: Ref -> Game ()
 defaultDrop ref = do
   room <- getRoom
@@ -363,7 +362,7 @@ defaultGo ref = do
   Just (_,dest) <- getPath ref
   player <- getPlayer
   move player dest
-  doVerb (Look Nothing)
+  doVerb $ Verb1 "look" dest
 
 defaultLook :: Ref -> Game ()
 defaultLook ref = do

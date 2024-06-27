@@ -245,12 +245,12 @@ buildWorld = do
     if playerLoc == dollhouse then do
       msg "You exit the dollhouse. Everything looks normal again."
       move player dollhouseLoc
-      doVerb $ Look Nothing
+      doVerb $ Verb1 "look" dollhouseLoc
       else if playerLoc == dollhouseLoc then do
       msg $ "You enter the dollhouse. Everything looks like a cartoon " ++
         "in here."
       move player dollhouse
-      doVerb $ Look Nothing
+      doVerb $ Verb1 "look" dollhouse
       else failUseDollhouse
   defaultDropGabby <- getVerb1 "drop" gabby
   defaultPutGabbyIn <- getOnPutIn gabby
@@ -702,7 +702,7 @@ buildWorld = do
   addAlias flask "holy water"
   setVerb1 "drink" flask $ msg $ "You have a feeling the contents of " ++
     "this flask are too important to drink."
-  setVerb1 "read" flask $ doVerb $ Look (Just flask)
+  setVerb1 "read" flask $ doVerb $ Verb1 "look" flask
 
   hhDiningRoom <- newRoom "dining room" $
     "This dining room has a huge octagonal hardwood table with eight chairs " ++
