@@ -140,6 +140,7 @@ getKey          = getProperty thingKey
 getOpener       = getProperty thingOpener
 getOnOpen       = getProperty thingOnOpen
 getVerb1Map     = getProperty thingVerb1Map
+getVerb2Map     = getProperty thingVerb2Map
 
 getIsUnlocked :: Ref -> Game Bool
 getIsUnlocked = fmap not . getIsLocked
@@ -173,6 +174,7 @@ setKey          = setProperty (\t v -> t { thingKey = v })
 setOpener       = setProperty (\t v -> t { thingOpener = v })
 setOnOpen       = setProperty (\t v -> t { thingOnOpen = v })
 setVerb1Map     = setProperty (\t v -> t { thingVerb1Map = v })
+setVerb2Map     = setProperty (\t v -> t { thingVerb2Map = v })
 
 addAlias :: Ref -> String -> Game ()
 addAlias ref alias = do
