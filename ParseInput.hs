@@ -99,6 +99,7 @@ verb2' verb prep = do
   return $ Verb2 verb' dobj prep' iobj
 
 alias2 :: String -> String -> (String, String)
+alias2 "take" "from" = ("get", "from")
 alias2 verb prep = (verb, prep)
 
 implicitGo :: MyParser Verb
@@ -161,12 +162,12 @@ parseLine =
   verb1 "water grass with" |||
 
   verb2  "close" "with" Lock |||
-  verb2  "get" "from" GetFrom |||
+  verb2' "get" "from" |||
   verb2  "lock" "with" Lock |||
   verb2  "open" "with" Open |||
   verb2  "put" "in" PutIn |||
   verb2  "put" "into" PutIn |||
-  verb2  "take" "from" GetFrom |||
+  verb2' "take" "from" |||
   verb2  "unlock" "with" Unlock |||
   verb2' "foo" "with" ||| -- TODO remove
 

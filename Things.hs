@@ -27,7 +27,6 @@ defaultThing ref = Thing {
   thingContents = [],
   thingExits = [],
   thingPath = Nothing,
-  thingOnGetFrom = defaultGetFrom ref,
   thingOnPutIn = defaultPutIn ref,
   thingIsContainer = False,
   thingOnUnlock = cant "unlock" ref, -- might be impossible to call this
@@ -39,14 +38,6 @@ defaultThing ref = Thing {
   thingVerb1Map = M.empty,
   thingVerb2Map = M.empty
   }
-
-defaultGetFrom :: Ref -> Ref -> Game ()
-defaultGetFrom ref container = do
-  player <- getPlayer
-  move ref player
-  itemName <- qualifiedName ref
-  containerName <- qualifiedName container
-  msg $ "You get " ++ itemName ++ " from " ++ containerName ++ "."
 
 defaultPutIn :: Ref -> Ref -> Game ()
 defaultPutIn ref container = do

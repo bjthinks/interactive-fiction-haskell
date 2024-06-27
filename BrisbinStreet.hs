@@ -634,7 +634,7 @@ buildWorld = do
         msg "You take off the ghost costume."
         setDescription2 player ""
   setVerb1 "get" costume getCostume
-  setOnGetFrom costume $ \_ -> getCostume
+  setVerb2 "get" costume "from" $ \_ -> getCostume
   setVerb1 "drop" costume $ do
     room <- getRoom
     putCostume room

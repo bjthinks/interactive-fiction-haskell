@@ -12,7 +12,6 @@ import Actions
 import Score
 
 data Verb = Blank
-          | GetFrom Ref Ref
           | PutIn Ref Ref
           | Unlock Ref Ref
           | Lock Ref Ref
@@ -26,24 +25,6 @@ data Verb = Blank
 
 doVerb :: Verb -> Game ()
 doVerb Blank = return ()
-
-doVerb (GetFrom ref container) = do
-  stopIfNotObject "get things out of" container
-  stopIfInOpenContainer "get things out of" container
-  stopIfNotOpenContainer container
-  -- container is open and in either inventory or room
-  stopIfNotObject "get from a container" ref
-  stopIfInRoom "get from a container" ref
-  stopIfInInventory "get from a container" ref
-  -- ref is in some container
-  refLoc <- getLocation ref
-  unless (refLoc == Just container) $ do
-    refName <- qualifiedName ref
-    containerName <- qualifiedName container
-    stop $ capitalize refName ++ " is not in " ++ containerName ++ "."
-  -- ref is in container
-  action <- getOnGetFrom ref
-  action container
 
 doVerb (PutIn ref container) = do
   stopIfNotObject "put things into" container
@@ -198,13 +179,13 @@ getGuard2 verb prep = do
   m <- guardMap2 <$> get
   let d = flip (defaultGuard2 verb) prep
   return $ M.findWithDefault d (verb, prep) m
-{-
+
 setGuard2 :: String -> String -> (Ref -> Ref -> Game ()) -> Game ()
 setGuard2 verb prep action = do
   st <- get
   let m' = M.insert (verb, prep) action (guardMap2 st)
   put $ st { guardMap2 = m' }
--}
+
 defaultGuard2 :: String -> Ref -> String -> Ref -> Game ()
 defaultGuard2 verb dobj prep iobj = do
   stopIfNotAccessible verb dobj
@@ -226,6 +207,7 @@ setGuards = do
   s setGuard1 stopIfNotInInventory "throw"
   s setGuard1 stopWith "unlock"
   setGuard1 "use" useGuard
+  setGuard2 "get" "from" getFromGuard
 
 stopWith :: String -> Ref -> Game ()
 stopWith verb ref = do
@@ -244,7 +226,7 @@ getTakeGuard ref = do
     Just container <- getLocation ref
     name <- qualifiedName container
     msg $ "(from " ++ name ++ ")"
-    doVerb (GetFrom ref container)
+    doVerb (Verb2 "get" ref "from" container)
     mzero
 
 containerGuard :: String -> Ref -> Game ()
@@ -277,6 +259,23 @@ useGuard ref = do
   stopIfExit verb ref
   stopIfInOpenContainer verb ref
 
+getFromGuard :: Ref -> Ref -> Game ()
+getFromGuard item container = do
+  stopIfNotObject "get from a container" item
+  stopIfInRoom "get from a container" item
+  stopIfInInventory "get from a container" item
+  -- item is in some container
+  stopIfNotObject "get things out of" container
+  stopIfInOpenContainer "get things out of" container
+  stopIfNotOpenContainer container
+  -- container is open and in either inventory or room
+  itemLoc <- getLocation item
+  unless (itemLoc == Just container) $ do
+    itemName <- qualifiedName item
+    containerName <- qualifiedName container
+    stop $ capitalize itemName ++ " is not in " ++ containerName ++ "."
+  -- item is in container
+
 setDefaults :: Game ()
 setDefaults = do
   setVerb0 "debug off" $ doDebug False
@@ -299,6 +298,7 @@ setDefaults = do
   setDefault1 "put all in" defaultPutAllIn
   setDefault1 "search" defaultSearch
   setDefault1 "throw" defaultThrow
+  setDefault2 "get" "from" defaultGetFrom
 
 doDebug :: Bool -> Game ()
 doDebug flag = do
@@ -377,7 +377,7 @@ defaultGetAllFrom container = do
   -- contents will not include the player
   containerName <- qualifiedName container
   when (contents == []) $ stop $ capitalize containerName ++ " is empty."
-  let getFromContainer = flip GetFrom container
+  let getFromContainer item = Verb2 "get" item "from" container
   mapM_ (doVerb . getFromContainer) contents
 
 defaultGo :: Ref -> Game ()
@@ -451,6 +451,14 @@ defaultThrow :: Ref -> Game ()
 defaultThrow ref = do
   name <- qualifiedName ref
   stop $ "There is no point in throwing " ++ name ++ "."
+
+defaultGetFrom :: Ref -> Ref -> Game ()
+defaultGetFrom item container = do
+  player <- getPlayer
+  move item player
+  itemName <- qualifiedName item
+  containerName <- qualifiedName container
+  msg $ "You get " ++ itemName ++ " from " ++ containerName ++ "."
 
 -- helper function for look and inventory
 humanFriendlyList :: [String] -> String

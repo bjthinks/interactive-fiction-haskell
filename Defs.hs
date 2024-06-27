@@ -21,7 +21,6 @@ data Thing = Thing {
   thingExits :: [Ref],
   thingPath :: Maybe (Ref,Ref),
   thingOnPutIn :: Ref -> Game (), -- put this thing into ref
-  thingOnGetFrom :: Ref -> Game (), -- get this thing from ref
   thingIsContainer :: Bool,
   thingOnUnlock :: Game (),
   thingOnLock :: Game (),
@@ -133,7 +132,6 @@ getContents'    = getProperty thingContents
 getExits        = getProperty thingExits
 getPath         = getProperty thingPath
 getOnPutIn      = getProperty thingOnPutIn
-getOnGetFrom    = getProperty thingOnGetFrom
 getIsContainer  = getProperty thingIsContainer
 getOnUnlock     = getProperty thingOnUnlock
 getOnLock       = getProperty thingOnLock
@@ -167,7 +165,6 @@ setContents     = setProperty (\t v -> t { thingContents = v })
 setExits        = setProperty (\t v -> t { thingExits = v })
 setPath         = setProperty (\t v -> t { thingPath = v })
 setOnPutIn      = setProperty (\t v -> t { thingOnPutIn = v })
-setOnGetFrom    = setProperty (\t v -> t { thingOnGetFrom = v })
 setIsContainer  = setProperty (\t v -> t { thingIsContainer = v })
 setOnUnlock     = setProperty (\t v -> t { thingOnUnlock = v })
 setOnLock       = setProperty (\t v -> t { thingOnLock = v })
