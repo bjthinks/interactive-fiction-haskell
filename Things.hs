@@ -36,7 +36,8 @@ defaultThing ref = Thing {
   thingKey = Nothing,
   thingOpener = Nothing, -- defers to Unlock unless set
   thingOnOpen = return (),
-  thingVerb1Map = M.empty
+  thingVerb1Map = M.empty,
+  thingVerb2Map = M.empty
   }
 
 defaultGetFrom :: Ref -> Ref -> Game ()

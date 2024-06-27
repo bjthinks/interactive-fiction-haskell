@@ -29,32 +29,37 @@ data Thing = Thing {
   thingKey :: Maybe Ref,
   thingOpener :: Maybe Ref, -- if Nothing, defers to Unlock
   thingOnOpen :: Game (),
-  thingVerb1Map :: M.Map String (Game ())
+  thingVerb1Map :: M.Map String (Game ()),
+  thingVerb2Map :: M.Map (String,String) (Ref -> Game ())
   }
 
-data GameState = GameState { things :: M.Map Ref Thing,
-                             verb0Map :: M.Map String (Game ()),
-                             default1Map :: M.Map String (Ref -> Game ()),
-                             guardMap :: M.Map String (Ref -> Game ()),
-                             nextThing :: Ref,
-                             maybePlayer :: Maybe Ref,
-                             delayedActions :: [(Int, Game ())],
-                             score :: Int,
-                             maxScore :: Int,
-                             keepPlaying :: Bool,
-                             debugFlag :: Bool }
+data GameState = GameState {
+  things :: M.Map Ref Thing,
+  verb0Map :: M.Map String (Game ()),
+  default1Map :: M.Map String (Ref -> Game ()),
+  default2Map :: M.Map (String,String) (Ref -> Ref -> Game ()),
+  guardMap :: M.Map String (Ref -> Game ()),
+  nextThing :: Ref,
+  maybePlayer :: Maybe Ref,
+  delayedActions :: [(Int, Game ())],
+  score :: Int,
+  maxScore :: Int,
+  keepPlaying :: Bool,
+  debugFlag :: Bool }
 
-startState = GameState { things = M.empty,
-                         verb0Map = M.empty,
-                         default1Map = M.empty,
-                         guardMap = M.empty,
-                         nextThing = 0,
-                         maybePlayer = Nothing,
-                         delayedActions = [],
-                         score = 0,
-                         maxScore = 0,
-                         keepPlaying = True,
-                         debugFlag = False }
+startState = GameState {
+  things = M.empty,
+  verb0Map = M.empty,
+  default1Map = M.empty,
+  default2Map = M.empty,
+  guardMap = M.empty,
+  nextThing = 0,
+  maybePlayer = Nothing,
+  delayedActions = [],
+  score = 0,
+  maxScore = 0,
+  keepPlaying = True,
+  debugFlag = False }
 
 type MoveInput = String
 type MoveOutput = String
