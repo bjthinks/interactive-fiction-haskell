@@ -108,20 +108,20 @@ debug name def = do
 parseLine :: MyParser Verb
 parseLine =
   verb0' "debug off" |||
-  verb0' "debug on" |||
-  verb0' "drop all" |||
-  verb0' "exit" |||
+  verb0' "debug on"  |||
+  verb0' "drop all"  |||
+  verb0' "exit"      |||
   verb0  "get all" GetAll |||
   verb0  "help" Help |||
-  verb0' "i" |||
+  verb0' "i"         |||
   verb0' "inventory" |||
   verb0  "l" (Look Nothing) |||
   verb0  "look" (Look Nothing) |||
-  verb0' "quit" |||
+  verb0' "quit"      |||
   verb0  "score" Score |||
   verb0  "search" Search |||
   verb0  "take all" GetAll |||
-  verb0' "wait" |||
+  verb0' "wait"      |||
 
   verb1 "close"            |||
   verb1 "drink"            |||
