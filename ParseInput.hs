@@ -113,7 +113,7 @@ parseLine =
   verb0' "drop all"  |||
   verb0' "exit"      |||
   verb0' "get all"   |||
-  verb0  "help" Help |||
+  verb0' "help"      |||
   verb0' "i"         |||
   verb0' "inventory" |||
   verb0  "l" (Look Nothing) |||

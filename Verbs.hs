@@ -20,7 +20,6 @@ data Verb = Blank
           | Open Ref Ref
           | Search
           | Score
-          | Help
           | Verb0 String
           | Verb1 String Ref
           | Examine Ref
@@ -142,18 +141,6 @@ doVerb Score = do
   msg $ "Your score is " ++ show points ++ " out of a maximum of " ++
     show maxPoints ++ "."
   maybeShowWinMessage
-
-doVerb Help = do
-  msg "Commands are of the form VERB, VERB NOUN, or VERB NOUN PREPOSITION NOUN."
-  msg "Some of the verbs I understand are:"
-  msg "inventory, search, wait, quit"
-  msg "go, look, get, drop, throw, use, eat, drink, or pet followed by a noun"
-  msg "unlock item/direction/door with key"
-  msg "get item from container, or put item in container"
-  msg "open item with tool"
-  msg $ "You can type the name of an exit to go that direction, and there " ++
-    "are shorthand names for commonly named exits. So \"go n\" or just " ++
-    "\"n\" is short for \"go north\"."
 
 doVerb (Verb0 name) = do
   action <- getVerb0 name
@@ -294,6 +281,7 @@ setDefaults = do
   setVerb0 "drop all" doDropAll
   setVerb0 "exit" stopPlaying
   setVerb0 "get all" doGetAll
+  setVerb0 "help" doHelp
   setVerb0 "inventory" doInventory
   setVerb0 "wait" $ msg "You wait for a little while."
   setDefault1 "drop" defaultDrop
@@ -322,6 +310,20 @@ doGetAll = do
   thingsToGet <- getRoomContents -- excludes player
   when (thingsToGet == []) $ stop "There isn\'t anything to get."
   mapM_ (doVerb . Verb1 "get") thingsToGet
+
+doHelp :: Game ()
+doHelp = do
+  msg $ "Commands are of the form \"verb\", \"verb noun\", or " ++
+    "\"verb noun preposition noun\"."
+  msg "Some of the verbs I understand are:"
+  msg "inventory, search, wait, quit"
+  msg "go, look, get, drop, throw, use, eat, drink, or pet followed by a noun"
+  msg "unlock item/direction/door with key"
+  msg "get item from container, or put item in container"
+  msg "open item with tool"
+  msg $ "You can type the name of an exit to go that direction, and there " ++
+    "are shorthand names for commonly named exits. So \"go n\" or just " ++
+    "\"n\" is short for \"go north\"."
 
 doInventory :: Game ()
 doInventory = do
