@@ -13,7 +13,6 @@ import Score
 
 data Verb = Blank
           | Look (Maybe Ref)
-          | GetAll
           | GetFrom Ref Ref
           | PutIn Ref Ref
           | Unlock Ref Ref
@@ -36,11 +35,6 @@ doVerb (Look arg) = do
     Nothing -> getRoom
     Just ref -> return ref
   doVerb (Verb1 "look" ref)
-
-doVerb GetAll = do
-  thingsToGet <- getRoomContents -- excludes player
-  when (thingsToGet == []) $ stop "There isn\'t anything to get."
-  mapM_ (doVerb . Verb1 "get") thingsToGet
 
 doVerb (GetFrom ref container) = do
   stopIfNotObject "get things out of" container
@@ -299,6 +293,7 @@ setDefaults = do
   setVerb0 "debug on" $ doDebug True
   setVerb0 "drop all" doDropAll
   setVerb0 "exit" stopPlaying
+  setVerb0 "get all" doGetAll
   setVerb0 "inventory" doInventory
   setVerb0 "wait" $ msg "You wait for a little while."
   setDefault1 "drop" defaultDrop
@@ -321,6 +316,12 @@ doDropAll = do
   thingsToDrop <- getInventory
   when (thingsToDrop == []) $ stop "You\'re not carrying anything."
   mapM_ (doVerb . Verb1 "drop") thingsToDrop
+
+doGetAll :: Game ()
+doGetAll = do
+  thingsToGet <- getRoomContents -- excludes player
+  when (thingsToGet == []) $ stop "There isn\'t anything to get."
+  mapM_ (doVerb . Verb1 "get") thingsToGet
 
 doInventory :: Game ()
 doInventory = do

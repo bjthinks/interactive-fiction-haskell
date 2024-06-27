@@ -65,6 +65,7 @@ verb0' name = do
 alias0 :: String -> String
 alias0 "i" = "inventory"
 alias0 "quit" = "exit"
+alias0 "take all" = "get all"
 alias0 x = x
 
 verb1 :: Word -> MyParser Verb
@@ -111,7 +112,7 @@ parseLine =
   verb0' "debug on"  |||
   verb0' "drop all"  |||
   verb0' "exit"      |||
-  verb0  "get all" GetAll |||
+  verb0' "get all"   |||
   verb0  "help" Help |||
   verb0' "i"         |||
   verb0' "inventory" |||
@@ -120,7 +121,7 @@ parseLine =
   verb0' "quit"      |||
   verb0  "score" Score |||
   verb0  "search" Search |||
-  verb0  "take all" GetAll |||
+  verb0' "take all"  |||
   verb0' "wait"      |||
 
   verb1 "close"            |||
