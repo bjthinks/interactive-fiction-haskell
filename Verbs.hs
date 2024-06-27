@@ -127,7 +127,7 @@ doVerb (Verb0 name) = do
   action
 
 doVerb (Verb1 name ref) = do
-  g <- getGuard name
+  g <- getGuard1 name
   g ref
   action <- getVerb1 name ref
   action
@@ -180,34 +180,34 @@ doVerb (Teleport ref) = do
 
 -- This uses a function in Categories.hs, so it can't be in Defs.hs or the
 -- module imports would form a cycle
-getGuard :: String -> Game (Ref -> Game ())
-getGuard name = do
-  m <- guardMap <$> get
+getGuard1 :: String -> Game (Ref -> Game ())
+getGuard1 name = do
+  m <- guardMap1 <$> get
   let d = stopIfNotAccessible name
   return $ M.findWithDefault d name m
 
-setGuard :: String -> (Ref -> Game ()) -> Game ()
-setGuard name action = do
+setGuard1 :: String -> (Ref -> Game ()) -> Game ()
+setGuard1 name action = do
   st <- get
-  let m' = M.insert name action (guardMap st)
-  put $ st { guardMap = m' }
+  let m' = M.insert name action (guardMap1 st)
+  put $ st { guardMap1 = m' }
 
 setGuards :: Game ()
 setGuards = do
   let s f g x = f x (g x)
-  s setGuard stopWith "close"
-  s setGuard stopIfNotInInventory "drop"
-  setGuard "get" getTakeGuard
-  setGuard "get all from" $ containerGuard "get things out of"
-  setGuard "go" goGuard
-  s setGuard stopWith "lock"
-  setGuard "look" $ \_ -> return ()
-  s setGuard stopWith "open"
-  setGuard "put all in" $ containerGuard "put things into"
-  setGuard "search" searchGuard
-  s setGuard stopIfNotInInventory "throw"
-  s setGuard stopWith "unlock"
-  setGuard "use" useGuard
+  s setGuard1 stopWith "close"
+  s setGuard1 stopIfNotInInventory "drop"
+  setGuard1 "get" getTakeGuard
+  setGuard1 "get all from" $ containerGuard "get things out of"
+  setGuard1 "go" goGuard
+  s setGuard1 stopWith "lock"
+  setGuard1 "look" $ \_ -> return ()
+  s setGuard1 stopWith "open"
+  setGuard1 "put all in" $ containerGuard "put things into"
+  setGuard1 "search" searchGuard
+  s setGuard1 stopIfNotInInventory "throw"
+  s setGuard1 stopWith "unlock"
+  setGuard1 "use" useGuard
 
 stopWith :: String -> Ref -> Game ()
 stopWith verb ref = do
