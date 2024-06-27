@@ -169,7 +169,6 @@ parseLine =
   verb2  "put" "into" PutIn |||
   verb2' "take" "from" |||
   verb2  "unlock" "with" Unlock |||
-  verb2' "foo" "with" ||| -- TODO remove
 
   debug "examine" Examine |||
   debug "teleport" Teleport |||
