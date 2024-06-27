@@ -95,8 +95,11 @@ verb2' verb prep = do
   matchTokens $ words prep
   object <- noun
   eof
-  -- TODO aliases
-  return $ Verb2 verb subject prep object
+  let (verb', prep') = alias2 verb prep
+  return $ Verb2 verb' subject prep' object
+
+alias2 :: String -> String -> (String, String)
+alias2 verb prep = (verb, prep)
 
 implicitGo :: MyParser Verb
 implicitGo = do
