@@ -38,6 +38,7 @@ buildWorld = do
     addPoints 5 "learning something"
     setDescription2 mathBook ""
     setVerb1 "read" mathBook $ stop "You\'ve already read that."
+  setVerb2 "foo" backpack "with" $ \x -> msg $ "Successful foo backpack " ++ show x -- TODO delete
 
   frontYard <- newRoom "Granny\'s front yard" $
     "The grass has many holes in it where squirrels have been " ++
