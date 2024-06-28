@@ -54,9 +54,9 @@ makeContainer ref = setIsContainer ref True
 
 setUnlockedDescription2 :: Ref -> String -> Game ()
 setUnlockedDescription2 ref description = do
-  action <- getOnUnlock ref
-  setOnUnlock ref $ do
-    action
+  action <- getVerb2 "unlock" ref "with"
+  setVerb2 "unlock" ref "with" $ \key -> do
+    action key
     setDescription2 ref description
   unlocked <- getIsUnlocked ref
   when unlocked $ setDescription2 ref description

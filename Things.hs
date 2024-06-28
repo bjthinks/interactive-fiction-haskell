@@ -28,7 +28,6 @@ defaultThing ref = Thing {
   thingExits = [],
   thingPath = Nothing,
   thingIsContainer = False,
-  thingOnUnlock = cant "unlock" ref, -- might be impossible to call this
   thingOnLock = cant "lock" ref, -- might be impossible to call this
   thingIsLocked = False,
   thingKey = Nothing,

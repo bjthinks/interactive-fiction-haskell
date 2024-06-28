@@ -12,7 +12,6 @@ import Actions
 import Score
 
 data Verb = Blank
-          | Unlock Ref Ref
           | Lock Ref Ref
           | Open Ref Ref
           | Verb0 String
@@ -24,31 +23,6 @@ data Verb = Blank
 
 doVerb :: Verb -> Game ()
 doVerb Blank = return ()
-
-doVerb (Unlock ref key) = do
-  let verb = "unlock"
-  stopIfPlayer verb ref
-  stopIfRoom verb ref
-  stopIfInOpenContainer verb ref
-  -- ref is an exit, in the room, or in the inventory
-  -- make sure ref is locked
-  name <- qualifiedName ref
-  exit <- isExit ref
-  container <- getIsContainer ref
-  when (not exit && not container) $ stop $
-    capitalize name ++ " isn\'t a container."
-  -- ref is either an exit or an accessible container
-  isUnlocked <- getIsUnlocked ref
-  when (isUnlocked) $ stop $ capitalize name ++ " isn\'t locked."
-  -- ref is either a locked exit or a locked, accessible container
-  stopIfNotInInventory "unlock with" key
-  -- key is in the inventory
-  keyName <- qualifiedName key
-  maybeKey <- getKey ref
-  unless (maybeKey == Just key) $ stop $ capitalize keyName ++
-    " is not the right key to unlock " ++ name ++ " with."
-  action <- getOnUnlock ref
-  action
 
 doVerb (Lock ref key) = do
   let verb = "lock"
@@ -80,7 +54,7 @@ doVerb (Open item tool) = do
   itemName <- qualifiedName item
   toolName <- qualifiedName tool
   case maybeOpener of
-    Nothing -> doVerb (Unlock item tool)
+    Nothing -> doVerb $ Verb2 "unlock" item "with" tool
     Just opener -> do
       stopIfNotAccessible "open" item
       stopIfNotAccessible "open with" tool
