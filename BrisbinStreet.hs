@@ -471,6 +471,8 @@ buildWorld = do
   addAlias capsellaSet "set"
   setVerb1 "get" capsellaSet $ stop $ "The Capsella set is too big to carry " ++
     "around."
+  atticShortcut <- newExit "shortcut to Granny\'s attic" brisbin attic
+  addAlias atticShortcut "a"
 
   driveway <- newRoom "driveway" $
     "A concrete driveway extends along the west side of Granny\'s House. " ++
