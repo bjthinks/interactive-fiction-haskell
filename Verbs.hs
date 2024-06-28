@@ -12,7 +12,6 @@ import Actions
 import Score
 
 data Verb = Blank
-          | Lock Ref Ref
           | Open Ref Ref
           | Verb0 String
           | Verb1 String Ref
@@ -23,31 +22,6 @@ data Verb = Blank
 
 doVerb :: Verb -> Game ()
 doVerb Blank = return ()
-
-doVerb (Lock ref key) = do
-  let verb = "lock"
-  stopIfPlayer verb ref
-  stopIfRoom verb ref
-  stopIfInOpenContainer verb ref
-  -- ref is an exit, in the room, or in the inventory
-  -- make sure ref is unlocked
-  name <- qualifiedName ref
-  isLocked <- getIsLocked ref
-  exit <- isExit ref
-  container <- getIsContainer ref
-  when (not exit && not container) $ stop $
-    capitalize name ++ " isn\'t a container."
-  -- ref is either an exit or an accessible container
-  when (isLocked) $ stop $ capitalize name ++ " is already locked."
-  -- ref is either an unlocked exit or an unlocked, accessible container
-  stopIfNotInInventory "lock with" key
-  -- key is in the inventory
-  keyName <- qualifiedName key
-  maybeKey <- getKey ref
-  unless (maybeKey == Just key) $ stop $ capitalize keyName ++
-    " is not the right key to lock " ++ name ++ " with."
-  action <- getOnLock ref
-  action
 
 doVerb (Open item tool) = do
   maybeOpener <- getOpener item
@@ -168,6 +142,7 @@ setGuards = do
   s setGuard1 stopWith "unlock"
   setGuard1 "use" useGuard
   setGuard2 "get" "from" getFromGuard
+  setGuard2 "lock" "with" lockGuard
   setGuard2 "put" "in" putInGuard
   setGuard2 "unlock" "with" unlockGuard
 
@@ -238,6 +213,28 @@ getFromGuard item container = do
     stop $ capitalize itemName ++ " is not in " ++ containerName ++ "."
   -- item is in container
 
+lockGuard :: Ref -> Ref -> Game ()
+lockGuard ref key = do
+  let verb = "lock"
+  stopIfPlayer verb ref
+  stopIfRoom verb ref
+  stopIfInOpenContainer verb ref
+  -- ref is an exit, in the room, or in the inventory
+  name <- qualifiedName ref
+  exit <- isExit ref
+  container <- getIsContainer ref
+  when (not exit && not container) $ stop $
+    capitalize name ++ " isn\'t a container."
+  -- ref is either an exit or an accessible container
+  -- make sure ref is unlocked
+  isLocked <- getIsLocked ref
+  when (isLocked) $ stop $ capitalize name ++ " is already locked."
+  -- ref is either an unlocked exit or an unlocked, accessible container
+  stopIfNotInInventory "lock with" key
+  -- key is in the inventory
+  -- TODO: check if key is the right key is in the default action.
+  -- Should it be here instead? Think.
+
 putInGuard :: Ref -> Ref -> Game ()
 putInGuard item container = do
   stopIfNotObject "put things into" container
@@ -295,6 +292,7 @@ setDefaults = do
   setDefault1 "search" defaultSearch
   setDefault1 "throw" defaultThrow
   setDefault2 "get" "from" defaultGetFrom
+  setDefault2 "lock" "with" defaultLock
   setDefault2 "put" "in" defaultPutIn
   setDefault2 "unlock" "with" defaultUnlock
 
@@ -457,6 +455,18 @@ defaultGetFrom item container = do
   itemName <- qualifiedName item
   containerName <- qualifiedName container
   msg $ "You get " ++ itemName ++ " from " ++ containerName ++ "."
+
+defaultLock :: Ref -> Ref -> Game ()
+defaultLock ref key = do
+  -- ref is either a locked exit or a locked, accessible container
+  -- key is in the inventory
+  refName <- qualifiedName ref
+  keyName <- qualifiedName key
+  maybeKey <- getKey ref
+  unless (maybeKey == Just key) $ stop $ capitalize keyName ++
+    " is not the right key to lock " ++ refName ++ " with."
+  setIsLocked ref True
+  msg $ "You lock " ++ refName ++ " with " ++ keyName ++ "."
 
 defaultPutIn :: Ref -> Ref -> Game ()
 defaultPutIn item container = do

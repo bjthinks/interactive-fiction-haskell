@@ -9,15 +9,14 @@ newThing :: Game Ref
 newThing = do
   oldState <- get
   let ref = nextThing oldState
-      thing = defaultThing ref
       newState = oldState {
-        things = M.insert ref thing (things oldState),
+        things = M.insert ref defaultThing (things oldState),
         nextThing = ref + 1 }
   put newState
   return ref
 
-defaultThing :: Ref -> Thing
-defaultThing ref = Thing {
+defaultThing :: Thing
+defaultThing = Thing {
   thingName = "",
   thingArticle = Nothing,
   thingAliases = [],
@@ -28,7 +27,6 @@ defaultThing ref = Thing {
   thingExits = [],
   thingPath = Nothing,
   thingIsContainer = False,
-  thingOnLock = cant "lock" ref, -- might be impossible to call this
   thingIsLocked = False,
   thingKey = Nothing,
   thingOpener = Nothing, -- defers to Unlock unless set

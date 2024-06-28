@@ -63,9 +63,9 @@ setUnlockedDescription2 ref description = do
 
 setLockedDescription2 :: Ref -> String -> Game ()
 setLockedDescription2 ref description = do
-  action <- getOnLock ref
-  setOnLock ref $ do
-    action
+  action <- getVerb2 "lock" ref "with"
+  setVerb2 "lock" ref "with" $ \key -> do
+    action key
     setDescription2 ref description
   locked <- getIsLocked ref
   when locked $ setDescription2 ref description
@@ -74,10 +74,10 @@ makeLocked :: Ref -> Ref -> Game ()
 makeLocked ref key = do
   setIsLocked ref True
   setKey ref $ Just key
-  keyName <- qualifiedName key
-  setOnLock ref $ do
-    setIsLocked ref True
-    msg $ "You lock it with " ++ keyName ++ "."
+  --keyName <- qualifiedName key
+  --setOnLock ref $ do
+  --  setIsLocked ref True
+  --  msg $ "You lock it with " ++ keyName ++ "."
   --setOnUnlock ref $ do
   --  setIsLocked ref False
   --  msg $ "You unlock it with " ++ keyName ++ "."

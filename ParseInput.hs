@@ -99,6 +99,7 @@ verb2' verb prep = do
   return $ Verb2 verb' dobj prep' iobj
 
 alias2 :: String -> String -> (String, String)
+alias2 "close" "with" = ("lock", "with")
 alias2 "put" "into" = ("put", "in")
 alias2 "take" "from" = ("get", "from")
 alias2 verb prep = (verb, prep)
@@ -162,9 +163,9 @@ parseLine =
   verb1 "use"              |||
   verb1 "water grass with" |||
 
-  verb2  "close" "with" Lock |||
+  verb2' "close" "with"  |||
   verb2' "get" "from"    |||
-  verb2  "lock" "with" Lock |||
+  verb2' "lock" "with"   |||
   verb2  "open" "with" Open |||
   verb2' "put" "in"      |||
   verb2' "put" "into"    |||
