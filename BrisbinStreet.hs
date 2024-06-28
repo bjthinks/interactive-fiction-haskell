@@ -212,7 +212,7 @@ buildWorld = do
     msg "You wipe perfume on your neck. You smell like perfume now..."
   basementKey <- newObject masterBedroom "basement key" $
     "This is an ordinery-looking key that opens the basement. Type \"unlock " ++
-    "down with basement key\" to use it."
+    "down with the basement key\" to use it."
 
   childBedroom <- newRoom "child\'s bedroom" $
     "This bedroom clearly belongs to a young boy. There " ++
@@ -225,7 +225,7 @@ buildWorld = do
     "This dollhouse is pink and blue, and looks like a giant cat. There " ++
     "are three floors connected by an elevator, with one room on each side " ++
     "of the elevator on each floor. Everything inside the dollhouse looks " ++
-    "like a cartoon. Try \"use dollhouse\" to enter or exit the dollhouse."
+    "like a cartoon. Try \"use the dollhouse\" to enter or exit the dollhouse."
   makeContainer dollhouse
   setArticle dollhouse ""
   addAlias dollhouse "dollhouse"
@@ -343,7 +343,7 @@ buildWorld = do
   makeImmobile circuitBreakerBox
   setDescription2 circuitBreakerBox $
     "One of the breakers is in the off position. It is labeled \"Air " ++
-    "Conditioner\". Type \"use breaker\" to turn it on."
+    "Conditioner\". Type \"turn on the breaker\" to turn it on."
   let resetBreaker = do
         msg "You flip the breaker labeled \"Air Conditioner\" to on."
         addPoints 5 "being an electrician"
@@ -373,8 +373,8 @@ buildWorld = do
   magnifyingGlass <- newObject nightstand "magnifying glass" $
     "This is a rectangular magnifying glass with a metal handle, of a type " ++
     "that hasn\'t been made in decades. It looks big enough that it would " ++
-    "concentrate the sun and burn things very well. Type \"use magnifying " ++
-    "glass\" to use it."
+    "concentrate the sun and burn things very well. Type \"use the " ++
+    "magnifying glass\" to use it."
   addAlias magnifyingGlass "glass"
 
   basementBar <- newRoom "bar" $
@@ -468,7 +468,8 @@ buildWorld = do
     "with connectors. Each sphere has a motor, gears, or a mechanism inside " ++
     "it."
   setDescription2 capsellaSet $
-    "You can make a toy out of the capsella set by typing \"use Capsella set\"."
+    "You can make a toy out of the capsella set by typing \"use the " ++
+    "Capsella set\"."
   addAlias capsellaSet "set"
   setVerb1 "get" capsellaSet $ stop $ "The Capsella set is too big to carry " ++
     "around."
@@ -476,7 +477,7 @@ buildWorld = do
     "This elaborate toy has a battery pack, switch, motor, gears, and " ++
     "propeller. There are four big yellow orbs which are intended as " ++
     "flotation devices. This would work well in a bathtub full of water. " ++
-    "Type \"use Capsella toy\" to make it go!"
+    "Type \"use the Capsella toy\" to make it go!"
   addAlias capsellaToy "toy"
   moveNowhere capsellaToy
   setVerb1 "use" capsellaSet $ do
