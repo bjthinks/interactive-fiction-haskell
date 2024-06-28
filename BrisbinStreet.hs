@@ -291,8 +291,7 @@ buildWorld = do
     "room to the west, an unfinished laundry room to the south, a bathroom " ++
     "to the north, and a bedroom to the east."
   basementEntrance <- newExit "down" kitchen basementLanding
-  addAlias basementEntrance "door"
-  addAlias basementEntrance "the door"
+  addAliases basementEntrance ["door", "the door"]
   makeLocked basementEntrance basementKey
   newExit "up" basementLanding kitchen
   basementShortcut <- newExit "shortcut to Granny\'s basement" brisbin
