@@ -65,6 +65,10 @@ doVerb (Examine ref) = do
   msg $ "isContainer: " ++ show isContainer
   isLocked <- getIsLocked ref
   msg $ "isLocked: " ++ show isLocked
+  m1 <- getVerb1Map ref
+  when debug $ msg $ "Verb1 keys: " ++ show (M.keys m1)
+  m2 <- getVerb2Map ref
+  when debug $ msg $ "Verb2 keys: " ++ show (M.keys m2)
 
 doVerb (Teleport ref) = do
   debug <- getDebug
