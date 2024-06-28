@@ -208,6 +208,7 @@ setGuards = do
   s setGuard1 stopWith "unlock"
   setGuard1 "use" useGuard
   setGuard2 "get" "from" getFromGuard
+  setGuard2 "put" "in" putInGuard
 
 stopWith :: String -> Ref -> Game ()
 stopWith verb ref = do
@@ -275,6 +276,18 @@ getFromGuard item container = do
     containerName <- qualifiedName container
     stop $ capitalize itemName ++ " is not in " ++ containerName ++ "."
   -- item is in container
+
+putInGuard :: Ref -> Ref -> Game ()
+putInGuard item container = do
+  stopIfNotObject "put things into" container
+  stopIfInOpenContainer "put things into" container
+  stopIfNotOpenContainer container
+  -- container is open and in either inventory or room
+  stopIfNotInInventory "put into a container" item
+  -- item is in inventory
+  itemName <- qualifiedName item
+  when (item == container) $ stop $ "You can't put " ++ itemName ++
+    " inside itself!"
 
 setDefaults :: Game ()
 setDefaults = do
