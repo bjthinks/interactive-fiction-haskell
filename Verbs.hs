@@ -269,6 +269,8 @@ unlockGuard ref key = do
   -- ref is either a locked exit or a locked, accessible container
   stopIfNotInInventory "unlock with" key
   -- key is in the inventory
+  -- TODO: check if key is the right key is in the default action.
+  -- Should it be here instead? Think.
 
 setDefaults :: Game ()
 setDefaults = do
