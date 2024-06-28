@@ -443,6 +443,32 @@ buildWorld = do
     msg "10. Play with a toy"
     msg $ "Finally, you must solve the mystery of the Haunted House."
 
+  upstairs <- newRoom "Upstairs" $
+    "This finished room spans the whole east-west length of Granny\'s " ++
+    "house. There are windows at each end, and a door to the south. The " ++
+    "room is used for storage. There are many large pieces of furniture " ++
+    "and boxes filling up most of the space, with only narrow paths to " ++
+    "walk along."
+  toUpstairs <- newExit "up" living upstairs
+  newExit "down" upstairs living
+  msg $ show toUpstairs -- TODO remove
+
+  attic <- newRoom "Attic" $
+    "This room is unfinished, with studs and insulation visible. There is " ++
+    "one small light bulb with a chain switch. Several dressers and chests " ++
+    "of drawers fill the space, and there is a disused Capsella set on one " ++
+    "of the pieces of furniture."
+  newExit "south" upstairs attic
+  newExit "north" attic upstairs
+  capsellaSet <- newObject attic "Capsella set" $
+    "This modular toy consists of a large number of clear plastic spheres " ++
+    "with connectors. Each sphere has a motor, gears, or a mechanism inside " ++
+    "it. You can make a toy out of the capsella set by typing \"use " ++
+    "Capsella set\"."
+  addAlias capsellaSet "set"
+  setVerb1 "get" capsellaSet $ stop $ "The Capsella set is too big to carry " ++
+    "around."
+
   driveway <- newRoom "driveway" $
     "A concrete driveway extends along the west side of Granny\'s House. " ++
     "Granny\'s side door is to the east. The front yard is to the " ++
