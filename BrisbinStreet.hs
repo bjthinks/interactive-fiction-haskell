@@ -316,12 +316,15 @@ buildWorld = do
   upstairsKey <- newObject laundryDesk "upstairs key" $
     "This is an ordinary looking key to the upstairs level of Granny\'s House."
   moveNowhere upstairsKey
-  defaultSearchLaundryRoom <- getVerb1 "search" laundryRoom
-  setVerb1 "search" laundryRoom $ do
-    msg "You search the room thoroughly, and find something in the desk."
+  setVerb1 "search" laundryRoom $ msg $
+    "You look everywhere in the laundry room, but don\'t find anything. " ++
+    "Maybe there is something in the old desk?"
+  setVerb1 "search" laundryDesk $ do
+    msg "You find something in the desk."
     move upstairsKey laundryDesk
     setDescription2 laundryRoom ""
-    setVerb1 "search" laundryRoom defaultSearchLaundryRoom
+    clearVerb1 "search" laundryRoom
+    clearVerb1 "search" laundryDesk
 
   diningRoom <- newRoom "dining room" $
     "This small room is nearly filled with a huge round oaken table. " ++
