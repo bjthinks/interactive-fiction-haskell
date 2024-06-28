@@ -3,6 +3,7 @@ module Actions where
 import Data.Maybe
 import Control.Monad
 import Defs
+import Categories
 
 moveNowhere :: Ref -> Game ()
 moveNowhere ref = do
@@ -73,14 +74,26 @@ setLockedDescription2 ref description = do
 makeLocked :: Ref -> Ref -> Game ()
 makeLocked ref key = do
   setIsLocked ref True
-  setKey ref $ Just key
-  --keyName <- qualifiedName key
-  --setOnLock ref $ do
-  --  setIsLocked ref True
-  --  msg $ "You lock it with " ++ keyName ++ "."
-  --setOnUnlock ref $ do
-  --  setIsLocked ref False
-  --  msg $ "You unlock it with " ++ keyName ++ "."
+  setVerb2 "lock" ref "with" $ \item -> do
+    -- ref is either an unlocked exit or an unlocked, accessible container
+    -- key is in the inventory
+    refName <- qualifiedName ref
+    itemName <- qualifiedName item
+    unless (item == key) $ stop $ capitalize itemName ++
+      " is not the right item to lock " ++ refName ++ " with."
+    -- key is the right key
+    setIsLocked ref True
+    msg $ "You lock " ++ refName ++ " with " ++ itemName ++ "."
+  setVerb2 "unlock" ref "with" $ \item -> do
+    -- ref is either a locked exit or a locked, accessible container
+    -- key is in the inventory
+    refName <- qualifiedName ref
+    itemName <- qualifiedName item
+    unless (item == key) $ stop $ capitalize itemName ++
+      " is not the right item to unlock " ++ refName ++ " with."
+    -- key is the right key
+    setIsLocked ref False
+    msg $ "You unlock " ++ refName ++ " with " ++ itemName ++ "."
 
 beforeGo :: Ref -> Game () -> Game ()
 beforeGo ref preAction = do

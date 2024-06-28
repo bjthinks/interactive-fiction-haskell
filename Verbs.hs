@@ -65,8 +65,6 @@ doVerb (Examine ref) = do
   msg $ "isContainer: " ++ show isContainer
   isLocked <- getIsLocked ref
   msg $ "isLocked: " ++ show isLocked
-  key <- getKey ref
-  msg $ "Key: " ++ show key
 
 doVerb (Teleport ref) = do
   debug <- getDebug
@@ -288,10 +286,10 @@ setDefaults = do
   setDefault1 "search" defaultSearch
   setDefault1 "throw" defaultThrow
   setDefault2 "get" "from" defaultGetFrom
-  setDefault2 "lock" "with" defaultLock
+  setDefault2 "lock" "with" defaultLockAndUnlock
   setDefault2 "open" "with" defaultOpen
   setDefault2 "put" "in" defaultPutIn
-  setDefault2 "unlock" "with" defaultUnlock
+  setDefault2 "unlock" "with" defaultLockAndUnlock
 
 doDebug :: Bool -> Game ()
 doDebug flag = do
@@ -453,17 +451,12 @@ defaultGetFrom item container = do
   containerName <- qualifiedName container
   msg $ "You get " ++ itemName ++ " from " ++ containerName ++ "."
 
-defaultLock :: Ref -> Ref -> Game ()
-defaultLock ref key = do
-  -- ref is either a locked exit or a locked, accessible container
+defaultLockAndUnlock :: Ref -> Ref -> Game ()
+defaultLockAndUnlock ref _ = do
+  -- ref is either an unlocked exit or an unlocked, accessible container
   -- key is in the inventory
   refName <- qualifiedName ref
-  keyName <- qualifiedName key
-  maybeKey <- getKey ref
-  unless (maybeKey == Just key) $ stop $ capitalize keyName ++
-    " is not the right key to lock " ++ refName ++ " with."
-  setIsLocked ref True
-  msg $ "You lock " ++ refName ++ " with " ++ keyName ++ "."
+  stop $ capitalize refName ++ " has no lock."
 
 defaultOpen :: Ref -> Ref -> Game ()
 defaultOpen ref key = doVerb $ Verb2 "unlock" ref "with" key
@@ -474,19 +467,6 @@ defaultPutIn item container = do
   itemName <- qualifiedName item
   containerName <- qualifiedName container
   msg $ "You put " ++ itemName ++ " in " ++ containerName ++ "."
-
-defaultUnlock :: Ref -> Ref -> Game ()
-defaultUnlock ref key = do
-  -- ref is either a locked exit or a locked, accessible container
-  -- key is in the inventory
-  refName <- qualifiedName ref
-  keyName <- qualifiedName key
-  maybeKey <- getKey ref
-  unless (maybeKey == Just key) $ stop $ capitalize keyName ++
-    " is not the right key to unlock " ++ refName ++ " with."
-  -- key is the right key
-  setIsLocked ref False
-  msg $ "You unlock " ++ refName ++ " with " ++ keyName ++ "."
 
 -- helper function for look and inventory
 humanFriendlyList :: [String] -> String

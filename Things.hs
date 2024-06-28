@@ -28,7 +28,6 @@ defaultThing = Thing {
   thingPath = Nothing,
   thingIsContainer = False,
   thingIsLocked = False,
-  thingKey = Nothing,
   thingOpener = Nothing, -- defers to Unlock unless set
   thingVerb1Map = M.empty,
   thingVerb2Map = M.empty
