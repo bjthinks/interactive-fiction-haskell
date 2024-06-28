@@ -12,7 +12,6 @@ import Actions
 import Score
 
 data Verb = Blank
-          | Open Ref Ref
           | Verb0 String
           | Verb1 String Ref
           | Verb2 String Ref String Ref
@@ -22,20 +21,6 @@ data Verb = Blank
 
 doVerb :: Verb -> Game ()
 doVerb Blank = return ()
-
-doVerb (Open item tool) = do
-  maybeOpener <- getOpener item
-  itemName <- qualifiedName item
-  toolName <- qualifiedName tool
-  case maybeOpener of
-    Nothing -> doVerb $ Verb2 "unlock" item "with" tool
-    Just opener -> do
-      stopIfNotAccessible "open" item
-      stopIfNotAccessible "open with" tool
-      unless (opener == tool) $ stop $ capitalize toolName ++
-        " is not the right tool to open " ++ itemName ++ " with."
-      action <- getOnOpen item
-      action
 
 doVerb (Verb0 name) = do
   action <- getVerb0 name
@@ -143,6 +128,7 @@ setGuards = do
   setGuard1 "use" useGuard
   setGuard2 "get" "from" getFromGuard
   setGuard2 "lock" "with" lockGuard
+  setGuard2 "open" "with" openGuard
   setGuard2 "put" "in" putInGuard
   setGuard2 "unlock" "with" unlockGuard
 
@@ -235,6 +221,16 @@ lockGuard ref key = do
   -- TODO: check if key is the right key is in the default action.
   -- Should it be here instead? Think.
 
+openGuard :: Ref -> Ref -> Game ()
+openGuard item opener = do
+  let verb = "open"
+  -- open defers to unlock, so this needs to be at least as permissive as
+  -- unlockGuard
+  stopIfPlayer verb item
+  stopIfRoom verb item
+  stopIfInOpenContainer verb item
+  stopIfNotInInventory "open with" opener
+
 putInGuard :: Ref -> Ref -> Game ()
 putInGuard item container = do
   stopIfNotObject "put things into" container
@@ -293,6 +289,7 @@ setDefaults = do
   setDefault1 "throw" defaultThrow
   setDefault2 "get" "from" defaultGetFrom
   setDefault2 "lock" "with" defaultLock
+  setDefault2 "open" "with" defaultOpen
   setDefault2 "put" "in" defaultPutIn
   setDefault2 "unlock" "with" defaultUnlock
 
@@ -467,6 +464,9 @@ defaultLock ref key = do
     " is not the right key to lock " ++ refName ++ " with."
   setIsLocked ref True
   msg $ "You lock " ++ refName ++ " with " ++ keyName ++ "."
+
+defaultOpen :: Ref -> Ref -> Game ()
+defaultOpen ref key = doVerb $ Verb2 "unlock" ref "with" key
 
 defaultPutIn :: Ref -> Ref -> Game ()
 defaultPutIn item container = do

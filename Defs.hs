@@ -24,7 +24,6 @@ data Thing = Thing {
   thingIsLocked :: Bool,
   thingKey :: Maybe Ref,
   thingOpener :: Maybe Ref, -- if Nothing, defers to Unlock
-  thingOnOpen :: Game (),
   thingVerb1Map :: M.Map String (Game ()),
   thingVerb2Map :: M.Map (String,String) (Ref -> Game ())
   }
@@ -132,7 +131,6 @@ getIsContainer  = getProperty thingIsContainer
 getIsLocked     = getProperty thingIsLocked
 getKey          = getProperty thingKey
 getOpener       = getProperty thingOpener
-getOnOpen       = getProperty thingOnOpen
 getVerb1Map     = getProperty thingVerb1Map
 getVerb2Map     = getProperty thingVerb2Map
 
@@ -162,7 +160,6 @@ setIsContainer  = setProperty (\t v -> t { thingIsContainer = v })
 setIsLocked     = setProperty (\t v -> t { thingIsLocked = v })
 setKey          = setProperty (\t v -> t { thingKey = v })
 setOpener       = setProperty (\t v -> t { thingOpener = v })
-setOnOpen       = setProperty (\t v -> t { thingOnOpen = v })
 setVerb1Map     = setProperty (\t v -> t { thingVerb1Map = v })
 setVerb2Map     = setProperty (\t v -> t { thingVerb2Map = v })
 

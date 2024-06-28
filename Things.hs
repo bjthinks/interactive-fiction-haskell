@@ -30,7 +30,6 @@ defaultThing = Thing {
   thingIsLocked = False,
   thingKey = Nothing,
   thingOpener = Nothing, -- defers to Unlock unless set
-  thingOnOpen = return (),
   thingVerb1Map = M.empty,
   thingVerb2Map = M.empty
   }

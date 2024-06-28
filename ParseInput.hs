@@ -79,17 +79,8 @@ alias1 "take all from" = "get all from"
 alias1 "put all into" = "put all in"
 alias1 x = x
 
-verb2 :: Word -> Word -> (Ref -> Ref -> Verb) -> MyParser Verb
-verb2 name1 name2 def = do
-  matchToken name1
-  ref1 <- noun
-  matchToken name2
-  ref2 <- noun
-  eof
-  return $ def ref1 ref2
-
-verb2' :: String -> String -> MyParser Verb
-verb2' verb prep = do
+verb2 :: String -> String -> MyParser Verb
+verb2 verb prep = do
   matchTokens $ words verb
   dobj <- noun
   matchTokens $ words prep
@@ -163,14 +154,14 @@ parseLine =
   verb1 "use"              |||
   verb1 "water grass with" |||
 
-  verb2' "close" "with"  |||
-  verb2' "get" "from"    |||
-  verb2' "lock" "with"   |||
-  verb2  "open" "with" Open |||
-  verb2' "put" "in"      |||
-  verb2' "put" "into"    |||
-  verb2' "take" "from"   |||
-  verb2' "unlock" "with" |||
+  verb2 "close" "with"  |||
+  verb2 "get" "from"    |||
+  verb2 "lock" "with"   |||
+  verb2 "open" "with"   |||
+  verb2 "put" "in"      |||
+  verb2 "put" "into"    |||
+  verb2 "take" "from"   |||
+  verb2 "unlock" "with" |||
 
   debug "examine" Examine |||
   debug "teleport" Teleport |||
