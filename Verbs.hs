@@ -33,12 +33,12 @@ doVerb (Unlock ref key) = do
   -- ref is an exit, in the room, or in the inventory
   -- make sure ref is locked
   name <- qualifiedName ref
-  isUnlocked <- getIsUnlocked ref
   exit <- isExit ref
   container <- getIsContainer ref
   when (not exit && not container) $ stop $
     capitalize name ++ " isn\'t a container."
   -- ref is either an exit or an accessible container
+  isUnlocked <- getIsUnlocked ref
   when (isUnlocked) $ stop $ capitalize name ++ " isn\'t locked."
   -- ref is either a locked exit or a locked, accessible container
   stopIfNotInInventory "unlock with" key
@@ -195,6 +195,7 @@ setGuards = do
   setGuard1 "use" useGuard
   setGuard2 "get" "from" getFromGuard
   setGuard2 "put" "in" putInGuard
+  setGuard2 "unlock" "with" unlockGuard
 
 stopWith :: String -> Ref -> Game ()
 stopWith verb ref = do
@@ -275,6 +276,26 @@ putInGuard item container = do
   when (item == container) $ stop $ "You can't put " ++ itemName ++
     " inside itself!"
 
+unlockGuard :: Ref -> Ref -> Game ()
+unlockGuard ref key = do
+  let verb = "unlock"
+  stopIfPlayer verb ref
+  stopIfRoom verb ref
+  stopIfInOpenContainer verb ref
+  -- ref is an exit, in the room, or in the inventory
+  name <- qualifiedName ref
+  exit <- isExit ref
+  container <- getIsContainer ref
+  when (not exit && not container) $ stop $
+    capitalize name ++ " isn\'t a container."
+  -- ref is either an exit or an accessible container
+  -- make sure ref is locked
+  isUnlocked <- getIsUnlocked ref
+  when (isUnlocked) $ stop $ capitalize name ++ " isn\'t locked."
+  -- ref is either a locked exit or a locked, accessible container
+  stopIfNotInInventory "unlock with" key
+  -- key is in the inventory
+
 setDefaults :: Game ()
 setDefaults = do
   setVerb0 "debug off" $ doDebug False
@@ -299,6 +320,7 @@ setDefaults = do
   setDefault1 "throw" defaultThrow
   setDefault2 "get" "from" defaultGetFrom
   setDefault2 "put" "in" defaultPutIn
+  setDefault2 "unlock" "with" defaultUnlock
 
 doDebug :: Bool -> Game ()
 doDebug flag = do
@@ -466,6 +488,19 @@ defaultPutIn item container = do
   itemName <- qualifiedName item
   containerName <- qualifiedName container
   msg $ "You put " ++ itemName ++ " in " ++ containerName ++ "."
+
+defaultUnlock :: Ref -> Ref -> Game ()
+defaultUnlock ref key = do
+  -- ref is either a locked exit or a locked, accessible container
+  -- key is in the inventory
+  refName <- qualifiedName ref
+  keyName <- qualifiedName key
+  maybeKey <- getKey ref
+  unless (maybeKey == Just key) $ stop $ capitalize keyName ++
+    " is not the right key to unlock " ++ refName ++ " with."
+  -- key is the right key
+  setIsLocked ref False
+  msg $ "You unlock " ++ refName ++ " with " ++ keyName ++ "."
 
 -- helper function for look and inventory
 humanFriendlyList :: [String] -> String
