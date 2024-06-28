@@ -39,7 +39,7 @@ newRoom name desc = do
   ref <- newThing
   setArticle ref "the" -- In most cases, this is right
   setName ref name
-  addAlias ref "here"
+  addAliases ref ["here", "room", "the room"]
   setDescription ref desc
   makeContainer ref
   return ref
