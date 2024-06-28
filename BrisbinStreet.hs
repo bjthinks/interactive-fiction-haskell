@@ -18,13 +18,13 @@ buildWorld = do
     "You are in the middle of Brisbin Street. The street continues to the " ++
     "west and east. To the north is Granny\'s House, and to the south is " ++
     "Nick\'s house."
-  setArticle brisbin Nothing
+  setArticle brisbin ""
 
   player <- newObject brisbin "yourself" $
     "You are an eight year old boy with blond hair, " ++
     "wearing jeans, a t-shirt, and tennis shoes with tube socks."
   addAliases player ["you", "self", "me"]
-  setArticle player Nothing
+  setArticle player ""
   setPlayer player
   makeContainer player
   backpack <- newObject player "backpack" "A blue canvas backpack."
@@ -45,7 +45,7 @@ buildWorld = do
     "and the driveway to the northwest. Granny\'s house is north and the " ++
     "side yard is northeast. There are a pine tree and two white oak trees " ++
     "in the yard. A squirrel watches you nervously from one of the oak trees."
-  setArticle frontYard Nothing
+  setArticle frontYard ""
   newExit "north" brisbin frontYard
   newExit "south" frontYard brisbin
   acorns <- newObject frontYard "acorns" $
@@ -227,12 +227,12 @@ buildWorld = do
     "of the elevator on each floor. Everything inside the dollhouse looks " ++
     "like a cartoon. Try \"use dollhouse\" to enter or exit the dollhouse."
   makeContainer dollhouse
-  setArticle dollhouse Nothing
+  setArticle dollhouse ""
   addAlias dollhouse "dollhouse"
   addAlias dollhouse "the dollhouse"
   gabby <- newObject childBedroom "Gabby" $
     "This is a Gabby doll. It looks like she wants to be in her dollhouse."
-  setArticle gabby Nothing
+  setArticle gabby ""
   addAlias gabby "doll"
   addAlias gabby "the doll"
   setVerb1 "use" dollhouse $ do
@@ -515,14 +515,14 @@ buildWorld = do
     "Granny\'s house, but could use a coat of paint, to say the least. " ++
     "The lawn is in serious need of weeding. There is a paper wasp nest " ++
     "out of reach, on the outside of the second floor."
-  setArticle nickYard Nothing
+  setArticle nickYard ""
   newExit "north" nickYard brisbin
   newExit "south" brisbin nickYard
 
   eastBrisbin <- newRoom "east Brisbin Street" $
     "This is the east end of the block. Mike\'s house is north, and " ++
     "Justin\'s house is south."
-  setArticle eastBrisbin Nothing
+  setArticle eastBrisbin ""
   newExit "east" brisbin eastBrisbin
   newExit "west" eastBrisbin brisbin
 
@@ -532,14 +532,14 @@ buildWorld = do
     "an old-fashioned well with petunias growing out of it, and you also " ++
     "see a flower bed next to the house. A garage stands at the back of " ++
     "the lot. A pet bunny named Misty is here."
-  setArticle mikeYard Nothing
+  setArticle mikeYard ""
   newExit "north" eastBrisbin mikeYard
   newExit "south" mikeYard eastBrisbin
   misty <- newObject mikeYard "Misty" $
     "Misty is a small bunny with a grey coat, a white underbelly, a cute " ++
     "nose, long ears, imploring eyes, a tiny little tail, and a pink " ++
     "collar. She would like it if you pet her."
-  setArticle misty Nothing
+  setArticle misty ""
   addAliases misty ["bunny", "rabbit", "the bunny", "the rabbit"]
   setVerb1 "get" misty $ msg $ "Misty doesn\'t know you very well, " ++
     "so she hops away from your outstreched arms."
@@ -559,7 +559,7 @@ buildWorld = do
     "You stand in front of Justin\'s house. It is a large home with a " ++
     "noticable addition and multiple floors. There is a crabapple tree " ++
     "here."
-  setArticle justinYard Nothing
+  setArticle justinYard ""
   let bimboIsHere = "Bimbo the cat is hanging out in the yard."
   setDescription2 justinYard bimboIsHere
   newExit "south" eastBrisbin justinYard
@@ -573,7 +573,7 @@ buildWorld = do
   bimbo <- newObject justinYard "Bimbo" $
     "Bimbo, who is oddly a male cat, has grey and white stripes covering " ++
     "all of his body."
-  setArticle bimbo Nothing
+  setArticle bimbo ""
   addAlias bimbo "cat"
   addAlias bimbo "the cat"
   setVerb1 "pet" bimbo $ msg "Bimbo purrs and rubs up against you."
@@ -581,7 +581,7 @@ buildWorld = do
   westBrisbin <- newRoom "west Brisbin Street" $
     "This is the west end of the block. There is a seedy motel to the " ++
     "north, and what looks like a haunted house to the south."
-  setArticle westBrisbin Nothing
+  setArticle westBrisbin ""
   newExit "west" brisbin westBrisbin
   newExit "east" westBrisbin brisbin
 

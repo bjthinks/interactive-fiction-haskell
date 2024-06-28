@@ -10,7 +10,7 @@ type Ref = Int
 
 data Thing = Thing {
   thingName :: String,
-  thingArticle :: Maybe String,
+  thingArticle :: String,
   thingAliases :: [String],
   thingDescription :: String,
   thingDescription2 :: String,
@@ -174,9 +174,7 @@ qualifiedName :: Ref -> Game String
 qualifiedName ref = do
   article <- getArticle ref
   name <- getName ref
-  return $ case article of
-    Nothing -> name
-    Just a -> a ++ ' ' : name
+  return $ if article == "" then name else article ++ ' ' : name
 
 debugName :: Ref -> Game String
 debugName ref = do

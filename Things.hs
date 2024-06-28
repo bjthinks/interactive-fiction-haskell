@@ -18,7 +18,7 @@ newThing = do
 defaultThing :: Thing
 defaultThing = Thing {
   thingName = "",
-  thingArticle = Nothing,
+  thingArticle = "",
   thingAliases = [],
   thingDescription = "",
   thingDescription2 = "",
@@ -38,7 +38,7 @@ defaultThing = Thing {
 newRoom :: String -> String -> Game Ref
 newRoom name desc = do
   ref <- newThing
-  setArticle ref $ Just "the" -- In most cases, this is right
+  setArticle ref "the" -- In most cases, this is right
   setName ref name
   addAlias ref "here"
   setDescription ref desc
@@ -49,7 +49,7 @@ newObject :: Ref -> String -> String -> Game Ref
 newObject loc name desc = do
   ref <- newThing
   setName ref name
-  setArticle ref $ Just "the" -- In most cases, this is right
+  setArticle ref "the" -- In most cases, this is right
   setDescription ref desc
   move ref loc
   return ref

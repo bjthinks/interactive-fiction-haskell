@@ -7,7 +7,6 @@ import Text.Parsec
 import Text.Parsec.Pos
 import Data.List
 import Data.Char
-import Data.Maybe
 import Text.Read
 import Defs
 import Categories
@@ -226,7 +225,7 @@ allNames ref = do
   article <- getArticle ref
   name <- getName ref
   aliases <- getAliases ref
-  let prefixes = if isNothing article then [""] else ["", fromJust article]
+  let prefixes = if article == "" then [""] else ["", article]
   return $ do
     p <- prefixes
     n <- name : aliases
