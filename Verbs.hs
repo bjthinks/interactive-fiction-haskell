@@ -12,7 +12,6 @@ import Actions
 import Score
 
 data Verb = Blank
-          | PutIn Ref Ref
           | Unlock Ref Ref
           | Lock Ref Ref
           | Open Ref Ref
@@ -25,19 +24,6 @@ data Verb = Blank
 
 doVerb :: Verb -> Game ()
 doVerb Blank = return ()
-
-doVerb (PutIn ref container) = do
-  stopIfNotObject "put things into" container
-  stopIfInOpenContainer "put things into" container
-  stopIfNotOpenContainer container
-  -- container is open and in either inventory or room
-  stopIfNotInInventory "put into a container" ref
-  -- ref is in inventory
-  refName <- qualifiedName ref
-  when (ref == container) $ stop $ "You can't put " ++ refName ++
-    " inside itself!"
-  action <- getOnPutIn ref
-  action container
 
 doVerb (Unlock ref key) = do
   let verb = "unlock"
@@ -312,6 +298,7 @@ setDefaults = do
   setDefault1 "search" defaultSearch
   setDefault1 "throw" defaultThrow
   setDefault2 "get" "from" defaultGetFrom
+  setDefault2 "put" "in" defaultPutIn
 
 doDebug :: Bool -> Game ()
 doDebug flag = do
@@ -452,7 +439,7 @@ defaultPutAllIn container = do
   containerName <- qualifiedName container
   when (thingsToPutIn == []) $ stop $ "You don\'t have anything to put in " ++
     containerName ++ "."
-  let putInContainer = flip PutIn container
+  let putInContainer = \item -> Verb2 "put" item "in" container
   mapM_ (doVerb . putInContainer) thingsToPutIn
 
 defaultSearch :: Ref -> Game ()
@@ -472,6 +459,13 @@ defaultGetFrom item container = do
   itemName <- qualifiedName item
   containerName <- qualifiedName container
   msg $ "You get " ++ itemName ++ " from " ++ containerName ++ "."
+
+defaultPutIn :: Ref -> Ref -> Game ()
+defaultPutIn item container = do
+  move item container
+  itemName <- qualifiedName item
+  containerName <- qualifiedName container
+  msg $ "You put " ++ itemName ++ " in " ++ containerName ++ "."
 
 -- helper function for look and inventory
 humanFriendlyList :: [String] -> String

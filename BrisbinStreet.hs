@@ -253,20 +253,20 @@ buildWorld = do
       doVerb $ Verb1 "look" dollhouse
       else failUseDollhouse
   defaultDropGabby <- getVerb1 "drop" gabby
-  defaultPutGabbyIn <- getOnPutIn gabby
+  defaultPutGabbyIn <- getVerb2 "put" gabby "in"
   let goInDollhouse = do
         msg $ "Gabby turns into her cartoon self and looks very happy to be " ++
           "in her dollhouse!"
         addPoints 10 "returning Gabby to her home"
         setVerb1 "drop" gabby defaultDropGabby
-        setOnPutIn gabby defaultPutGabbyIn
+        setVerb2 "put" gabby "in" defaultPutGabbyIn
         setDescription gabby
           "This is cartoon Gabby. She likes being in her dollhouse."
   setVerb1 "drop" gabby $ do
     defaultDropGabby
     maybeGabbyLoc <- getLocation gabby
     when (maybeGabbyLoc == Just dollhouse) goInDollhouse
-  setOnPutIn gabby $ (\container -> do
+  setVerb2 "put" gabby "in" $ (\container -> do
     defaultPutGabbyIn container
     when (container == dollhouse) goInDollhouse)
 
@@ -638,7 +638,7 @@ buildWorld = do
   setVerb1 "drop" costume $ do
     room <- getRoom
     putCostume room
-  setOnPutIn costume putCostume
+  setVerb2 "put" costume "in" putCostume
   setVerb1 "get" bimbo $ do
     costumeLocation <- getLocation costume
     unless (costumeLocation == Just player) $ stop $

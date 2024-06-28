@@ -27,7 +27,6 @@ defaultThing ref = Thing {
   thingContents = [],
   thingExits = [],
   thingPath = Nothing,
-  thingOnPutIn = defaultPutIn ref,
   thingIsContainer = False,
   thingOnUnlock = cant "unlock" ref, -- might be impossible to call this
   thingOnLock = cant "lock" ref, -- might be impossible to call this
@@ -38,13 +37,6 @@ defaultThing ref = Thing {
   thingVerb1Map = M.empty,
   thingVerb2Map = M.empty
   }
-
-defaultPutIn :: Ref -> Ref -> Game ()
-defaultPutIn ref container = do
-  move ref container
-  itemName <- qualifiedName ref
-  containerName <- qualifiedName container
-  msg $ "You put " ++ itemName ++ " in " ++ containerName ++ "."
 
 -- Here are the exported functions
 
