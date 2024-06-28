@@ -22,7 +22,6 @@ data Thing = Thing {
   thingPath :: Maybe (Ref,Ref),
   thingIsContainer :: Bool,
   thingIsLocked :: Bool,
-  thingOpener :: Maybe Ref, -- if Nothing, defers to Unlock
   thingVerb1Map :: M.Map String (Game ()),
   thingVerb2Map :: M.Map (String,String) (Ref -> Game ())
   }
@@ -128,7 +127,6 @@ getExits        = getProperty thingExits
 getPath         = getProperty thingPath
 getIsContainer  = getProperty thingIsContainer
 getIsLocked     = getProperty thingIsLocked
-getOpener       = getProperty thingOpener
 getVerb1Map     = getProperty thingVerb1Map
 getVerb2Map     = getProperty thingVerb2Map
 
@@ -156,7 +154,6 @@ setExits        = setProperty (\t v -> t { thingExits = v })
 setPath         = setProperty (\t v -> t { thingPath = v })
 setIsContainer  = setProperty (\t v -> t { thingIsContainer = v })
 setIsLocked     = setProperty (\t v -> t { thingIsLocked = v })
-setOpener       = setProperty (\t v -> t { thingOpener = v })
 setVerb1Map     = setProperty (\t v -> t { thingVerb1Map = v })
 setVerb2Map     = setProperty (\t v -> t { thingVerb2Map = v })
 

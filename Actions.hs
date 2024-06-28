@@ -95,6 +95,20 @@ makeLocked ref key = do
     setIsLocked ref False
     msg $ "You unlock " ++ refName ++ " with " ++ itemName ++ "."
 
+-- This is for the can of tuna, which can be opened but not closed.
+-- If a mechanic of being opened and closed, like a drawer, is ever
+-- needed, it will be a different function.
+makeOpenable :: Ref -> Ref -> Game () -> Game ()
+makeOpenable ref opener action = do
+  setVerb2 "open" ref "with" $ \item -> do
+    -- ref is in the inventory, in the room, or an exit
+    -- item is in the inventory
+    refName <- qualifiedName ref
+    itemName <- qualifiedName item
+    unless (item == opener) $ stop $ capitalize itemName ++
+      " is not the right tool to open " ++ refName ++ " with."
+    action
+
 beforeGo :: Ref -> Game () -> Game ()
 beforeGo ref preAction = do
   action <- getVerb1 "go" ref

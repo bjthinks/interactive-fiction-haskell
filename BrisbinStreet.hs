@@ -878,15 +878,7 @@ buildWorld = do
         room <- getRoom
         kittyLocation <- getLocation blackCat
         when (Just room == kittyLocation) $ msg message
-  setOpener tuna (Just canOpener)
-  -- TODO needs significant work
-  setVerb2 "open" tuna "with" $ \tool -> do
-    let opener = canOpener
-    tunaName <- qualifiedName tuna
-    toolName <- qualifiedName tool
-    stopIfNotAccessible "open" tuna -- in case "open exit with ..."
-    unless (opener == tool) $ stop $ capitalize toolName ++
-      " is not the right tool to open " ++ tunaName ++ " with."
+  makeOpenable tuna canOpener $ do
     msg "You open the can of tuna with the can opener."
     setName tuna "open can of tuna"
     addAlias tuna "can of tuna"
