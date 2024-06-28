@@ -466,11 +466,27 @@ buildWorld = do
   capsellaSet <- newObject attic "Capsella set" $
     "This modular toy consists of a large number of clear plastic spheres " ++
     "with connectors. Each sphere has a motor, gears, or a mechanism inside " ++
-    "it. You can make a toy out of the capsella set by typing \"use " ++
-    "Capsella set\"."
+    "it."
+  setDescription2 capsellaSet $
+    "You can make a toy out of the capsella set by typing \"use Capsella set\"."
   addAlias capsellaSet "set"
   setVerb1 "get" capsellaSet $ stop $ "The Capsella set is too big to carry " ++
     "around."
+  capsellaToy <- newObject attic "Capsella toy" $
+    "This elaborate toy has a battery pack, switch, motor, gears, and " ++
+    "propeller. There are four big yellow orbs which are intended as " ++
+    "flotation devices. This would work well in a bathtub full of water. " ++
+    "Type \"use Capsella toy\" to make it go!"
+  addAlias capsellaToy "toy"
+  moveNowhere capsellaToy
+  setVerb1 "use" capsellaSet $ do
+    msg $ "Following the instruction book, you put together pieces until " ++
+      "you\'ve made a Capsella toy. Look at the toy for more details."
+    addPoints 5 "creating something cool"
+    setVerb1 "use" capsellaSet $ msg $ "There aren\'t enough parts left in " ++
+      "the Capsella set to make another creation."
+    move capsellaToy attic
+    setDescription2 capsellaSet ""
   atticShortcut <- newExit "shortcut to Granny\'s attic" brisbin attic
   addAlias atticShortcut "a"
 
@@ -969,7 +985,7 @@ buildWorld = do
   setVerb1 "turn on" sprinkler useSprinkler
   setVerb1 "water grass with" sprinkler useSprinkler
 
-  setMaxScore 105
+  setMaxScore 110
 
   return ()
 
