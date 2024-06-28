@@ -284,6 +284,7 @@ buildWorld = do
   addAlias bathtub "tub"
   setDescription2 bathtub "Type \"fill the bathtub\" to fill it with water."
   makeImmobile bathtub
+  makeContainer bathtub
 
   basementLanding <- newRoom "basement landing" $
     "The stairway, and the floor of this entire level, is a thin green " ++
@@ -477,7 +478,7 @@ buildWorld = do
     "This elaborate toy has a battery pack, switch, motor, gears, and " ++
     "propeller. There are four big yellow orbs which are intended as " ++
     "flotation devices. This would work well in a bathtub full of water. " ++
-    "Type \"use the Capsella toy\" to make it go!"
+    "Type \"play with the Capsella toy\" to make it go!"
   addAlias capsellaToy "toy"
   moveNowhere capsellaToy
   setVerb1 "use" capsellaSet $ do
@@ -495,8 +496,21 @@ buildWorld = do
         let alreadyFull = msg "The bathtub is already full of water."
         setVerb1 "fill" bathtub alreadyFull
         setVerb1 "use" bathtub alreadyFull
+        setVerb1 "play with" capsellaToy toySwimsFirstTime
+      noWater = stop "You\'ll have to put the Capsella toy in water first."
+      toySwims = do
+        toyLoc <- getLocation capsellaToy
+        unless (toyLoc == Just bathtub) noWater
+        msg $ "You turn on the switch on the Capsella toy. Its motor starts " ++
+          "up, and the propeller turns. The toy zooms through the water " ++
+          "and gently bonks against the end of the bathtub."
+      toySwimsFirstTime = do
+        toySwims
+        addPoints 10 "being a true eight year-old"
+        setVerb1 "play with" capsellaToy toySwims
   setVerb1 "fill" bathtub fillBathtub
   setVerb1 "use" bathtub fillBathtub
+  setVerb1 "play with" capsellaToy noWater
   atticShortcut <- newExit "shortcut to Granny\'s attic" brisbin attic
   addAlias atticShortcut "a"
 
@@ -995,7 +1009,7 @@ buildWorld = do
   setVerb1 "turn on" sprinkler useSprinkler
   setVerb1 "water grass with" sprinkler useSprinkler
 
-  setMaxScore 115
+  setMaxScore 125
 
   return ()
 

@@ -141,6 +141,7 @@ parseLine =
   verb1 "move"             |||
   verb1 "open"             |||
   verb1 "pet"              |||
+  verb1 "play with"        |||
   verb1 "put all in"       |||
   verb1 "put all into"     |||
   verb1 "read"             |||

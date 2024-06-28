@@ -123,6 +123,7 @@ setGuards = do
   s setGuard1 stopWith "lock"
   setGuard1 "look" $ \_ -> return ()
   s setGuard1 stopWith "open"
+  s setGuard1 stopIfNotObject "play with"
   setGuard1 "put all in" $ containerGuard "put things into"
   setGuard1 "search" searchGuard
   s setGuard1 stopIfNotInInventory "throw"
