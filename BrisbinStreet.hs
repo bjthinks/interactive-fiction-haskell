@@ -282,7 +282,7 @@ buildWorld = do
     "This is a plain white bathtub with a shower attachment and glass " ++
     "doors."
   addAlias bathtub "tub"
-  setDescription2 bathtub "Type \"use bathtub\" to fill it with water."
+  setDescription2 bathtub "Type \"fill the bathtub\" to fill it with water."
   makeImmobile bathtub
 
   basementLanding <- newRoom "basement landing" $
@@ -488,6 +488,15 @@ buildWorld = do
       "the Capsella set to make another creation."
     move capsellaToy attic
     setDescription2 capsellaSet ""
+  let fillBathtub = do
+        msg "You fill the bathtub with water."
+        addPoints 5 "becoming a hydrologist"
+        setDescription2 bathtub "It is full of warm water."
+        let alreadyFull = msg "The bathtub is already full of water."
+        setVerb1 "fill" bathtub alreadyFull
+        setVerb1 "use" bathtub alreadyFull
+  setVerb1 "fill" bathtub fillBathtub
+  setVerb1 "use" bathtub fillBathtub
   atticShortcut <- newExit "shortcut to Granny\'s attic" brisbin attic
   addAlias atticShortcut "a"
 
@@ -986,7 +995,7 @@ buildWorld = do
   setVerb1 "turn on" sprinkler useSprinkler
   setVerb1 "water grass with" sprinkler useSprinkler
 
-  setMaxScore 110
+  setMaxScore 115
 
   return ()
 
