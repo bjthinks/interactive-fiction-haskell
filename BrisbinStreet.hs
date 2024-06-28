@@ -453,7 +453,8 @@ buildWorld = do
     "walk along."
   toUpstairs <- newExit "up" living upstairs
   newExit "down" upstairs living
-  msg $ show toUpstairs -- TODO remove
+  addAliases toUpstairs ["door", "the door"]
+  makeLocked toUpstairs upstairsKey
 
   attic <- newRoom "Attic" $
     "This room is unfinished, with studs and insulation visible. There is " ++
