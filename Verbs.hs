@@ -179,6 +179,7 @@ setGuards = do
   setDefaultGuard2 "lock" "with" lockGuard
   setDefaultGuard2 "open" "with" unlockGuard
   setDefaultGuard2 "put" "in" putInGuard
+  setDefaultGuard2 "throw" "at" throwGuard
   setDefaultGuard2 "unlock" "with" unlockGuard
 
 stopWith :: String -> Ref -> Game ()
@@ -271,6 +272,11 @@ putInGuard item container = do
   itemName <- qualifiedName item
   when (item == container) $ stop $ "You can't put " ++ itemName ++
     " inside itself!"
+
+throwGuard :: Ref -> Ref -> Game ()
+throwGuard item target = do
+  stopIfNotInInventory "throw" item
+  stopIfNotAccessible "throw at" target
 
 unlockGuard :: Ref -> Ref -> Game ()
 unlockGuard ref key = do
