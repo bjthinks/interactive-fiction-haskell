@@ -54,6 +54,12 @@ buildWorld = do
   setVerb1 "eat" acorns $
     msg $ "You try one, but they taste terribly bitter. Maybe a squirrel " ++
       "would like them if you threw them at it?"
+  squirrel <- newObject frontYard "squirrel" $
+    "A common grey squirrel. She is high up in one of the oak trees in " ++
+    "the yard. She looks at you as if she is expecting something."
+  let highInTree = msg "The squirrel is high up in a tree."
+  setVerb1 "get" squirrel highInTree
+  setVerb1 "pet" squirrel highInTree
   let throwAcorns finalAction = do
         room <- getRoom
         unless (room == frontYard) $ stop "You don\'t see any squirrels here."
