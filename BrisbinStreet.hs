@@ -960,6 +960,8 @@ buildWorld = do
         room <- getRoom
         kittyLocation <- getLocation blackCat
         when (Just room == kittyLocation) $ msg message
+  -- We have to set the guard here for now because Verbs imports Actions
+  -- and we can't have the imports making a cycle
   setGuard2 "open" tuna "with" $ \opener -> do
     stopIfNotObject "open" tuna
     stopIfInOpenContainer "open" tuna
