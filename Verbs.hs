@@ -33,7 +33,7 @@ doVerb (Verb1 name ref) = do
   action
 
 doVerb (Verb2 verb dobj prep iobj) = do
-  g <- getGuard2 verb prep
+  g <- getDefaultGuard2 verb prep
   g dobj iobj
   action <- getVerb2 verb dobj prep
   action iobj
@@ -95,20 +95,20 @@ setDefaultGuard1 name action = do
   let m' = M.insert name action (defaultGuard1Map st)
   put $ st { defaultGuard1Map = m' }
 
-getGuard2 :: String -> String -> Game (Ref -> Ref -> Game ())
-getGuard2 verb prep = do
-  m <- guardMap2 <$> get
-  let d = flip (defaultGuard2 verb) prep
+getDefaultGuard2 :: String -> String -> Game (Ref -> Ref -> Game ())
+getDefaultGuard2 verb prep = do
+  m <- defaultGuard2Map <$> get
+  let d = flip (ultimateDefaultGuard2 verb) prep
   return $ M.findWithDefault d (verb, prep) m
 
-setGuard2 :: String -> String -> (Ref -> Ref -> Game ()) -> Game ()
-setGuard2 verb prep action = do
+setDefaultGuard2 :: String -> String -> (Ref -> Ref -> Game ()) -> Game ()
+setDefaultGuard2 verb prep action = do
   st <- get
-  let m' = M.insert (verb, prep) action (guardMap2 st)
-  put $ st { guardMap2 = m' }
+  let m' = M.insert (verb, prep) action (defaultGuard2Map st)
+  put $ st { defaultGuard2Map = m' }
 
-defaultGuard2 :: String -> Ref -> String -> Ref -> Game ()
-defaultGuard2 verb dobj prep iobj = do
+ultimateDefaultGuard2 :: String -> Ref -> String -> Ref -> Game ()
+ultimateDefaultGuard2 verb dobj prep iobj = do
   stopIfNotAccessible verb dobj
   stopIfNotAccessible (verb ++ ' ' : prep) iobj
 
@@ -129,11 +129,11 @@ setGuards = do
   s setDefaultGuard1 stopIfNotInInventory "throw"
   s setDefaultGuard1 stopWith "unlock"
   setDefaultGuard1 "use" useGuard
-  setGuard2 "get" "from" getFromGuard
-  setGuard2 "lock" "with" lockGuard
-  setGuard2 "open" "with" openGuard
-  setGuard2 "put" "in" putInGuard
-  setGuard2 "unlock" "with" unlockGuard
+  setDefaultGuard2 "get" "from" getFromGuard
+  setDefaultGuard2 "lock" "with" lockGuard
+  setDefaultGuard2 "open" "with" openGuard
+  setDefaultGuard2 "put" "in" putInGuard
+  setDefaultGuard2 "unlock" "with" unlockGuard
 
 stopWith :: String -> Ref -> Game ()
 stopWith verb ref = do
