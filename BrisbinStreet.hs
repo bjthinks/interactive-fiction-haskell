@@ -899,6 +899,28 @@ buildWorld = do
   newExit "west" hhLanding hhAtrium
   newExit "east" hhAtrium hhLanding
 
+  atriumShortcut <- newExit "shortcut to atrium" brisbin hhAtrium
+  addAlias atriumShortcut "t"
+
+  hhMasterBedroom <- newRoom "master bedroom" $
+    "This spacious bedroom is dimly lit with Christmas lights which are " ++
+    "strung around the crown moulding. There is a king size four-poster " ++
+    "bed richly adorned with elegant blankets and pillowcases. On one of " ++
+    "the bedside stands is a large jack-o\'-lantern with a flickering " ++
+    "light inside, although no candle or light source can be seen. A huge " ++
+    "ghost stands right in front of you, and you are extremely scared!"
+  newExit "west" hhAtrium hhMasterBedroom
+  newExit "east" hhMasterBedroom hhAtrium
+  boss <- newObject hhMasterBedroom "huge ghost" $
+    "" -- TODO describe ghost
+  addAlias boss "ghost"
+  makeImmobile boss
+  {-
+  let panic = do
+    msg "You are so frightened of the big ghost that you run out of the room!"
+    move player hhAtrium
+  -}
+
   hhHallway <- newRoom "hallway" $
     "The wood paneling in this part of the house is particularly elegant. " ++
     "A large grandfather clock stands against the west wall. Its pendulum " ++
