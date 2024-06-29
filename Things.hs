@@ -29,7 +29,9 @@ defaultThing = Thing {
   thingIsContainer = False,
   thingIsLocked = False,
   thingVerb1Map = M.empty,
-  thingVerb2Map = M.empty
+  thingVerb2Map = M.empty,
+  thingGuard1Map = M.empty,
+  thingGuard2Map = M.empty
   }
 
 -- Here are the exported functions
