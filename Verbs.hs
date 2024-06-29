@@ -27,7 +27,7 @@ doVerb (Verb0 name) = do
   action
 
 doVerb (Verb1 name ref) = do
-  g <- getGuard1 name
+  g <- getDefaultGuard1 name
   g ref
   action <- getVerb1 name ref
   action
@@ -83,17 +83,17 @@ doVerb (Teleport ref) = do
 
 -- This uses a function in Categories.hs, so it can't be in Defs.hs or the
 -- module imports would form a cycle
-getGuard1 :: String -> Game (Ref -> Game ())
-getGuard1 name = do
-  m <- guardMap1 <$> get
+getDefaultGuard1 :: String -> Game (Ref -> Game ())
+getDefaultGuard1 name = do
+  m <- defaultGuard1Map <$> get
   let d = stopIfNotAccessible name
   return $ M.findWithDefault d name m
 
-setGuard1 :: String -> (Ref -> Game ()) -> Game ()
-setGuard1 name action = do
+setDefaultGuard1 :: String -> (Ref -> Game ()) -> Game ()
+setDefaultGuard1 name action = do
   st <- get
-  let m' = M.insert name action (guardMap1 st)
-  put $ st { guardMap1 = m' }
+  let m' = M.insert name action (defaultGuard1Map st)
+  put $ st { defaultGuard1Map = m' }
 
 getGuard2 :: String -> String -> Game (Ref -> Ref -> Game ())
 getGuard2 verb prep = do
@@ -115,20 +115,20 @@ defaultGuard2 verb dobj prep iobj = do
 setGuards :: Game ()
 setGuards = do
   let s f g x = f x (g x)
-  s setGuard1 stopWith "close"
-  s setGuard1 stopIfNotInInventory "drop"
-  setGuard1 "get" getTakeGuard
-  setGuard1 "get all from" $ containerGuard "get things out of"
-  setGuard1 "go" goGuard
-  s setGuard1 stopWith "lock"
-  setGuard1 "look" $ \_ -> return ()
-  s setGuard1 stopWith "open"
-  s setGuard1 stopIfNotObject "play with"
-  setGuard1 "put all in" $ containerGuard "put things into"
-  setGuard1 "search" searchGuard
-  s setGuard1 stopIfNotInInventory "throw"
-  s setGuard1 stopWith "unlock"
-  setGuard1 "use" useGuard
+  s setDefaultGuard1 stopWith "close"
+  s setDefaultGuard1 stopIfNotInInventory "drop"
+  setDefaultGuard1 "get" getTakeGuard
+  setDefaultGuard1 "get all from" $ containerGuard "get things out of"
+  setDefaultGuard1 "go" goGuard
+  s setDefaultGuard1 stopWith "lock"
+  setDefaultGuard1 "look" $ \_ -> return ()
+  s setDefaultGuard1 stopWith "open"
+  s setDefaultGuard1 stopIfNotObject "play with"
+  setDefaultGuard1 "put all in" $ containerGuard "put things into"
+  setDefaultGuard1 "search" searchGuard
+  s setDefaultGuard1 stopIfNotInInventory "throw"
+  s setDefaultGuard1 stopWith "unlock"
+  setDefaultGuard1 "use" useGuard
   setGuard2 "get" "from" getFromGuard
   setGuard2 "lock" "with" lockGuard
   setGuard2 "open" "with" openGuard
