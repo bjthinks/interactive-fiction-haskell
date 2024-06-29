@@ -277,15 +277,15 @@ setDefaults = do
   setVerb0 "score" doScore
   setVerb0 "search" doSearch
   setVerb0 "wait" $ msg "You wait for a little while."
-  setDefault1 "drop" defaultDrop
-  setDefault1 "get" defaultGet
-  setDefault1 "get all from" defaultGetAllFrom
-  setDefault1 "go" defaultGo
-  setDefault1 "look" defaultLook
-  setDefault1 "pet" defaultPet
-  setDefault1 "put all in" defaultPutAllIn
-  setDefault1 "search" defaultSearch
-  setDefault1 "throw" defaultThrow
+  setDefaultVerb1 "drop" defaultDrop
+  setDefaultVerb1 "get" defaultGet
+  setDefaultVerb1 "get all from" defaultGetAllFrom
+  setDefaultVerb1 "go" defaultGo
+  setDefaultVerb1 "look" defaultLook
+  setDefaultVerb1 "pet" defaultPet
+  setDefaultVerb1 "put all in" defaultPutAllIn
+  setDefaultVerb1 "search" defaultSearch
+  setDefaultVerb1 "throw" defaultThrow
   setDefault2 "get" "from" defaultGetFrom
   setDefault2 "lock" "with" defaultLockAndUnlock
   setDefault2 "open" "with" defaultOpen
