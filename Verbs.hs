@@ -190,7 +190,6 @@ goGuard ref = do
   stopIfInRoom verb ref
   stopIfInOpenContainer verb ref
 
--- TODO: note the following two guards are identical
 searchGuard :: Ref -> Game ()
 searchGuard ref = do
   let verb = "search"
