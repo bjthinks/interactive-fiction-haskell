@@ -960,6 +960,10 @@ buildWorld = do
         room <- getRoom
         kittyLocation <- getLocation blackCat
         when (Just room == kittyLocation) $ msg message
+  setGuard2 "open" tuna "with" $ \opener -> do
+    stopIfNotObject "open" tuna
+    stopIfInOpenContainer "open" tuna
+    stopIfNotInInventory "open with" opener
   makeOpenable tuna canOpener $ do
     msg "You open the can of tuna with the can opener."
     setName tuna "open can of tuna"

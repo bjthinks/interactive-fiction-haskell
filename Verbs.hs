@@ -35,8 +35,8 @@ doVerb (Verb1 name ref) = do
   action
 
 doVerb (Verb2 verb dobj prep iobj) = do
-  g <- getDefaultGuard2 verb prep
-  g dobj iobj
+  g <- getGuard2 verb dobj prep
+  g iobj
   action <- getVerb2 verb dobj prep
   action iobj
 
@@ -177,7 +177,7 @@ setGuards = do
   s setDefaultGuard1 stopWith "unlock"
   setDefaultGuard2 "get" "from" getFromGuard
   setDefaultGuard2 "lock" "with" lockGuard
-  setDefaultGuard2 "open" "with" openGuard
+  setDefaultGuard2 "open" "with" unlockGuard
   setDefaultGuard2 "put" "in" putInGuard
   setDefaultGuard2 "unlock" "with" unlockGuard
 
@@ -259,16 +259,6 @@ lockGuard ref key = do
   -- ref is either an unlocked exit or an unlocked, accessible container
   stopIfNotInInventory "lock with" key
   -- key is in the inventory
-
-openGuard :: Ref -> Ref -> Game ()
-openGuard item opener = do
-  let verb = "open"
-  -- open defers to unlock, so this needs to be at least as permissive as
-  -- unlockGuard
-  stopIfPlayer verb item
-  stopIfRoom verb item
-  stopIfInOpenContainer verb item
-  stopIfNotInInventory "open with" opener
 
 putInGuard :: Ref -> Ref -> Game ()
 putInGuard item container = do
