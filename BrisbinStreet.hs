@@ -497,6 +497,8 @@ buildWorld = do
         setVerb1 "fill" bathtub alreadyFull
         setVerb1 "use" bathtub alreadyFull
         setVerb1 "play with" capsellaToy toySwimsFirstTime
+        setVerb1 "turn on" capsellaToy toySwimsFirstTime
+        setVerb1 "use" capsellaToy toySwimsFirstTime
       noWater = stop "You\'ll have to put the Capsella toy in water first."
       toySwims = do
         toyLoc <- getLocation capsellaToy
@@ -508,9 +510,17 @@ buildWorld = do
         toySwims
         addPoints 10 "being a true eight year-old"
         setVerb1 "play with" capsellaToy toySwims
+        setVerb1 "turn on" capsellaToy toySwims
+        setVerb1 "use" capsellaToy toySwims
+      capsellaGuard = stopIfNotObject "play with" capsellaToy
   setVerb1 "fill" bathtub fillBathtub
   setVerb1 "use" bathtub fillBathtub
   setVerb1 "play with" capsellaToy noWater
+  setVerb1 "turn on" capsellaToy noWater
+  setVerb1 "use" capsellaToy noWater
+  setGuard1 "play with" capsellaToy capsellaGuard
+  setGuard1 "turn on" capsellaToy capsellaGuard
+  setGuard1 "use" capsellaToy capsellaGuard
   atticShortcut <- newExit "shortcut to Granny\'s attic" brisbin attic
   addAlias atticShortcut "a"
 
