@@ -886,7 +886,8 @@ buildWorld = do
   setVerb1 "go" upSpiral $ stop $ "The black cat positions herself on " ++
     "the first step of the spiral staircase, bares her claws, arches " ++
     "her back, and hisses at you loudly! You are too scared to go " ++
-    "past her. There must be a way to get on this cat\'s good side."
+    "past her. There must be a way to get on this cat\'s good side. " ++
+    "Maybe there is cat food somewhere?"
 
   hhAtrium <- newRoom "atrium" $
     "This room has a large vaulted skylight covering the ceiling. There are " ++
