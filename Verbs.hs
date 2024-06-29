@@ -173,7 +173,7 @@ setGuards = do
   s setDefaultGuard1 stopWith "open"
   setDefaultGuard1 "put all in" $ containerGuard "put things into"
   setDefaultGuard1 "search" searchGuard
-  s setDefaultGuard1 stopIfNotInInventory "throw"
+  s setDefaultGuard1 stopAt "throw"
   s setDefaultGuard1 stopWith "unlock"
   setDefaultGuard2 "get" "from" getFromGuard
   setDefaultGuard2 "lock" "with" lockGuard
@@ -181,6 +181,11 @@ setGuards = do
   setDefaultGuard2 "put" "in" putInGuard
   setDefaultGuard2 "throw" "at" throwGuard
   setDefaultGuard2 "unlock" "with" unlockGuard
+
+stopAt :: String -> Ref -> Game ()
+stopAt verb ref = do
+  name <- qualifiedName ref
+  stop $ "What would you like to " ++ verb ++ " " ++ name ++ " at?"
 
 stopWith :: String -> Ref -> Game ()
 stopWith verb ref = do
@@ -319,11 +324,11 @@ setDefaults = do
   setDefaultVerb1 "pet" defaultPet
   setDefaultVerb1 "put all in" defaultPutAllIn
   setDefaultVerb1 "search" defaultSearch
-  setDefaultVerb1 "throw" defaultThrow
   setDefaultVerb2 "get" "from" defaultGetFrom
   setDefaultVerb2 "lock" "with" defaultLockAndUnlock
   setDefaultVerb2 "open" "with" defaultOpen
   setDefaultVerb2 "put" "in" defaultPutIn
+  setDefaultVerb2 "throw" "at" defaultThrow
   setDefaultVerb2 "unlock" "with" defaultLockAndUnlock
 
 doDebug :: Bool -> Game ()
@@ -473,11 +478,6 @@ defaultSearch ref = do
   name <- qualifiedName ref
   msg $ "You look everywhere in " ++ name ++ " but don\'t find anything."
 
-defaultThrow :: Ref -> Game ()
-defaultThrow ref = do
-  name <- qualifiedName ref
-  stop $ "There is no point in throwing " ++ name ++ "."
-
 defaultGetFrom :: Ref -> Ref -> Game ()
 defaultGetFrom item container = do
   player <- getPlayer
@@ -502,6 +502,12 @@ defaultPutIn item container = do
   itemName <- qualifiedName item
   containerName <- qualifiedName container
   msg $ "You put " ++ itemName ++ " in " ++ containerName ++ "."
+
+defaultThrow :: Ref -> Ref -> Game ()
+defaultThrow ref target = do
+  name <- qualifiedName ref
+  targetName <- qualifiedName target
+  stop $ "There is no point in throwing " ++ name ++ " at " ++ targetName ++ "."
 
 -- helper function for look and inventory
 humanFriendlyList :: [String] -> String

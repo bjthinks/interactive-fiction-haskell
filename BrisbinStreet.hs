@@ -54,17 +54,14 @@ buildWorld = do
   setVerb1 "eat" acorns $
     msg $ "You try one, but they taste terribly bitter. Maybe a squirrel " ++
       "would like them if you threw them at it?"
+  setVerb1 "use" acorns $ msg "Do you want to throw the acorns?"
   squirrel <- newObject frontYard "squirrel" $
     "A common grey squirrel. She is high up in one of the oak trees in " ++
     "the yard. She looks at you as if she is expecting something."
   let highInTree = msg "The squirrel is high up in a tree."
   setVerb1 "get" squirrel highInTree
   setVerb1 "pet" squirrel highInTree
-  let throwAcorns finalAction = do
-        room <- getRoom
-        unless (room == frontYard) $ stop "You don\'t see any squirrels here."
-        finalAction
-      throwAcorns2 finalAction = \target -> do
+  let throwAcorns finalAction = \target -> do
         room <- getRoom
         unless (room == frontYard) $ stop "You don\'t see any squirrels here."
         targetName <- qualifiedName target
@@ -75,13 +72,9 @@ buildWorld = do
         msg $ "You throw an acorn at the squirrel. She catches the acorn, " ++
           "runs up the tree, and eats the acorn hungrily."
         addPoints 10 "improving your aim"
-        setVerb1 "throw" acorns $ throwAcorns subsequentThrow
-        setVerb1 "use" acorns $ throwAcorns subsequentThrow
-        -- TODO setVerb2
+        setVerb2 "throw" acorns "at" $ throwAcorns subsequentThrow
       subsequentThrow = msg "The squirrel catches the acorn and eats it."
-  setVerb1 "throw" acorns $ throwAcorns firstThrow
-  setVerb1 "use" acorns $ throwAcorns firstThrow
-  setVerb2 "throw" acorns "at" $ throwAcorns2 firstThrow
+  setVerb2 "throw" acorns "at" $ throwAcorns firstThrow
 
   living <- newRoom "living room" $
     "This is clearly the living room of Granny\'s House. The floor has " ++
