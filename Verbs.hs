@@ -1,5 +1,6 @@
 module Verbs(Verb(..), doVerb, setGuards, setDefaults,
-            getGuard1, setGuard1, clearGuard1) where
+            getGuard1, setGuard1, clearGuard1,
+            getGuard2, setGuard2, clearGuard2) where
 
 import Data.Maybe
 import Data.List
@@ -137,6 +138,27 @@ clearGuard1 name ref = do
   m <- getGuard1Map ref
   let m' = M.delete name m
   setGuard1Map ref m'
+
+getGuard2 :: String -> Ref -> String -> Game (Ref -> Game ())
+getGuard2 verb dobj prep = do
+  m <- getGuard2Map dobj
+  debug <- getDebug
+  n <- qualifiedName dobj
+  when debug $ msg $ "Guard2 keys for " ++ n ++ ": " ++ show (M.keys m)
+  d <- getDefaultGuard2 verb prep
+  return $ M.findWithDefault (d dobj) (verb, prep) m
+
+setGuard2 :: String -> Ref -> String -> (Ref -> Game ()) -> Game ()
+setGuard2 verb dobj prep action = do
+  m <- getGuard2Map dobj
+  let m' = M.insert (verb, prep) action m
+  setGuard2Map dobj m'
+
+clearGuard2 :: String -> Ref -> String -> Game ()
+clearGuard2 verb dobj prep = do
+  m <- getGuard2Map dobj
+  let m' = M.delete (verb, prep) m
+  setGuard2Map dobj m'
 
 setGuards :: Game ()
 setGuards = do
