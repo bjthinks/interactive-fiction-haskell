@@ -30,7 +30,7 @@ data GameState = GameState {
   things :: M.Map Ref Thing,
   verb0Map :: M.Map String (Game ()),
   defaultVerb1Map :: M.Map String (Ref -> Game ()),
-  default2Map :: M.Map (String,String) (Ref -> Ref -> Game ()),
+  defaultVerb2Map :: M.Map (String,String) (Ref -> Ref -> Game ()),
   guardMap1 :: M.Map String (Ref -> Game ()),
   guardMap2 :: M.Map (String, String) (Ref -> Ref -> Game ()),
   nextThing :: Ref,
@@ -45,7 +45,7 @@ startState = GameState {
   things = M.empty,
   verb0Map = M.empty,
   defaultVerb1Map = M.empty,
-  default2Map = M.empty,
+  defaultVerb2Map = M.empty,
   guardMap1 = M.empty,
   guardMap2 = M.empty,
   nextThing = 0,
@@ -235,17 +235,17 @@ cant2 verb dobj prep iobj = do
   stop $ "You can\'t " ++ verb ++ ' ' : dobjName ++ ' ' : prep ++
     ' ' : iobjName ++ "."
 
-getDefault2 :: String -> String -> Game (Ref -> Ref -> Game ())
-getDefault2 verb prep = do
-  m <- default2Map <$> get
+getDefaultVerb2 :: String -> String -> Game (Ref -> Ref -> Game ())
+getDefaultVerb2 verb prep = do
+  m <- defaultVerb2Map <$> get
   let d = flip (cant2 verb) prep
   return $ M.findWithDefault d (verb, prep) m
 
-setDefault2 :: String -> String -> (Ref -> Ref -> Game ()) -> Game ()
-setDefault2 verb prep action = do
+setDefaultVerb2 :: String -> String -> (Ref -> Ref -> Game ()) -> Game ()
+setDefaultVerb2 verb prep action = do
   st <- get
-  let m' = M.insert (verb, prep) action $ default2Map st
-  put $ st { default2Map = m' }
+  let m' = M.insert (verb, prep) action $ defaultVerb2Map st
+  put $ st { defaultVerb2Map = m' }
 
 getVerb2 :: String -> Ref -> String -> Game (Ref -> Game ())
 getVerb2 verb dobj prep = do
@@ -253,7 +253,7 @@ getVerb2 verb dobj prep = do
   debug <- getDebug
   n <- qualifiedName dobj
   when debug $ msg $ "Verb2 keys for " ++ n ++ ": " ++ show (M.keys m)
-  d <- getDefault2 verb prep
+  d <- getDefaultVerb2 verb prep
   return $ M.findWithDefault (d dobj) (verb, prep) m
 
 setVerb2 :: String -> Ref -> String -> (Ref -> Game ()) -> Game ()

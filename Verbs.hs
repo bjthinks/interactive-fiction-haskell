@@ -286,11 +286,11 @@ setDefaults = do
   setDefaultVerb1 "put all in" defaultPutAllIn
   setDefaultVerb1 "search" defaultSearch
   setDefaultVerb1 "throw" defaultThrow
-  setDefault2 "get" "from" defaultGetFrom
-  setDefault2 "lock" "with" defaultLockAndUnlock
-  setDefault2 "open" "with" defaultOpen
-  setDefault2 "put" "in" defaultPutIn
-  setDefault2 "unlock" "with" defaultLockAndUnlock
+  setDefaultVerb2 "get" "from" defaultGetFrom
+  setDefaultVerb2 "lock" "with" defaultLockAndUnlock
+  setDefaultVerb2 "open" "with" defaultOpen
+  setDefaultVerb2 "put" "in" defaultPutIn
+  setDefaultVerb2 "unlock" "with" defaultLockAndUnlock
 
 doDebug :: Bool -> Game ()
 doDebug flag = do
