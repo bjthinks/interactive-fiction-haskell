@@ -50,7 +50,8 @@ buildWorld = do
   newExit "south" frontYard brisbin
   acorns <- newObject frontYard "acorns" $
     "Ordinary white oak acorns. Could you throw them at a squirrel?"
-  addAlias acorns "acorn" -- TODO "an acorn"
+  setArticle acorns ""
+  addAliases acorns ["the acorn", "the acorns", "acorn", "an acorn"]
   setVerb1 "eat" acorns $
     msg $ "You try one, but they taste terribly bitter. Maybe a squirrel " ++
       "would like them if you threw them at it?"
