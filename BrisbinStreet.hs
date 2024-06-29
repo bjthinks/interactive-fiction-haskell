@@ -64,15 +64,24 @@ buildWorld = do
         room <- getRoom
         unless (room == frontYard) $ stop "You don\'t see any squirrels here."
         finalAction
+      throwAcorns2 finalAction = \target -> do
+        room <- getRoom
+        unless (room == frontYard) $ stop "You don\'t see any squirrels here."
+        targetName <- qualifiedName target
+        unless (target == squirrel) $ stop $
+          "There is no point in throwing an acorn at " ++ targetName ++ "."
+        finalAction
       firstThrow = do
         msg $ "You throw an acorn at the squirrel. She catches the acorn, " ++
           "runs up the tree, and eats the acorn hungrily."
         addPoints 10 "improving your aim"
         setVerb1 "throw" acorns $ throwAcorns subsequentThrow
         setVerb1 "use" acorns $ throwAcorns subsequentThrow
+        -- TODO setVerb2
       subsequentThrow = msg "The squirrel catches the acorn and eats it."
   setVerb1 "throw" acorns $ throwAcorns firstThrow
   setVerb1 "use" acorns $ throwAcorns firstThrow
+  setVerb2 "throw" acorns "at" $ throwAcorns2 firstThrow
 
   living <- newRoom "living room" $
     "This is clearly the living room of Granny\'s House. The floor has " ++
