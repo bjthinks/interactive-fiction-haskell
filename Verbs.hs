@@ -145,7 +145,6 @@ setGuards = do
   s setDefaultGuard1 stopWith "lock"
   setDefaultGuard1 "look" $ \_ -> return ()
   s setDefaultGuard1 stopWith "open"
-  s setDefaultGuard1 stopIfNotObject "play with"
   setDefaultGuard1 "put all in" $ containerGuard "put things into"
   setDefaultGuard1 "search" searchGuard
   s setDefaultGuard1 stopIfNotInInventory "throw"
