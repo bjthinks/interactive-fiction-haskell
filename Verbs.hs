@@ -70,6 +70,10 @@ doVerb (Examine ref) = do
   when debug $ msg $ "Verb1 keys: " ++ show (M.keys m1)
   m2 <- getVerb2Map ref
   when debug $ msg $ "Verb2 keys: " ++ show (M.keys m2)
+  g1 <- getGuard1Map ref
+  when debug $ msg $ "Guard1 keys: " ++ show (M.keys g1)
+  g2 <- getGuard2Map ref
+  when debug $ msg $ "Guard2 keys: " ++ show (M.keys g2)
 
 doVerb (Teleport ref) = do
   debug <- getDebug
