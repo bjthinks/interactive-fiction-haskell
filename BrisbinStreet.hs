@@ -257,12 +257,12 @@ buildWorld = do
     if playerLoc == dollhouse then do
       msg "You exit the dollhouse. Everything looks normal again."
       move player dollhouseLoc
-      doVerb $ Verb1 "look" dollhouseLoc
+      doVerb $ Verb0 "look"
       else if playerLoc == dollhouseLoc then do
       msg $ "You enter the dollhouse. Everything looks like a cartoon " ++
         "in here."
       move player dollhouse
-      doVerb $ Verb1 "look" dollhouse
+      doVerb $ Verb0 "look"
       else failUseDollhouse
   defaultDropGabby <- getVerb1 "drop" gabby
   defaultPutGabbyIn <- getVerb2 "put" gabby "in"
@@ -920,6 +920,7 @@ buildWorld = do
   let panic = do
     msg "You are so frightened of the big ghost that you run out of the room!"
     move player hhAtrium
+    doVerb $ Verb0 "look"
   -}
 
   hhHallway <- newRoom "hallway" $

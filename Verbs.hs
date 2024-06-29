@@ -83,7 +83,7 @@ doVerb (Teleport ref) = do
   unless exists $ stop $ "There is nothing with Ref " ++ show ref ++ "."
   player <- getPlayer
   move player ref
-  doVerb $ Verb1 "look" ref
+  doVerb $ Verb0 "look"
 
 -- Guard functions
 
@@ -419,7 +419,7 @@ defaultGo ref = do
   Just (_,dest) <- getPath ref
   player <- getPlayer
   move player dest
-  doVerb $ Verb1 "look" dest
+  doVerb $ Verb0 "look"
 
 defaultLook :: Ref -> Game ()
 defaultLook ref = do
