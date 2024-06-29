@@ -653,8 +653,7 @@ buildWorld = do
     "Bimbo, who is oddly a male cat, has grey and white stripes covering " ++
     "all of his body."
   setArticle bimbo ""
-  addAlias bimbo "cat"
-  addAlias bimbo "the cat"
+  addAliases bimbo ["cat", "the cat"]
   setVerb1 "pet" bimbo $ msg "Bimbo purrs and rubs up against you."
 
   westBrisbin <- newRoom "west Brisbin Street" $
@@ -695,8 +694,7 @@ buildWorld = do
     "upper shelf with paper and fountain pens."
   makeImmobile writingDesk
   makeContainer writingDesk
-  addAlias writingDesk "drawers"
-  addAlias writingDesk "drawer"
+  addAliases writingDesk ["drawers", "drawer"]
   newObject writingDesk "notebook" $
     "This is a common spiral bound notebook with a puce cover."
   costume <- newObject writingDesk "ghost costume" $
