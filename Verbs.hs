@@ -150,7 +150,6 @@ setGuards = do
   setDefaultGuard1 "search" searchGuard
   s setDefaultGuard1 stopIfNotInInventory "throw"
   s setDefaultGuard1 stopWith "unlock"
-  setDefaultGuard1 "use" useGuard
   setDefaultGuard2 "get" "from" getFromGuard
   setDefaultGuard2 "lock" "with" lockGuard
   setDefaultGuard2 "open" "with" openGuard
@@ -196,13 +195,6 @@ goGuard ref = do
 searchGuard :: Ref -> Game ()
 searchGuard ref = do
   let verb = "search"
-  stopIfPlayer verb ref
-  stopIfExit verb ref
-  stopIfInOpenContainer verb ref
-
-useGuard :: Ref -> Game ()
-useGuard ref = do
-  let verb = "use"
   stopIfPlayer verb ref
   stopIfExit verb ref
   stopIfInOpenContainer verb ref

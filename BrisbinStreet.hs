@@ -233,6 +233,11 @@ buildWorld = do
     "This is a Gabby doll. It looks like she wants to be in her dollhouse."
   setArticle gabby ""
   addAliases gabby ["doll", "the doll"]
+  setGuard1 "use" dollhouse $ do
+    let verb = "use"
+    stopIfPlayer verb dollhouse
+    stopIfExit verb dollhouse
+    stopIfInOpenContainer verb dollhouse
   setVerb1 "use" dollhouse $ do
     playerLoc <- getRoom
     maybeDollhouseLoc <- getLocation dollhouse
