@@ -848,12 +848,11 @@ buildWorld = do
   addAliases tuna ["tuna", "can"]
   moveNowhere tuna
   setVerb1 "eat" tuna $ msg "You haven\'t opened the can of tuna."
-  defaultSearchKitchen <- getVerb1 "search" hhKitchen
   setVerb1 "search" hhKitchen $ do
     move tuna hhKitchen
     msg "You look in the cupboards and find some cans of tuna."
     addPoints 5 "finding something delicious"
-    setVerb1 "search" hhKitchen defaultSearchKitchen
+    clearVerb1 "search" hhKitchen
 
   hhStaircase <- newRoom "spiral staircase" $
     "This room has a very large and opulent spiral staircase going to the " ++
