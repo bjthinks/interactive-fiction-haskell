@@ -634,15 +634,21 @@ buildWorld = do
     "collar. She would like it if you pet her."
   setArticle misty ""
   addAliases misty ["bunny", "rabbit", "the bunny", "the rabbit"]
-  setVerb1 "get" misty $ msg $ "Misty doesn\'t know you very well, " ++
-    "so she hops away from your outstreched arms."
+  setVerb1 "get" misty $ do
+    msg "Misty likes being picked up and snuggles into your arms."
+    move misty player
+  setVerb1 "drop" misty $ do
+    msg "You gently set Misty down."
+    room <- getRoom
+    move misty room
   let happyMisty = do
         msg $ "You gently pet Misty between her eyes and nose. " ++
           "She excitedly hops about; she loves being pet there."
         queueAction 2 $ do
           room <- getRoom
-          when (room == mikeYard) $ msg $ "Misty hops up to you and wants " ++
-            "to be pet again."
+          mistyLoc <- getLocation misty
+          when (Just room == mistyLoc) $ msg $
+            "Misty hops up to you and wants to be pet again."
   setVerb1 "pet" misty $ do
     happyMisty
     addPoints 10 "being so loving to a deserving animal"
