@@ -761,13 +761,12 @@ buildWorld = do
   setDescription2 hhReadingRoom $
     "There is a lot of clutter on the floor. Maybe there is something " ++
     "important hidden here?"
-  defaultSearchAction <- getVerb1 "search" hhReadingRoom
   setVerb1 "search" hhReadingRoom $ do
     msg $ "You look everywhere, and find a crooked key under one of the " ++
       "armchairs."
     move crookedKey hhReadingRoom
     addPoints 5 "finding a useful key"
-    setVerb1 "search" hhReadingRoom defaultSearchAction
+    clearVerb1 "search" hhReadingRoom
     setDescription2 hhReadingRoom ""
   makeLocked writingDesk crookedKey
   -- These two lines should come after makeLocked above
