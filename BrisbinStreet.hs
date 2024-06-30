@@ -939,7 +939,7 @@ buildWorld = do
           friendlyKitty
           setName tuna "empty can of tuna"
           setDescription tuna "This is just an empty can now."
-          setVerb1 "drop" tuna defaultDropTuna
+          clearVerb1 "drop" tuna
           clearVerb1 "eat" tuna
       friendlyKitty = do
         clearVerb1 "go" upSpiral
