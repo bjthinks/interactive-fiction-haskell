@@ -5,24 +5,14 @@ add more immobile items for flavor
 boards creak in different place?
 describe hhLanding
 burn ants (with magnifying glass)
-use glass on ants?
-"water grass with magnifying glass" will burn the ants
-maybe it's time to use a Map String (Game ()) for verbs instead of all these
-  individual actions
-throw acorn at squirrel
-water grass (with sprinkler)
+use glass on ants? burn ants with glass?
 consider handling plurals in error messages in Categories.hs (e.g. acorns)?
 light candle with match -- complicated
 See if I can do better when the ParseError is an unexpected end of input
-what do you want to lock, unlock, open it with?
-eat the open can of tuna
 use matches -- change to light match eventually?
 failUseDollhouse -- use cant
 turn on the bar light
 use words in parser to eliminate verb1m'
-water grass -> What do you want to water the grass with?
-drop empty can of tuna -- restore default behavior. Check all defaults in
-  BrisbinStreet. Search for default and for getVerb1.
-consider read math book -> (After taking it out of the backpack) ?
+consider read math book -> (After taking it out of the backpack) ??
 consider allowing "it" as a noun in the parser -- would have to check if
   the ref is still visible before allowing it to be parsed
