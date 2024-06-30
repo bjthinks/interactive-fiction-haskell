@@ -5,7 +5,7 @@ add more immobile items for flavor
 boards creak in different place?
 describe hhLanding
 burn ants (with magnifying glass)
-use glass on ants? burn ants with glass?
+use glass on ants?
 consider handling plurals in error messages in Categories.hs (e.g. acorns)?
 light candle with match -- complicated
 See if I can do better when the ParseError is an unexpected end of input
