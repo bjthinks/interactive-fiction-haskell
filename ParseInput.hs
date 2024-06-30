@@ -73,9 +73,10 @@ alias1 :: String -> String
 alias1 "l" = "look"
 alias1 "look at" = "look"
 alias1 "move" = "go"
+alias1 "put all into" = "put all in"
 alias1 "take" = "get"
 alias1 "take all from" = "get all from"
-alias1 "put all into" = "put all in"
+alias1 "water grass with" = "water the grass with"
 alias1 x = x
 
 verb2 :: String -> String -> MyParser Verb
@@ -125,35 +126,36 @@ parseLine =
   verb0 "take all"  |||
   verb0 "wait"      |||
 
-  verb1 "close"            |||
-  verb1 "drink"            |||
-  verb1 "drop"             |||
-  verb1 "eat"              |||
-  verb1 "fill"             |||
-  verb1 "get"              |||
-  verb1 "get all from"     |||
-  verb1 "go"               |||
-  verb1 "l"                |||
-  verb1 "light"            |||
-  verb1 "lock"             |||
-  verb1 "look"             |||
-  verb1 "look at"          |||
-  verb1 "move"             |||
-  verb1 "open"             |||
-  verb1 "pet"              |||
-  verb1 "play with"        |||
-  verb1 "put all in"       |||
-  verb1 "put all into"     |||
-  verb1 "read"             |||
-  verb1 "search"           |||
-  verb1 "take"             |||
-  verb1 "take all from"    |||
-  verb1 "throw"            |||
-  verb1 "turn off"         |||
-  verb1 "turn on"          |||
-  verb1 "unlock"           |||
-  verb1 "use"              |||
-  verb1 "water grass with" |||
+  verb1 "close"                |||
+  verb1 "drink"                |||
+  verb1 "drop"                 |||
+  verb1 "eat"                  |||
+  verb1 "fill"                 |||
+  verb1 "get"                  |||
+  verb1 "get all from"         |||
+  verb1 "go"                   |||
+  verb1 "l"                    |||
+  verb1 "light"                |||
+  verb1 "lock"                 |||
+  verb1 "look"                 |||
+  verb1 "look at"              |||
+  verb1 "move"                 |||
+  verb1 "open"                 |||
+  verb1 "pet"                  |||
+  verb1 "play with"            |||
+  verb1 "put all in"           |||
+  verb1 "put all into"         |||
+  verb1 "read"                 |||
+  verb1 "search"               |||
+  verb1 "take"                 |||
+  verb1 "take all from"        |||
+  verb1 "throw"                |||
+  verb1 "turn off"             |||
+  verb1 "turn on"              |||
+  verb1 "unlock"               |||
+  verb1 "use"                  |||
+  verb1 "water grass with"     |||
+  verb1 "water the grass with" |||
 
   verb2 "close" "with"  |||
   verb2 "get" "from"    |||

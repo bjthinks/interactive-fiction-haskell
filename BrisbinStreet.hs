@@ -1036,7 +1036,7 @@ buildWorld = do
   setVerb1 "use" book onGetBook2
 
   let useSprinkler = do
-        stopIfNotAccessible "water grass with" sprinkler
+        stopIfNotAccessible "water the grass with" sprinkler
         let goodGrassLocs =
               [backyard, frontYard, nickYard, mikeYard, justinYard, motel,
                hauntedYard]
@@ -1055,12 +1055,12 @@ buildWorld = do
         addPoints 10 "watering the grass"
         setVerb1 "use" sprinkler alreadyRunning
         setVerb1 "turn on" sprinkler alreadyRunning
-        setVerb1 "water grass with" sprinkler alreadyRunning
+        setVerb1 "water the grass with" sprinkler alreadyRunning
         setVerb1 "get" sprinkler $ stop "You would get wet."
         setDescription2 sideYard healthyGrassStr
   setVerb1 "use" sprinkler useSprinkler
   setVerb1 "turn on" sprinkler useSprinkler
-  setVerb1 "water grass with" sprinkler useSprinkler
+  setVerb1 "water the grass with" sprinkler useSprinkler
 
   setMaxScore 125
 
