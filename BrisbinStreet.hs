@@ -82,8 +82,16 @@ buildWorld = do
     "armchairs, and a spindly palm tree sits in the corner next to a " ++
     "display case. To the south is Granny\'s front door, which goes back " ++
     "to the front yard."
-  newExit "north" frontYard living
-  newExit "south" living frontYard
+  enterHouse <- newExit "north" frontYard living
+  exitHouse <- newExit "south" living frontYard
+  frontDoorKey <- newObject living "front door key"
+    "This looks like the key to Granny\'s front door."
+  makeLocked enterHouse frontDoorKey
+  beforeGo exitHouse $ do
+    isLocked <- getIsLocked enterHouse
+    when isLocked $ do
+      msg "You unlock the front door before exiting."
+      setIsLocked enterHouse False
   setDescription2 living "It\'s hot and muggy in here."
   airConditioner <- newObject living "air conditioner" $
     "You see a beefy, 240 volt window unit air conditioner. It has plastic " ++
