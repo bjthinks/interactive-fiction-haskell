@@ -17,8 +17,6 @@ data Verb = Blank
           | Verb0 String
           | Verb1 String Ref
           | Verb2 String Ref String Ref
-          | Examine Ref
-          | Teleport Ref
           deriving Show
 
 doVerb :: Verb -> Game ()
@@ -39,51 +37,6 @@ doVerb (Verb2 verb dobj prep iobj) = do
   g iobj
   action <- getVerb2 verb dobj prep
   action iobj
-
-doVerb (Examine ref) = do
-  debug <- getDebug
-  unless debug $ stop $ "This command is only available in debug mode."
-  exists <- ifExists ref
-  unless exists $ stop $ "There is nothing with Ref " ++ show ref ++ "."
-  name <- getName ref
-  msg $ "Name: " ++ show name
-  article <- getArticle ref
-  msg $ "Article: " ++ show article
-  aliases <- getAliases ref
-  msg $ "Aliases: " ++ show aliases
-  desc <- getDescription ref
-  msg $ "Description: " ++ show desc
-  desc2 <- getDescription2 ref
-  msg $ "Description2: " ++ show desc2
-  location <- getLocation ref
-  msg $ "Location: " ++ show location
-  contents <- getContents' ref
-  msg $ "Contents: " ++ show contents
-  exits <- getExits ref
-  msg $ "Exits: " ++ show exits
-  path <- getPath ref
-  msg $ "Path: " ++ show path
-  isContainer <- getIsContainer ref
-  msg $ "isContainer: " ++ show isContainer
-  isLocked <- getIsLocked ref
-  msg $ "isLocked: " ++ show isLocked
-  m1 <- getVerb1Map ref
-  when debug $ msg $ "Verb1 keys: " ++ show (M.keys m1)
-  m2 <- getVerb2Map ref
-  when debug $ msg $ "Verb2 keys: " ++ show (M.keys m2)
-  g1 <- getGuard1Map ref
-  when debug $ msg $ "Guard1 keys: " ++ show (M.keys g1)
-  g2 <- getGuard2Map ref
-  when debug $ msg $ "Guard2 keys: " ++ show (M.keys g2)
-
-doVerb (Teleport ref) = do
-  debug <- getDebug
-  unless debug $ stop $ "This command is only available in debug mode."
-  exists <- ifExists ref
-  unless exists $ stop $ "There is nothing with Ref " ++ show ref ++ "."
-  player <- getPlayer
-  move player ref
-  doVerb $ Verb0 "look"
 
 -- Guard functions
 
@@ -165,6 +118,7 @@ setGuards = do
   let s f g x = f x (g x)
   s setDefaultGuard1 stopWith "close"
   s setDefaultGuard1 stopIfNotInInventory "drop"
+  setDefaultGuard1 "examine" $ \_ -> return ()
   setDefaultGuard1 "get" getTakeGuard
   setDefaultGuard1 "get all from" $ containerGuard "get things out of"
   setDefaultGuard1 "go" goGuard
@@ -173,6 +127,7 @@ setGuards = do
   s setDefaultGuard1 stopWith "open"
   setDefaultGuard1 "put all in" $ containerGuard "put things into"
   setDefaultGuard1 "search" searchGuard
+  setDefaultGuard1 "teleport" $ \_ -> return ()
   s setDefaultGuard1 stopAt "throw"
   s setDefaultGuard1 stopWith "unlock"
   setDefaultGuard2 "get" "from" getFromGuard
@@ -317,6 +272,7 @@ setDefaults = do
   setVerb0 "search" doSearch
   setVerb0 "wait" $ msg "You wait for a little while."
   setDefaultVerb1 "drop" defaultDrop
+  setDefaultVerb1 "examine" defaultExamine
   setDefaultVerb1 "get" defaultGet
   setDefaultVerb1 "get all from" defaultGetAllFrom
   setDefaultVerb1 "go" defaultGo
@@ -324,6 +280,7 @@ setDefaults = do
   setDefaultVerb1 "pet" defaultPet
   setDefaultVerb1 "put all in" defaultPutAllIn
   setDefaultVerb1 "search" defaultSearch
+  setDefaultVerb1 "teleport" defaultTeleport
   setDefaultVerb2 "get" "from" defaultGetFrom
   setDefaultVerb2 "lock" "with" defaultLockAndUnlock
   setDefaultVerb2 "open" "with" defaultOpen
@@ -393,6 +350,42 @@ defaultDrop ref = do
   move ref room
   name <- qualifiedName ref
   msg $ "You drop " ++ name ++ "."
+
+defaultExamine ref = do
+  debug <- getDebug
+  unless debug $ stop $ "This command is only available in debug mode."
+  exists <- ifExists ref
+  unless exists $ stop $ "There is nothing with Ref " ++ show ref ++ "."
+  name <- getName ref
+  msg $ "Name: " ++ show name
+  article <- getArticle ref
+  msg $ "Article: " ++ show article
+  aliases <- getAliases ref
+  msg $ "Aliases: " ++ show aliases
+  desc <- getDescription ref
+  msg $ "Description: " ++ show desc
+  desc2 <- getDescription2 ref
+  msg $ "Description2: " ++ show desc2
+  location <- getLocation ref
+  msg $ "Location: " ++ show location
+  contents <- getContents' ref
+  msg $ "Contents: " ++ show contents
+  exits <- getExits ref
+  msg $ "Exits: " ++ show exits
+  path <- getPath ref
+  msg $ "Path: " ++ show path
+  isContainer <- getIsContainer ref
+  msg $ "isContainer: " ++ show isContainer
+  isLocked <- getIsLocked ref
+  msg $ "isLocked: " ++ show isLocked
+  m1 <- getVerb1Map ref
+  when debug $ msg $ "Verb1 keys: " ++ show (M.keys m1)
+  m2 <- getVerb2Map ref
+  when debug $ msg $ "Verb2 keys: " ++ show (M.keys m2)
+  g1 <- getGuard1Map ref
+  when debug $ msg $ "Guard1 keys: " ++ show (M.keys g1)
+  g2 <- getGuard2Map ref
+  when debug $ msg $ "Guard2 keys: " ++ show (M.keys g2)
 
 defaultGet :: Ref -> Game ()
 defaultGet ref = do
@@ -477,6 +470,15 @@ defaultSearch :: Ref -> Game ()
 defaultSearch ref = do
   name <- qualifiedName ref
   msg $ "You look everywhere in " ++ name ++ " but don\'t find anything."
+
+defaultTeleport ref = do
+  debug <- getDebug
+  unless debug $ stop $ "This command is only available in debug mode."
+  exists <- ifExists ref
+  unless exists $ stop $ "There is nothing with Ref " ++ show ref ++ "."
+  player <- getPlayer
+  move player ref
+  doVerb $ Verb0 "look"
 
 defaultGetFrom :: Ref -> Ref -> Game ()
 defaultGetFrom item container = do

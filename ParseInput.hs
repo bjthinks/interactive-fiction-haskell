@@ -69,6 +69,13 @@ verb1 name = do
   eof
   return $ Verb1 (alias1 name) ref
 
+debug :: String -> MyParser Verb
+debug name = do
+  matchTokens $ words name
+  ref <- parseRef
+  eof
+  return $ Verb1 (alias1 name) ref
+
 alias1 :: String -> String
 alias1 "l" = "look"
 alias1 "look at" = "look"
@@ -100,13 +107,6 @@ implicitGo = do
   ref <- noun
   eof
   return $ Verb1 "go" ref
-
-debug :: String -> (Ref -> Verb) -> MyParser Verb
-debug name def = do
-  matchToken name
-  ref <- parseRef
-  eof
-  return $ def ref
 
 parseLine :: MyParser Verb
 parseLine =
@@ -167,8 +167,8 @@ parseLine =
   verb2 "throw" "at"    |||
   verb2 "unlock" "with" |||
 
-  debug "examine" Examine |||
-  debug "teleport" Teleport |||
+  debug "examine" |||
+  debug "teleport" |||
   implicitGo |||
   (eof >> return Blank)
 
