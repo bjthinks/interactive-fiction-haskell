@@ -880,7 +880,6 @@ buildWorld = do
     ""
   upSpiral <- newExit "up" hhStaircase hhLanding
   newExit "down" hhLanding hhStaircase
-  defaultGoUpSpiral <- getVerb1 "go" upSpiral
   setVerb1 "go" upSpiral $ stop $ "The black cat positions herself on " ++
     "the first step of the spiral staircase, bares her claws, arches " ++
     "her back, and hisses at you loudly! You are too scared to go " ++
@@ -943,7 +942,7 @@ buildWorld = do
           setVerb1 "drop" tuna defaultDropTuna
           clearVerb1 "eat" tuna
       friendlyKitty = do
-        setVerb1 "go" upSpiral defaultGoUpSpiral
+        clearVerb1 "go" upSpiral
         setDescription blackCat $ "Now what you\'ve fed her, this seems " ++
           "like a pretty friendly cat."
         setVerb1 "get" blackCat $ msg $ "You try to pick her up, but " ++
