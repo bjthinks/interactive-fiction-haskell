@@ -60,6 +60,7 @@ alias0 "i" = "inventory"
 alias0 "l" = "look"
 alias0 "quit" = "exit"
 alias0 "take all" = "get all"
+alias0 "water grass" = "water the grass"
 alias0 x = x
 
 verb1 :: String -> MyParser Verb
@@ -110,21 +111,23 @@ implicitGo = do
 
 parseLine :: MyParser Verb
 parseLine =
-  verb0 "debug off" |||
-  verb0 "debug on"  |||
-  verb0 "drop all"  |||
-  verb0 "exit"      |||
-  verb0 "get all"   |||
-  verb0 "help"      |||
-  verb0 "i"         |||
-  verb0 "inventory" |||
-  verb0 "l"         |||
-  verb0 "look"      |||
-  verb0 "quit"      |||
-  verb0 "score"     |||
-  verb0 "search"    |||
-  verb0 "take all"  |||
-  verb0 "wait"      |||
+  verb0 "debug off"       |||
+  verb0 "debug on"        |||
+  verb0 "drop all"        |||
+  verb0 "exit"            |||
+  verb0 "get all"         |||
+  verb0 "help"            |||
+  verb0 "i"               |||
+  verb0 "inventory"       |||
+  verb0 "l"               |||
+  verb0 "look"            |||
+  verb0 "quit"            |||
+  verb0 "score"           |||
+  verb0 "search"          |||
+  verb0 "take all"        |||
+  verb0 "wait"            |||
+  verb0 "water grass"     |||
+  verb0 "water the grass" |||
 
   verb1 "close"                |||
   verb1 "drink"                |||

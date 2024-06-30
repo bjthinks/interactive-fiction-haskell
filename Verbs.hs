@@ -271,6 +271,8 @@ setDefaults = do
   setVerb0 "score" doScore
   setVerb0 "search" doSearch
   setVerb0 "wait" $ msg "You wait for a little while."
+  setVerb0 "water the grass" $ stop
+    "What would you like to water the grass with?"
   setDefaultVerb1 "drop" defaultDrop
   setDefaultVerb1 "examine" defaultExamine
   setDefaultVerb1 "get" defaultGet
