@@ -825,7 +825,7 @@ buildWorld = do
       "take the skull key from the ghosts."
     defaultGetSkullKey
     addPoints 5 "turning the tables on the three ghosts"
-    setVerb1 "get" skullKey defaultGetSkullKey
+    clearVerb1 "get" skullKey
 
   hhKitchen <- newRoom "kitchen" $
     "This kitchen is a complete mess. Someone has thrown all of the dishes " ++
