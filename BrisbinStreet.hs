@@ -204,6 +204,10 @@ buildWorld = do
         setVerb1 "use" candle alreadyLit
         setVerb1 "light" candle alreadyLit
         setDescription2 candle "It is burning brightly."
+        setVerb2 "put" candle "in" $ \container -> do
+          containerName <- qualifiedName container
+          msg $ "It wouldn\'t be safe to put a lit candle in "
+            ++ containerName ++ "."
   setVerb1 "use" candle useCandleAction
   setVerb1 "light" candle useCandleAction
 

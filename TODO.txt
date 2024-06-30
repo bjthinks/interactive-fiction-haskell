@@ -23,5 +23,6 @@ use words in parser to eliminate verb1m'
 water grass -> What do you want to water the grass with?
 drop empty can of tuna -- restore default behavior. Check all defaults in
   BrisbinStreet. Search for default and for getVerb1.
-don't let lit candle go in a container
 consider read math book -> (After taking it out of the backpack) ?
+consider allowing "it" as a noun in the parser -- would have to check if
+  the ref is still visible before allowing it to be parsed
