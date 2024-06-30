@@ -5,6 +5,11 @@ import Control.Monad
 import Defs
 import Categories
 
+makePlayer :: Ref -> Game ()
+makePlayer player = do
+  setPlayer player
+  makeContainer player
+
 moveNowhere :: Ref -> Game ()
 moveNowhere ref = do
   maybeLoc <- getLocation ref

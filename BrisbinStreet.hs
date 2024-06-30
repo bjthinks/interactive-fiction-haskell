@@ -23,10 +23,9 @@ buildWorld = do
   player <- newObject brisbin "yourself" $
     "You are an eight year old boy with blond hair, " ++
     "wearing jeans, a t-shirt, and tennis shoes with tube socks."
-  addAliases player ["you", "self", "me"]
+  addAliases player ["you", "self", "me", "myself", "i"]
   setArticle player ""
-  setPlayer player
-  makeContainer player
+  makePlayer player
   backpack <- newObject player "backpack" "A blue canvas backpack."
   makeContainer backpack
   mathBook <- newObject backpack "math book" $
