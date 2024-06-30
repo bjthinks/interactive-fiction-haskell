@@ -555,6 +555,9 @@ buildWorld = do
     "There are a great many small brown and medium black ants coming " ++
     "and going out of anthills along the driveway. You wish you had a " ++
     "magnifying glass to use on the ants."
+  ants <- newObject driveway "ants" $
+    "You wish you could kill all these ants somehow."
+  makeImmobile ants
   newExit "east" driveway kitchen
   newExit "west" kitchen driveway
   newExit "southeast" driveway frontYard
@@ -571,6 +574,9 @@ buildWorld = do
     setDescription2 driveway $
       "There are a great many dead and burned ants littering the concrete " ++
       "driveway. You smile at your deed."
+    setDescription ants $
+      "The ants are mostly dead, especially the medium black ones. There " ++
+      "are still some small brown ones running around."
 
   garage <- newRoom "garage" $
     "Two cars are squeezed into this garage: a 1970s era yellow " ++
