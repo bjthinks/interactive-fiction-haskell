@@ -169,6 +169,7 @@ buildWorld = do
   setVerb1 "light" stove useStove
   setVerb1 "turn on" stove useStove
   setVerb1 "turn off" stove $ stop "The stove is already off."
+  setVerb2 "light" stove "with" $ \_ -> stop "The stove has a pilot light."
   matches <- newObject kitchen "matches" "A simple book of paper matches."
   addAlias matches "match"
   setVerb1 "use" matches $
