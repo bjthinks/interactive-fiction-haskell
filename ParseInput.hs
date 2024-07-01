@@ -160,6 +160,7 @@ parseLine =
   verb1 "water grass with"     |||
   verb1 "water the grass with" |||
 
+  verb2 "burn" "with"   |||
   verb2 "close" "with"  |||
   verb2 "get" "from"    |||
   verb2 "lock" "with"   |||

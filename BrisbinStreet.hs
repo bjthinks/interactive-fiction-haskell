@@ -565,18 +565,30 @@ buildWorld = do
 
   let noUseGlass = stop
         "There isn\'t anything to burn with the sun around here."
+      burnAnts = do
+        msg "You burn ant after ant with the sun, killing many of them."
+        addPoints 10 "being an exterminator"
+        setVerb1 "use" magnifyingGlass noUseGlass
+        setVerb2 "burn" ants "with" $ \tool -> do
+          checkTool tool
+          stop "The ants are already mostly dead."
+        setDescription2 driveway $
+          "There are a great many dead and burned ants littering the " ++
+          "concrete driveway. You smile at your deed."
+        setDescription ants $
+          "The ants are mostly dead, especially the medium black ones. " ++
+          "There are still some small brown ones running around."
+      checkTool tool = do
+        unless (tool == magnifyingGlass) $ do
+          toolName <- qualifiedName tool
+          stop $ "You can\'t burn the ants with " ++ toolName ++ "."
   setVerb1 "use" magnifyingGlass $ do
     room <- getRoom
     unless (room == driveway) noUseGlass
-    msg "You burn ant after ant with the sun, killing many of them."
-    addPoints 10 "being an exterminator"
-    setVerb1 "use" magnifyingGlass noUseGlass
-    setDescription2 driveway $
-      "There are a great many dead and burned ants littering the concrete " ++
-      "driveway. You smile at your deed."
-    setDescription ants $
-      "The ants are mostly dead, especially the medium black ones. There " ++
-      "are still some small brown ones running around."
+    burnAnts
+  setVerb2 "burn" ants "with" $ \tool -> do
+    checkTool tool
+    burnAnts
 
   garage <- newRoom "garage" $
     "Two cars are squeezed into this garage: a 1970s era yellow " ++
