@@ -1,5 +1,4 @@
 points:
-  use capsella toy (in bathtub)
   holy water in bathroom to throw at ghost
 add more immobile items for flavor
 boards creak in different place?
