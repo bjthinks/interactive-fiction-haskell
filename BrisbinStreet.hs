@@ -203,6 +203,7 @@ buildWorld = do
         let alreadyLit = stop "The candle is already lit."
         setVerb1 "use" candle alreadyLit
         setVerb1 "light" candle alreadyLit
+        setVerb2 "light" candle "with" $ \_ -> alreadyLit
         setDescription2 candle "It is burning brightly."
         setVerb2 "put" candle "in" $ \container -> do
           containerName <- qualifiedName container
@@ -210,6 +211,11 @@ buildWorld = do
             ++ containerName ++ "."
   setVerb1 "use" candle useCandleAction
   setVerb1 "light" candle useCandleAction
+  setVerb2 "light" candle "with" $ \lighter -> do
+    unless (lighter == matches) $ do
+      lighterName <- qualifiedName lighter
+      stop $ "You can\'t light the candle with " ++ lighterName ++ "."
+    useCandleAction
 
   hallway <- newRoom "hallway" $
     "This simple east-west hallway has a tiny five watt light fixture on " ++

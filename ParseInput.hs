@@ -163,6 +163,7 @@ parseLine =
   verb2 "burn" "with"   |||
   verb2 "close" "with"  |||
   verb2 "get" "from"    |||
+  verb2 "light" "with"  |||
   verb2 "lock" "with"   |||
   verb2 "open" "with"   |||
   verb2 "put" "in"      |||
