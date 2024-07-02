@@ -950,8 +950,9 @@ buildWorld = do
     "strung around the crown moulding. There is a king size four-poster " ++
     "bed richly adorned with elegant blankets and pillowcases. On one of " ++
     "the bedside stands is a large jack-o\'-lantern with a flickering " ++
-    "light inside, although no candle or light source can be seen. A huge " ++
-    "ghost stands right in front of you, and you are extremely scared!"
+    "light inside, although no candle or light source can be seen."
+  setDescription2 hhMasterBedroom
+    "A huge ghost stands right in front of you, and you are extremely scared!"
   newExit "west" hhAtrium hhMasterBedroom
   newExit "east" hhMasterBedroom hhAtrium
   boss <- newObject hhMasterBedroom "huge ghost" $
@@ -960,16 +961,22 @@ buildWorld = do
     "game. This is surely the source of evil in this house. Defeat it!"
   addAlias boss "ghost"
   makeImmobile boss
+  let winGame = do
+        msg $ "You throw the holy water at the huge ghost, and it breaks " ++
+          "on impact. The huge ghost is covered in water, and rapidly " ++
+          "dissolves! You have defeated it!"
+        addPoints 20 "defeating the boss of the Haunted House"
+        moveNowhere boss
+        moveNowhere flask
+        moveNowhere ghosts
+        setDescription2 hhMasterBedroom ""
+        clearVerb1 "search" hhMasterBedroom
   setVerb2 "throw" flask "at" $ \target -> do
     unless (target == boss) $ stop $
       "Surely there is something more important to do with the flask of " ++
       "holy water than that."
-    msg $ "You throw the holy water at the huge ghost, and it breaks on " ++
-      "impact. The huge ghost is covered in water, and rapidly dissolves! " ++
-      "You have defeated it!"
-    addPoints 20 "defeating the boss of the Haunted House"
-    moveNowhere boss
-    clearVerb1 "search" hhMasterBedroom
+    winGame
+  setVerb1 "use" flask winGame
 
   let panic = do
         msg $ "You are so frightened of the big ghost that you " ++
