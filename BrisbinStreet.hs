@@ -736,6 +736,12 @@ buildWorld = do
   setVerb1 "talk to" leah $ msg $
     "Leah says, \"Do you wanna play hide and seek? I want to play " ++
     "with you!\" (Type \"play with Leah\" to play hide and seek.)"
+  setVerb1 "play with" leah $ do
+    msg "Leah says, \"Hooray! Hide and seek! That\'s my favorite!\""
+    msg "Leah leaves to the south."
+    move leah upstairs
+    clearVerb1 "talk to" leah
+    clearVerb1 "play with" leah
 
   hauntedYard <- newRoom "haunted house yard" $
     "This is a very large white stucco two story house, with a sizeable " ++
