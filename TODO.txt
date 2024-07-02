@@ -1,7 +1,6 @@
 points:
   holy water in bathroom to throw at ghost
 add more immobile items for flavor
-boards creak in different place?
 describe hhLanding
 use glass on ants?
 consider handling plurals in error messages in Categories.hs (e.g. acorns)?
@@ -9,7 +8,5 @@ See if I can do better when the ParseError is an unexpected end of input
 use matches -- change to light match eventually?
 failUseDollhouse -- use cant
 turn on the bar light
-use words in parser to eliminate verb1m'
-consider read math book -> (After taking it out of the backpack) ??
 consider allowing "it" as a noun in the parser -- would have to check if
   the ref is still visible before allowing it to be parsed
