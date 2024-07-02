@@ -727,6 +727,12 @@ buildWorld = do
     "from which the property no doubt got its name."
   newExit "north" westBrisbin motel
   newExit "south" motel westBrisbin
+  leah <- newObject motel "Leah" $
+    "Leah is a five year old girl with straight blonde hair. She might " ++
+    "want to play with you. Please try \"talk to Leah\" or \"play with " ++
+    "Leah\""
+  setArticle leah ""
+  makeImmobile leah
 
   hauntedYard <- newRoom "haunted house yard" $
     "This is a very large white stucco two story house, with a sizeable " ++
