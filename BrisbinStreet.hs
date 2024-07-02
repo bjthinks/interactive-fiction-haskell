@@ -939,8 +939,8 @@ buildWorld = do
   batDoor <- newExit "west" hhLanding hhAtrium
   newExit "east" hhAtrium hhLanding
   beforeGo batDoor $ msg $
-    "As you go through the door, a big, scary bat flies past you. You feel " ++
-    "its wings against the top of your head!"
+    "As you go through the door, a big, scary, vampire bat flies past you. " ++
+    "You feel its wings against the top of your head!"
 
   atriumShortcut <- newExit "shortcut to atrium" brisbin hhAtrium
   addAlias atriumShortcut "t"
