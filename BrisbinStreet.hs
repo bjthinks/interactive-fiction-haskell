@@ -965,17 +965,12 @@ buildWorld = do
         move player hhAtrium
         doVerb $ Verb0 "look"
   setVerb1 "get" boss panic
-  setVerb1 "get all from" boss panic
   lookBoss <- getVerb1 "look" boss
   setVerb1 "look" boss $ do
     lookBoss
     panic
   setVerb1 "search" hhMasterBedroom panic -- TODO revert
   setVerb1 "search" boss panic
-  setVerb1 "pet" boss panic
-  setVerb1 "play with" boss panic
-  setVerb1 "throw" boss panic
-  setVerb1 "use" boss panic
 
   hhHallway <- newRoom "hallway" $
     "The wood paneling in this part of the house is particularly elegant. " ++
