@@ -958,12 +958,14 @@ buildWorld = do
     "" -- TODO describe ghost
   addAlias boss "ghost"
   makeImmobile boss
-  {-
+
   let panic = do
-    msg "You are so frightened of the big ghost that you run out of the room!"
-    move player hhAtrium
-    doVerb $ Verb0 "look"
-  -}
+        msg $ "You are so frightened of the big ghost that you " ++
+          "run out of the room!"
+        move player hhAtrium
+        doVerb $ Verb0 "look"
+  setVerb1 "search" hhMasterBedroom panic
+  setVerb1 "search" boss panic
 
   hhHallway <- newRoom "hallway" $
     "The wood paneling in this part of the house is particularly elegant. " ++
