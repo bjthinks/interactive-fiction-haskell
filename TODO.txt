@@ -1,5 +1,3 @@
-points:
-  holy water in bathroom to throw at ghost
 add more immobile items for flavor
 describe hhLanding
 use glass on ants?
