@@ -150,6 +150,7 @@ parseLine =
   verb1 "put all into"         |||
   verb1 "read"                 |||
   verb1 "search"               |||
+  verb1 "talk to"              |||
   verb1 "take"                 |||
   verb1 "take all from"        |||
   verb1 "throw"                |||

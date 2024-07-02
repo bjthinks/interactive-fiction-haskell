@@ -733,6 +733,9 @@ buildWorld = do
     "Leah\""
   setArticle leah ""
   makeImmobile leah
+  setVerb1 "talk to" leah $ msg $
+    "Leah says, \"Do you wanna play hide and seek? I want to play " ++
+    "with you!\" (Type \"play with Leah\" to play hide and seek.)"
 
   hauntedYard <- newRoom "haunted house yard" $
     "This is a very large white stucco two story house, with a sizeable " ++
