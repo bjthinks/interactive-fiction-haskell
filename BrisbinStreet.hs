@@ -955,9 +955,21 @@ buildWorld = do
   newExit "west" hhAtrium hhMasterBedroom
   newExit "east" hhMasterBedroom hhAtrium
   boss <- newObject hhMasterBedroom "huge ghost" $
-    "" -- TODO describe ghost
+    "This is a huge, round ghost with a gaping, toothy mouth and big eyes " ++
+    "with curved eyebrows. It looks like something out of a Nintendo 64 " ++
+    "game. This is surely the source of evil in this house. Defeat it!"
   addAlias boss "ghost"
   makeImmobile boss
+  setVerb2 "throw" flask "at" $ \target -> do
+    unless (target == boss) $ stop $
+      "Surely there is something more important to do with the flask of " ++
+      "holy water than that."
+    msg $ "You throw the holy water at the huge ghost, and it breaks on " ++
+      "impact. The huge ghost is covered in water, and rapidly dissolves! " ++
+      "You have defeated it!"
+    addPoints 20 "defeating the boss of the Haunted House"
+    moveNowhere boss
+    clearVerb1 "search" hhMasterBedroom
 
   let panic = do
         msg $ "You are so frightened of the big ghost that you " ++
@@ -1108,7 +1120,7 @@ buildWorld = do
   setVerb1 "turn on" sprinkler useSprinkler
   setVerb1 "water the grass with" sprinkler useSprinkler
 
-  setMaxScore 125
+  setMaxScore 145
 
   return ()
 
