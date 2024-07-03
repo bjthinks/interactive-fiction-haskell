@@ -428,6 +428,7 @@ buildWorld = do
   barLight <- newObject basementBar "light" $ "This is a small round light " ++
     "mounted on the far wall. The word BAR is on its globe in large, ornate " ++
     "capital letters."
+  addAlias barLight "bar light"
   makeImmobile barLight
   let lightOffDesc = "The light is currently off."
       lightOnDesc = "Light shines from the globe, illuminating the area."
