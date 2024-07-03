@@ -121,7 +121,7 @@ setHistory hist = do
 addHistory :: String -> Game ()
 addHistory h = do
   hs <- getHistory
-  setHistory (h:hs) -- reverse order
+  setHistory $ h:hs -- reverse order
 
 getThing :: Ref -> Game Thing
 getThing ref = (fromJust . M.lookup ref . things) <$> get
