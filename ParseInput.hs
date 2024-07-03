@@ -182,6 +182,7 @@ parseLine =
 handleInput :: Game ()
 handleInput = do
   input <- ask
+  addHistory input
   let inputLowercase = toLowerString input
       inputWords = words inputLowercase
       inputWithPositions = zipWith (,) [1..] inputWords
