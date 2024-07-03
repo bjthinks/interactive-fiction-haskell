@@ -5,6 +5,5 @@ consider handling plurals in error messages in Categories.hs (e.g. acorns)?
 See if I can do better when the ParseError is an unexpected end of input
 use matches -- change to light match eventually?
 failUseDollhouse -- use cant
-turn on the bar light
 consider allowing "it" as a noun in the parser -- would have to check if
   the ref is still visible before allowing it to be parsed
