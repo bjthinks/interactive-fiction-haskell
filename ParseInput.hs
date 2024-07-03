@@ -134,6 +134,7 @@ parseLine =
   verb1 "drop"                 |||
   verb1 "eat"                  |||
   verb1 "fill"                 |||
+  verb1 "find"                 |||
   verb1 "get"                  |||
   verb1 "get all from"         |||
   verb1 "go"                   |||

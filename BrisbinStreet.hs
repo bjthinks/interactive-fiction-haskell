@@ -728,19 +728,33 @@ buildWorld = do
   newExit "north" westBrisbin motel
   newExit "south" motel westBrisbin
   leah <- newObject motel "Leah" $
-    "Leah is a five year old girl with straight blonde hair. She might " ++
-    "want to play with you. Please try \"talk to Leah\" or \"play with " ++
-    "Leah\""
+    "Leah is a five year old girl with straight blonde hair."
+  setDescription2 leah $
+    "She might want to play with you. Please try \"talk to Leah\" or " ++
+    "\"play with Leah\"."
   setArticle leah ""
   makeImmobile leah
   setVerb1 "talk to" leah $ msg $
     "Leah says, \"Do you wanna play hide and seek? I want to play " ++
     "with you!\" (Type \"play with Leah\" to play hide and seek.)"
+  let foundLeah = do
+        msg "Leah says, \"You found me! You\'re good at this game!\""
+        msg "Leah goes down the stairs."
+        move leah motel
+        setVerb1 "talk to" leah $ msg $
+          "Leah says, \"I'm done playing for now. Thanks!\""
+        clearVerb1 "find" leah
+        addPoints 5 "playing with a fun child"
+        setDescription2 leah "She is done playing games with you."
   setVerb1 "play with" leah $ do
     msg "Leah says, \"Hooray! Hide and seek! That\'s my favorite!\""
     msg "Leah leaves to the south."
     move leah upstairs
-    clearVerb1 "talk to" leah
+    setDescription2 leah $
+      "She is playing hide and seek with you. Please type \"find Leah\" " ++
+      "to let her know you have found her!"
+    setVerb1 "talk to" leah foundLeah
+    setVerb1 "find" leah foundLeah
     clearVerb1 "play with" leah
 
   hauntedYard <- newRoom "haunted house yard" $
@@ -1142,7 +1156,7 @@ buildWorld = do
   setVerb1 "turn on" sprinkler useSprinkler
   setVerb1 "water the grass with" sprinkler useSprinkler
 
-  setMaxScore 145
+  setMaxScore 150
 
   return ()
 
