@@ -41,7 +41,8 @@ data GameState = GameState {
   score :: Int,
   maxScore :: Int,
   keepPlaying :: Bool,
-  debugFlag :: Bool }
+  debugFlag :: Bool,
+  commandHistory :: [String] } -- stored in reverse order
 
 startState = GameState {
   things = M.empty,
@@ -56,7 +57,8 @@ startState = GameState {
   score = 0,
   maxScore = 0,
   keepPlaying = True,
-  debugFlag = False }
+  debugFlag = False,
+  commandHistory = [] }
 
 type MoveInput = String
 type MoveOutput = String
@@ -107,6 +109,19 @@ setDebug :: Bool -> Game ()
 setDebug flag = do
   st <- get
   put $ st { debugFlag = flag }
+
+getHistory :: Game [String]
+getHistory = commandHistory <$> get
+
+setHistory :: [String] -> Game ()
+setHistory hist = do
+  st <- get
+  put st { commandHistory = hist }
+
+addHistory :: String -> Game ()
+addHistory h = do
+  hs <- getHistory
+  setHistory (h:hs) -- reverse order
 
 getThing :: Ref -> Game Thing
 getThing ref = (fromJust . M.lookup ref . things) <$> get
