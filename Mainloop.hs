@@ -27,12 +27,20 @@ runActions (action:actions) oldState = do
 mainloop :: GameState -> MaybeT (InputT IO) ()
 mainloop oldState = do
   line <- MaybeT $ getInputLine "> "
-  let (newState, response) = execRWS (runMaybeT handleInput) line oldState
-  liftIO $ putStr $ wordWrap response
-  let (nows, laters) = processDelayedActions $ delayedActions newState
-      newState2 = newState { delayedActions = laters }
-  newState3 <- runActions nows newState2
-  when (keepPlaying newState3) (mainloop newState3)
+  let command = take 5 line
+      filename = drop 5 line
+  if (command == "save " && filename /= "") then do
+    let hist = reverse $ commandHistory oldState
+    liftIO $ putStrLn $ "Saving game to filename " ++ filename ++ "."
+    liftIO $ writeFile filename $ unlines hist
+    mainloop oldState
+    else do
+    let (newState, response) = execRWS (runMaybeT handleInput) line oldState
+    liftIO $ putStr $ wordWrap response
+    let (nows, laters) = processDelayedActions $ delayedActions newState
+        newState2 = newState { delayedActions = laters }
+    newState3 <- runActions nows newState2
+    when (keepPlaying newState3) (mainloop newState3)
 
 startup :: Game () -> Game ()
 startup buildWorld = do
