@@ -17,12 +17,11 @@ processDelayedActions input = process [] [] input
       | t <= 0    = process (a:nows) laters is
       | otherwise = process nows ((t-1,a):laters) is
 
-runActions :: [Game ()] -> GameState -> MaybeT (InputT IO) GameState
-runActions [] st = return st
-runActions (action:actions) oldState = do
-  let (newState, response) = execRWS (runMaybeT action) "" oldState
-  liftIO $ putStr $ wordWrap response
-  runActions actions newState
+runActions :: [Game ()] -> String -> GameState -> (String, GameState)
+runActions [] response st = (response, st)
+runActions (action:actions) response oldState = do
+  let (newState, response') = execRWS (runMaybeT action) "" oldState
+  runActions actions (response ++ response') newState
 
 mainloop :: GameState -> MaybeT (InputT IO) ()
 mainloop oldState = do
@@ -39,7 +38,8 @@ mainloop oldState = do
     liftIO $ putStr $ wordWrap response
     let (nows, laters) = processDelayedActions $ delayedActions newState
         newState2 = newState { delayedActions = laters }
-    newState3 <- runActions nows newState2
+    let (response', newState3) = runActions nows "" newState2
+    liftIO $ putStr $ wordWrap response'
     when (keepPlaying newState3) (mainloop newState3)
 
 startup :: Game () -> Game ()
