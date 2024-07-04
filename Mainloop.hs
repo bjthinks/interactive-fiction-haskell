@@ -55,10 +55,11 @@ startup = do
   doVerb $ Verb0 "look"
   msg "Type help for a list of commands."
 
+mySettings :: Settings IO
+mySettings = setComplete noCompletion defaultSettings
+
 main :: IO ()
 main = do
   let (newState, response) = execRWS (runMaybeT startup) "" startState
   putStr $ wordWrap response
   void $ runInputT mySettings $ runMaybeT $ mainloop newState
-    where
-      mySettings = setComplete noCompletion defaultSettings
