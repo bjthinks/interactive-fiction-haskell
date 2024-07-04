@@ -23,6 +23,14 @@ runActions (action:actions) response oldState = do
   let (newState, response') = execRWS (runMaybeT action) "" oldState
   runActions actions (response ++ response') newState
 
+takeTurn :: String -> GameState -> (String, GameState)
+takeTurn line oldState =
+  let (newState, response) = execRWS (runMaybeT handleInput) line oldState
+      (nows, laters) = processDelayedActions $ delayedActions newState
+      newState2 = newState { delayedActions = laters }
+      (response', newState3) = runActions nows response newState2
+  in (response', newState3)
+
 mainloop :: GameState -> MaybeT (InputT IO) ()
 mainloop oldState = do
   line <- MaybeT $ getInputLine "> "
@@ -34,12 +42,9 @@ mainloop oldState = do
     liftIO $ writeFile filename $ unlines hist
     mainloop oldState
     else do
-    let (newState, response) = execRWS (runMaybeT handleInput) line oldState
-        (nows, laters) = processDelayedActions $ delayedActions newState
-        newState2 = newState { delayedActions = laters }
-        (response', newState3) = runActions nows response newState2
-    liftIO $ putStr $ wordWrap response'
-    when (keepPlaying newState3) (mainloop newState3)
+    let (response, newState) = takeTurn line oldState
+    liftIO $ putStr $ wordWrap response
+    when (keepPlaying newState) (mainloop newState)
 
 startup :: Game () -> Game ()
 startup buildWorld = do
