@@ -18,24 +18,29 @@ processDelayedActions input = process [] [] input
       | t <= 0    = process (a:nows) laters is
       | otherwise = process nows ((t-1,a):laters) is
 
-runActions :: [Game ()] -> String -> GameState -> (String, GameState)
-runActions [] response st = (response, st)
+runActions :: [Game ()] -> String -> GameState -> (GameState, String)
+runActions [] response st = (st, response)
 runActions (action:actions) response oldState = do
   let (newState, response') = execRWS (runMaybeT action) "" oldState
   runActions actions (response ++ response') newState
 
-takeTurn :: String -> GameState -> (String, GameState)
+takeTurn :: String -> GameState -> (GameState, String)
 takeTurn line oldState =
   let (newState, response) = execRWS (runMaybeT handleInput) line oldState
       (nows, laters) = processDelayedActions $ delayedActions newState
       newState2 = newState { delayedActions = laters }
-      (response', newState3) = runActions nows response newState2
-  in (response', newState3)
+  in runActions nows response newState2
 
 playback :: [String] -> GameState
-playback _ =
+playback input =
   let (newState, _) = execRWS (runMaybeT startup) "" startState
-  in newState
+  in takeTurns input newState
+  where
+    takeTurns :: [String] -> GameState -> GameState
+    takeTurns [] st = st
+    takeTurns (i:is) st =
+      let (st', _) = takeTurn i st
+      in takeTurns is st'
 
 mainloop :: GameState -> MaybeT (InputT IO) ()
 mainloop oldState = do
@@ -55,7 +60,7 @@ mainloop oldState = do
     liftIO $ putStr $ wordWrap response
     mainloop newState2
     else do
-    let (response, newState) = takeTurn line oldState
+    let (newState, response) = takeTurn line oldState
     liftIO $ putStr $ wordWrap response
     when (keepPlaying newState) (mainloop newState)
 
