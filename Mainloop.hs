@@ -32,6 +32,11 @@ takeTurn line oldState =
       (response', newState3) = runActions nows response newState2
   in (response', newState3)
 
+playback :: [String] -> GameState
+playback _ =
+  let (newState, _) = execRWS (runMaybeT startup) "" startState
+  in newState
+
 mainloop :: GameState -> MaybeT (InputT IO) ()
 mainloop oldState = do
   line <- MaybeT $ getInputLine "> "
@@ -42,6 +47,13 @@ mainloop oldState = do
     liftIO $ putStrLn $ "Saving game to filename " ++ filename ++ "."
     liftIO $ writeFile filename $ unlines hist
     mainloop oldState
+    else if command == "load " && filename /= "" then do
+    saveData <- liftIO $ readFile filename
+    let newState = playback $ lines saveData
+    let (newState2, response) = execRWS (runMaybeT $ doVerb $ Verb0 "look")
+          "" newState
+    liftIO $ putStr $ wordWrap response
+    mainloop newState2
     else do
     let (response, newState) = takeTurn line oldState
     liftIO $ putStr $ wordWrap response
