@@ -1,12 +1,11 @@
 {-# OPTIONS_GHC -fno-warn-unused-do-bind #-}
-module Main (main) where
+module BrisbinStreet (buildWorld) where
 
 import Defs
 import Things
 import Categories
 import Score
 import Actions
-import Mainloop
 import Verbs
 import Control.Monad
 import Data.Maybe
@@ -1160,6 +1159,3 @@ buildWorld = do
   setMaxScore 150
 
   return ()
-
-main :: IO ()
-main = playGame buildWorld

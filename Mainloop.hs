@@ -1,4 +1,4 @@
-module Mainloop(playGame) where
+module Main(main) where
 
 import System.Console.Haskeline
 import Control.Monad
@@ -8,6 +8,7 @@ import Defs
 import ParseInput
 import Verbs
 import WordWrap
+import BrisbinStreet
 
 processDelayedActions :: [(Int, Game())] -> ([Game ()], [(Int, Game())])
 processDelayedActions input = process [] [] input
@@ -46,18 +47,17 @@ mainloop oldState = do
     liftIO $ putStr $ wordWrap response
     when (keepPlaying newState) (mainloop newState)
 
-startup :: Game () -> Game ()
-startup buildWorld = do
+startup :: Game ()
+startup = do
   setDefaults
   setGuards
   buildWorld
   doVerb $ Verb0 "look"
   msg "Type help for a list of commands."
 
-playGame :: Game () -> IO ()
-playGame buildWorld = do
-  let (newState, response) =
-        execRWS (runMaybeT $ startup buildWorld) "" startState
+main :: IO ()
+main = do
+  let (newState, response) = execRWS (runMaybeT startup) "" startState
   putStr $ wordWrap response
   void $ runInputT mySettings $ runMaybeT $ mainloop newState
     where
