@@ -32,7 +32,6 @@ mainloop oldState = do
   if (command == "save " && filename /= "") then do
     let hist = reverse $ commandHistory oldState
     liftIO $ putStrLn $ "Saving game to filename " ++ filename ++ "."
-    -- TODO detect filename exists and refuse to overwrite it
     liftIO $ writeFile filename $ unlines hist
     mainloop oldState
     else do
