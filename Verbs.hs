@@ -320,6 +320,8 @@ doHelp = do
   msg $ "You can type the name of an exit to go that direction, and there " ++
     "are shorthand names for commonly named exits. So \"go n\" or just " ++
     "\"n\" is short for \"go north\"."
+  msg $ "You can save and load games with the save filename and load " ++
+    "filename commands."
 
 doInventory :: Game ()
 doInventory = do
