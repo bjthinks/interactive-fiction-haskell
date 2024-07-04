@@ -35,10 +35,9 @@ mainloop oldState = do
     mainloop oldState
     else do
     let (newState, response) = execRWS (runMaybeT handleInput) line oldState
-    liftIO $ putStr $ wordWrap response
-    let (nows, laters) = processDelayedActions $ delayedActions newState
+        (nows, laters) = processDelayedActions $ delayedActions newState
         newState2 = newState { delayedActions = laters }
-    let (response', newState3) = runActions nows "" newState2
+        (response', newState3) = runActions nows response newState2
     liftIO $ putStr $ wordWrap response'
     when (keepPlaying newState3) (mainloop newState3)
 
