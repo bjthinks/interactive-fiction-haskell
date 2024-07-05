@@ -7,3 +7,4 @@ use matches -- change to light match eventually?
 failUseDollhouse -- use cant
 consider allowing "it" as a noun in the parser -- would have to check if
   the ref is still visible before allowing it to be parsed
+search x where x is an animal -> can't
