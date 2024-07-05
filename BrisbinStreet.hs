@@ -677,6 +677,10 @@ buildWorld = do
     msg "You gently set Misty down."
     room <- getRoom
     move misty room
+  putMistyIn <- getVerb2 "put" misty "in"
+  setVerb2 "put" misty "in" $ \container -> do
+    putMistyIn container
+    when (container == backpack) $ msg "Misty loves your backpack."
   let happyMisty = do
         msg $ "You gently pet Misty between her eyes and nose. " ++
           "She excitedly hops about; she loves being pet there."
