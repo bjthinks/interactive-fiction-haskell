@@ -345,6 +345,8 @@ doScore = do
 doSearch :: Game ()
 doSearch = do
   room <- getRoom
+  name <- qualifiedName room
+  msg $ "(" ++ name ++ ")"
   action <- getVerb1 "search" room
   action
 
