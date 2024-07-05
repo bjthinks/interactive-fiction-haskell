@@ -921,6 +921,8 @@ buildWorld = do
     "This is a metal and plastic can opener of a common style that you " ++
     "have seen many times before. The handles are red."
   addAlias canOpener "opener"
+  setVerb1 "use" canOpener $ stop
+    "Instead of using the can opener, please open something with it."
   tuna <- newObject hhKitchen "can of tuna"
     "A can of StarKist brand skipjack tuna."
   addAliases tuna ["tuna", "can"]
