@@ -215,6 +215,9 @@ buildWorld = do
     unless (lighter == matches) $ do
       lighterName <- qualifiedName lighter
       stop $ "You can\'t light the candle with " ++ lighterName ++ "."
+    matchesLoc <- getLocation matches
+    unless (matchesLoc == Just player) $ stop
+      "You need to be holding the matches."
     useCandleAction
 
   hallway <- newRoom "hallway" $
