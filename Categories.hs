@@ -105,7 +105,7 @@ stopIfInRoom :: String -> Ref -> Game ()
 stopIfInRoom verb ref = do
   flag <- isInRoom ref
   -- name <- qualifiedName ref
-  when flag $ stop $ "You can\'t " ++ verb ++ " something in the area with you."
+  when flag $ stop $ "You can\'t " ++ verb ++ " an object in your room."
 
 stopIfInOpenContainer :: String -> Ref -> Game ()
 stopIfInOpenContainer verb ref = do
