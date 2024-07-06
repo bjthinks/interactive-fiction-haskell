@@ -69,8 +69,7 @@ startState = GameState {
     get :: Game GameState -- get the current state of the game
     put :: GameState -> Game () -- replace the state with a new one
     mzero :: Game () -- stop execution of the current and all enclosing "do"
-      blocks, and return to Mainloop where execRWS (runMaybeT ...) has been
-      called.
+      blocks, and return to Mainloop where execGame has been called.
   tell and mzero are usually used via helper functions msg and stop defined
   below.
 -}
