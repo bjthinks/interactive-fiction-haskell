@@ -21,19 +21,19 @@ processDelayedActions input = process [] [] input
 runActions :: [Game ()] -> String -> GameState -> (GameState, String)
 runActions [] response st = (st, response)
 runActions (action:actions) response oldState = do
-  let (newState, response') = execRWS (runMaybeT action) "" oldState
+  let (newState, response') = execGame action "" oldState
   runActions actions (response ++ response') newState
 
 takeTurn :: String -> GameState -> (GameState, String)
 takeTurn line oldState =
-  let (newState, response) = execRWS (runMaybeT handleInput) line oldState
+  let (newState, response) = execGame handleInput line oldState
       (nows, laters) = processDelayedActions $ delayedActions newState
       newState2 = newState { delayedActions = laters }
   in runActions nows response newState2
 
 playback :: [String] -> GameState
 playback input =
-  let (newState, _) = execRWS (runMaybeT startup) "" startState
+  let newState = fst doStartup
   in takeTurns input newState
   where
     takeTurns :: [String] -> GameState -> GameState
@@ -55,8 +55,7 @@ mainloop oldState = do
     else if command == "load " && filename /= "" then do
     saveData <- liftIO $ readFile filename
     let newState = playback $ lines saveData
-    let (newState2, response) = execRWS (runMaybeT $ doVerb $ Verb0 "look")
-          "" newState
+    let (newState2, response) = execGame (doVerb $ Verb0 "look") "" newState
     liftIO $ putStr $ wordWrap response
     mainloop newState2
     else do
@@ -72,11 +71,14 @@ startup = do
   doVerb $ Verb0 "look"
   msg "Type help for a list of commands."
 
+doStartup :: (GameState, String)
+doStartup = execGame startup "" startState
+
 mySettings :: Settings IO
 mySettings = setComplete noCompletion defaultSettings
 
 main :: IO ()
 main = do
-  let (newState, response) = execRWS (runMaybeT startup) "" startState
+  let (newState, response) = doStartup
   putStr $ wordWrap response
   void $ runInputT mySettings $ runMaybeT $ mainloop newState
