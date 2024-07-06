@@ -60,6 +60,21 @@ startState = GameState {
   debugFlag = False,
   commandHistory = [] }
 
+{-
+  The monad Game a is used very heavily in this program. It is a combination
+  of the Reader, Writer, State, and Maybe monads. Thus, the fundamental
+  operations available in Game a are:
+    ask :: Game String -- Get the user's input string, if any
+    tell :: String -> Game () -- Queue up a string for printing to the user
+    get :: Game GameState -- get the current state of the game
+    put :: GameState -> Game () -- replace the state with a new one
+    mzero :: Game () -- stop execution of the current and all enclosing "do"
+      blocks, and return to Mainloop where execRWS (runMaybeT ...) has been
+      called.
+  tell and mzero are usually used via helper functions msg and stop defined
+  below.
+-}
+
 type MoveInput = String
 type MoveOutput = String
 type Game = MaybeT (RWS MoveInput MoveOutput GameState)
