@@ -18,18 +18,13 @@ processDelayedActions input = process [] [] input
       | t <= 0    = process (a:nows) laters is
       | otherwise = process nows ((t-1,a):laters) is
 
-runActions :: [Game ()] -> String -> GameState -> (GameState, String)
-runActions [] response st = (st, response)
-runActions (action:actions) response oldState = do
-  let (newState, response') = execGame action "" oldState
-  runActions actions (response ++ response') newState
-
 takeTurn :: String -> GameState -> (GameState, String)
 takeTurn line oldState =
   let (newState, response) = execGame handleInput line oldState
       (nows, laters) = processDelayedActions $ delayedActions newState
       newState2 = newState { delayedActions = laters }
-  in runActions nows response newState2
+      (newState3, response2) = sequenceGame nows newState2
+  in (newState3, response ++ response2)
 
 playback :: [String] -> GameState
 playback input =

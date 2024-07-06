@@ -408,7 +408,14 @@ defaultGetAllFrom container = do
   containerName <- qualifiedName container
   when (contents == []) $ stop $ capitalize containerName ++ " is empty."
   let getFromContainer item = Verb2 "get" item "from" container
-  mapM_ (doVerb . getFromContainer) contents
+  -- we can't use mapM or sequence below because one of the actions might
+  -- execute "stop" (or mzero), which would prevent the rest of the actions
+  -- in the list from running at all.
+  oldState <- get
+  let (newState, response) =
+        sequenceGame (map (doVerb . getFromContainer) contents) oldState
+  tell response
+  put newState
 
 defaultGo :: Ref -> Game ()
 defaultGo ref = do
@@ -470,7 +477,14 @@ defaultPutAllIn container = do
   when (thingsToPutIn == []) $ stop $ "You don\'t have anything to put in " ++
     containerName ++ "."
   let putInContainer = \item -> Verb2 "put" item "in" container
-  mapM_ (doVerb . putInContainer) thingsToPutIn
+  -- we can't use mapM or sequence below because one of the actions might
+  -- execute "stop" (or mzero), which would prevent the rest of the actions
+  -- in the list from running at all.
+  oldState <- get
+  let (newState, response) =
+        sequenceGame (map (doVerb . putInContainer) thingsToPutIn) oldState
+  tell response
+  put newState
 
 defaultSearch :: Ref -> Game ()
 defaultSearch ref = do
