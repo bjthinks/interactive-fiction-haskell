@@ -996,7 +996,7 @@ buildWorld = do
     "light inside, although no candle or light source can be seen."
   setDescription2 hhMasterBedroom
     "A huge ghost stands right in front of you, and you are extremely scared!"
-  newExit "west" hhAtrium hhMasterBedroom
+  enterMasterBedroom <- newExit "west" hhAtrium hhMasterBedroom
   newExit "east" hhMasterBedroom hhAtrium
   boss <- newObject hhMasterBedroom "huge ghost" $
     "This is a huge, round ghost with a gaping, toothy mouth and big eyes " ++
@@ -1013,7 +1013,6 @@ buildWorld = do
         moveNowhere flask
         moveNowhere ghosts
         setDescription2 hhMasterBedroom ""
-        clearVerb1 "search" hhMasterBedroom
   setVerb2 "throw" flask "at" $ \target -> do
     unless (target == boss) $ stop $
       "Surely there is something more important to do with the flask of " ++
@@ -1022,17 +1021,14 @@ buildWorld = do
   setVerb1 "use" flask winGame
 
   let panic = do
-        msg $ "You are so frightened of the big ghost that you " ++
+        room <- getRoom
+        bossLoc <- getLocation boss
+        unless (Just room == bossLoc) mzero
+        msg $ "You are so frightened of the huge ghost that you " ++
           "run out of the room!"
         move player hhAtrium
         doVerb $ Verb0 "look"
-  setVerb1 "get" boss panic
-  lookBoss <- getVerb1 "look" boss
-  setVerb1 "look" boss $ do
-    lookBoss
-    panic
-  setVerb1 "search" hhMasterBedroom panic -- TODO revert
-  setVerb1 "search" boss panic
+  beforeGo enterMasterBedroom $ queueAction 2 panic
 
   hhHallway <- newRoom "hallway" $
     "The wood paneling in this part of the house is particularly elegant. " ++
