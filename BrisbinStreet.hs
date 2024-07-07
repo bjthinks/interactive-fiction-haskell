@@ -956,7 +956,7 @@ buildWorld = do
     brisbin hhKitchen
   addAlias shortcut "k"
 
-  hhMusicRoom <- newRoom "landing" $
+  hhMusicRoom <- newRoom "music room" $
     "This ornately decorated room has a concert grand piano in the middle " ++
     "of it. The piano is softly playing music, despite the absence of a " ++
     "player. It sounds like the soundtrack of a horror movie. A bench with " ++
