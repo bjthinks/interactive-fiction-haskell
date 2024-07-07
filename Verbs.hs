@@ -407,15 +407,10 @@ defaultGetAllFrom container = do
   -- contents will not include the player
   containerName <- qualifiedName container
   when (contents == []) $ stop $ capitalize containerName ++ " is empty."
-  let getFromContainer item = Verb2 "get" item "from" container
-  -- we can't use mapM or sequence below because one of the actions might
-  -- execute "stop" (or mzero), which would prevent the rest of the actions
-  -- in the list from running at all.
-  oldState <- get
-  let (newState, response) =
-        sequenceGame (map (doVerb . getFromContainer) contents) oldState
-  tell response
-  put newState
+  let getFromContainer item = doVerb $ Verb2 "get" item "from" container
+  -- The mplus below assures that the list of actions continues executing
+  -- even if one of them uses stop or mzero.
+  mapM_ (flip mplus (return ()) . getFromContainer) contents
 
 defaultGo :: Ref -> Game ()
 defaultGo ref = do
@@ -476,15 +471,10 @@ defaultPutAllIn container = do
   containerName <- qualifiedName container
   when (thingsToPutIn == []) $ stop $ "You don\'t have anything to put in " ++
     containerName ++ "."
-  let putInContainer = \item -> Verb2 "put" item "in" container
-  -- we can't use mapM or sequence below because one of the actions might
-  -- execute "stop" (or mzero), which would prevent the rest of the actions
-  -- in the list from running at all.
-  oldState <- get
-  let (newState, response) =
-        sequenceGame (map (doVerb . putInContainer) thingsToPutIn) oldState
-  tell response
-  put newState
+  let putInContainer = \item -> doVerb $ Verb2 "put" item "in" container
+  -- The mplus below assures that the list of actions continues executing
+  -- even if one of them uses stop or mzero.
+  mapM_ (flip mplus (return ()) . putInContainer) thingsToPutIn
 
 defaultSearch :: Ref -> Game ()
 defaultSearch ref = do

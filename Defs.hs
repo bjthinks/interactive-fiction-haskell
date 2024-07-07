@@ -81,19 +81,6 @@ type Game = MaybeT (RWS MoveInput MoveOutput GameState)
 execGame :: Game a -> MoveInput -> GameState -> (GameState, MoveOutput)
 execGame action = execRWS (runMaybeT action)
 
--- This is needed for "get all from" and "put all in". It can't use
--- sequence, because a stop command in one of the actions should not
--- stop the whole list of actions.
-sequenceGame :: [Game a] -> GameState -> (GameState, MoveOutput)
-sequenceGame actions = sequenceGame' actions ""
-  where
-    sequenceGame' :: [Game a] -> MoveOutput -> GameState ->
-      (GameState, MoveOutput)
-    sequenceGame' [] response oldState = (oldState, response)
-    sequenceGame' (a:as) partialResponse oldState =
-      let (newState, nextResponse) = execGame a "" oldState
-      in sequenceGame' as (partialResponse ++ nextResponse) newState
-
 msg :: String -> Game ()
 msg str = tell str >> tell "\n"
 
