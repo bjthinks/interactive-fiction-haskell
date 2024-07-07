@@ -956,10 +956,15 @@ buildWorld = do
     brisbin hhKitchen
   addAlias shortcut "k"
 
-  hhLanding <- newRoom "landing" $
-    ""
-  upSpiral <- newExit "up" hhStaircase hhLanding
-  newExit "down" hhLanding hhStaircase
+  hhMusicRoom <- newRoom "landing" $
+    "This ornately decorated room has a concert grand piano in the middle " ++
+    "of it. The piano is softly playing music, despite the absence of a " ++
+    "player. It sounds like the soundtrack of a horror movie. A bench with " ++
+    "many pillows circles the exterior of the room, with gaps for the " ++
+    "spiral staircase landing and a door to the west. There is a patch of " ++
+    "black fur on the floor where the kitty of the house evidently sleeps."
+  upSpiral <- newExit "up" hhStaircase hhMusicRoom
+  newExit "down" hhMusicRoom hhStaircase
   setVerb1 "go" upSpiral $ stop $ "The black cat positions herself on " ++
     "the first step of the spiral staircase, bares her claws, arches " ++
     "her back, and hisses at you loudly! You are too scared to go " ++
@@ -974,8 +979,8 @@ buildWorld = do
     "There is an ornate door to the west: it must be the master bedroom. " ++
     "Strangely, there is no doorknob or handle to be seen; only a keyhole " ++
     "to unlock it."
-  batDoor <- newExit "west" hhLanding hhAtrium
-  newExit "east" hhAtrium hhLanding
+  batDoor <- newExit "west" hhMusicRoom hhAtrium
+  newExit "east" hhAtrium hhMusicRoom
   beforeGo batDoor $ msg $
     "As you go through the door, a big, scary, vampire bat flies past you. " ++
     "You feel its wings against the top of your head!"
@@ -1063,7 +1068,7 @@ buildWorld = do
         queueAction 4 prowl1
       prowl1 = do
         kittyMessage "The black cat walks up the spiral staircase."
-        move blackCat hhLanding
+        move blackCat hhMusicRoom
         kittyMessage "The black cat arrives from below and purrs at you."
         queueAction 3 prowl2
       prowl2 = do
@@ -1085,7 +1090,7 @@ buildWorld = do
         queueAction 3 prowl5
       prowl5 = do
         kittyMessage "The black cat slinks off to the east."
-        move blackCat hhLanding
+        move blackCat hhMusicRoom
         kittyMessage $ "The black cat arrives from the west. She stretches " ++
           "and sharpens her claws on the carpet."
         queueAction 3 prowl6
