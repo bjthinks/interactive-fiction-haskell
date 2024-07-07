@@ -1043,6 +1043,15 @@ buildWorld = do
   newExit "north" hhAtrium hhHallway
   newExit "south" hhHallway hhAtrium
 
+  hhDressingRoom <- newRoom "dressing room" $
+    "This room appears to be overflow storage for everyone\'s clothing. " ++
+    "It is chock full of Halloween costumes. You see pirates, ninjas, " ++
+    "robots, animals, and especially ghosts. There is even a whole section " ++
+    "of bunny costumes. The house\'s butler is floating in the air, and " ++
+    "there is a large lever on the far wall."
+  newExit "east" hhHallway hhDressingRoom
+  newExit "west" hhDressingRoom hhHallway
+
   defaultDropTuna <- getVerb1 "drop" tuna
   let checkIfKittyEatsTuna = do
         tunaLoc <- getLocation tuna
