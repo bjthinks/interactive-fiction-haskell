@@ -1048,6 +1048,22 @@ buildWorld = do
   newExit "east" hhHallway hhDressingRoom
   newExit "west" hhDressingRoom hhHallway
 
+  hhWestBedroom <- newRoom "west bedroom" $
+    ""
+  enterWestBedroom <- newExit "north" hhHallway hhWestBedroom
+  newExit "south" hhWestBedroom hhHallway
+  setIsLocked enterWestBedroom True
+  let noKeyhole = stop "The door has no keyhole."
+  setVerb2 "unlock" enterWestBedroom "with" $ \_ -> noKeyhole
+  setVerb2 "lock" enterWestBedroom "with" $ \_ -> noKeyhole
+
+  hhEastBedroom <- newRoom "east bedroom" $
+    ""
+  enterEastBedroom <- newExit "northeast" hhHallway hhEastBedroom
+  newExit "southwest" hhEastBedroom hhHallway
+  setVerb2 "unlock" enterEastBedroom "with" $ \_ -> noKeyhole
+  setVerb2 "lock" enterEastBedroom "with" $ \_ -> noKeyhole
+
   defaultDropTuna <- getVerb1 "drop" tuna
   let checkIfKittyEatsTuna = do
         tunaLoc <- getLocation tuna
