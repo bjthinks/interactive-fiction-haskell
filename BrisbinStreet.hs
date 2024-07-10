@@ -1085,8 +1085,13 @@ buildWorld = do
   setVerb2 "lock" enterWestBedroom "with" noKeyhole
   hhNightstand <- newObject hhWestBedroom "nightstand"
     "This is a small nightstand with both drawers wide open."
+  addAlias hhNightstand "stand"
   makeImmobile hhNightstand
   makeContainer hhNightstand
+  bunnyHood <- newObject hhNightstand "bunny hood" $
+    "This is a hat with two big tan ears with pink insides. The ears are " ++
+    "spring loaded and bounce around when you walk."
+  addAlias bunnyHood "hood"
 
   hhEastBedroom <- newRoom "east bedroom" $
     ""
