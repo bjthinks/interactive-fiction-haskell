@@ -984,6 +984,10 @@ buildWorld = do
   beforeGo batDoor $ msg $
     "As you go through the door, a big, scary, vampire bat flies past you. " ++
     "You feel its wings against the top of your head!"
+  plant <- newObject hhAtrium "small plant" $
+    "This is a small monstera plant with holes and slits in its leaves, " ++
+    "in a plain clay pot."
+  addAlias plant "plant"
 
   atriumShortcut <- newExit "shortcut to atrium" brisbin hhAtrium
   addAlias atriumShortcut "t"
@@ -1063,6 +1067,14 @@ buildWorld = do
   newExit "southwest" hhEastBedroom hhHallway
   setVerb2 "unlock" enterEastBedroom "with" $ \_ -> noKeyhole
   setVerb2 "lock" enterEastBedroom "with" $ \_ -> noKeyhole
+
+  setVerb1 "get" plant $ do
+    move plant player
+    room <- getRoom
+    when (room /= hhAtrium) $ stop "You get the small plant."
+    msg "You hear a click as you get the small plant."
+    setIsLocked enterWestBedroom False
+    setIsLocked enterEastBedroom True
 
   defaultDropTuna <- getVerb1 "drop" tuna
   let checkIfKittyEatsTuna = do
