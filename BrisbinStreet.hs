@@ -1075,6 +1075,13 @@ buildWorld = do
     msg "You hear a click as you get the small plant."
     setIsLocked enterWestBedroom False
     setIsLocked enterEastBedroom True
+  setVerb1 "drop" plant $ do
+    room <- getRoom
+    move plant room
+    when (room /= hhAtrium) $ stop "You drop the small plant."
+    msg "You hear a click as you drop the small plant."
+    setIsLocked enterWestBedroom True
+    setIsLocked enterEastBedroom False
 
   defaultDropTuna <- getVerb1 "drop" tuna
   let checkIfKittyEatsTuna = do
