@@ -57,6 +57,7 @@ buildWorld = do
   squirrel <- newObject frontYard "squirrel" $
     "A common grey squirrel. She is high up in one of the oak trees in " ++
     "the yard. She looks at you as if she is expecting something."
+  makeCreature squirrel
   let highInTree = msg "The squirrel is high up in a tree."
   setVerb1 "get" squirrel highInTree
   setVerb1 "pet" squirrel highInTree
@@ -262,6 +263,7 @@ buildWorld = do
     "This is a Gabby doll. It looks like she wants to be in her dollhouse."
   setArticle gabby ""
   addAliases gabby ["doll", "the doll"]
+  makeCreature gabby
   setGuard1 "use" dollhouse $ do
     let verb = "use"
     stopIfPlayer verb dollhouse
@@ -567,6 +569,7 @@ buildWorld = do
     "magnifying glass to use on the ants."
   ants <- newObject driveway "ants" $
     "You wish you could kill all these ants somehow."
+  makeCreature ants
   makeImmobile ants
   newExit "east" driveway kitchen
   newExit "west" kitchen driveway
@@ -673,6 +676,7 @@ buildWorld = do
     "collar. She would like it if you pet her."
   setArticle misty ""
   addAliases misty ["bunny", "rabbit", "the bunny", "the rabbit"]
+  makeCreature misty
   setVerb1 "get" misty $ do
     msg "Misty likes being picked up and snuggles into your arms."
     move misty player
@@ -717,6 +721,7 @@ buildWorld = do
     "all of his body."
   setArticle bimbo ""
   addAliases bimbo ["cat", "the cat"]
+  makeCreature bimbo
   setVerb1 "pet" bimbo $ msg "Bimbo purrs and rubs up against you."
 
   westBrisbin <- newRoom "west Brisbin Street" $
@@ -741,6 +746,7 @@ buildWorld = do
     "\"play with Leah\"."
   setArticle leah ""
   makeImmobile leah
+  makeCreature leah
   setVerb1 "talk to" leah $ msg $
     "Leah says, \"Do you wanna play hide and seek? I want to play " ++
     "with you!\" (Type \"play with Leah\" to play hide and seek.)"
@@ -889,6 +895,7 @@ buildWorld = do
     "guarding something."
   addAlias ghosts "ghosts"
   makeImmobile ghosts
+  makeCreature ghosts
   skullKey <- newObject hhDiningRoom "skull key" $
     "This key has a tiny metal skull on its handle. Who knows what it " ++
     "unlocks?"
@@ -947,6 +954,7 @@ buildWorld = do
     "This cat arches its back and hisses when you look at it. It stares at " ++
     "you creepily."
   addAliases blackCat ["cat", "kitty"]
+  makeCreature blackCat
   setVerb1 "get" blackCat $ msg $ "The cat bares its claws and hisses. " ++
     "There is no way you would try to pick up such an unfriendly cat."
   setVerb1 "pet" blackCat $ msg
@@ -1008,6 +1016,7 @@ buildWorld = do
     "game. This is surely the source of evil in this house. Defeat it!"
   addAlias boss "ghost"
   makeImmobile boss
+  makeCreature boss
   let winGame = do
         msg $ "You throw the holy water at the huge ghost, and it breaks " ++
           "on impact. The huge ghost is covered in water, and rapidly " ++
@@ -1057,16 +1066,16 @@ buildWorld = do
   enterWestBedroom <- newExit "north" hhHallway hhWestBedroom
   newExit "south" hhWestBedroom hhHallway
   setIsLocked enterWestBedroom True
-  let noKeyhole = stop "The door has no keyhole."
-  setVerb2 "unlock" enterWestBedroom "with" $ \_ -> noKeyhole
-  setVerb2 "lock" enterWestBedroom "with" $ \_ -> noKeyhole
+  let noKeyhole _ = stop "The door has no keyhole."
+  setVerb2 "unlock" enterWestBedroom "with" noKeyhole
+  setVerb2 "lock" enterWestBedroom "with" noKeyhole
 
   hhEastBedroom <- newRoom "east bedroom" $
     ""
   enterEastBedroom <- newExit "northeast" hhHallway hhEastBedroom
   newExit "southwest" hhEastBedroom hhHallway
-  setVerb2 "unlock" enterEastBedroom "with" $ \_ -> noKeyhole
-  setVerb2 "lock" enterEastBedroom "with" $ \_ -> noKeyhole
+  setVerb2 "unlock" enterEastBedroom "with" noKeyhole
+  setVerb2 "lock" enterEastBedroom "with" noKeyhole
 
   setVerb1 "get" plant $ do
     move plant player

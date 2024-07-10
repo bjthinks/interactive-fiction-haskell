@@ -39,6 +39,12 @@ makeImmobile ref = setVerb1 "get" ref $ do
   name <- qualifiedName ref
   msg $ "You can\'t take " ++ name ++ "."
 
+makeCreature :: Ref -> Game ()
+makeCreature ref = do
+  setVerb1 "search" ref $ do
+    name <- qualifiedName ref
+    stop $ capitalize name ++ " would not appreciate that."
+
 disconnect :: Ref -> Game ()
 disconnect exit = do
   maybePath <- getPath exit
