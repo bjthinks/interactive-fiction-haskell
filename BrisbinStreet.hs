@@ -1073,13 +1073,20 @@ buildWorld = do
     "pair of slippers.\""
 
   hhWestBedroom <- newRoom "west bedroom" $
-    ""
+    "This bedroom is profoundly messy. There are piles of clothes on the " ++
+    "floor, and it\'s not even clear which ones are clean or dirty. The " ++
+    "dresser drawers are open, and things are hanging out. The closet is " ++
+    "full of stuff. The bed is unmade, and the bedding is askew."
   enterWestBedroom <- newExit "north" hhHallway hhWestBedroom
   newExit "south" hhWestBedroom hhHallway
   setIsLocked enterWestBedroom True
   let noKeyhole _ = stop "The door has no keyhole."
   setVerb2 "unlock" enterWestBedroom "with" noKeyhole
   setVerb2 "lock" enterWestBedroom "with" noKeyhole
+  hhNightstand <- newObject hhWestBedroom "nightstand"
+    "This is a small nightstand with both drawers wide open."
+  makeImmobile hhNightstand
+  makeContainer hhNightstand
 
   hhEastBedroom <- newRoom "east bedroom" $
     ""
