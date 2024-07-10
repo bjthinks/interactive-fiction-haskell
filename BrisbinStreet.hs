@@ -1056,10 +1056,21 @@ buildWorld = do
     "This room appears to be overflow storage for everyone\'s clothing. " ++
     "It is chock full of Halloween costumes. You see pirates, ninjas, " ++
     "robots, animals, and especially ghosts. There is even a whole section " ++
-    "of bunny costumes. The house\'s butler is floating in the air, and " ++
-    "there is a large lever on the far wall."
+    "of bunny costumes. The house\'s butler is floating in the air."
   newExit "east" hhHallway hhDressingRoom
   newExit "west" hhDressingRoom hhHallway
+  butler <- newObject hhDressingRoom "butler ghost" $
+    "This ghost is wearing a tuxedo and a top hat, and has a monocle " ++
+    "in his right eye. He looks very dapper and would probably talk to you."
+  addAliases butler ["butler", "ghost"]
+  makeImmobile butler
+  makeCreature butler
+  setVerb1 "talk to" butler $ msg $
+    "The butler ghost says, \"I have been watching you since you came into " ++
+    "the house. You seem like you have your act together, so I have a task " ++
+    "for you. We are missing a bunny costume that went missing some time " ++
+    "ago. Could you find it for me? It comes in two parts: a hood, and a " ++
+    "pair of slippers.\""
 
   hhWestBedroom <- newRoom "west bedroom" $
     ""
