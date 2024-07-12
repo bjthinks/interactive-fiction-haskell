@@ -1065,12 +1065,6 @@ buildWorld = do
   addAliases butler ["butler", "ghost"]
   makeImmobile butler
   makeCreature butler
-  setVerb1 "talk to" butler $ msg $
-    "The butler ghost says, \"I have been watching you since you came into " ++
-    "the house. You seem like you have your act together, so I have a task " ++
-    "for you. We are missing a bunny costume that went missing some time " ++
-    "ago. Could you find it for me? It comes in two parts: a hood, and a " ++
-    "pair of slippers.\""
 
   hhWestBedroom <- newRoom "west bedroom" $
     "This bedroom is profoundly messy. There are piles of clothes on the " ++
@@ -1136,6 +1130,28 @@ buildWorld = do
     move bunnySlippers hhEastBedroom
     clearVerb1 "search" bed
     addPoints 5 "finding something to sneak with"
+
+  let butlerDialogue = do
+        hoodLoc <- getLocation bunnyHood
+        slipperLoc <- getLocation bunnySlippers
+        let haveHood = hoodLoc == Just player
+            haveSlippers = slipperLoc == Just player
+        when (not haveHood && not haveSlippers) $ stop
+          "The butler ghost says, \"Please find the bunny hood and slippers.\""
+        when (haveHood && not haveSlippers) $ stop
+          "The butler ghost says, \"Please find the bunny slippers.\""
+        when (not haveHood && haveSlippers) $ stop
+          "The butler ghost says, \"Please find the bunny hood.\""
+        return () -- TODO
+  setVerb1 "talk to" butler $ do
+    msg $
+      "The butler ghost says, \"I have been watching you since you came " ++
+      "into the house. You seem like you have your act together, so I have " ++
+      "a task for you. We are missing a bunny costume that went missing " ++
+      "some time ago. Could you find it for me? It comes in two parts: a " ++
+      "hood, and a pair of slippers. Please talk to me again when you " ++
+      "have found them.\""
+    setVerb1 "talk to" butler butlerDialogue
 
   setVerb1 "get" plant $ do
     move plant player
