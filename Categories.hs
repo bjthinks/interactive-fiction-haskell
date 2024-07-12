@@ -139,8 +139,11 @@ stopIfNotObject verb ref = do
 stopIfNotInInventory :: String -> Ref -> Game ()
 stopIfNotInInventory verb ref = do
   stopIfNotObject verb ref
-  stopIfInRoom verb ref
-  stopIfInOpenContainer verb ref
+  inRoom <- isInRoom ref
+  inContainer <- isInOpenContainer ref
+  name <- qualifiedName ref
+  when (inRoom || inContainer) $ stop $
+    "You will have to pick up " ++ name ++ " first."
 
 -- Not used for the Use verb, because of Gabby's Dollhouse
 stopIfNotAccessible :: String -> Ref -> Game ()
