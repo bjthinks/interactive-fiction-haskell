@@ -1105,11 +1105,32 @@ buildWorld = do
   makeContainer hhDresser
 
   hhEastBedroom <- newRoom "east bedroom" $
-    ""
+    "This room is immaculate. Every single thing has a location it " ++
+    "belongs in, and nothing is out of place. The bed is made without a " ++
+    "single wrinkle, the floor is clean, and each piece of furniture has " ++
+    "a few decorative and useful objects artfully displayed. The room " ++
+    "looks like it belongs in a museum."
   enterEastBedroom <- newExit "northeast" hhHallway hhEastBedroom
   newExit "southwest" hhEastBedroom hhHallway
   setVerb2 "unlock" enterEastBedroom "with" noKeyhole
   setVerb2 "lock" enterEastBedroom "with" noKeyhole
+  bedroomDesk <- newObject hhEastBedroom "desk" $
+    "This is a custom made standing desk, six feet wide and nearly " ++
+    "three feet deep, with a sculpture in the corner and a non-laptop " ++
+    "computer on display."
+  makeImmobile bedroomDesk
+  makeContainer bedroomDesk
+  bed <- newObject hhEastBedroom "bed" $
+    "This queen size bed has a mandala print duvet and bamboo sheets that " ++
+    "have been made perfectly and folded over to make it easy to get into " ++
+    "the bed in the dark. The pillows are fluffed and everything has been " ++
+    "smoothed out."
+  makeImmobile bed
+  setVerb1 "search" bed $ do
+    msg "You find a pair of bunny slippers under the bed."
+    --move bunnySlippers hhEastBedroom
+    clearVerb1 "search" bed
+    addPoints 5 "finding something to sneak with"
 
   setVerb1 "get" plant $ do
     move plant player
