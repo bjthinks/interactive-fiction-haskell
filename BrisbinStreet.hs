@@ -1098,6 +1098,11 @@ buildWorld = do
     move bunnyHood hhNightstand
     clearVerb1 "search" hhNightstand
     addPoints 5 "finding something to run with"
+  hhDresser <- newObject hhWestBedroom "dresser" $
+    "This is a dark wooden three drawer dressser. Two of the drawers are " ++
+    "wide open, and clothes are overflowing the drawers."
+  makeImmobile hhDresser
+  makeContainer hhDresser
 
   hhEastBedroom <- newRoom "east bedroom" $
     ""
