@@ -798,7 +798,6 @@ buildWorld = do
   costume <- newObject writingDesk "ghost costume" $
     "This is a plain white sheet with two holes for your eyes. The corners " ++
     "have been cut off to make it circular. A classic Halloween costume!"
-  addAlias costume "costume"
   let getCostume = do
         move costume player
         msg "You put on the ghost costume."
@@ -1131,6 +1130,13 @@ buildWorld = do
     clearVerb1 "search" bed
     addPoints 5 "finding something to sneak with"
 
+  bunnyCostume <- newObject player "bunny costume" $
+    "The hood and slippers have magically transformed into a complete, " ++
+    "head-to-toe bunny costume! It has big, pink ears, a cute button nose, " ++
+    "black whiskers, two big front teeth, arms, legs, and a torso with a " ++
+    "white underbelly, and, of course, slipper feet. Maybe you should wear " ++
+    "it for Halloween!"
+  moveNowhere bunnyCostume
   let butlerDialogue = do
         hoodLoc <- getLocation bunnyHood
         slipperLoc <- getLocation bunnySlippers
@@ -1150,7 +1156,7 @@ buildWorld = do
         msg "You combine the costume parts into the bunny costume."
         moveNowhere bunnyHood
         moveNowhere bunnySlippers
-        --move bunnyCostume player
+        move bunnyCostume player
         --setVerb1 "talk to" butler $ do
   setVerb1 "talk to" butler $ do
     msg $
