@@ -1142,7 +1142,16 @@ buildWorld = do
           "The butler ghost says, \"Please find the bunny slippers.\""
         when (not haveHood && haveSlippers) $ stop
           "The butler ghost says, \"Please find the bunny hood.\""
-        return () -- TODO
+        msg $ "The butler ghost says, \"I see you have both parts of the " ++
+          "bunny costume. Please combine them together and give me the " ++
+          "resulting costume.\" (You can type \"combine the bunny hood " ++
+          "with the bunny slippers\".)"
+      combine = do
+        msg "You combine the costume parts into the bunny costume."
+        moveNowhere bunnyHood
+        moveNowhere bunnySlippers
+        --move bunnyCostume player
+        --setVerb1 "talk to" butler $ do
   setVerb1 "talk to" butler $ do
     msg $
       "The butler ghost says, \"I have been watching you since you came " ++
@@ -1152,6 +1161,12 @@ buildWorld = do
       "hood, and a pair of slippers. Please talk to me again when you " ++
       "have found them.\""
     setVerb1 "talk to" butler butlerDialogue
+  setVerb2 "combine" bunnyHood "with" $ \item -> do
+    unless (item == bunnySlippers) $ stop "You can\'t combine those things."
+    combine
+  setVerb2 "combine" bunnySlippers "with" $ \item -> do
+    unless (item == bunnyHood) $ stop "You can\'t combine those things."
+    combine
 
   setVerb1 "get" plant $ do
     move plant player

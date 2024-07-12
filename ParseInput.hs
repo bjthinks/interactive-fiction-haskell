@@ -162,17 +162,18 @@ parseLine =
   verb1 "water grass with"     |||
   verb1 "water the grass with" |||
 
-  verb2 "burn" "with"   |||
-  verb2 "close" "with"  |||
-  verb2 "get" "from"    |||
-  verb2 "light" "with"  |||
-  verb2 "lock" "with"   |||
-  verb2 "open" "with"   |||
-  verb2 "put" "in"      |||
-  verb2 "put" "into"    |||
-  verb2 "take" "from"   |||
-  verb2 "throw" "at"    |||
-  verb2 "unlock" "with" |||
+  verb2 "burn" "with"    |||
+  verb2 "close" "with"   |||
+  verb2 "combine" "with" |||
+  verb2 "get" "from"     |||
+  verb2 "light" "with"   |||
+  verb2 "lock" "with"    |||
+  verb2 "open" "with"    |||
+  verb2 "put" "in"       |||
+  verb2 "put" "into"     |||
+  verb2 "take" "from"    |||
+  verb2 "throw" "at"     |||
+  verb2 "unlock" "with"  |||
 
   debug "examine" |||
   debug "teleport" |||
