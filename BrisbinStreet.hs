@@ -1092,6 +1092,12 @@ buildWorld = do
     "This is a hat with two big tan ears with pink insides. The ears are " ++
     "spring loaded and bounce around when you walk."
   addAlias bunnyHood "hood"
+  moveNowhere bunnyHood
+  setVerb1 "search" hhNightstand $ do
+    msg "You look through the nightstand and find a bunny hood."
+    move bunnyHood hhNightstand
+    clearVerb1 "search" hhNightstand
+    addPoints 5 "finding something to run with"
 
   hhEastBedroom <- newRoom "east bedroom" $
     ""
@@ -1242,6 +1248,6 @@ buildWorld = do
   setVerb1 "turn on" sprinkler useSprinkler
   setVerb1 "water the grass with" sprinkler useSprinkler
 
-  setMaxScore 150
+  setMaxScore 155
 
   return ()
