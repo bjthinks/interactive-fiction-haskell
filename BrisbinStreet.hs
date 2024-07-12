@@ -1132,7 +1132,7 @@ buildWorld = do
         when (tunaLoc == Just hhStaircase) $ do
           msg $ "The black cat eats the tuna from the can in no time. She " ++
             "must have been very hungry!"
-          addPoints 5 "feeding the kitty"
+          addPoints 5 "feeding the kitty cat"
           friendlyKitty
           setName tuna "empty can of tuna"
           setDescription tuna "This is just an empty can now."
