@@ -1126,9 +1126,14 @@ buildWorld = do
     "the bed in the dark. The pillows are fluffed and everything has been " ++
     "smoothed out."
   makeImmobile bed
+  bunnySlippers <- newObject bed "bunny slippers" $
+    "This is a pair of classic bunny slippers with rubber soles and lots " ++
+    "of nice, warm fur. They have floppy ears, and you might want to call " ++
+    "them \"flopsy\" and \"mopsy\"."
+  addAlias bunnySlippers "slippers"
   setVerb1 "search" bed $ do
     msg "You find a pair of bunny slippers under the bed."
-    --move bunnySlippers hhEastBedroom
+    move bunnySlippers hhEastBedroom
     clearVerb1 "search" bed
     addPoints 5 "finding something to sneak with"
 
