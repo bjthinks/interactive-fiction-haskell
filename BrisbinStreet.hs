@@ -978,7 +978,9 @@ buildWorld = do
   hhMusicRoom <- newRoom "music room" $
     "This ornately decorated room has a concert grand piano in the middle " ++
     "of it. The piano is softly playing music, despite the absence of a " ++
-    "player. It sounds like the soundtrack of a horror movie. A bench with " ++
+    "player. It sounds like the soundtrack of a horror movie. A flute is " ++
+    "accompanying the piano: it is floating in the air and being played " ++
+    "by an invisible musician. A bench with " ++
     "many pillows circles the exterior of the room, with gaps for the " ++
     "spiral staircase landing and a door to the west. There is a patch of " ++
     "black fur on the floor where the kitty of the house evidently sleeps."
