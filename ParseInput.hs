@@ -78,6 +78,7 @@ debug name = do
   return $ Verb1 (alias1 name) ref
 
 alias1 :: String -> String
+alias1 "examine" = "look"
 alias1 "l" = "look"
 alias1 "look at" = "look"
 alias1 "move" = "go"
@@ -133,6 +134,7 @@ parseLine =
   verb1 "drink"                |||
   verb1 "drop"                 |||
   verb1 "eat"                  |||
+  verb1 "examine"              |||
   verb1 "fill"                 |||
   verb1 "find"                 |||
   verb1 "get"                  |||
