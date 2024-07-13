@@ -118,10 +118,10 @@ setGuards = do
   let s f g x = f x (g x)
   s setDefaultGuard1 stopWith "close"
   s setDefaultGuard1 stopIfNotInInventory "drop"
-  setDefaultGuard1 "examine" $ \_ -> return ()
   setDefaultGuard1 "get" getTakeGuard
   setDefaultGuard1 "get all from" $ containerGuard "get things out of"
   setDefaultGuard1 "go" goGuard
+  setDefaultGuard1 "inspect" $ \_ -> return ()
   s setDefaultGuard1 stopWith "lock"
   setDefaultGuard1 "look" $ \_ -> return ()
   s setDefaultGuard1 stopWith "open"
@@ -275,10 +275,10 @@ setDefaults = do
   setVerb0 "water the grass" $ stop
     "What would you like to water the grass with?"
   setDefaultVerb1 "drop" defaultDrop
-  setDefaultVerb1 "examine" defaultExamine
   setDefaultVerb1 "get" defaultGet
   setDefaultVerb1 "get all from" defaultGetAllFrom
   setDefaultVerb1 "go" defaultGo
+  setDefaultVerb1 "inspect" defaultInspect
   setDefaultVerb1 "look" defaultLook
   setDefaultVerb1 "pet" defaultPet
   setDefaultVerb1 "put all in" defaultPutAllIn
@@ -358,7 +358,36 @@ defaultDrop ref = do
   name <- qualifiedName ref
   msg $ "You drop " ++ name ++ "."
 
-defaultExamine ref = do
+defaultGet :: Ref -> Game ()
+defaultGet ref = do
+  player <- getPlayer
+  move ref player
+  name <- qualifiedName ref
+  msg $ "You get " ++ name ++ "."
+
+defaultGetAllFrom :: Ref -> Game ()
+defaultGetAllFrom container = do
+  contents <- getContents' container
+  -- The player's room is already excluded by stopIfNotObject, so
+  -- contents will not include the player
+  containerName <- qualifiedName container
+  when (contents == []) $ stop $ capitalize containerName ++ " is empty."
+  let getFromContainer item = doVerb $ Verb2 "get" item "from" container
+  -- The mplus below assures that the list of actions continues executing
+  -- even if one of them uses stop or mzero.
+  mapM_ (flip mplus (return ()) . getFromContainer) contents
+
+defaultGo :: Ref -> Game ()
+defaultGo ref = do
+  locked <- getIsLocked ref
+  name <- qualifiedName ref
+  when locked $ stop $ "The door going " ++ name ++ " is locked."
+  Just (_,dest) <- getPath ref
+  player <- getPlayer
+  move player dest
+  doVerb $ Verb0 "look"
+
+defaultInspect ref = do
   debug <- getDebug
   unless debug $ stop $ "This command is only available in debug mode."
   exists <- ifExists ref
@@ -393,35 +422,6 @@ defaultExamine ref = do
   when debug $ msg $ "Guard1 keys: " ++ show (M.keys g1)
   g2 <- getGuard2Map ref
   when debug $ msg $ "Guard2 keys: " ++ show (M.keys g2)
-
-defaultGet :: Ref -> Game ()
-defaultGet ref = do
-  player <- getPlayer
-  move ref player
-  name <- qualifiedName ref
-  msg $ "You get " ++ name ++ "."
-
-defaultGetAllFrom :: Ref -> Game ()
-defaultGetAllFrom container = do
-  contents <- getContents' container
-  -- The player's room is already excluded by stopIfNotObject, so
-  -- contents will not include the player
-  containerName <- qualifiedName container
-  when (contents == []) $ stop $ capitalize containerName ++ " is empty."
-  let getFromContainer item = doVerb $ Verb2 "get" item "from" container
-  -- The mplus below assures that the list of actions continues executing
-  -- even if one of them uses stop or mzero.
-  mapM_ (flip mplus (return ()) . getFromContainer) contents
-
-defaultGo :: Ref -> Game ()
-defaultGo ref = do
-  locked <- getIsLocked ref
-  name <- qualifiedName ref
-  when locked $ stop $ "The door going " ++ name ++ " is locked."
-  Just (_,dest) <- getPath ref
-  player <- getPlayer
-  move player dest
-  doVerb $ Verb0 "look"
 
 defaultLook :: Ref -> Game ()
 defaultLook ref = do

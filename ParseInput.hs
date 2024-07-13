@@ -176,7 +176,7 @@ parseLine =
   verb2 "use" "on"       |||
   verb2 "unlock" "with"  |||
 
-  debug "examine" |||
+  debug "inspect"  |||
   debug "teleport" |||
   implicitGo |||
   (eof >> return Blank)
