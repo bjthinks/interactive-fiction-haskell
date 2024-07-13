@@ -183,6 +183,7 @@ searchGuard ref = do
   stopIfPlayer verb ref
   stopIfExit verb ref
   stopIfInOpenContainer verb ref
+  stopIfNotOpenContainer ref
 
 getFromGuard :: Ref -> Ref -> Game ()
 getFromGuard item container = do

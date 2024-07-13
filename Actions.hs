@@ -40,10 +40,7 @@ makeImmobile ref = setVerb1 "get" ref $ do
   msg $ "You can\'t take " ++ name ++ "."
 
 makeCreature :: Ref -> Game ()
-makeCreature ref = do
-  setVerb1 "search" ref $ do
-    name <- qualifiedName ref
-    stop $ capitalize name ++ " would not appreciate that."
+makeCreature _ = return ()
 
 disconnect :: Ref -> Game ()
 disconnect exit = do

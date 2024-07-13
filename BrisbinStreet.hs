@@ -1124,6 +1124,7 @@ buildWorld = do
     "of nice, warm fur. They have floppy ears, and you might want to call " ++
     "them \"flopsy\" and \"mopsy\"."
   addAlias bunnySlippers "slippers"
+  setGuard1 "search" bed $ return ()
   setVerb1 "search" bed $ do
     msg "You find a pair of bunny slippers under the bed."
     move bunnySlippers hhEastBedroom
