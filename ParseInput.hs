@@ -173,6 +173,7 @@ parseLine =
   verb2 "put" "into"     |||
   verb2 "take" "from"    |||
   verb2 "throw" "at"     |||
+  verb2 "use" "on"       |||
   verb2 "unlock" "with"  |||
 
   debug "examine" |||

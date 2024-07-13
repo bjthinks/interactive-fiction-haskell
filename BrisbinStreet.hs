@@ -585,6 +585,9 @@ buildWorld = do
         setVerb2 "burn" ants "with" $ \tool -> do
           checkTool tool
           stop "The ants are already mostly dead."
+        setVerb2 "use" magnifyingGlass "on" $ \victim -> do
+          checkVictim victim
+          stop "The ants are already mostly dead."
         setDescription2 driveway $
           "There are a great many dead and burned ants littering the " ++
           "concrete driveway. You smile at your deed."
@@ -595,12 +598,20 @@ buildWorld = do
         unless (tool == magnifyingGlass) $ do
           toolName <- qualifiedName tool
           stop $ "You can\'t burn the ants with " ++ toolName ++ "."
+      checkVictim victim = do
+        unless (victim == ants) $ do
+          victimName <- qualifiedName victim
+          stop $ "You can\'t (or shouldn\'t) burn " ++ victimName ++
+            "with the magnifying glass."
   setVerb1 "use" magnifyingGlass $ do
     room <- getRoom
     unless (room == driveway) noUseGlass
     burnAnts
   setVerb2 "burn" ants "with" $ \tool -> do
     checkTool tool
+    burnAnts
+  setVerb2 "use" magnifyingGlass "on" $ \victim -> do
+    checkVictim victim
     burnAnts
 
   garage <- newRoom "garage" $

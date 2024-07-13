@@ -1,6 +1,3 @@
-add more immobile items for flavor
-describe hhLanding
-use glass on ants?
 consider handling plurals in error messages in Categories.hs (e.g. acorns)?
 See if I can do better when the ParseError is an unexpected end of input
 use matches -- change to light match eventually?
