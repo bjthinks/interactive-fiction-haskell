@@ -271,7 +271,8 @@ buildWorld = do
   setVerb1 "use" dollhouse $ do
     playerLoc <- getRoom
     maybeDollhouseLoc <- getLocation dollhouse
-    let failUseDollhouse = stop "You can\'t use that now."
+    let failUseDollhouse = stop $ "Something has gone wrong. You can\'t " ++
+          "use the dollhouse now."
     when (maybeDollhouseLoc == Nothing) failUseDollhouse
     let dollhouseLoc = fromJust maybeDollhouseLoc
     when (dollhouseLoc == player) $ stop "Please drop the dollhouse first."

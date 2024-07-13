@@ -143,7 +143,7 @@ stopIfNotInInventory verb ref = do
   inContainer <- isInOpenContainer ref
   name <- qualifiedName ref
   when (inRoom || inContainer) $ stop $
-    "You will have to pick up " ++ name ++ " first."
+    "You need to hold onto " ++ name ++ " first."
 
 stopIfNotAccessible :: String -> Ref -> Game ()
 stopIfNotAccessible verb ref = do
