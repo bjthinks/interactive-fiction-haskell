@@ -712,6 +712,8 @@ buildWorld = do
     happyMisty
     addPoints 10 "being so loving to a deserving animal"
     setVerb1 "pet" misty happyMisty
+  setVerb1 "play with" misty $ msg
+    "Misty runs in joyous clockwise circles around your feet."
 
   justinYard <- newRoom "Justin\'s yard" $
     "You stand in front of Justin\'s house. It is a large home with a " ++
