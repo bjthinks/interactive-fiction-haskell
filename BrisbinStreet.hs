@@ -234,11 +234,12 @@ buildWorld = do
     "phone sits on the bedside stand."
   newExit "east" masterBedroom hallway
   newExit "west" hallway masterBedroom
-  perfume <- newObject masterBedroom "perfume" $
-    "A collection of tiny vials of perfume, probably collected from store " ++
-    "samples."
-  setVerb1 "use" perfume $ do
-    msg "You wipe perfume on your neck. You smell like perfume now..."
+  flashlight <- newObject masterBedroom "flashlight" $
+    "A chrome-plated flashlight with a red switch and a red shade around " ++
+    "the light."
+  let --flashlightOnDesc  = "The flashlight is on."
+      flashlightOffDesc = "The flashlight is off."
+  setDescription2 flashlight flashlightOffDesc
   basementKey <- newObject masterBedroom "basement key" $
     "This is an ordinery-looking key that opens the basement. Type \"unlock " ++
     "down with the basement key\" to use it."
@@ -312,6 +313,11 @@ buildWorld = do
     "into the bathroom from a vent enclosed by the cabinetry."
   newExit "north" hallway bathroom
   newExit "south" bathroom hallway
+  perfume <- newObject bathroom "perfume" $
+    "A collection of tiny vials of perfume, probably collected from store " ++
+    "samples."
+  setVerb1 "use" perfume $ do
+    msg "You wipe perfume on your neck. You smell like perfume now..."
   bathtub <- newObject bathroom "bathtub" $
     "This is a plain white bathtub with a shower attachment and glass " ++
     "doors."
