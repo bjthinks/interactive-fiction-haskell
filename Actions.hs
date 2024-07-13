@@ -87,21 +87,25 @@ makeLocked ref key = do
     -- key is in the inventory
     refName <- qualifiedName ref
     itemName <- qualifiedName item
+    exit <- isExit ref
+    let doorGoing = if exit then "the door going " else ""
     unless (item == key) $ stop $ capitalize itemName ++
-      " is not the right item to lock " ++ refName ++ " with."
+      " is not the right item to lock " ++ doorGoing ++ refName ++ "."
     -- key is the right key
     setIsLocked ref True
-    msg $ "You lock " ++ refName ++ " with " ++ itemName ++ "."
+    msg $ "You lock " ++ doorGoing ++ refName ++ " with " ++ itemName ++ "."
   setVerb2 "unlock" ref "with" $ \item -> do
     -- ref is either a locked exit or a locked, accessible container
     -- key is in the inventory
     refName <- qualifiedName ref
     itemName <- qualifiedName item
+    exit <- isExit ref
+    let doorGoing = if exit then "the door going " else ""
     unless (item == key) $ stop $ capitalize itemName ++
-      " is not the right item to unlock " ++ refName ++ " with."
+      " is not the right item to unlock " ++ doorGoing ++ refName ++ "."
     -- key is the right key
     setIsLocked ref False
-    msg $ "You unlock " ++ refName ++ " with " ++ itemName ++ "."
+    msg $ "You unlock " ++ doorGoing ++ refName ++ " with " ++ itemName ++ "."
 
 -- This is for the can of tuna, which can be opened but not closed.
 -- If a mechanic of being opened and closed, like a drawer, is ever
