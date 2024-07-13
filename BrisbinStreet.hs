@@ -466,7 +466,7 @@ buildWorld = do
   newExit "west" basementBar basementBathroom
   note <- newObject basementBathroom "note" $
     "This helpful note lists ways to earn points in this game. Reading it " ++
-    "is considered cheating!"
+    "is cheating a little bit!"
   setVerb1 "read" note $ do
     msg "Ways to Earn Points:"
     msg "1. Learn some math"
@@ -479,6 +479,7 @@ buildWorld = do
     msg "8. Become an exterminator"
     msg "9. Cool the house"
     msg "10. Play with a toy"
+    msg "11. Play a game of hide and seek"
     msg $ "Finally, you must solve the mystery of the Haunted House."
 
   upstairs <- newRoom "Upstairs" $
