@@ -234,12 +234,12 @@ buildWorld = do
     "phone sits on the bedside stand."
   newExit "east" masterBedroom hallway
   newExit "west" hallway masterBedroom
-  flashlight <- newObject masterBedroom "flashlight" $
+  {-flashlight <- newObject masterBedroom "flashlight" $
     "A chrome-plated flashlight with a red switch and a red shade around " ++
     "the light."
   let --flashlightOnDesc  = "The flashlight is on."
       flashlightOffDesc = "The flashlight is off."
-  setDescription2 flashlight flashlightOffDesc
+  setDescription2 flashlight flashlightOffDesc-}
   basementKey <- newObject masterBedroom "basement key" $
     "This is an ordinery-looking key that opens the basement. Type \"unlock " ++
     "down with the basement key\" to use it."
