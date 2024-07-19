@@ -85,6 +85,7 @@ alias1 "move" = "go"
 alias1 "put all into" = "put all in"
 alias1 "take" = "get"
 alias1 "take all from" = "get all from"
+alias1 "talk" = "talk to"
 alias1 "water grass with" = "water the grass with"
 alias1 x = x
 
@@ -153,6 +154,7 @@ parseLine =
   verb1 "put all into"         |||
   verb1 "read"                 |||
   verb1 "search"               |||
+  verb1 "talk"                 |||
   verb1 "talk to"              |||
   verb1 "take"                 |||
   verb1 "take all from"        |||
@@ -168,6 +170,7 @@ parseLine =
   verb2 "close" "with"   |||
   verb2 "combine" "with" |||
   verb2 "get" "from"     |||
+  verb2 "give" "to"      |||
   verb2 "light" "with"   |||
   verb2 "lock" "with"    |||
   verb2 "open" "with"    |||
