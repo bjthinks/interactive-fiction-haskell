@@ -20,7 +20,7 @@ processDelayedActions input = process [] [] input
 
 takeTurn :: String -> GameState -> (GameState, String)
 takeTurn line oldState =
-  let (newState, response) = execGame handleInput line oldState
+  let (newState, response) = execGame (handleInput line) "" oldState
       (nows, laters) = processDelayedActions $ delayedActions newState
       nowsWithFailureCaught = map (flip mplus (return ())) nows
       newState2 = newState { delayedActions = laters }

@@ -2,7 +2,6 @@ module ParseInput(handleInput) where
 
 import Prelude hiding (Word)
 import Control.Monad
-import Control.Monad.RWS
 import Text.Parsec
 import Text.Parsec.Pos
 import Data.List
@@ -186,9 +185,8 @@ parseLine =
   implicitGo |||
   (eof >> return Blank)
 
-handleInput :: Game ()
-handleInput = do
-  input <- ask
+handleInput :: String -> Game ()
+handleInput input = do
   addHistory input
   let inputLowercase = toLowerString input
       inputWords = words inputLowercase
@@ -203,7 +201,7 @@ handleInput = do
       result = runParser parseLine nouns "" inputWithPositions
   when flag $ msg $ "Result: " ++ show result
   case result of
-    Left err -> printError err
+    Left err -> printError input err
     Right verb -> doVerb verb
 
 tokensWithRef :: Ref -> Game [([Word],Ref)]
@@ -217,14 +215,13 @@ tokensWithRef ref = do
 toLowerString :: String -> String
 toLowerString = map toLower
 
-printError :: ParseError -> Game ()
-printError err = do
-  command <- ask
-  let commandWords = words command
+printError :: String -> ParseError -> Game ()
+printError input err = do
+  let inputWords = words input
       badWordNumber = sourceColumn $ errorPos err
-      badWordList = drop (badWordNumber - 1) commandWords
+      badWordList = drop (badWordNumber - 1) inputWords
       badWord = if badWordList == []
-        then last commandWords
+        then last inputWords
         else head badWordList
   stop $ "I didn\'t understand something at (or shortly after) " ++
     "\"" ++ badWord ++ "\"."

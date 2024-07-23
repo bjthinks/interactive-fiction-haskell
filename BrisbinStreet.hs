@@ -1184,10 +1184,10 @@ buildWorld = do
           msg $ "The butler ghost says, \"I see you have assembled the " ++
             "complete bunny costume. Please give it to me, and I will " ++
             "allow you to see the master of the house.\""
-        setVerb2 "give" bunnyCostume "to" $ \person -> do
-          personName <- qualifiedName person
-          unless (person == butler) $ stop $
-            "You can\'t give the bunny costume to " ++ personName ++ "."
+        setVerb2 "give" bunnyCostume "to" $ \ghost -> do
+          ghostName <- qualifiedName ghost
+          unless (ghost == butler) $ stop $
+            "You can\'t give the bunny costume to " ++ ghostName ++ "."
   setVerb1 "talk to" butler $ do
     msg $
       "The butler ghost says, \"I have been watching you since you came " ++
