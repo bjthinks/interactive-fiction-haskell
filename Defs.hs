@@ -64,7 +64,6 @@ startState = GameState {
   The monad Game a is used very heavily in this program. It is a combination
   of the Reader, Writer, State, and Maybe monads. Thus, the fundamental
   operations available in Game a are:
-    ask :: Game String -- Get the user's input string, if any
     tell :: String -> Game () -- Queue up a string for printing to the user
     get :: Game GameState -- get the current state of the game
     put :: GameState -> Game () -- replace the state with a new one
