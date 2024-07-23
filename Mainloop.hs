@@ -20,12 +20,12 @@ processDelayedActions input = process [] [] input
 
 takeTurn :: String -> GameState -> (GameState, String)
 takeTurn line oldState =
-  let (newState, response) = execGame (handleInput line) "" oldState
+  let (newState, response) = execGame (handleInput line) oldState
       (nows, laters) = processDelayedActions $ delayedActions newState
       nowsWithFailureCaught = map (flip mplus (return ())) nows
       newState2 = newState { delayedActions = laters }
       (newState3, response2) =
-                  execGame (sequence nowsWithFailureCaught) "" newState2
+                  execGame (sequence nowsWithFailureCaught) newState2
   in (newState3, response ++ response2)
 
 playback :: [String] -> GameState
@@ -52,7 +52,7 @@ mainloop oldState = do
     else if command == "load " && filename /= "" then do
     saveData <- liftIO $ readFile filename
     let newState = playback $ lines saveData
-    let (newState2, response) = execGame (doVerb $ Verb0 "look") "" newState
+    let (newState2, response) = execGame (doVerb $ Verb0 "look") newState
     liftIO $ putStr $ wordWrap response
     mainloop newState2
     else do
@@ -69,7 +69,7 @@ startup = do
   msg "Type help for a list of commands."
 
 doStartup :: (GameState, String)
-doStartup = execGame startup "" startState
+doStartup = execGame startup startState
 
 mySettings :: Settings IO
 mySettings = setComplete noCompletion defaultSettings

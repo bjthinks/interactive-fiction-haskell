@@ -77,8 +77,8 @@ type MoveInput = String
 type MoveOutput = String
 type Game = MaybeT (RWS MoveInput MoveOutput GameState)
 
-execGame :: Game a -> MoveInput -> GameState -> (GameState, MoveOutput)
-execGame action = execRWS (runMaybeT action)
+execGame :: Game a -> GameState -> (GameState, MoveOutput)
+execGame action = execRWS (runMaybeT action) ""
 
 msg :: String -> Game ()
 msg str = tell str >> tell "\n"
