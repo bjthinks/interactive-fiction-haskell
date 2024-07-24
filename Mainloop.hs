@@ -19,7 +19,7 @@ getWidth = do
 output :: String -> IO ()
 output str = do
   w <- getWidth
-  putStr $ wordWrap (w-2) str
+  putStr $ wordWrap (max (w-5) 1) str
 
 processDelayedActions :: [(Int, Game())] -> ([Game ()], [(Int, Game())])
 processDelayedActions input = process [] [] input
