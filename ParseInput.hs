@@ -122,6 +122,7 @@ parseLine =
   verb0 "inventory"       |||
   verb0 "l"               |||
   verb0 "look"            |||
+  verb0 "map"             |||
   verb0 "quit"            |||
   verb0 "score"           |||
   verb0 "search"          |||

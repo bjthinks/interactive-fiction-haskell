@@ -269,6 +269,7 @@ setDefaults = do
   setVerb0 "help" doHelp
   setVerb0 "inventory" doInventory
   setVerb0 "look" doLook
+  setVerb0 "map" doMap
   setVerb0 "score" doScore
   setVerb0 "search" doSearch
   setVerb0 "wait" $ msg "You wait for a little while."
@@ -334,6 +335,10 @@ doLook :: Game ()
 doLook = do
   ref <- getRoom
   doVerb (Verb1 "look" ref)
+
+doMap :: Game ()
+doMap = do
+  stop "The map command is under construction. Please check back later."
 
 doScore :: Game ()
 doScore = do
