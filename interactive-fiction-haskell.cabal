@@ -30,7 +30,8 @@ executable BrisbinStreet
     parsec ^>=3.1.17.0,
     transformers ^>=0.5.6.2,
     split ^>=0.2.5,
-    terminal-size
+    terminal-size,
+    array ^>=0.5.4.0
   -- hs-source-dirs:
   default-language:    Haskell2010
   ghc-options:         -Wall -Werror -Wno-missing-signatures

@@ -5,6 +5,7 @@ import Control.Monad.RWS
 import Data.Maybe
 import Control.Monad
 import Control.Monad.Trans.Maybe
+import Data.Array.Unboxed
 
 type Ref = Int
 
@@ -42,7 +43,8 @@ data GameState = GameState {
   maxScore :: Int,
   keepPlaying :: Bool,
   debugFlag :: Bool,
-  commandHistory :: [String] } -- stored in reverse order
+  commandHistory :: [String], -- stored in reverse order
+  gameMaps :: M.Map Region GameMap }
 
 startState = GameState {
   things = M.empty,
@@ -58,7 +60,8 @@ startState = GameState {
   maxScore = 0,
   keepPlaying = True,
   debugFlag = False,
-  commandHistory = [] }
+  commandHistory = [],
+  gameMaps = M.singleton 1 emptyMap }
 
 {-
   The monad Game a is used very heavily in this program. It is a combination
@@ -86,6 +89,13 @@ msg str = tell str >> tell "\n"
 -- into the MaybeT monad transformer.
 stop :: String -> Game ()
 stop str = msg str >> mzero
+
+-- In-game map stuff
+type Region = Int
+type GameMap = UArray (Int,Int) Char
+
+emptyMap :: GameMap
+emptyMap = listArray ((0,0),(9,9)) $ repeat ' '
 
 getPlayer :: Game Ref
 getPlayer = do
@@ -137,6 +147,17 @@ addHistory :: String -> Game ()
 addHistory h = do
   hs <- getHistory
   setHistory $ h:hs -- reverse order
+
+getMap :: Region -> Game (Maybe GameMap)
+getMap region = do
+  m <- gameMaps <$> get
+  return $ M.lookup region m
+
+setMap :: Region -> GameMap -> Game ()
+setMap region gameMap = do
+  st <- get
+  let m' = M.insert region gameMap $ gameMaps st
+  put st { gameMaps = m' }
 
 getThing :: Ref -> Game Thing
 getThing ref = (fromJust . M.lookup ref . things) <$> get

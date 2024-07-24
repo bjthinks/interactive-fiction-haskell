@@ -338,7 +338,9 @@ doLook = do
 
 doMap :: Game ()
 doMap = do
-  stop "The map command is under construction. Please check back later."
+  let region = 1
+  m <- getMap region
+  msg $ show m
 
 doScore :: Game ()
 doScore = do
