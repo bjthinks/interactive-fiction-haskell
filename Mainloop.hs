@@ -1,6 +1,7 @@
 module Main(main) where
 
 import System.Console.Haskeline
+import System.Console.Terminal.Size
 import Control.Monad
 import Control.Monad.Trans.Maybe
 import Control.Monad.RWS
@@ -9,6 +10,16 @@ import ParseInput
 import Verbs
 import WordWrap
 import BrisbinStreet
+
+getWidth :: IO Int
+getWidth = do
+  x <- (size :: IO (Maybe (Window Int)))
+  return $ maybe 80 width x
+
+output :: String -> IO ()
+output str = do
+  _ <- getWidth
+  putStr $ wordWrap str
 
 processDelayedActions :: [(Int, Game())] -> ([Game ()], [(Int, Game())])
 processDelayedActions input = process [] [] input
@@ -46,18 +57,18 @@ mainloop oldState = do
       filename = drop 5 line
   if (command == "save " && filename /= "") then do
     let hist = reverse $ commandHistory oldState
-    liftIO $ putStrLn $ "Saving game to filename " ++ filename ++ "."
+    liftIO $ output $ "Saving game to filename " ++ filename ++ "."
     liftIO $ writeFile filename $ unlines hist
     mainloop oldState
     else if command == "load " && filename /= "" then do
     saveData <- liftIO $ readFile filename
     let newState = playback $ lines saveData
     let (newState2, response) = execGame (doVerb $ Verb0 "look") newState
-    liftIO $ putStr $ wordWrap response
+    liftIO $ output response
     mainloop newState2
     else do
     let (newState, response) = takeTurn line oldState
-    liftIO $ putStr $ wordWrap response
+    liftIO $ output response
     when (keepPlaying newState) (mainloop newState)
 
 startup :: Game ()
@@ -77,5 +88,5 @@ mySettings = setComplete noCompletion defaultSettings
 main :: IO ()
 main = do
   let (newState, response) = doStartup
-  putStr $ wordWrap response
+  output response
   void $ runInputT mySettings $ runMaybeT $ mainloop newState
