@@ -339,7 +339,7 @@ doLook = do
 doMap :: Game ()
 doMap = do
   let region = 1
-  m <- getMap region
+  Just m <- getMap region
   msg $ show m
 
 doScore :: Game ()
