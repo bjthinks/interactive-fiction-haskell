@@ -12,6 +12,7 @@ import Defs
 import Categories
 import Actions
 import Score
+import GameMap
 
 data Verb = Blank
           | Verb0 String
@@ -341,8 +342,7 @@ doMap = do
   let region = 1
   m <- getMap region
   when (isNothing m) $ setMap region emptyMap
-  Just m' <- getMap region
-  msg $ show m'
+  printMap
 
 doScore :: Game ()
 doScore = do
