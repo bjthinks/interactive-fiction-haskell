@@ -341,7 +341,7 @@ doMap :: Game ()
 doMap = do
   let region = 1
   m <- getMap region
-  when (isNothing m) $ setMap region emptyMap
+  when (isNothing m) $ setMap region testMap
   printMap
 
 doScore :: Game ()

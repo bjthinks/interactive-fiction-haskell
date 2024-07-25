@@ -94,9 +94,6 @@ stop str = msg str >> mzero
 type Region = Int
 type GameMap = UArray (Int,Int) Char
 
-emptyMap :: GameMap
-emptyMap = listArray ((0,0),(8,9)) $ cycle "Test pattern "
-
 getPlayer :: Game Ref
 getPlayer = do
   mp <- maybePlayer <$> get
