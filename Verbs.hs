@@ -339,8 +339,10 @@ doLook = do
 doMap :: Game ()
 doMap = do
   let region = 1
-  Just m <- getMap region
-  msg $ show m
+  m <- getMap region
+  when (isNothing m) $ setMap region emptyMap
+  Just m' <- getMap region
+  msg $ show m'
 
 doScore :: Game ()
 doScore = do

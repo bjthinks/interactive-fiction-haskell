@@ -61,7 +61,7 @@ startState = GameState {
   keepPlaying = True,
   debugFlag = False,
   commandHistory = [],
-  gameMaps = M.singleton 1 emptyMap }
+  gameMaps = M.empty }
 
 {-
   The monad Game a is used very heavily in this program. It is a combination
