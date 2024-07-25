@@ -1,6 +1,7 @@
 module GameMap where
 
 import Control.Monad
+import Control.Monad.RWS
 import Data.Maybe
 import Data.Array.IArray
 import Defs
@@ -12,5 +13,7 @@ printMap = do
   when (isNothing mm) $ stop "There is no map for this area."
   let m = fromJust mm
   let ((xmin,ymin),(xmax,ymax)) = bounds m
-  msg $ show $ ((xmin,ymin),(xmax,ymax))
-  return ()
+  tell $ do
+    y <- [ymax,ymax-1..ymin]
+    x <- [xmin..xmax]
+    [m ! (x,y)] ++ if x == xmax then "\n" else ""
