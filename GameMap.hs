@@ -13,13 +13,16 @@ printMap = do
   when (isNothing mm) $ stop "There is no map for this area."
   let m = fromJust mm
   let ((xmin,ymin),(xmax,ymax)) = bounds m
+  msg ""
   tell $ do
     y <- [ymax,ymax-1..ymin]
     x <- [xmin..xmax]
-    [m ! (x,y)] ++ if x == xmax then "\n" else ""
+    (if x == xmin then " " else "") ++ [m ! (x,y)] ++
+      if x == xmax then "\n" else ""
+  msg ""
 
 testMap :: GameMap
-testMap = listArray ((0,0),(8,9)) (repeat ' ') //
+testMap = listArray ((0,0),(4,4)) (repeat ' ') //
   [((0,0),'*'),
    ((1,0),'-'),
    ((2,0),'*'),
