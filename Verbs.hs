@@ -270,7 +270,7 @@ setDefaults = do
   setVerb0 "help" doHelp
   setVerb0 "inventory" doInventory
   setVerb0 "look" doLook
-  setVerb0 "map" doMap
+  setVerb0 "map" printMap
   setVerb0 "score" doScore
   setVerb0 "search" doSearch
   setVerb0 "wait" $ msg "You wait for a little while."
@@ -334,15 +334,9 @@ doInventory = do
 
 doLook :: Game ()
 doLook = do
+  printMap `mplus` return ()
   ref <- getRoom
   doVerb (Verb1 "look" ref)
-
-doMap :: Game ()
-doMap = do
-  let region = 1
-  m <- getMap region
-  when (isNothing m) $ setMap region testMap
-  printMap
 
 doScore :: Game ()
 doScore = do

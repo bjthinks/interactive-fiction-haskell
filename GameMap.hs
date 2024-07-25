@@ -9,6 +9,9 @@ import Defs
 printMap :: Game ()
 printMap = do
   let region = 1
+  do
+    m <- getMap region
+    when (isNothing m) $ setMap region testMap
   mm <- getMap region
   when (isNothing mm) $ stop "There is no map for this area."
   let m = fromJust mm
