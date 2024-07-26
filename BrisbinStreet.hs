@@ -230,6 +230,7 @@ buildWorld = do
     "This simple east-west hallway has a tiny five watt light fixture on " ++
     "the ceiling. There is a wicker hamper which, on inspection, appears " ++
     "to contain a stack of clean placemats."
+  mapRoom hallway 2 (5,3)
   newExit "south" hallway living
   newExit "north" living hallway
 
@@ -238,6 +239,7 @@ buildWorld = do
     "furniture. There are a desk, a highboy dresser, another long dresser, " ++
     "and a queen size bed with a flower-print bedspread. A touch tone " ++
     "phone sits on the bedside stand."
+  mapRoom masterBedroom 2 (3,3)
   newExit "east" masterBedroom hallway
   newExit "west" hallway masterBedroom
   {-flashlight <- newObject masterBedroom "flashlight" $
@@ -255,6 +257,7 @@ buildWorld = do
     "are toys strewn about the floor, and a half-empty toybox is against " ++
     "the west wall. There are three moderately-sized dressers, and a " ++
     "large bookcase sits atop the biggest one. A twin bed is in the corner."
+  mapRoom childBedroom 2 (7,3)
   newExit "west" childBedroom hallway
   newExit "east" hallway childBedroom
   dollhouse <- newObject childBedroom "Gabby\'s dollhouse" $
