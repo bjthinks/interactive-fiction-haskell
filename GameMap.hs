@@ -16,23 +16,26 @@ mapRoom ref region (x,y) = do
 -- the player is moved from one location to another
 updateMap :: Ref -> Game ()
 updateMap ref = do
-  msg $ "Update map " ++ show ref
   maybeRegion <- getRegion ref
   when (isJust maybeRegion) $ do
     let Just region = maybeRegion
     roomData <- makeUpdates <$> getMapData ref
     -- TODO: queue draw exits
-    -- TODO: queue draw player
+    playerRoom <- getRoom
+    let playerData = if (roomData /= [] && playerRoom == ref)
+          then [setChar '@' $ head roomData]
+          else []
     -- TODO: allocate and/or resize map properly
     maybeMap <- getMap region
     when (isNothing maybeMap) $ do
       let newMap = listArray ((0,0),(8,9)) $ repeat ' '
       setMap region newMap
     Just regionMap <- getMap region
-    let updatedMap = regionMap // roomData
+    let updatedMap = regionMap // (roomData ++ playerData)
     setMap region updatedMap
       where
         makeUpdates = map (\(x,y,c) -> ((x,y),c))
+        setChar c ((x,y),_) = ((x,y),c)
 
 printMap :: Game ()
 printMap = do
