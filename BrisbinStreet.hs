@@ -357,6 +357,7 @@ buildWorld = do
     "concrete, and the interior walls are covered in thin cheap paneling. " ++
     "There is a tremendous amount of clutter in the middle of the room, " ++
     "with a narrow path going back to the washer and dryer."
+  mapRoom laundryRoom 3 (2,0)
   setDescription2 laundryRoom "You might find something if you search."
   newExit "south" basementLanding laundryRoom
   newExit "north" laundryRoom basementLanding
@@ -385,6 +386,7 @@ buildWorld = do
     "cabinet holds Granny\'s fine china. There " ++
     "is an ironing board and an iron near the entrance, and a circuit " ++
     "breaker box in the far corner in a wooden cabinet."
+  mapRoom diningRoom 3 (0,2)
   newExit "west" basementLanding diningRoom
   newExit "east" diningRoom basementLanding
   circuitBreakerBox <- newObject diningRoom "circuit breaker box" $
