@@ -320,6 +320,7 @@ buildWorld = do
     "cupboards " ++
     "below the counter, and a cupboard door stands wide open to allow heat " ++
     "into the bathroom from a vent enclosed by the cabinetry."
+  mapRoom bathroom 2 (5,5)
   newExit "north" hallway bathroom
   newExit "south" bathroom hallway
   perfume <- newObject bathroom "perfume" $
@@ -340,6 +341,7 @@ buildWorld = do
     "carpet. There are several rooms connected to the landing: a dining " ++
     "room to the west, an unfinished laundry room to the south, a bathroom " ++
     "to the north, and a bedroom to the east."
+  mapRoom basementLanding 3 (2,2)
   basementEntrance <- newExit "down" kitchen basementLanding
   addAliases basementEntrance ["door", "the door"]
   makeLocked basementEntrance basementKey
