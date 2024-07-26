@@ -1,4 +1,4 @@
-module Things(newRoom, newObject, newExit) where
+module Things(newPlayer, newRoom, newObject, newExit) where
 
 import Defs
 import Actions
@@ -37,6 +37,15 @@ defaultThing = Thing {
   }
 
 -- Here are the exported functions
+
+newPlayer :: String -> String -> Game Ref
+newPlayer name desc = do
+  ref <- newThing
+  setName ref name
+  setDescription ref desc
+  setPlayer ref
+  makeContainer ref
+  return ref
 
 newRoom :: String -> String -> Game Ref
 newRoom name desc = do

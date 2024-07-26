@@ -21,12 +21,12 @@ buildWorld = do
   mapRoom brisbin 1 (4,3)
   setArticle brisbin ""
 
-  player <- newObject brisbin "yourself" $
+  player <- newPlayer "yourself" $
     "You are an eight year old boy with blond hair, " ++
     "wearing jeans, a t-shirt, and tennis shoes with tube socks."
+  move player brisbin
   addAliases player ["you", "self", "me", "myself", "i"]
   setArticle player ""
-  makePlayer player
   backpack <- newObject player "backpack" "A blue canvas backpack."
   makeContainer backpack
   mathBook <- newObject backpack "math book" $

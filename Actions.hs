@@ -4,11 +4,7 @@ import Data.Maybe
 import Control.Monad
 import Defs
 import Categories
-
-makePlayer :: Ref -> Game ()
-makePlayer player = do
-  setPlayer player
-  makeContainer player
+import GameMap
 
 moveNowhere :: Ref -> Game ()
 moveNowhere ref = do
@@ -26,6 +22,7 @@ move :: Ref -> Ref -> Game ()
 move ref destination = do
   when (ref == destination) $ error
     "Fatal error: attempt to move item inside itself"
+  source <- getLocation ref
   -- Get rid of any prior presence in another location
   moveNowhere ref
   -- Add ref to destination's contents
@@ -33,6 +30,11 @@ move ref destination = do
   setContents destination $ ref : destContents
   -- Change object's location to new one
   setLocation ref $ Just destination
+  -- Update the map
+  flag <- isPlayer ref
+  when flag $ do
+    mapM_ updateMap source
+    updateMap destination
 
 makeImmobile :: Ref -> Game ()
 makeImmobile ref = setVerb1 "get" ref $ do

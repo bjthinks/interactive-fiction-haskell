@@ -11,6 +11,12 @@ mapRoom ref region (x,y) = do
   setRegion ref $ Just region
   setMapData ref [(x,y,'*')]
 
+-- Update the map for a given room or location -- called from move when
+-- the player is moved from one location to another
+updateMap :: Ref -> Game ()
+updateMap ref = do
+  msg $ "Update map " ++ show ref
+
 printMap :: Game ()
 printMap = do
   let region = 1
