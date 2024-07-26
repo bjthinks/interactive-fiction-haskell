@@ -160,6 +160,7 @@ buildWorld = do
     "and broiler, a double sink, and a dishwasher. Next to the sink is a " ++
     "ceramic fish for holding Brillo pads, and on the cupboard is a fruit " ++
     "bowl. To the west is Granny\'s side door, which goes to the driveway."
+  mapRoom kitchen 2 (1,1)
   newExit "west" dinette kitchen
   newExit "east" kitchen dinette
   stove <- newObject kitchen "stove" $
