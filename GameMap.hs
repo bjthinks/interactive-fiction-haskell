@@ -5,6 +5,7 @@ import Control.Monad.RWS
 import Data.Maybe
 import Data.Array.IArray
 import Defs
+import Categories
 
 mapRoom :: Ref -> Region -> (Int,Int) -> Game ()
 mapRoom ref region (x,y) = do
@@ -35,12 +36,16 @@ updateMap ref = do
 
 printMap :: Game ()
 printMap = do
-  let region = 1
+  let noMap = stop "There is no map for this area."
+  room <- getRoom
+  maybeRegion <- getRegion room
+  when (isNothing maybeRegion) noMap
+  let Just region = maybeRegion
   do
     m <- getMap region
     when (isNothing m) $ setMap region testMap2
   mm <- getMap region
-  when (isNothing mm) $ stop "There is no map for this area."
+  when (isNothing mm) noMap
   let m = fromJust mm
   let ((xmin,ymin),(xmax,ymax)) = bounds m
   msg ""
