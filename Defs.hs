@@ -26,7 +26,9 @@ data Thing = Thing {
   thingVerb1Map :: M.Map String (Game ()),
   thingVerb2Map :: M.Map (String,String) (Ref -> Game ()),
   thingGuard1Map :: M.Map String (Game ()),
-  thingGuard2Map :: M.Map (String,String) (Ref -> Game ())
+  thingGuard2Map :: M.Map (String,String) (Ref -> Game ()),
+  thingRegion :: Maybe Region,
+  thingMapData :: [(Int,Int,Char)]
   }
 
 data GameState = GameState {
@@ -181,6 +183,8 @@ getVerb1Map     = getProperty thingVerb1Map
 getVerb2Map     = getProperty thingVerb2Map
 getGuard1Map    = getProperty thingGuard1Map
 getGuard2Map    = getProperty thingGuard2Map
+getRegion       = getProperty thingRegion
+getMapData      = getProperty thingMapData
 
 getIsUnlocked :: Ref -> Game Bool
 getIsUnlocked = fmap not . getIsLocked
@@ -210,6 +214,8 @@ setVerb1Map     = setProperty (\t v -> t { thingVerb1Map = v })
 setVerb2Map     = setProperty (\t v -> t { thingVerb2Map = v })
 setGuard1Map    = setProperty (\t v -> t { thingGuard1Map = v })
 setGuard2Map    = setProperty (\t v -> t { thingGuard2Map = v })
+setRegion       = setProperty (\t v -> t { thingRegion = v })
+setMapData      = setProperty (\t v -> t { thingMapData = v })
 
 addAlias :: Ref -> String -> Game ()
 addAlias ref alias = do
