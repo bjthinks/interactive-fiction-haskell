@@ -481,6 +481,7 @@ buildWorld = do
     "mirrors and two cabinets, a toilet, and " ++
     "a shower stall with small green square tile. There is a little round " ++
     "light in the ceiling just outside the shower stall."
+  mapRoom basementBathroom 3 (2,4)
   newExit "north" basementLanding basementBathroom
   newExit "south" basementBathroom basementLanding
   newExit "east" basementBathroom basementBar
@@ -509,6 +510,7 @@ buildWorld = do
     "room is used for storage. There are many large pieces of furniture " ++
     "and boxes filling up most of the space, with only narrow paths to " ++
     "walk along."
+  mapRoom upstairs 4 (0,2)
   toUpstairs <- newExit "up" living upstairs
   newExit "down" upstairs living
   addAliases toUpstairs ["door", "the door"]
@@ -519,6 +521,7 @@ buildWorld = do
     "one small light bulb with a chain switch. Several dressers and chests " ++
     "of drawers fill the space, and there is a disused Capsella set on one " ++
     "of the pieces of furniture."
+  mapRoom attic 4 (0,0)
   newExit "south" upstairs attic
   newExit "north" attic upstairs
   capsellaSet <- newObject attic "Capsella set" $
