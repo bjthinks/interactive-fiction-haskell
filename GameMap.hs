@@ -11,7 +11,7 @@ printMap = do
   let region = 1
   do
     m <- getMap region
-    when (isNothing m) $ setMap region testMap
+    when (isNothing m) $ setMap region testMap2
   mm <- getMap region
   when (isNothing mm) $ stop "There is no map for this area."
   let m = fromJust mm
@@ -24,8 +24,8 @@ printMap = do
       (if x == xmax then "\n" else "")
   msg ""
 
-testMap :: GameMap
-testMap = listArray ((0,0),(4,4)) (repeat ' ') //
+testMap1 :: GameMap
+testMap1 = listArray ((0,0),(4,4)) (repeat ' ') //
   [((0,0),' '),
    ((1,0),'+'),
    ((2,0),'*'),
@@ -39,3 +39,21 @@ testMap = listArray ((0,0),(4,4)) (repeat ' ') //
    ((2,4),'*'),
    ((3,3),'/'),
    ((4,4),'*')]
+
+testMap2 :: GameMap
+testMap2 = listArray ((0,0),(7,5)) (repeat ' ') //
+  [((0,1),'-'),
+   ((1,1),'<'),
+   ((2,1),'-'),
+   ((3,1),'*'),
+   ((4,1),'-'),
+   ((5,1),'>'),
+   ((5,0),'|'),
+   ((5,2),'|'),
+   ((5,3),'@'),
+   ((5,4),'|'),
+   ((5,5),'*'),
+   ((4,3),'-'),
+   ((3,3),'*'),
+   ((6,3),'-'),
+   ((7,3),'*')]
