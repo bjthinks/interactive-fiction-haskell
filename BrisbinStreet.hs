@@ -416,6 +416,7 @@ buildWorld = do
     "This bedroom has a huge king-size bed and a very old vacuum tube " ++
     "television that sits directly on the floor. Granny\'s nightstand " ++
     "sits by the bed. There is a tan recliner facing the TV."
+  mapRoom basementBedroom 3 (4,2)
   newExit "east" basementLanding basementBedroom
   newExit "west" basementBedroom basementLanding
   nightstand <- newObject basementBedroom "nightstand" $
@@ -437,6 +438,7 @@ buildWorld = do
     "are dark wood. There are three tall bar chairs with black padded " ++
     "backs and seats, and two armchairs along the opposite wall. The bar " ++
     "has a small incandescent light on the far wall."
+  mapRoom basementBar 3 (4,4)
   newExit "north" basementBedroom basementBar
   newExit "south" basementBar basementBedroom
   spirits <- newObject basementBar "spirits" $
