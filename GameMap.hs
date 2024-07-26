@@ -6,6 +6,11 @@ import Data.Maybe
 import Data.Array.IArray
 import Defs
 
+mapRoom :: Ref -> Region -> (Int,Int) -> Game ()
+mapRoom ref region (x,y) = do
+  setRegion ref $ Just region
+  setMapData ref [(x,y,'*')]
+
 printMap :: Game ()
 printMap = do
   let region = 1

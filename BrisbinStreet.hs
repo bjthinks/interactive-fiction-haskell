@@ -7,6 +7,7 @@ import Categories
 import Score
 import Actions
 import Verbs
+import GameMap
 import Control.Monad
 import Data.Maybe
 
@@ -17,8 +18,7 @@ buildWorld = do
     "You are in the middle of Brisbin Street. The street continues to the " ++
     "west and east. To the north is Granny\'s House, and to the south is " ++
     "Nick\'s house."
-  setRegion brisbin $ Just 1
-  setMapData brisbin [(4,3,'*')]
+  mapRoom brisbin 1 (4,3)
   setArticle brisbin ""
 
   player <- newObject brisbin "yourself" $
@@ -45,8 +45,7 @@ buildWorld = do
     "and the driveway to the northwest. Granny\'s house is north and the " ++
     "side yard is northeast. There are a pine tree and two white oak trees " ++
     "in the yard. A squirrel watches you nervously from one of the oak trees."
-  setRegion frontYard $ Just 1
-  setMapData frontYard [(4,5,'*')]
+  mapRoom frontYard 1 (4,5)
   setArticle frontYard ""
   newExit "north" brisbin frontYard
   newExit "south" frontYard brisbin
