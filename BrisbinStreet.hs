@@ -84,6 +84,7 @@ buildWorld = do
     "armchairs, and a spindly palm tree sits in the corner next to a " ++
     "display case. To the south is Granny\'s front door, which goes back " ++
     "to the front yard."
+  mapRoom living 2 (5,1)
   enterHouse <- newExit "north" frontYard living
   exitHouse <- newExit "south" living frontYard
   frontDoorKey <- newObject living "front door key"
@@ -141,6 +142,7 @@ buildWorld = do
     "wood pattern. Four chairs with dark brown plastic seats and backs " ++
     "surround the table, and the floor is a brown tile with a swirly " ++
     "pattern."
+  mapRoom dinette 2 (3,1)
   newExit "west" living dinette
   newExit "east" dinette living
   newspaper <- newObject dinette "newspaper" $
