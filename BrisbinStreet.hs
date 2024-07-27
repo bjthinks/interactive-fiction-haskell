@@ -690,6 +690,7 @@ buildWorld = do
     "Granny\'s house, but could use a coat of paint, to say the least. " ++
     "The lawn is in serious need of weeding. There is a paper wasp nest " ++
     "out of reach, on the outside of the second floor."
+  mapRoom nickYard 1 (4,1)
   setArticle nickYard ""
   newExit "north" nickYard brisbin
   newExit "south" brisbin nickYard
@@ -697,6 +698,7 @@ buildWorld = do
   eastBrisbin <- newRoom "east Brisbin Street" $
     "This is the east end of the block. Mike\'s house is north, and " ++
     "Justin\'s house is south."
+  mapRoom eastBrisbin 1 (8,3)
   setArticle eastBrisbin ""
   newExit "east" brisbin eastBrisbin
   newExit "west" eastBrisbin brisbin
