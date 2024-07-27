@@ -664,6 +664,7 @@ buildWorld = do
     "are some disused laundry poles with old clotheslines strung between " ++
     "them. The driveway is southwest, and the side yard is southeast. A " ++
     "side door goes to the garage to the west."
+  mapRoom backyard 1 (4,9)
   newExit "southwest" backyard driveway
   newExit "northeast" driveway backyard
   newExit "west" backyard garage
@@ -675,6 +676,7 @@ buildWorld = do
     "house, and a lightning rod and a TV antenna have been installed with " ++
     "corresponding wires running up to the roof. The front yard is " ++
     "southwest and the backyard is northwest."
+  mapRoom sideYard 1 (6,7)
   setDescription2 sideYard $
     "The grass here looks dry and parched. A hose beckons you to water the " ++
     "yard."
