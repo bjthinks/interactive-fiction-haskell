@@ -130,13 +130,13 @@ setGuards = do
   setDefaultGuard1 "get" getTakeGuard
   setDefaultGuard1 "get all from" $ containerGuard "get things out of"
   setDefaultGuard1 "go" goGuard
-  setDefaultGuard1 "inspect" $ \_ -> return ()
+  setDefaultGuard1 "inspect" alwaysPass
   s setDefaultGuard1 stopWith "lock"
-  setDefaultGuard1 "look" $ \_ -> return ()
+  setDefaultGuard1 "look" alwaysPass
   s setDefaultGuard1 stopWith "open"
   setDefaultGuard1 "put all in" $ containerGuard "put things into"
   setDefaultGuard1 "search" searchGuard
-  setDefaultGuard1 "teleport" $ \_ -> return ()
+  setDefaultGuard1 "teleport" alwaysPass
   s setDefaultGuard1 stopAt "throw"
   s setDefaultGuard1 stopWith "unlock"
   setDefaultGuard2 "get" "from" getFromGuard
@@ -145,6 +145,9 @@ setGuards = do
   setDefaultGuard2 "put" "in" putInGuard
   setDefaultGuard2 "throw" "at" throwGuard
   setDefaultGuard2 "unlock" "with" unlockGuard
+
+alwaysPass :: Ref -> Game ()
+alwaysPass _ = return ()
 
 stopAt :: String -> Ref -> Game ()
 stopAt verb ref = do
