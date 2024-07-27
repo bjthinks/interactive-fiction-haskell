@@ -784,6 +784,7 @@ buildWorld = do
     "a row of motel rooms along the back of the property. In the middle of " ++
     "the lot is an oval of grass with a picnic table and several oak trees, " ++
     "from which the property no doubt got its name."
+  mapRoom motel 1 (0,5)
   newExit "north" westBrisbin motel
   newExit "south" motel westBrisbin
   leah <- newObject motel "Leah" $
@@ -823,6 +824,7 @@ buildWorld = do
     "the front yard, with white rocks surrounding it. As you approach the " ++
     "house, the light on the post turns on. You feel like you are being " ++
     "watched."
+  mapRoom hauntedYard 1 (0,1)
   newExit "south" westBrisbin hauntedYard
   newExit "north" hauntedYard westBrisbin
 
