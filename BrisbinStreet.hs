@@ -588,6 +588,7 @@ buildWorld = do
     "A concrete driveway extends along the west side of Granny\'s House. " ++
     "Granny\'s side door is to the east. The front yard is to the " ++
     "southeast and the backyard is to the northeast. The garage is north."
+  mapRoom driveway 1 (2,7)
   setDescription2 driveway $
     "There are a great many small brown and medium black ants coming " ++
     "and going out of anthills along the driveway. You wish you had a " ++
@@ -643,6 +644,7 @@ buildWorld = do
     "Two cars are squeezed into this garage: a 1970s era yellow " ++
     "Oldsmobile, and a very old green car with patched rust spots all over " ++
     "its body. There is a side door going to the back yard to the east."
+  mapRoom garage 1 (2,9)
   newExit "north" driveway garage
   newExit "south" garage driveway
   sprinkler <- newObject garage "sprinkler" $
