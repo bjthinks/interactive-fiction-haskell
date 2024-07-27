@@ -709,6 +709,7 @@ buildWorld = do
     "an old-fashioned well with petunias growing out of it, and you also " ++
     "see a flower bed next to the house. A garage stands at the back of " ++
     "the lot. A pet bunny named Misty is here."
+  mapRoom mikeYard 1 (8,5)
   setArticle mikeYard ""
   newExit "north" eastBrisbin mikeYard
   newExit "south" mikeYard eastBrisbin
@@ -729,7 +730,7 @@ buildWorld = do
   putMistyIn <- getVerb2 "put" misty "in"
   setVerb2 "put" misty "in" $ \container -> do
     putMistyIn container
-    when (container == backpack) $ msg "Misty loves your backpack."
+    when (container == backpack) $ msg "Misty loves your backpack!"
   let happyMisty = do
         msg $ "You gently pet Misty between her eyes and nose. " ++
           "She excitedly hops about; she loves being pet there."
@@ -749,6 +750,7 @@ buildWorld = do
     "You stand in front of Justin\'s house. It is a large home with a " ++
     "noticable addition and multiple floors. There is a crabapple tree " ++
     "here."
+  mapRoom justinYard 1 (8,1)
   setArticle justinYard ""
   let bimboIsHere = "Bimbo the cat is hanging out in the yard."
   setDescription2 justinYard bimboIsHere
@@ -771,6 +773,7 @@ buildWorld = do
   westBrisbin <- newRoom "west Brisbin Street" $
     "This is the west end of the block. There is a seedy motel to the " ++
     "north, and what looks like a haunted house to the south."
+  mapRoom westBrisbin 1 (0,3)
   setArticle westBrisbin ""
   newExit "west" brisbin westBrisbin
   newExit "east" westBrisbin brisbin
