@@ -21,19 +21,27 @@ data Verb = Blank
           deriving Show
 
 doVerb :: Verb -> Game ()
-doVerb Blank = return ()
+doVerb Blank = do
+  debug <- getDebug
+  when debug $ msg $ "Executing " ++ show Blank
 
 doVerb (Verb0 name) = do
+  debug <- getDebug
+  when debug $ msg $ "Executing " ++ show (Verb0 name)
   action <- getVerb0 name
   action
 
 doVerb (Verb1 name ref) = do
+  debug <- getDebug
+  when debug $ msg $ "Executing " ++ show (Verb1 name ref)
   g <- getGuard1 name ref
   g
   action <- getVerb1 name ref
   action
 
 doVerb (Verb2 verb dobj prep iobj) = do
+  debug <- getDebug
+  when debug $ msg $ "Executing " ++ show (Verb2 verb dobj prep iobj)
   g <- getGuard2 verb dobj prep
   g iobj
   action <- getVerb2 verb dobj prep
