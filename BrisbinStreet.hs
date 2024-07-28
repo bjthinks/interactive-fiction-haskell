@@ -833,6 +833,7 @@ buildWorld = do
     "to be done in lavish wood paneling. There is a picture of an elderly " ++
     "man on the wall, and his eyes move to follow you. There is a writing " ++
     "desk and a basket for umbrellas next to the coat closet."
+  mapRoom hhFoyer 5 (0,4)
   hhEntrance <- newExit "south" hauntedYard hhFoyer
   beforeGo hhEntrance $ msg "You hear footsteps as you enter the house."
   newExit "north" hhFoyer hauntedYard
@@ -883,6 +884,7 @@ buildWorld = do
     "home -- you can see their webs covering the upper shelves of the " ++
     "bookcases. One red book stands out from the rest, as if it has been " ++
     "pulled out several inches."
+  mapRoom hhReadingRoom 5 (2,4)
   newExit "east" hhFoyer hhReadingRoom
   newExit "west" hhReadingRoom hhFoyer
   book <- newObject hhReadingRoom "book" $
