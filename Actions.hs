@@ -48,7 +48,7 @@ disconnect :: Ref -> Game ()
 disconnect exit = do
   maybePath <- getPath exit
   when (isJust maybePath) $ do
-    let Just (src,_) = maybePath
+    let (src,_) = fromJust maybePath
     srcExits <- getExits src
     setExits src $ filter (/= exit) srcExits
     setPath exit Nothing

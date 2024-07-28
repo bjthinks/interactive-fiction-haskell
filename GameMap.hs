@@ -18,7 +18,7 @@ updateMap :: Ref -> Game ()
 updateMap ref = do
   maybeRegion <- getRegion ref
   when (isJust maybeRegion) $ do
-    let Just region = maybeRegion
+    let region = fromJust maybeRegion
     roomData <- makeUpdates <$> getMapData ref
     -- TODO: queue draw exits
     playerRoom <- getRoom
@@ -30,7 +30,7 @@ updateMap ref = do
     when (isNothing maybeMap) $ do
       let newMap = listArray ((0,0),(8,9)) $ repeat ' '
       setMap region newMap
-    Just regionMap <- getMap region
+    regionMap <- fromJust <$> getMap region
     let updatedMap = regionMap // (roomData ++ playerData)
     setMap region updatedMap
       where
@@ -43,7 +43,7 @@ printMap = do
   room <- getRoom
   maybeRegion <- getRegion room
   when (isNothing maybeRegion) noMap
-  let Just region = maybeRegion
+  let region = fromJust maybeRegion
   do
     m <- getMap region
     when (isNothing m) $ setMap region testMap2
