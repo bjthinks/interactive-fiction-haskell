@@ -907,14 +907,15 @@ buildWorld = do
   setUnlockedDescription2 writingDesk "The drawers are unlocked."
   setLockedDescription2 writingDesk "The drawers are locked."
 
-  hhBathroom1 <- newRoom "bathroom" $
+  hhBathroom <- newRoom "bathroom" $
     "In this otherwise normal-looking bathroom, there is an open coffin. " ++
     "It takes up most of the space on the floor. Other than that, you see " ++
     "a sink, a toilet, and a shower. There is a medicine cabinet behind the " ++
     "bathroom mirror."
-  bathroomEntrance <- newExit "south" hhReadingRoom hhBathroom1
-  newExit "north" hhBathroom1 hhReadingRoom
-  medicineCabinet <- newObject hhBathroom1 "medicine cabinet" $
+  mapRoom hhBathroom 5 (2,2)
+  bathroomEntrance <- newExit "south" hhReadingRoom hhBathroom
+  newExit "north" hhBathroom hhReadingRoom
+  medicineCabinet <- newObject hhBathroom "medicine cabinet" $
     "This is an ordinary cabinet. It\'s white on the inside and has glass " ++
     "shelves."
   addAlias medicineCabinet "cabinet"
@@ -1340,7 +1341,7 @@ buildWorld = do
       onGetBook2 = do
         getBookMessage
         disconnect staircaseEntrance
-        connect bathroomEntrance hhReadingRoom hhBathroom1
+        connect bathroomEntrance hhReadingRoom hhBathroom
         setVerb1 "get" book onGetBook1
         setVerb1 "use" book onGetBook1
       getBookMessage = msg $
