@@ -934,6 +934,7 @@ buildWorld = do
     "on all sides of it. There is a chandelier with real candles in it, " ++
     "which have been recently lit. In the middle of the table is a big " ++
     "ceramic jar."
+  mapRoom hhDiningRoom 5 (0,2)
   newExit "south" hhFoyer hhDiningRoom
   newExit "north" hhDiningRoom hhFoyer
   eyeballs <- newObject hhDiningRoom "jar" $
@@ -973,7 +974,7 @@ buildWorld = do
   addAliases kitchenEntrance ["door", "the door"]
   makeLocked kitchenEntrance skullKey
   beforeGo kitchenEntrance $ msg $ "Boards creak under your feet, but the " ++
-    "ghosts don\'t notice."
+    "ghosts don\'t notice." -- TODO: message shouldn't appear if door is locked
   newExit "north" hhKitchen hhDiningRoom
   canOpener <- newObject hhKitchen "can opener" $
     "This is a metal and plastic can opener of a common style that you " ++
