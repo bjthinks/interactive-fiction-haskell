@@ -959,7 +959,7 @@ buildWorld = do
       "towards you and bare their huge ghostly teeth! You are too scared to " ++
       "go on."
     msg $ "Wearing your ghost costume, you walk right up to the table and " ++
-      "take the skull key from the ghosts."
+      "take the skull key from the ghosts. They must think you are one of them."
     defaultGetSkullKey
     addPoints 5 "turning the tables on the three ghosts"
     clearVerb1 "get" skullKey

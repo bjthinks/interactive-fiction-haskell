@@ -188,6 +188,9 @@ goGuard ref = do
   stopIfRoom verb ref
   stopIfInRoom verb ref
   stopIfInOpenContainer verb ref
+  locked <- getIsLocked ref
+  name <- qualifiedName ref
+  when locked $ stop $ "The door going " ++ name ++ " is locked."
 
 searchGuard :: Ref -> Game ()
 searchGuard ref = do
@@ -393,9 +396,6 @@ defaultGetAllFrom container = do
 
 defaultGo :: Ref -> Game ()
 defaultGo ref = do
-  locked <- getIsLocked ref
-  name <- qualifiedName ref
-  when locked $ stop $ "The door going " ++ name ++ " is locked."
   Just (_,dest) <- getPath ref
   player <- getPlayer
   move player dest
