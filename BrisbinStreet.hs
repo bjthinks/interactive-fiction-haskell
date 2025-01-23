@@ -1215,17 +1215,15 @@ buildWorld = do
         move bunnyCostume player
         setVerb1 "talk to" butler $ do
           msg $ "The butler ghost says, \"I see you have assembled the " ++
-            "complete bunny costume. Please give it to me, and I will " ++
-            "allow you to see the master of the house.\""
-        setVerb2 "give" bunnyCostume "to" $ \ghost -> do
-          ghostName <- qualifiedName ghost
-          unless (ghost == butler) $ stop $
-            "You can\'t give the bunny costume to " ++ ghostName ++ "."
+            "complete bunny costume. The master of the house will want to " ++
+            "see this! Please take this key and visit him in the master " ++
+            "bedroom.\""
+          move bossKey player
   setVerb1 "talk to" butler $ do
     msg $
       "The butler ghost says, \"I have been watching you since you came " ++
       "into the house. You seem like you have your act together, so I have " ++
-      "a task for you. We are missing a bunny costume that went missing " ++
+      "a task for you. We are missing a bunny costume that got lost " ++
       "some time ago. Could you find it for me? It comes in two parts: a " ++
       "hood, and a pair of slippers. Please talk to me again when you " ++
       "have found them.\""
