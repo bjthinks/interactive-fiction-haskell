@@ -87,6 +87,23 @@ mySettings = setComplete noCompletion defaultSettings
 
 main :: IO ()
 main = do
+  sequence_ $ map putStrLn banner
   let (newState, response) = doStartup
   output response
   void $ runInputT mySettings $ runMaybeT $ mainloop newState
+
+banner :: [String]
+banner =
+  [ "  ____       _     _     _"
+  , " |  _ \\     (_)   | |   (_)"
+  , " | |_) |_ __ _ ___| |__  _ _ __"
+  , " |  _ <| '__| / __| '_ \\| | '_ \\"
+  , " | |_) | |  | \\__ \\ |_) | | | | |"
+  , " |____/|_|  |_|___/_.__/|_|_| |_|"
+  , "  / ____| |               | |"
+  , " | (___ | |_ _ __ ___  ___| |_"
+  , "  \\___ \\| __| '__/ _ \\/ _ \\ __|"
+  , "  ____) | |_| | |  __/  __/ |_"
+  , " |_____/ \\__|_|  \\___|\\___|\\__|"
+  , ""
+  ]
