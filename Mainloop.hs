@@ -92,6 +92,8 @@ main = do
   output response
   void $ runInputT mySettings $ runMaybeT $ mainloop newState
 
+-- Taken from:
+-- https://patorjk.com/software/taag/#p=display&f=Big&t=Brisbin%0AStreet
 banner :: [String]
 banner =
   [ "  ____       _     _     _"
