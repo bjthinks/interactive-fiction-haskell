@@ -4,3 +4,9 @@ consider allowing "it" as a noun in the parser -- would have to check if
   the ref is still visible before allowing it to be parsed
 read jar
 play with the black cat
+
+commands to implement:
+burn ants
+look in backpack
+get ants
+burn ants
