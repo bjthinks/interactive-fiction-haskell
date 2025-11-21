@@ -1,7 +1,8 @@
 module Defs where
 
 import qualified Data.Map.Strict as M
-import Control.Monad.RWS
+import Control.Monad.State
+import Control.Monad.Writer
 import Data.Maybe
 import Control.Monad
 import Control.Monad.Trans.Maybe
@@ -79,10 +80,10 @@ startState = GameState {
 -}
 
 type MoveOutput = String
-type Game = MaybeT (RWS () MoveOutput GameState)
+type Game = MaybeT (StateT GameState (Writer MoveOutput))
 
 execGame :: Game a -> GameState -> (GameState, MoveOutput)
-execGame action = execRWS (runMaybeT action) ()
+execGame action st = runWriter (execStateT (runMaybeT action) st)
 
 msg :: String -> Game ()
 msg str = tell str >> tell "\n"

@@ -5,7 +5,7 @@ module Verbs(Verb(..), doVerb, setGuards, setDefaults,
 import Data.Maybe
 import Data.List
 import Control.Monad
-import Control.Monad.RWS
+import Control.Monad.State
 import qualified Data.Map.Strict as M
 
 import Defs

@@ -2,7 +2,7 @@ module Score where
 
 import Defs
 import Control.Monad
-import Control.Monad.RWS
+import Control.Monad.State
 
 addPoints :: Int -> String -> Game ()
 addPoints points reason = do

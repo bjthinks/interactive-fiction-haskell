@@ -4,7 +4,7 @@ import System.Console.Haskeline
 import System.Console.Terminal.Size
 import Control.Monad
 import Control.Monad.Trans.Maybe
-import Control.Monad.RWS
+import Control.Monad.IO.Class
 import Defs
 import ParseInput
 import Verbs

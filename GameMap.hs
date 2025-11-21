@@ -1,7 +1,7 @@
 module GameMap where
 
 import Control.Monad
-import Control.Monad.RWS
+import Control.Monad.Writer
 import Data.Maybe
 import Data.Array.IArray
 import Defs
