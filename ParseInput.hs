@@ -1,4 +1,4 @@
-module ParseInput(handleInput) where
+module ParseInput(handleInput, visibleRefs, allNames) where
 
 import Prelude hiding (Word)
 import Control.Monad

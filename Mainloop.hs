@@ -4,7 +4,10 @@ import System.Console.Haskeline
 import System.Console.Terminal.Size
 import Control.Monad
 import Control.Monad.Trans.Maybe
-import Control.Monad.IO.Class
+import Control.Monad.State
+import Control.Monad.Writer
+import Data.IORef
+import Data.List
 import Defs
 import ParseInput
 import Verbs
@@ -50,8 +53,9 @@ playback input =
       let (st', _) = takeTurn i st
       in takeTurns is st'
 
-mainloop :: GameState -> MaybeT (InputT IO) ()
-mainloop oldState = do
+mainloop :: IORef GameState -> MaybeT (InputT IO) ()
+mainloop ref = do
+  oldState <- liftIO $ readIORef ref
   line <- MaybeT $ getInputLine "> "
   let command = take 5 line
       filename = drop 5 line
@@ -59,17 +63,19 @@ mainloop oldState = do
     let hist = reverse $ commandHistory oldState
     liftIO $ output $ "Saving game to filename " ++ filename ++ "."
     liftIO $ writeFile filename $ unlines hist
-    mainloop oldState
+    mainloop ref
     else if command == "load " && filename /= "" then do
     saveData <- liftIO $ readFile filename
     let newState = playback $ lines saveData
     let (newState2, response) = execGame (doVerb $ Verb0 "look") newState
     liftIO $ output response
-    mainloop newState2
+    liftIO $ writeIORef ref newState2
+    mainloop ref
     else do
     let (newState, response) = takeTurn line oldState
     liftIO $ output response
-    when (keepPlaying newState) (mainloop newState)
+    liftIO $ writeIORef ref newState
+    when (keepPlaying newState) (mainloop ref)
 
 startup :: Game ()
 startup = do
@@ -82,15 +88,45 @@ startup = do
 doStartup :: (GameState, String)
 doStartup = execGame startup startState
 
-mySettings :: Settings IO
-mySettings = setComplete noCompletion defaultSettings
+uniq :: Eq a => [a]-> [a]
+uniq (a:b:cs)
+  | a == b = uniq (b:cs)
+  | otherwise = a : uniq (b:cs)
+uniq [a] = [a]
+uniq [] = []
+
+visibleWords :: Game [String]
+visibleWords = do
+  refs <- visibleRefs
+  visibleNames <- mapM allNames refs
+  let flatNames = concat visibleNames
+      flatWords = concat $ map words flatNames
+      uniqueWords = uniq $ sort flatWords
+  return uniqueWords
+
+visibleWords' :: GameState -> [String]
+visibleWords' currentState =
+  concat $ fst $ runWriter (evalStateT (runMaybeT visibleWords) currentState)
+
+wordsBeginningWith :: IORef GameState -> String -> IO [Completion]
+wordsBeginningWith ref str = do
+  gameState <- readIORef ref
+  return $ map simpleCompletion $ filter (isPrefixOf str) $
+    visibleWords' gameState
+
+completion :: IORef GameState -> CompletionFunc IO
+completion ref = completeWord Nothing " " $ wordsBeginningWith ref
+
+mySettings :: IORef GameState -> Settings IO
+mySettings ref = setComplete (completion ref) defaultSettings
 
 main :: IO ()
 main = do
   sequence_ $ map putStrLn banner
   let (newState, response) = doStartup
   output response
-  void $ runInputT mySettings $ runMaybeT $ mainloop newState
+  ref <- newIORef newState
+  void $ runInputT (mySettings ref) $ runMaybeT $ mainloop ref
 
 -- Taken from:
 -- https://patorjk.com/software/taag/#p=display&f=Big&t=Brisbin%0AStreet
