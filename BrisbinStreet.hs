@@ -1027,6 +1027,7 @@ buildWorld = do
     "many pillows circles the exterior of the room, with gaps for the " ++
     "spiral staircase landing and a door to the west. There is a patch of " ++
     "black fur on the floor where the kitty of the house evidently sleeps."
+  mapRoom hhMusicRoom 6 (4,0)
   upSpiral <- newExit "up" hhStaircase hhMusicRoom
   newExit "down" hhMusicRoom hhStaircase
   setVerb1 "go" upSpiral $ stop $ "The black cat positions herself on " ++
@@ -1043,6 +1044,7 @@ buildWorld = do
     "There is an ornate door to the west: it must be the master bedroom. " ++
     "Strangely, there is no doorknob or handle to be seen; only a keyhole " ++
     "to unlock it."
+  mapRoom hhAtrium 6 (2,0)
   batDoor <- newExit "west" hhMusicRoom hhAtrium
   newExit "east" hhAtrium hhMusicRoom
   beforeGo batDoor $ msg $
@@ -1062,6 +1064,7 @@ buildWorld = do
     "bed richly adorned with elegant blankets and pillowcases. On one of " ++
     "the bedside stands is a large jack-o\'-lantern with a flickering " ++
     "light inside, although no candle or light source can be seen."
+  mapRoom hhMasterBedroom 6 (0,0)
   setDescription2 hhMasterBedroom
     "A huge ghost stands right in front of you, and you are extremely scared!"
   enterMasterBedroom <- newExit "west" hhAtrium hhMasterBedroom
@@ -1105,6 +1108,7 @@ buildWorld = do
     "makes a soft ticking sound as it swings back and forth. You watch it " ++
     "for a while, and start to feel sleepy. Maybe you should move on before " ++
     "you fall into a hypnotic trance..."
+  mapRoom hhHallway 6 (2,2)
   newExit "north" hhAtrium hhHallway
   newExit "south" hhHallway hhAtrium
 
@@ -1113,6 +1117,7 @@ buildWorld = do
     "It is chock full of Halloween costumes. You see pirates, ninjas, " ++
     "robots, animals, and especially ghosts. There is even a whole section " ++
     "of bunny costumes. The house\'s butler is floating in the air."
+  mapRoom hhDressingRoom 6 (4,2)
   newExit "east" hhHallway hhDressingRoom
   newExit "west" hhDressingRoom hhHallway
   butler <- newObject hhDressingRoom "butler ghost" $
@@ -1127,6 +1132,7 @@ buildWorld = do
     "floor, and it\'s not even clear which ones are clean or dirty. The " ++
     "dresser drawers are open, and things are hanging out. The closet is " ++
     "full of stuff. The bed is unmade, and the bedding is askew."
+  mapRoom hhWestBedroom 6 (2,4)
   enterWestBedroom <- newExit "north" hhHallway hhWestBedroom
   newExit "south" hhWestBedroom hhHallway
   setIsLocked enterWestBedroom True
@@ -1160,6 +1166,7 @@ buildWorld = do
     "single wrinkle, the floor is clean, and each piece of furniture has " ++
     "a few decorative and useful objects artfully displayed. The room " ++
     "looks like it belongs in a museum."
+  mapRoom hhEastBedroom 6 (4,4)
   enterEastBedroom <- newExit "northeast" hhHallway hhEastBedroom
   newExit "southwest" hhEastBedroom hhHallway
   setVerb2 "unlock" enterEastBedroom "with" noKeyhole
