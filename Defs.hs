@@ -85,6 +85,9 @@ type Game = MaybeT (StateT GameState (Writer MoveOutput))
 execGame :: Game a -> GameState -> (GameState, MoveOutput)
 execGame action st = runWriter (execStateT (runMaybeT action) st)
 
+catch :: Game () -> Game ()
+catch action = mplus action $ return ()
+
 msg :: String -> Game ()
 msg str = tell str >> tell "\n"
 

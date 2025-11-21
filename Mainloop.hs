@@ -33,7 +33,7 @@ takeTurn :: String -> GameState -> (GameState, String)
 takeTurn line oldState =
   let (newState, response) = execGame (handleInput line) oldState
       (nows, laters) = processDelayedActions $ delayedActions newState
-      nowsWithFailureCaught = map (flip mplus (return ())) nows
+      nowsWithFailureCaught = map catch nows
       newState2 = newState { delayedActions = laters }
       (newState3, response2) =
                   execGame (sequence nowsWithFailureCaught) newState2

@@ -348,7 +348,7 @@ doInventory = do
 
 doLook :: Game ()
 doLook = do
-  printMap `mplus` return ()
+  catch printMap
   ref <- getCurrentRoom
   doVerb (Verb1 "look" ref)
 
@@ -390,9 +390,9 @@ defaultGetAllFrom container = do
   containerName <- qualifiedName container
   when (contents == []) $ stop $ capitalize containerName ++ " is empty."
   let getFromContainer item = doVerb $ Verb2 "get" item "from" container
-  -- The mplus below assures that the list of actions continues executing
+  -- The catch below assures that the list of actions continues executing
   -- even if one of them uses stop or mzero.
-  mapM_ (flip mplus (return ()) . getFromContainer) contents
+  mapM_ (catch . getFromContainer) contents
 
 defaultGo :: Ref -> Game ()
 defaultGo ref = do
@@ -487,9 +487,9 @@ defaultPutAllIn container = do
   when (thingsToPutIn == []) $ stop $ "You don\'t have anything to put in " ++
     containerName ++ "."
   let putInContainer = \item -> doVerb $ Verb2 "put" item "in" container
-  -- The mplus below assures that the list of actions continues executing
+  -- The catch below assures that the list of actions continues executing
   -- even if one of them uses stop or mzero.
-  mapM_ (flip mplus (return ()) . putInContainer) thingsToPutIn
+  mapM_ (catch . putInContainer) thingsToPutIn
 
 defaultSearch :: Ref -> Game ()
 defaultSearch ref = do
