@@ -970,6 +970,7 @@ buildWorld = do
     "floor and countertops. There is no food anywhere to be seen, and the " ++
     "fridge is standing open and completely empty. You watch your step " ++
     "very carefully as you pass through this room."
+  mapRoom hhKitchen 5 (0,0)
   kitchenEntrance <- newExit "south" hhDiningRoom hhKitchen
   addAliases kitchenEntrance ["door", "the door"]
   makeLocked kitchenEntrance skullKey
@@ -997,6 +998,7 @@ buildWorld = do
     "This room has a very large and opulent spiral staircase going to the " ++
     "upstairs floor. The walnut railing is inlaid with mother of pearl, and " ++
     "the steps are covered in yellow carpet."
+  mapRoom hhStaircase 5 (2,0)
   setDescription2 hhStaircase $ "A very unfriendly black cat is " ++
     "staring at you."
   addAlias hhStaircase "staircase"
