@@ -101,7 +101,7 @@ visibleWords = do
   visibleNames <- mapM allNames refs
   let flatNames = concat visibleNames
       flatWords = concat $ map words flatNames
-      uniqueWords = uniq $ sort flatWords
+      uniqueWords = uniq $ sort $ flatWords ++ parseWords
   return uniqueWords
 
 visibleWords' :: GameState -> [String]

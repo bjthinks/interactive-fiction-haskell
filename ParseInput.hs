@@ -1,4 +1,4 @@
-module ParseInput(handleInput, visibleRefs, allNames) where
+module ParseInput(handleInput, visibleRefs, allNames, parseWords) where
 
 import Prelude hiding (Word)
 import Control.Monad
@@ -62,6 +62,15 @@ alias0 "take all" = "get all"
 alias0 "water grass" = "water the grass"
 alias0 x = x
 
+alias0Words :: [String]
+alias0Words =
+  [ "i"
+  , "l"
+  , "quit"
+  , "take all"
+  , "water grass"
+  ]
+
 verb1 :: String -> MyParser Verb
 verb1 name = do
   matchTokens $ words name
@@ -88,6 +97,19 @@ alias1 "talk" = "talk to"
 alias1 "water grass with" = "water the grass with"
 alias1 x = x
 
+alias1Words :: [String]
+alias1Words =
+  [ "examine"
+  , "l"
+  , "look at"
+  , "move"
+  , "put all into"
+  , "take"
+  , "take all from"
+  , "talk"
+  , "water grass with"
+  ]
+
 verb2 :: String -> String -> MyParser Verb
 verb2 verb prep = do
   matchTokens $ words verb
@@ -103,6 +125,13 @@ alias2 "close" "with" = ("lock", "with")
 alias2 "put" "into" = ("put", "in")
 alias2 "take" "from" = ("get", "from")
 alias2 verb prep = (verb, prep)
+
+alias2Words :: [String]
+alias2Words =
+  [ "close with"
+  , "put into"
+  , "take from"
+  ]
 
 implicitGo :: MyParser Verb
 implicitGo = do
@@ -185,6 +214,79 @@ parseLine =
   debug "teleport" |||
   implicitGo |||
   (eof >> return Blank)
+
+verbWords :: [String]
+verbWords =
+  [ "drop all"
+  , "exit"
+  , "get all"
+  , "help"
+  , "i"
+  , "inventory"
+  , "l"
+  , "look"
+  , "map"
+  , "quit"
+  , "score"
+  , "search"
+  , "take all"
+  , "wait"
+  , "water grass"
+  , "water the grass"
+
+  , "close"
+  , "drink"
+  , "drop"
+  , "eat"
+  , "examine"
+  , "fill"
+  , "find"
+  , "get"
+  , "get all from"
+  , "go"
+  , "l"
+  , "light"
+  , "lock"
+  , "look"
+  , "look at"
+  , "move"
+  , "open"
+  , "pet"
+  , "play with"
+  , "put all in"
+  , "put all into"
+  , "read"
+  , "search"
+  , "talk"
+  , "talk to"
+  , "take"
+  , "take all from"
+  , "throw"
+  , "turn off"
+  , "turn on"
+  , "unlock"
+  , "use"
+  , "water grass with"
+  , "water the grass with"
+
+  , "burn with"
+  , "close with"
+  , "combine with"
+  , "get from"
+  , "give to"
+  , "light with"
+  , "lock with"
+  , "open with"
+  , "put in"
+  , "put into"
+  , "take from"
+  , "throw at"
+  , "use on"
+  , "unlock with"
+  ]
+
+parseWords = sort $ concat $ map words $
+  alias0Words ++ alias1Words ++ alias2Words ++ verbWords
 
 handleInput :: String -> Game ()
 handleInput input = do
