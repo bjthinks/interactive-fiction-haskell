@@ -64,7 +64,7 @@ buildWorld = do
   setVerb1 "get" squirrel highInTree
   setVerb1 "pet" squirrel highInTree
   let throwAcorns finalAction = \target -> do
-        room <- getRoom
+        room <- getCurrentRoom
         unless (room == frontYard) $ stop "You don\'t see any squirrels here."
         targetName <- qualifiedName target
         unless (target == squirrel) $ stop $
@@ -118,13 +118,13 @@ buildWorld = do
         setDescription2 living "It feels cool and pleasant in here."
         let acDesc2On = "The unit hums noisily as it runs."
             acCyclesOn = do
-              room <- getRoom
+              room <- getCurrentRoom
               when (room == living) $ msg $ "The air conditioner cycles on. " ++
                 acDesc2On
               setDescription2 airConditioner acDesc2On
               queueAction 4 acCyclesOff
             acCyclesOff = do
-              room <- getRoom
+              room <- getCurrentRoom
               when (room == living) $ msg $ "The air conditioner cycles " ++
                 "off. It is suddenly quiet."
               setDescription2 airConditioner ""
@@ -198,7 +198,7 @@ buildWorld = do
 
   let useCandleAction = do
         maybeCandleLoc <- getLocation candle
-        room <- getRoom
+        room <- getCurrentRoom
         unless (maybeCandleLoc == Just room) $ stop
           "You should drop the candle before lighting it."
         maybeMatchesLoc <- getLocation matches
@@ -279,7 +279,7 @@ buildWorld = do
     stopIfExit verb dollhouse
     stopIfInOpenContainer verb dollhouse
   setVerb1 "use" dollhouse $ do
-    playerLoc <- getRoom
+    playerLoc <- getCurrentRoom
     maybeDollhouseLoc <- getLocation dollhouse
     let failUseDollhouse = stop $ "Something has gone wrong. You can\'t " ++
           "use the dollhouse now."
@@ -630,7 +630,7 @@ buildWorld = do
           stop $ "You can\'t (or shouldn\'t) burn " ++ victimName ++
             "with the magnifying glass."
   setVerb1 "use" magnifyingGlass $ do
-    room <- getRoom
+    room <- getCurrentRoom
     unless (room == driveway) noUseGlass
     burnAnts
   setVerb2 "burn" ants "with" $ \tool -> do
@@ -725,7 +725,7 @@ buildWorld = do
     move misty player
   setVerb1 "drop" misty $ do
     msg "You gently set Misty down."
-    room <- getRoom
+    room <- getCurrentRoom
     move misty room
   putMistyIn <- getVerb2 "put" misty "in"
   setVerb2 "put" misty "in" $ \container -> do
@@ -735,7 +735,7 @@ buildWorld = do
         msg $ "You gently pet Misty between her eyes and nose. " ++
           "She excitedly hops about; she loves being pet there."
         queueAction 2 $ do
-          room <- getRoom
+          room <- getCurrentRoom
           mistyLoc <- getLocation misty
           when (Just room == mistyLoc) $ msg $
             "Misty hops up to you and wants to be pet again."
@@ -860,7 +860,7 @@ buildWorld = do
   setVerb1 "get" costume getCostume
   setVerb2 "get" costume "from" $ \_ -> getCostume
   setVerb1 "drop" costume $ do
-    room <- getRoom
+    room <- getCurrentRoom
     putCostume room
   setVerb2 "put" costume "in" putCostume
   setVerb1 "get" bimbo $ do
@@ -872,7 +872,7 @@ buildWorld = do
     moveNowhere bimbo
     setDescription2 justinYard ""
     queueAction 3 $ do
-      room <- getRoom
+      room <- getCurrentRoom
       when (room == justinYard) $ msg "Bimbo returns to the front yard."
       move bimbo justinYard
       setDescription2 justinYard bimboIsHere
@@ -1088,7 +1088,7 @@ buildWorld = do
   setVerb1 "use" flask winGame
 
   let panic = do
-        room <- getRoom
+        room <- getCurrentRoom
         bossLoc <- getLocation boss
         unless (Just room == bossLoc) mzero
         msg $ "You are so frightened of the huge ghost that you " ++
@@ -1239,13 +1239,13 @@ buildWorld = do
 
   setVerb1 "get" plant $ do
     move plant player
-    room <- getRoom
+    room <- getCurrentRoom
     when (room /= hhAtrium) $ stop "You get the small plant."
     msg "You hear a click as you get the small plant."
     setIsLocked enterWestBedroom False
     setIsLocked enterEastBedroom True
   setVerb1 "drop" plant $ do
-    room <- getRoom
+    room <- getCurrentRoom
     move plant room
     when (room /= hhAtrium) $ stop "You drop the small plant."
     msg "You hear a click as you drop the small plant."
@@ -1310,7 +1310,7 @@ buildWorld = do
           "above. She settles into her spot on the first step."
         queueAction 3 prowl1
       kittyMessage message = do
-        room <- getRoom
+        room <- getCurrentRoom
         kittyLocation <- getLocation blackCat
         when (Just room == kittyLocation) $ msg message
   -- We have to set the guard here for now because Verbs imports Actions

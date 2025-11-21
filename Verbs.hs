@@ -320,7 +320,7 @@ doDropAll = do
 
 doGetAll :: Game ()
 doGetAll = do
-  thingsToGet <- getRoomContents -- excludes player
+  thingsToGet <- getCurrentRoomContents -- excludes player
   when (thingsToGet == []) $ stop "There isn\'t anything to get."
   mapM_ (doVerb . Verb1 "get") thingsToGet
 
@@ -349,7 +349,7 @@ doInventory = do
 doLook :: Game ()
 doLook = do
   printMap `mplus` return ()
-  ref <- getRoom
+  ref <- getCurrentRoom
   doVerb (Verb1 "look" ref)
 
 doScore :: Game ()
@@ -362,7 +362,7 @@ doScore = do
 
 doSearch :: Game ()
 doSearch = do
-  room <- getRoom
+  room <- getCurrentRoom
   name <- qualifiedName room
   msg $ "(" ++ name ++ ")"
   action <- getVerb1 "search" room
@@ -370,7 +370,7 @@ doSearch = do
 
 defaultDrop :: Ref -> Game ()
 defaultDrop ref = do
-  room <- getRoom
+  room <- getCurrentRoom
   move ref room
   name <- qualifiedName ref
   msg $ "You drop " ++ name ++ "."

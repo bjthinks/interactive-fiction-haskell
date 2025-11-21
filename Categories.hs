@@ -25,8 +25,8 @@ getInventory = do
   player <- getPlayer
   getContents' player
 
-getRoom :: Game Ref
-getRoom = do
+getCurrentRoom :: Game Ref
+getCurrentRoom = do
   player <- getPlayer
   maybeRoom <- getLocation player
   case maybeRoom of
@@ -34,9 +34,9 @@ getRoom = do
     Just room -> return room
 
 -- Excludes player
-getRoomContents :: Game [Ref]
-getRoomContents = do
-  room <- getRoom
+getCurrentRoomContents :: Game [Ref]
+getCurrentRoomContents = do
+  room <- getCurrentRoom
   player <- getPlayer
   contents <- getContents' room
   return $ filter (/= player) contents
@@ -45,7 +45,7 @@ getRoomContents = do
 getOpenContainers :: Game [Ref]
 getOpenContainers = do
   inventory <- getInventory
-  roomContents <- getRoomContents
+  roomContents <- getCurrentRoomContents
   containers <- filterM getIsContainer (inventory ++ roomContents)
   filterM getIsUnlocked containers
 
@@ -55,9 +55,9 @@ getThingsInOpenContainers = do
   contents <- mapM getContents' openContainers
   return $ concat contents
 
-getRoomExits :: Game [Ref]
-getRoomExits = do
-  room <- getRoom
+getCurrentRoomExits :: Game [Ref]
+getCurrentRoomExits = do
+  room <- getCurrentRoom
   getExits room
 
 -- Predicates for distinguishing among categories 1-6
@@ -68,18 +68,18 @@ isPlayer ref = (== ref) <$> getPlayer
 isInInventory :: Ref -> Game Bool
 isInInventory ref = elem ref <$> getInventory
 
-isRoom :: Ref -> Game Bool
-isRoom ref = (== ref) <$> getRoom
+isCurrentRoom :: Ref -> Game Bool
+isCurrentRoom ref = (== ref) <$> getCurrentRoom
 
 -- Excludes player
 isInRoom :: Ref -> Game Bool
-isInRoom ref = elem ref <$> getRoomContents
+isInRoom ref = elem ref <$> getCurrentRoomContents
 
 isInOpenContainer :: Ref -> Game Bool
 isInOpenContainer ref = elem ref <$> getThingsInOpenContainers
 
 isExit :: Ref -> Game Bool
-isExit ref = elem ref <$> getRoomExits
+isExit ref = elem ref <$> getCurrentRoomExits
 
 -- Stop functions for use in doVerb
 
@@ -97,7 +97,7 @@ stopIfInInventory verb ref = do
 
 stopIfRoom :: String -> Ref -> Game ()
 stopIfRoom verb ref = do
-  flag <- isRoom ref
+  flag <- isCurrentRoom ref
   name <- qualifiedName ref
   when flag $ stop $ "You can\'t " ++ verb ++ " " ++ name ++ "."
 

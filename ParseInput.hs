@@ -231,10 +231,10 @@ visibleRefs :: Game [Ref]
 visibleRefs = do
   player <- getPlayer
   inventory <- getInventory
-  room <- getRoom
-  roomContents <- getRoomContents -- excludes player
+  room <- getCurrentRoom
+  roomContents <- getCurrentRoomContents -- excludes player
   containerContents <- getThingsInOpenContainers
-  roomExits <- getRoomExits
+  roomExits <- getCurrentRoomExits
   return $ player : inventory ++ room : roomContents ++ containerContents ++
     roomExits
 

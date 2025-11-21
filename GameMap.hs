@@ -21,7 +21,7 @@ updateMap ref = do
     let region = fromJust maybeRegion
     roomData <- makeUpdates <$> getMapData ref
     -- TODO: queue draw exits
-    playerRoom <- getRoom
+    playerRoom <- getCurrentRoom
     let playerData = if (roomData /= [] && playerRoom == ref)
           then [setChar '@' $ head roomData]
           else []
@@ -40,7 +40,7 @@ updateMap ref = do
 printMap :: Game ()
 printMap = do
   let noMap = stop "There is no map for this area."
-  room <- getRoom
+  room <- getCurrentRoom
   maybeRegion <- getRegion room
   when (isNothing maybeRegion) noMap
   let region = fromJust maybeRegion
