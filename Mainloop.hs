@@ -20,10 +20,10 @@ getWidth = do
   x <- (size :: IO (Maybe (Window Int)))
   return $ maybe 80 width x
 
-output :: String -> IO ()
-output str = do
+output :: Color -> String -> IO ()
+output color str = do
   w <- getWidth
-  putStr $ setSGRCode [SetColor Foreground Vivid Green]
+  putStr $ setSGRCode [SetColor Foreground Vivid color]
   putStr $ wordWrap (max (w-5) 1) str
   putStr $ setSGRCode []
 
@@ -64,19 +64,19 @@ mainloop ref = do
       filename = drop 5 line
   if (command == "save " && filename /= "") then do
     let hist = reverse $ commandHistory oldState
-    liftIO $ output $ "Saving game to filename " ++ filename ++ "."
+    liftIO $ output Green $ "Saving game to filename " ++ filename ++ "."
     liftIO $ writeFile filename $ unlines hist
     mainloop ref
     else if command == "load " && filename /= "" then do
     saveData <- liftIO $ readFile filename
     let newState = playback $ lines saveData
     let (newState2, response) = execGame (doVerb $ Verb0 "look") newState
-    liftIO $ output response
+    liftIO $ output Green response
     liftIO $ writeIORef ref newState2
     mainloop ref
     else do
     let (newState, response) = takeTurn line oldState
-    liftIO $ output response
+    liftIO $ output Green response
     liftIO $ writeIORef ref newState
     when (keepPlaying newState) (mainloop ref)
 
@@ -127,7 +127,7 @@ main :: IO ()
 main = do
   sequence_ $ map putStrLn banner
   let (newState, response) = doStartup
-  output response
+  output Green response
   ref <- newIORef newState
   void $ runInputT (mySettings ref) $ runMaybeT $ mainloop ref
 
