@@ -25,7 +25,7 @@ output color str = do
   w <- getWidth
   putStr $ setSGRCode [SetColor Foreground Vivid color]
   putStr $ wordWrap (max (w-5) 1) str
-  putStr $ setSGRCode []
+  putStr $ setSGRCode [SetColor Foreground Vivid White]
 
 processDelayedActions :: [(Int, Game())] -> ([Game ()], [(Int, Game())])
 processDelayedActions input = process [] [] input
@@ -125,11 +125,15 @@ mySettings ref = setComplete (completion ref) defaultSettings
 
 main :: IO ()
 main = do
+  putStr $ setSGRCode [SetColor Foreground Vivid White,
+                       SetColor Background Dull Black] ++
+           clearFromCursorToScreenEndCode
   sequence_ $ map putStrLn banner
   let (newState, response) = doStartup
   output Green response
   ref <- newIORef newState
   void $ runInputT (mySettings ref) $ runMaybeT $ mainloop ref
+  putStr $ setSGRCode [] ++ clearFromCursorToScreenEndCode
 
 -- Taken from:
 -- https://patorjk.com/software/taag/#p=display&f=Big&t=Brisbin%0AStreet
@@ -149,5 +153,6 @@ banner =
   , " | (___ | |_ _ __ ___  ___| |_"
   , "  \\___ \\| __| '__/ _ \\/ _ \\ __|"
   , "  ____) | |_| | |  __/  __/ |_"
-  , " |_____/ \\__|_|  \\___|\\___|\\__|" ++ setSGRCode []
+  , " |_____/ \\__|_|  \\___|\\___|\\__|" ++
+    setSGRCode [SetColor Foreground Vivid White]
   ]
