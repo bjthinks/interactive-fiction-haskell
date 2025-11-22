@@ -67,10 +67,12 @@ printMap = do
   when (isNothing mm) noMap
   let m = fromJust mm
   let ((xmin,ymin),(xmax,ymax)) = bounds m
-  msg $ setSGRCode [SetConsoleIntensity BoldIntensity]
+  msg $ setSGRCode [SetConsoleIntensity BoldIntensity,
+                    SetColor Foreground Vivid Red]
   tell $ do
     y <- [ymax,ymax-1..ymin]
     x <- [xmin..xmax]
     (if x == xmin then " " else "") ++ [m ! (x,y)] ++
       (if x == xmax then "\n" else "")
-  msg $ setSGRCode [SetConsoleIntensity NormalIntensity]
+  msg $ setSGRCode [SetConsoleIntensity NormalIntensity,
+                    SetColor Foreground Vivid Green]

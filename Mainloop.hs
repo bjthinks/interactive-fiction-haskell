@@ -23,7 +23,9 @@ getWidth = do
 output :: String -> IO ()
 output str = do
   w <- getWidth
+  putStr $ setSGRCode [SetColor Foreground Vivid Green]
   putStr $ wordWrap (max (w-5) 1) str
+  putStr $ setSGRCode []
 
 processDelayedActions :: [(Int, Game())] -> ([Game ()], [(Int, Game())])
 processDelayedActions input = process [] [] input
@@ -133,9 +135,11 @@ main = do
 -- https://patorjk.com/software/taag/#p=display&f=Big&t=Brisbin%0AStreet
 banner :: [String]
 banner =
-  [ hyperlinkCode "https://github.com/bjthinks/interactive-fiction-haskell"
-    "Click here for the source code on GitHub."
-  , "  ____       _     _     _"
+  [ setSGRCode [SetColor Foreground Vivid Cyan] ++
+    hyperlinkCode "https://github.com/bjthinks/interactive-fiction-haskell"
+      "Click here for the source code on GitHub."
+  , setSGRCode [SetColor Foreground Vivid Magenta] ++
+    "  ____       _     _     _"
   , " |  _ \\     (_)   | |   (_)"
   , " | |_) |_ __ _ ___| |__  _ _ __"
   , " |  _ <| '__| / __| '_ \\| | '_ \\"
@@ -145,5 +149,5 @@ banner =
   , " | (___ | |_ _ __ ___  ___| |_"
   , "  \\___ \\| __| '__/ _ \\/ _ \\ __|"
   , "  ____) | |_| | |  __/  __/ |_"
-  , " |_____/ \\__|_|  \\___|\\___|\\__|"
+  , " |_____/ \\__|_|  \\___|\\___|\\__|" ++ setSGRCode []
   ]
