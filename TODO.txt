@@ -10,3 +10,4 @@ burn ants
 look in backpack
 get ants
 burn ants
+enter dollhouse
