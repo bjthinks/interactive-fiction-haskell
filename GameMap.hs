@@ -4,6 +4,7 @@ import Control.Monad
 import Control.Monad.Writer
 import Data.Maybe
 import Data.Array.IArray
+import System.Console.ANSI
 import Defs
 import Categories
 
@@ -66,10 +67,10 @@ printMap = do
   when (isNothing mm) noMap
   let m = fromJust mm
   let ((xmin,ymin),(xmax,ymax)) = bounds m
-  msg ""
+  msg $ setSGRCode [SetConsoleIntensity BoldIntensity]
   tell $ do
     y <- [ymax,ymax-1..ymin]
     x <- [xmin..xmax]
     (if x == xmin then " " else "") ++ [m ! (x,y)] ++
       (if x == xmax then "\n" else "")
-  msg ""
+  msg $ setSGRCode [SetConsoleIntensity NormalIntensity]

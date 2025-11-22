@@ -2,6 +2,7 @@ module Main(main) where
 
 import System.Console.Haskeline
 import System.Console.Terminal.Size
+import System.Console.ANSI
 import Control.Monad
 import Control.Monad.Trans.Maybe
 import Control.Monad.State
@@ -132,7 +133,9 @@ main = do
 -- https://patorjk.com/software/taag/#p=display&f=Big&t=Brisbin%0AStreet
 banner :: [String]
 banner =
-  [ "  ____       _     _     _"
+  [ hyperlinkCode "https://github.com/bjthinks/interactive-fiction-haskell"
+    "Click here for the source code on GitHub."
+  , "  ____       _     _     _"
   , " |  _ \\     (_)   | |   (_)"
   , " | |_) |_ __ _ ___| |__  _ _ __"
   , " |  _ <| '__| / __| '_ \\| | '_ \\"
@@ -143,5 +146,4 @@ banner =
   , "  \\___ \\| __| '__/ _ \\/ _ \\ __|"
   , "  ____) | |_| | |  __/  __/ |_"
   , " |_____/ \\__|_|  \\___|\\___|\\__|"
-  , ""
   ]

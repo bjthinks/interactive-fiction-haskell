@@ -11,3 +11,5 @@ look in backpack
 get ants
 burn ants
 enter dollhouse
+
+msg $ setSGRCode [SetColor Foreground Vivid White]
