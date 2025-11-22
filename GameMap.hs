@@ -28,7 +28,7 @@ updateMap ref = do
     -- TODO: allocate and/or resize map properly
     maybeMap <- getMap region
     when (isNothing maybeMap) $ do
-      let newMap = listArray ((0,0),(8,9)) $ repeat ' '
+      let newMap = listArray ((0,0),(8,9)) $ repeat '.'
       setMap region newMap
     regionMap <- fromJust <$> getMap region
     let updatedMap = regionMap // (roomData ++ playerData)
