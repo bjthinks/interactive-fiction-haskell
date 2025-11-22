@@ -25,17 +25,35 @@ updateMap ref = do
     let playerData = if (roomData /= [] && playerRoom == ref)
           then [setChar '@' $ head roomData]
           else []
-    -- TODO: allocate and/or resize map properly
-    maybeMap <- getMap region
-    when (isNothing maybeMap) $ do
-      let newMap = listArray ((0,0),(8,9)) $ repeat '.'
-      setMap region newMap
-    regionMap <- fromJust <$> getMap region
-    let updatedMap = regionMap // (roomData ++ playerData)
-    setMap region updatedMap
-      where
-        makeUpdates = map (\(x,y,c) -> ((x,y),c))
-        setChar c ((x,y),_) = ((x,y),c)
+    let allUpdates = roomData ++ playerData
+    when (allUpdates /= []) $ do
+
+      -- allocate and/or resize map properly
+      maybeMap <- getMap region
+      when (isNothing maybeMap) $ do
+        let firstUpdateLoc = fst $ head allUpdates
+            blankMap = listArray (firstUpdateLoc,firstUpdateLoc) $ repeat ' '
+        setMap region blankMap
+      oldMap <- fromJust <$> getMap region
+      let oldSize = bounds oldMap
+          updateSize = boundsOfUpdates $ map fst allUpdates
+          newSize = unionSizes oldSize updateSize
+          resizedMap = listArray newSize $ repeat ' '
+      let updatedMap = if newSize == oldSize then oldMap // allUpdates
+            else resizedMap // (assocs oldMap ++ allUpdates)
+      setMap region updatedMap
+        where
+          makeUpdates = map (\(x,y,c) -> ((x,y),c))
+          setChar c ((x,y),_) = ((x,y),c)
+          boundsOfUpdates :: [(Int,Int)] -> ((Int,Int),(Int,Int))
+          boundsOfUpdates (xy:zs@(_:_)) =
+            unionSizes (xy,xy) $ boundsOfUpdates zs
+          boundsOfUpdates [(x,y)] = ((x,y),(x,y))
+          boundsOfUpdates [] = undefined
+          unionSizes :: ((Int,Int),(Int,Int)) -> ((Int,Int),(Int,Int)) ->
+            ((Int,Int),(Int,Int))
+          unionSizes ((left1,bot1),(right1,top1)) ((left2,bot2),(right2,top2)) =
+            ((min left1 left2,min bot1 bot2),(max right1 right2,max top1 top2))
 
 printMap :: Game ()
 printMap = do
