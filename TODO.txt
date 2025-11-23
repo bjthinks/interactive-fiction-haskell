@@ -2,14 +2,13 @@ consider handling plurals in error messages in Categories.hs (e.g. acorns)?
 See if I can do better when the ParseError is an unexpected end of input
 consider allowing "it" as a noun in the parser -- would have to check if
   the ref is still visible before allowing it to be parsed
-read jar
-play with the black cat
 
 commands to implement:
+read jar
+play with the black cat
 burn ants
 look in backpack
 get ants
-burn ants
 enter dollhouse
 go dollhouse
 feed squirrel
