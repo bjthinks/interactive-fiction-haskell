@@ -34,7 +34,13 @@ move ref destination = do
   flag <- isPlayer ref
   when flag $ do
     mapM_ updateMap source
+    if isJust source then do
+      sourceExits <- getExits $ fromJust source
+      mapM_ updateMap sourceExits
+      else return ()
     updateMap destination
+    destinationExits <- getExits destination
+    mapM_ updateMap destinationExits
 
 makeImmobile :: Ref -> Game ()
 makeImmobile ref = setVerb1 "get" ref $ do

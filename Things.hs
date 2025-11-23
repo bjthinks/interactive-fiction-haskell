@@ -1,4 +1,4 @@
-module Things(newPlayer, newRoom, newObject, newExit) where
+module Things(newPlayer, newRoom, newObject, newExit, newExitOnMap) where
 
 import Defs
 import Actions
@@ -85,3 +85,22 @@ newExit name src dest = do
       autoAliases "up"   = ["u"]
       autoAliases "down" = ["d"]
       autoAliases _ = []
+
+newExitOnMap :: String -> Ref -> Ref -> Region -> (Int,Int) -> Game ()
+newExitOnMap name from to region (x,y) = do
+  ref <- newExit name from to
+  setRegion ref $ Just region
+  setMapData ref [(x,y,characterOfExit name)]
+    where
+      characterOfExit :: String -> Char
+      characterOfExit "north" = '|'
+      characterOfExit "south" = '|'
+      characterOfExit "east" = '-'
+      characterOfExit "west" = '-'
+      characterOfExit "northeast" = '/'
+      characterOfExit "northwest" = '\\'
+      characterOfExit "southeast" = '\\'
+      characterOfExit "southwest" = '/'
+      characterOfExit "up" = '<'
+      characterOfExit "down" = '>'
+      characterOfExit _ = undefined

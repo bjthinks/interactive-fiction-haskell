@@ -24,7 +24,9 @@ buildWorld = do
   player <- newPlayer "yourself" $
     "You are an eight year old boy with blond hair, " ++
     "wearing jeans, a t-shirt, and tennis shoes with tube socks."
-  move player brisbin
+  -- Player needs to be moved to the starting room after all the exits are
+  -- defined (so the map is right at startup).
+  -- move player brisbin -- Do this at the end of this function
   addAliases player ["you", "self", "me", "myself", "i"]
   setArticle player ""
   backpack <- newObject player "backpack" "A blue canvas backpack."
@@ -47,7 +49,7 @@ buildWorld = do
     "in the yard. A squirrel watches you nervously from one of the oak trees."
   mapRoom frontYard 1 (4,5)
   setArticle frontYard ""
-  newExit "north" brisbin frontYard
+  newExitOnMap "north" brisbin frontYard 1 (4,4)
   newExit "south" frontYard brisbin
   acorns <- newObject frontYard "acorns" $
     "Ordinary white oak acorns. Could you throw them at a squirrel?"
@@ -1388,6 +1390,7 @@ buildWorld = do
   setVerb1 "turn on" sprinkler useSprinkler
   setVerb1 "water the grass with" sprinkler useSprinkler
 
+  move player brisbin
   setMaxScore 155
 
   return ()
