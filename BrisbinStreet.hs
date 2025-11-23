@@ -49,8 +49,8 @@ buildWorld = do
     "in the yard. A squirrel watches you nervously from one of the oak trees."
   mapRoom frontYard 1 (4,5)
   setArticle frontYard ""
-  newExitOnMap "north" brisbin frontYard 1 (4,4)
-  newExit "south" frontYard brisbin
+  newExit{-OnMap-} "north" brisbin frontYard --1 (4,4)
+  newExitOnMap "south" frontYard brisbin 1 (4,4)
   acorns <- newObject frontYard "acorns" $
     "Ordinary white oak acorns. Could you throw them at a squirrel?"
   addAliases acorns ["acorn", "acorns", "an acorn"]
@@ -87,7 +87,7 @@ buildWorld = do
     "display case. To the south is Granny\'s front door, which goes back " ++
     "to the front yard."
   mapRoom living 2 (5,1)
-  enterHouse <- newExit "north" frontYard living
+  enterHouse <- newExitOnMap "north" frontYard living 1 (4,6)
   exitHouse <- newExit "south" living frontYard
   frontDoorKey <- newObject living "front door key"
     "This looks like the key to Granny\'s front door."
@@ -599,10 +599,10 @@ buildWorld = do
     "You wish you could kill all these ants somehow."
   makeCreature ants
   makeImmobile ants
-  newExit "east" driveway kitchen
+  newExitOnMap "east" driveway kitchen 1 (3,7)
   newExit "west" kitchen driveway
-  newExit "southeast" driveway frontYard
-  newExit "northwest" frontYard driveway
+  newExitOnMap "southeast" driveway frontYard 1 (3,6)
+  newExitOnMap "northwest" frontYard driveway 1 (3,6)
 
   let noUseGlass = stop
         "There isn\'t anything to burn with the sun around here."
@@ -647,7 +647,7 @@ buildWorld = do
     "Oldsmobile, and a very old green car with patched rust spots all over " ++
     "its body. There is a side door going to the back yard to the east."
   mapRoom garage 1 (2,9)
-  newExit "north" driveway garage
+  newExitOnMap "north" driveway garage 1 (2,8)
   newExit "south" garage driveway
   sprinkler <- newObject garage "sprinkler" $
     "This sprinkler spins around fast when used."
@@ -668,7 +668,7 @@ buildWorld = do
     "side door goes to the garage to the west."
   mapRoom backyard 1 (4,9)
   newExit "southwest" backyard driveway
-  newExit "northeast" driveway backyard
+  newExitOnMap "northeast" driveway backyard 1 (3,8)
   newExit "west" backyard garage
   newExit "east" garage backyard
 
@@ -685,7 +685,7 @@ buildWorld = do
   newExit "northwest" sideYard backyard
   newExit "southeast" backyard sideYard
   newExit "southwest" sideYard frontYard
-  newExit "northeast" frontYard sideYard
+  newExitOnMap "northeast" frontYard sideYard 1 (5,6)
 
   nickYard <- newRoom "Nick\'s yard" $
     "This house is in a very poor state of disrepair. It is green, like " ++

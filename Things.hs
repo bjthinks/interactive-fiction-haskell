@@ -86,11 +86,12 @@ newExit name src dest = do
       autoAliases "down" = ["d"]
       autoAliases _ = []
 
-newExitOnMap :: String -> Ref -> Ref -> Region -> (Int,Int) -> Game ()
+newExitOnMap :: String -> Ref -> Ref -> Region -> (Int,Int) -> Game Ref
 newExitOnMap name from to region (x,y) = do
   ref <- newExit name from to
   setRegion ref $ Just region
   setMapData ref [(x,y,characterOfExit name)]
+  return ref
     where
       characterOfExit :: String -> Char
       characterOfExit "north" = '|'
