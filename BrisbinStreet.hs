@@ -49,7 +49,7 @@ buildWorld = do
     "in the yard. A squirrel watches you nervously from one of the oak trees."
   mapRoom frontYard 1 (4,5)
   setArticle frontYard ""
-  newExit{-OnMap-} "north" brisbin frontYard --1 (4,4)
+  newExitOnMap "north" brisbin frontYard 1 (4,4)
   newExitOnMap "south" frontYard brisbin 1 (4,4)
   acorns <- newObject frontYard "acorns" $
     "Ordinary white oak acorns. Could you throw them at a squirrel?"
@@ -648,7 +648,7 @@ buildWorld = do
     "its body. There is a side door going to the back yard to the east."
   mapRoom garage 1 (2,9)
   newExitOnMap "north" driveway garage 1 (2,8)
-  newExit "south" garage driveway
+  newExitOnMap "south" garage driveway 1 (2,8)
   sprinkler <- newObject garage "sprinkler" $
     "This sprinkler spins around fast when used."
   bigWheel <- newObject garage "big wheel" $
@@ -667,10 +667,10 @@ buildWorld = do
     "them. The driveway is southwest, and the side yard is southeast. A " ++
     "side door goes to the garage to the west."
   mapRoom backyard 1 (4,9)
-  newExit "southwest" backyard driveway
+  newExitOnMap "southwest" backyard driveway 1 (3,8)
   newExitOnMap "northeast" driveway backyard 1 (3,8)
-  newExit "west" backyard garage
-  newExit "east" garage backyard
+  newExitOnMap "west" backyard garage 1 (3,9)
+  newExitOnMap "east" garage backyard 1 (3,9)
 
   sideYard <- newRoom "side yard" $
     "This narrow bit of property runs along the east side of Granny\'s " ++
@@ -682,9 +682,9 @@ buildWorld = do
   setDescription2 sideYard $
     "The grass here looks dry and parched. A hose beckons you to water the " ++
     "yard."
-  newExit "northwest" sideYard backyard
-  newExit "southeast" backyard sideYard
-  newExit "southwest" sideYard frontYard
+  newExitOnMap "northwest" sideYard backyard 1 (5,8)
+  newExitOnMap "southeast" backyard sideYard 1 (5,8)
+  newExitOnMap "southwest" sideYard frontYard 1 (5,6)
   newExitOnMap "northeast" frontYard sideYard 1 (5,6)
 
   nickYard <- newRoom "Nick\'s yard" $
@@ -694,16 +694,20 @@ buildWorld = do
     "out of reach, on the outside of the second floor."
   mapRoom nickYard 1 (4,1)
   setArticle nickYard ""
-  newExit "north" nickYard brisbin
-  newExit "south" brisbin nickYard
+  newExitOnMap "north" nickYard brisbin 1 (4,2)
+  newExitOnMap "south" brisbin nickYard 1 (4,2)
 
   eastBrisbin <- newRoom "east Brisbin Street" $
     "This is the east end of the block. Mike\'s house is north, and " ++
     "Justin\'s house is south."
   mapRoom eastBrisbin 1 (8,3)
   setArticle eastBrisbin ""
-  newExit "east" brisbin eastBrisbin
-  newExit "west" eastBrisbin brisbin
+  eastFromBrisbin <- newExit "east" brisbin eastBrisbin
+  setRegion eastFromBrisbin $ Just 1
+  setMapData eastFromBrisbin [(6,3,'-'),(5,3,'-')]
+  westFromEastBrisbin <- newExit "west" eastBrisbin brisbin
+  setRegion westFromEastBrisbin $ Just 1
+  setMapData westFromEastBrisbin [(6,3,'-'),(7,3,'-')]
 
   mikeYard <- newRoom "Mike\'s yard" $
     "Mike\'s house is large and L-shaped. The driveway goes around the " ++
@@ -713,8 +717,8 @@ buildWorld = do
     "the lot. A pet bunny named Misty is here."
   mapRoom mikeYard 1 (8,5)
   setArticle mikeYard ""
-  newExit "north" eastBrisbin mikeYard
-  newExit "south" mikeYard eastBrisbin
+  newExitOnMap "north" eastBrisbin mikeYard 1 (8,4)
+  newExitOnMap "south" mikeYard eastBrisbin 1 (8,4)
   misty <- newObject mikeYard "Misty" $
     "Misty is a small bunny with a grey coat, a white underbelly, a cute " ++
     "nose, long ears, imploring eyes, a tiny little tail, and a pink " ++
@@ -756,8 +760,8 @@ buildWorld = do
   setArticle justinYard ""
   let bimboIsHere = "Bimbo the cat is hanging out in the yard."
   setDescription2 justinYard bimboIsHere
-  newExit "south" eastBrisbin justinYard
-  newExit "north" justinYard eastBrisbin
+  newExitOnMap "south" eastBrisbin justinYard 1 (8,2)
+  newExitOnMap "north" justinYard eastBrisbin 1 (8,2)
   crabapple <- newObject justinYard "crabapple" $
     "This crabapple looks like it might have a worm in it. Yuck!"
   setVerb1 "eat" crabapple $ do
@@ -777,8 +781,12 @@ buildWorld = do
     "north, and what looks like a haunted house to the south."
   mapRoom westBrisbin 1 (0,3)
   setArticle westBrisbin ""
-  newExit "west" brisbin westBrisbin
-  newExit "east" westBrisbin brisbin
+  westFromBrisbin <- newExit "west" brisbin westBrisbin
+  setRegion westFromBrisbin $ Just 1
+  setMapData westFromBrisbin [(2,3,'-'),(3,3,'-')]
+  eastFromWestBrisbin <- newExit "east" westBrisbin brisbin
+  setRegion eastFromWestBrisbin $ Just 1
+  setMapData eastFromWestBrisbin [(2,3,'-'),(1,3,'-')]
 
   motel <- newRoom "Oak Grove Motel" $
     "You stand in the parking lot of a down-and-out motel. There are two " ++
@@ -787,8 +795,8 @@ buildWorld = do
     "the lot is an oval of grass with a picnic table and several oak trees, " ++
     "from which the property no doubt got its name."
   mapRoom motel 1 (0,5)
-  newExit "north" westBrisbin motel
-  newExit "south" motel westBrisbin
+  newExitOnMap "north" westBrisbin motel 1 (0,4)
+  newExitOnMap "south" motel westBrisbin 1 (0,4)
   leah <- newObject motel "Leah" $
     "Leah is a five year old girl with straight blonde hair."
   setDescription2 leah $
@@ -827,8 +835,8 @@ buildWorld = do
     "house, the light on the post turns on. You feel like you are being " ++
     "watched."
   mapRoom hauntedYard 1 (0,1)
-  newExit "south" westBrisbin hauntedYard
-  newExit "north" hauntedYard westBrisbin
+  newExitOnMap "south" westBrisbin hauntedYard 1 (0,2)
+  newExitOnMap "north" hauntedYard westBrisbin 1 (0,2)
 
   hhFoyer <- newRoom "foyer" $
     "This is the front room of the haunted house. The whole house appears " ++
@@ -836,7 +844,7 @@ buildWorld = do
     "man on the wall, and his eyes move to follow you. There is a writing " ++
     "desk and a basket for umbrellas next to the coat closet."
   mapRoom hhFoyer 5 (0,4)
-  hhEntrance <- newExit "south" hauntedYard hhFoyer
+  hhEntrance <- newExitOnMap "south" hauntedYard hhFoyer 1 (0,0)
   beforeGo hhEntrance $ msg "You hear footsteps as you enter the house."
   newExit "north" hhFoyer hauntedYard
   writingDesk <- newObject hhFoyer "desk" $
