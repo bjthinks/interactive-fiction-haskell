@@ -13,3 +13,6 @@ burn ants
 enter dollhouse
 go dollhouse
 feed squirrel
+
+Consider making room names bold in the (implicit or explicit) look
+command.
