@@ -13,48 +13,61 @@ mapRoom ref region (x,y) = do
   setRegion ref $ Just region
   setMapData ref [(x,y,'*')]
 
--- Update the map for a given room or location -- called from move when
+-- Update the map for a given room or exit -- called from move when
 -- the player is moved from one location to another
 updateMap :: Ref -> Game ()
 updateMap ref = do
   maybeRegion <- getRegion ref
   when (isJust maybeRegion) $ do
     let region = fromJust maybeRegion
-    roomData <- makeUpdates <$> getMapData ref
-    -- TODO: queue draw exits
-    playerRoom <- getCurrentRoom
-    let playerData = if (roomData /= [] && playerRoom == ref)
+    updates <- getMapData ref
+    updateMapWith region updates
+
+-- Also called from move
+placePlayerOnMap :: Game ()
+placePlayerOnMap = do
+  currentRoom <- getCurrentRoom
+  maybeRegion <- getRegion currentRoom
+  when (isJust maybeRegion) $ do
+    roomData <- getMapData currentRoom
+    let region = fromJust maybeRegion
+        playerData = if roomData /= []
           then [setChar '@' $ head roomData]
           else []
-    let allUpdates = roomData ++ playerData
-    when (allUpdates /= []) $ do
+    updateMapWith region playerData
+  where
+    setChar :: Char -> (Int,Int,Char) -> (Int,Int,Char)
+    setChar c (x,y,_) = (x,y,c)
 
-      -- allocate and/or resize map properly
-      maybeMap <- getMap region
-      when (isNothing maybeMap) $ do
-        let firstUpdateLoc = fst $ head allUpdates
-            blankMap = listArray (firstUpdateLoc,firstUpdateLoc) $ repeat ' '
-        setMap region blankMap
-      oldMap <- fromJust <$> getMap region
-      let oldSize = bounds oldMap
-          updateSize = boundsOfUpdates $ map fst allUpdates
-          newSize = unionSizes oldSize updateSize
-          resizedMap = listArray newSize $ repeat ' '
-      let updatedMap = if newSize == oldSize then oldMap // allUpdates
-            else resizedMap // (assocs oldMap ++ allUpdates)
-      setMap region updatedMap
-        where
-          makeUpdates = map (\(x,y,c) -> ((x,y),c))
-          setChar c ((x,y),_) = ((x,y),c)
-          boundsOfUpdates :: [(Int,Int)] -> ((Int,Int),(Int,Int))
-          boundsOfUpdates (xy:zs@(_:_)) =
-            unionSizes (xy,xy) $ boundsOfUpdates zs
-          boundsOfUpdates [(x,y)] = ((x,y),(x,y))
-          boundsOfUpdates [] = undefined
-          unionSizes :: ((Int,Int),(Int,Int)) -> ((Int,Int),(Int,Int)) ->
-            ((Int,Int),(Int,Int))
-          unionSizes ((left1,bot1),(right1,top1)) ((left2,bot2),(right2,top2)) =
-            ((min left1 left2,min bot1 bot2),(max right1 right2,max top1 top2))
+updateMapWith :: Region -> [(Int,Int,Char)] -> Game ()
+updateMapWith region updates' = do
+  let updates = makeUpdates updates'
+  when (updates /= []) $ do
+    -- allocate and/or resize map properly
+    maybeMap <- getMap region
+    when (isNothing maybeMap) $ do
+      let firstUpdateLoc = fst $ head updates
+          blankMap = listArray (firstUpdateLoc,firstUpdateLoc) $ repeat ' '
+      setMap region blankMap
+    oldMap <- fromJust <$> getMap region
+    let oldSize = bounds oldMap
+        updateSize = boundsOfUpdates $ map fst updates
+        newSize = unionSizes oldSize updateSize
+        resizedMap = listArray newSize $ repeat ' '
+    let updatedMap = if newSize == oldSize then oldMap // updates
+          else resizedMap // (assocs oldMap ++ updates)
+    setMap region updatedMap
+  where
+    makeUpdates :: [(Int,Int,Char)] -> [((Int,Int),Char)]
+    makeUpdates = map (\(x,y,c) -> ((x,y),c))
+    boundsOfUpdates :: [(Int,Int)] -> ((Int,Int),(Int,Int))
+    boundsOfUpdates (xy:zs@(_:_)) = unionSizes (xy,xy) $ boundsOfUpdates zs
+    boundsOfUpdates [(x,y)] = ((x,y),(x,y))
+    boundsOfUpdates [] = undefined
+    unionSizes :: ((Int,Int),(Int,Int)) -> ((Int,Int),(Int,Int)) ->
+                  ((Int,Int),(Int,Int))
+    unionSizes ((left1,bot1),(right1,top1)) ((left2,bot2),(right2,top2)) =
+      ((min left1 left2,min bot1 bot2),(max right1 right2,max top1 top2))
 
 printMap :: Game ()
 printMap = do
