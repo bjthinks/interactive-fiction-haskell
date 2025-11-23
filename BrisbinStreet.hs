@@ -1039,7 +1039,7 @@ buildWorld = do
     "black fur on the floor where the kitty of the house evidently sleeps."
   mapRoom hhMusicRoom 6 (4,0)
   upSpiral <- newExit "up" hhStaircase hhMusicRoom
-  newExit "down" hhMusicRoom hhStaircase
+  newExitOnMap "down" hhMusicRoom hhStaircase 6 (4,0)
   setVerb1 "go" upSpiral $ stop $ "The black cat positions herself on " ++
     "the first step of the spiral staircase, bares her claws, arches " ++
     "her back, and hisses at you loudly! You are too scared to go " ++
@@ -1055,8 +1055,8 @@ buildWorld = do
     "Strangely, there is no doorknob or handle to be seen; only a keyhole " ++
     "to unlock it."
   mapRoom hhAtrium 6 (2,0)
-  batDoor <- newExit "west" hhMusicRoom hhAtrium
-  newExit "east" hhAtrium hhMusicRoom
+  batDoor <- newExitOnMap "west" hhMusicRoom hhAtrium 6 (3,0)
+  newExitOnMap "east" hhAtrium hhMusicRoom 6 (3,0)
   beforeGo batDoor $ msg $
     "As you go through the door, a big, scary, vampire bat flies past you. " ++
     "You feel its wings against the top of your head!"
@@ -1077,8 +1077,8 @@ buildWorld = do
   mapRoom hhMasterBedroom 6 (0,0)
   setDescription2 hhMasterBedroom
     "A huge ghost stands right in front of you, and you are extremely scared!"
-  enterMasterBedroom <- newExit "west" hhAtrium hhMasterBedroom
-  newExit "east" hhMasterBedroom hhAtrium
+  enterMasterBedroom <- newExitOnMap "west" hhAtrium hhMasterBedroom 6 (1,0)
+  newExitOnMap "east" hhMasterBedroom hhAtrium 6 (1,0)
   boss <- newObject hhMasterBedroom "huge ghost" $
     "This is a huge, round ghost with a gaping, toothy mouth and big eyes " ++
     "with curved eyebrows. It looks like something out of a Nintendo 64 " ++
@@ -1119,8 +1119,8 @@ buildWorld = do
     "for a while, and start to feel sleepy. Maybe you should move on before " ++
     "you fall into a hypnotic trance..."
   mapRoom hhHallway 6 (2,2)
-  newExit "north" hhAtrium hhHallway
-  newExit "south" hhHallway hhAtrium
+  newExitOnMap "north" hhAtrium hhHallway 6 (2,1)
+  newExitOnMap "south" hhHallway hhAtrium 6 (2,1)
 
   hhDressingRoom <- newRoom "dressing room" $
     "This room appears to be overflow storage for everyone\'s clothing. " ++
@@ -1128,8 +1128,8 @@ buildWorld = do
     "robots, animals, and especially ghosts. There is even a whole section " ++
     "of bunny costumes. The house\'s butler is floating in the air."
   mapRoom hhDressingRoom 6 (4,2)
-  newExit "east" hhHallway hhDressingRoom
-  newExit "west" hhDressingRoom hhHallway
+  newExitOnMap "east" hhHallway hhDressingRoom 6 (3,2)
+  newExitOnMap "west" hhDressingRoom hhHallway 6 (3,2)
   butler <- newObject hhDressingRoom "butler ghost" $
     "This ghost is wearing a tuxedo and a top hat, and has a monocle " ++
     "in his right eye. He looks very dapper and would probably talk to you."
@@ -1143,8 +1143,8 @@ buildWorld = do
     "dresser drawers are open, and things are hanging out. The closet is " ++
     "full of stuff. The bed is unmade, and the bedding is askew."
   mapRoom hhWestBedroom 6 (2,4)
-  enterWestBedroom <- newExit "north" hhHallway hhWestBedroom
-  newExit "south" hhWestBedroom hhHallway
+  enterWestBedroom <- newExitOnMap "north" hhHallway hhWestBedroom 6 (2,3)
+  newExitOnMap "south" hhWestBedroom hhHallway 6 (2,3)
   setIsLocked enterWestBedroom True
   let noKeyhole _ = stop "The door has no keyhole."
   setVerb2 "unlock" enterWestBedroom "with" noKeyhole
@@ -1177,8 +1177,8 @@ buildWorld = do
     "a few decorative and useful objects artfully displayed. The room " ++
     "looks like it belongs in a museum."
   mapRoom hhEastBedroom 6 (4,4)
-  enterEastBedroom <- newExit "northeast" hhHallway hhEastBedroom
-  newExit "southwest" hhEastBedroom hhHallway
+  enterEastBedroom <- newExitOnMap "northeast" hhHallway hhEastBedroom 6 (3,3)
+  newExitOnMap "southwest" hhEastBedroom hhHallway 6 (3,3)
   setVerb2 "unlock" enterEastBedroom "with" noKeyhole
   setVerb2 "lock" enterEastBedroom "with" noKeyhole
   bedroomDesk <- newObject hhEastBedroom "desk" $
