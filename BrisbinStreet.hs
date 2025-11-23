@@ -514,7 +514,7 @@ buildWorld = do
     "walk along."
   mapRoom upstairs 4 (0,2)
   toUpstairs <- newExit "up" living upstairs
-  newExit "down" upstairs living
+  newExitOnMap "down" upstairs living 4 (0,2)
   addAliases toUpstairs ["door", "the door"]
   makeLocked toUpstairs upstairsKey
 
@@ -524,8 +524,8 @@ buildWorld = do
     "of drawers fill the space, and there is a disused Capsella set on one " ++
     "of the pieces of furniture."
   mapRoom attic 4 (0,0)
-  newExit "south" upstairs attic
-  newExit "north" attic upstairs
+  newExitOnMap "south" upstairs attic 4 (0,1)
+  newExitOnMap "north" attic upstairs 4 (0,1)
   capsellaSet <- newObject attic "Capsella set" $
     "This modular toy consists of a large number of clear plastic spheres " ++
     "with connectors. Each sphere has a motor, gears, or a mechanism inside " ++
