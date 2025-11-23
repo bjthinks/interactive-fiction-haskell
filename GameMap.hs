@@ -72,7 +72,7 @@ printMap = do
   tell $ do
     y <- [ymax,ymax-1..ymin]
     x <- [xmin..xmax]
-    (if x == xmin then " " else "") ++ [m ! (x,y)] ++
+    (if x == xmin then " " else "") ++ [m ! (x,y)] ++ " " ++
       (if x == xmax then "\n" else "")
   msg $ setSGRCode [SetConsoleIntensity NormalIntensity,
                     SetColor Foreground Vivid Green]
