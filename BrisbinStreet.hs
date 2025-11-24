@@ -88,7 +88,7 @@ buildWorld = do
     "to the front yard."
   mapRoom living 2 (5,1)
   enterHouse <- newExitOnMap "north" frontYard living 1 (4,6)
-  exitHouse <- newExit "south" living frontYard
+  exitHouse <- newExitOnMap "south" living frontYard 2 (5,0)
   frontDoorKey <- newObject living "front door key"
     "This looks like the key to Granny\'s front door."
   makeLocked enterHouse frontDoorKey
@@ -145,8 +145,8 @@ buildWorld = do
     "surround the table, and the floor is a brown tile with a swirly " ++
     "pattern."
   mapRoom dinette 2 (3,1)
-  newExit "west" living dinette
-  newExit "east" dinette living
+  newExitOnMap "west" living dinette 2 (4,1)
+  newExitOnMap "east" dinette living 2 (4,1)
   newspaper <- newObject dinette "newspaper" $
     "This is today\'s issue of the Minneapolis Star and Tribune."
   setVerb1 "read" newspaper $ msg $
@@ -163,8 +163,8 @@ buildWorld = do
     "ceramic fish for holding Brillo pads, and on the cupboard is a fruit " ++
     "bowl. To the west is Granny\'s side door, which goes to the driveway."
   mapRoom kitchen 2 (1,1)
-  newExit "west" dinette kitchen
-  newExit "east" kitchen dinette
+  newExitOnMap "west" dinette kitchen 2 (2,1)
+  newExitOnMap "east" kitchen dinette 2 (2,1)
   stove <- newObject kitchen "stove" $
     "A vintage gas stove with one non-functional burner. Even the oven " ++
     "is gas."
@@ -233,8 +233,8 @@ buildWorld = do
     "the ceiling. There is a wicker hamper which, on inspection, appears " ++
     "to contain a stack of clean placemats."
   mapRoom hallway 2 (5,3)
-  newExit "south" hallway living
-  newExit "north" living hallway
+  newExitOnMap "south" hallway living 2 (5,2)
+  newExitOnMap "north" living hallway 2 (5,2)
 
   masterBedroom <- newRoom "master bedroom" $
     "Someone has clearly spend some money filling this bedroom with nice " ++
@@ -242,8 +242,8 @@ buildWorld = do
     "and a queen size bed with a flower-print bedspread. A touch tone " ++
     "phone sits on the bedside stand."
   mapRoom masterBedroom 2 (3,3)
-  newExit "east" masterBedroom hallway
-  newExit "west" hallway masterBedroom
+  newExitOnMap "east" masterBedroom hallway 2 (4,3)
+  newExitOnMap "west" hallway masterBedroom 2 (4,3)
   {-flashlight <- newObject masterBedroom "flashlight" $
     "A chrome-plated flashlight with a red switch and a red shade around " ++
     "the light."
@@ -260,8 +260,8 @@ buildWorld = do
     "the west wall. There are three moderately-sized dressers, and a " ++
     "large bookcase sits atop the biggest one. A twin bed is in the corner."
   mapRoom childBedroom 2 (7,3)
-  newExit "west" childBedroom hallway
-  newExit "east" hallway childBedroom
+  newExitOnMap "west" childBedroom hallway 2 (6,3)
+  newExitOnMap "east" hallway childBedroom 2 (6,3)
   dollhouse <- newObject childBedroom "Gabby\'s dollhouse" $
     "This dollhouse is pink and blue, and looks like a giant cat. There " ++
     "are three floors connected by an elevator, with one room on each side " ++
@@ -323,8 +323,8 @@ buildWorld = do
     "below the counter, and a cupboard door stands wide open to allow heat " ++
     "into the bathroom from a vent enclosed by the cabinetry."
   mapRoom bathroom 2 (5,5)
-  newExit "north" hallway bathroom
-  newExit "south" bathroom hallway
+  newExitOnMap "north" hallway bathroom 2 (5,4)
+  newExitOnMap "south" bathroom hallway 2 (5,4)
   perfume <- newObject bathroom "perfume" $
     "A collection of tiny vials of perfume, probably collected from store " ++
     "samples."
@@ -344,7 +344,7 @@ buildWorld = do
     "room to the west, an unfinished laundry room to the south, a bathroom " ++
     "to the north, and a bedroom to the east."
   mapRoom basementLanding 3 (2,2)
-  basementEntrance <- newExit "down" kitchen basementLanding
+  basementEntrance <- newExitOnMap "down" kitchen basementLanding 2 (1,1)
   addAliases basementEntrance ["door", "the door"]
   makeLocked basementEntrance basementKey
   newExitOnMap "up" basementLanding kitchen 3 (2,2)
@@ -513,7 +513,7 @@ buildWorld = do
     "and boxes filling up most of the space, with only narrow paths to " ++
     "walk along."
   mapRoom upstairs 4 (0,2)
-  toUpstairs <- newExit "up" living upstairs
+  toUpstairs <- newExitOnMap "up" living upstairs 2 (5,1)
   newExitOnMap "down" upstairs living 4 (0,2)
   addAliases toUpstairs ["door", "the door"]
   makeLocked toUpstairs upstairsKey
@@ -600,7 +600,7 @@ buildWorld = do
   makeCreature ants
   makeImmobile ants
   newExitOnMap "east" driveway kitchen 1 (3,7)
-  newExit "west" kitchen driveway
+  newExitOnMap "west" kitchen driveway 2 (0,1)
   newExitOnMap "southeast" driveway frontYard 1 (3,6)
   newExitOnMap "northwest" frontYard driveway 1 (3,6)
 
