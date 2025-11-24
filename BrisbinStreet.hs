@@ -347,7 +347,7 @@ buildWorld = do
   basementEntrance <- newExit "down" kitchen basementLanding
   addAliases basementEntrance ["door", "the door"]
   makeLocked basementEntrance basementKey
-  newExit "up" basementLanding kitchen
+  newExitOnMap "up" basementLanding kitchen 3 (2,2)
   basementShortcut <- newExit "shortcut to Granny\'s basement" brisbin
     basementLanding
   addAlias basementShortcut "b"
@@ -361,8 +361,8 @@ buildWorld = do
     "with a narrow path going back to the washer and dryer."
   mapRoom laundryRoom 3 (2,0)
   setDescription2 laundryRoom "You might find something if you search."
-  newExit "south" basementLanding laundryRoom
-  newExit "north" laundryRoom basementLanding
+  newExitOnMap "south" basementLanding laundryRoom 3 (2,1)
+  newExitOnMap "north" laundryRoom basementLanding 3 (2,1)
   laundryDesk <- newObject laundryRoom "old desk" $
     "This is a disused desk with drawers on the right hand side."
   addAlias laundryDesk "desk"
@@ -389,8 +389,8 @@ buildWorld = do
     "is an ironing board and an iron near the entrance, and a circuit " ++
     "breaker box in the far corner in a wooden cabinet."
   mapRoom diningRoom 3 (0,2)
-  newExit "west" basementLanding diningRoom
-  newExit "east" diningRoom basementLanding
+  newExitOnMap "west" basementLanding diningRoom 3 (1,2)
+  newExitOnMap "east" diningRoom basementLanding 3 (1,2)
   circuitBreakerBox <- newObject diningRoom "circuit breaker box" $
     "This is an ordinary circuit breaker box with 100 Amp service."
   addAliases circuitBreakerBox
@@ -419,8 +419,8 @@ buildWorld = do
     "television that sits directly on the floor. Granny\'s nightstand " ++
     "sits by the bed. There is a tan recliner facing the TV."
   mapRoom basementBedroom 3 (4,2)
-  newExit "east" basementLanding basementBedroom
-  newExit "west" basementBedroom basementLanding
+  newExitOnMap "east" basementLanding basementBedroom 3 (3,2)
+  newExitOnMap "west" basementBedroom basementLanding 3 (3,2)
   nightstand <- newObject basementBedroom "nightstand" $
     "This is a fancy-looking nightstand with an old school clock radio, " ++
     "some moisturizer, and two large drawers."
@@ -441,8 +441,8 @@ buildWorld = do
     "backs and seats, and two armchairs along the opposite wall. The bar " ++
     "has a small incandescent light on the far wall."
   mapRoom basementBar 3 (4,4)
-  newExit "north" basementBedroom basementBar
-  newExit "south" basementBar basementBedroom
+  newExitOnMap "north" basementBedroom basementBar 3 (4,3)
+  newExitOnMap "south" basementBar basementBedroom 3 (4,3)
   spirits <- newObject basementBar "spirits" $
     "Behind the bar are numerous bottles of whiskey and other spirits, " ++
     "all capped with pour spouts."
@@ -484,10 +484,10 @@ buildWorld = do
     "a shower stall with small green square tile. There is a little round " ++
     "light in the ceiling just outside the shower stall."
   mapRoom basementBathroom 3 (2,4)
-  newExit "north" basementLanding basementBathroom
-  newExit "south" basementBathroom basementLanding
-  newExit "east" basementBathroom basementBar
-  newExit "west" basementBar basementBathroom
+  newExitOnMap "north" basementLanding basementBathroom 3 (2,3)
+  newExitOnMap "south" basementBathroom basementLanding 3 (2,3)
+  newExitOnMap "east" basementBathroom basementBar 3 (3,4)
+  newExitOnMap "west" basementBar basementBathroom 3 (3,4)
   note <- newObject basementBathroom "note" $
     "This helpful note lists ways to earn points in this game. Reading it " ++
     "is cheating a little bit!"
