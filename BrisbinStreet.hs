@@ -846,7 +846,7 @@ buildWorld = do
   mapRoom hhFoyer 5 (0,4)
   hhEntrance <- newExitOnMap "south" hauntedYard hhFoyer 1 (0,0)
   beforeGo hhEntrance $ msg "You hear footsteps as you enter the house."
-  newExit "north" hhFoyer hauntedYard
+  newExitOnMap "north" hhFoyer hauntedYard 5 (0,5)
   writingDesk <- newObject hhFoyer "desk" $
     "This is a small writing desk with multiple drawers for storage and an " ++
     "upper shelf with paper and fountain pens."
@@ -895,8 +895,8 @@ buildWorld = do
     "bookcases. One red book stands out from the rest, as if it has been " ++
     "pulled out several inches."
   mapRoom hhReadingRoom 5 (2,4)
-  newExit "east" hhFoyer hhReadingRoom
-  newExit "west" hhReadingRoom hhFoyer
+  newExitOnMap "east" hhFoyer hhReadingRoom 5 (1,4)
+  newExitOnMap "west" hhReadingRoom hhFoyer 5 (1,4)
   book <- newObject hhReadingRoom "book" $
     "This red book stands out from the rest. It beckons you to take it."
   crookedKey <- newObject hhReadingRoom "crooked key" $
@@ -923,8 +923,8 @@ buildWorld = do
     "a sink, a toilet, and a shower. There is a medicine cabinet behind the " ++
     "bathroom mirror."
   mapRoom hhBathroom 5 (2,2)
-  bathroomEntrance <- newExit "south" hhReadingRoom hhBathroom
-  newExit "north" hhBathroom hhReadingRoom
+  bathroomEntrance <- newExitOnMap "south" hhReadingRoom hhBathroom 5 (2,3)
+  newExitOnMap "north" hhBathroom hhReadingRoom 5 (2,3)
   medicineCabinet <- newObject hhBathroom "medicine cabinet" $
     "This is an ordinary cabinet. It\'s white on the inside and has glass " ++
     "shelves."
@@ -945,8 +945,8 @@ buildWorld = do
     "which have been recently lit. In the middle of the table is a big " ++
     "ceramic jar."
   mapRoom hhDiningRoom 5 (0,2)
-  newExit "south" hhFoyer hhDiningRoom
-  newExit "north" hhDiningRoom hhFoyer
+  newExitOnMap "south" hhFoyer hhDiningRoom 5 (0,3)
+  newExitOnMap "north" hhDiningRoom hhFoyer 5 (0,3)
   eyeballs <- newObject hhDiningRoom "jar" $
     "The jar is labeled \"Eyeballs\". You try not to think about what might " ++
     "be inside."
@@ -981,12 +981,12 @@ buildWorld = do
     "fridge is standing open and completely empty. You watch your step " ++
     "very carefully as you pass through this room."
   mapRoom hhKitchen 5 (0,0)
-  kitchenEntrance <- newExit "south" hhDiningRoom hhKitchen
+  kitchenEntrance <- newExitOnMap "south" hhDiningRoom hhKitchen 5 (0,1)
   addAliases kitchenEntrance ["door", "the door"]
   makeLocked kitchenEntrance skullKey
   beforeGo kitchenEntrance $ msg $ "Boards creak under your feet, but the " ++
     "ghosts don\'t notice." -- TODO: message shouldn't appear if door is locked
-  newExit "north" hhKitchen hhDiningRoom
+  newExitOnMap "north" hhKitchen hhDiningRoom 5 (0,1)
   canOpener <- newObject hhKitchen "can opener" $
     "This is a metal and plastic can opener of a common style that you " ++
     "have seen many times before. The handles are red."
@@ -1012,8 +1012,8 @@ buildWorld = do
   setDescription2 hhStaircase $ "A very unfriendly black cat is " ++
     "staring at you."
   addAlias hhStaircase "staircase"
-  staircaseEntrance <- newExit "east" hhKitchen hhStaircase
-  newExit "west" hhStaircase hhKitchen
+  staircaseEntrance <- newExitOnMap "east" hhKitchen hhStaircase 5 (1,0)
+  newExitOnMap "west" hhStaircase hhKitchen 5 (1,0)
   blackCat <- newObject hhStaircase "black cat" $
     "This cat arches its back and hisses when you look at it. It stares at " ++
     "you creepily."
@@ -1038,7 +1038,7 @@ buildWorld = do
     "spiral staircase landing and a door to the west. There is a patch of " ++
     "black fur on the floor where the kitty of the house evidently sleeps."
   mapRoom hhMusicRoom 6 (4,0)
-  upSpiral <- newExit "up" hhStaircase hhMusicRoom
+  upSpiral <- newExitOnMap "up" hhStaircase hhMusicRoom 5 (2,0)
   newExitOnMap "down" hhMusicRoom hhStaircase 6 (4,0)
   setVerb1 "go" upSpiral $ stop $ "The black cat positions herself on " ++
     "the first step of the spiral staircase, bares her claws, arches " ++
