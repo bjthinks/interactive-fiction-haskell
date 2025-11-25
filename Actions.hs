@@ -103,6 +103,8 @@ makeLocked ref key = do
     -- key is the right key
     setIsLocked ref True
     msg $ "You lock " ++ doorGoing ++ refName ++ " with " ++ itemName ++ "."
+    updateMap ref
+    placePlayerOnMap
   setVerb2 "unlock" ref "with" $ \item -> do
     -- ref is either a locked exit or a locked, accessible container
     -- key is in the inventory
@@ -115,6 +117,8 @@ makeLocked ref key = do
     -- key is the right key
     setIsLocked ref False
     msg $ "You unlock " ++ doorGoing ++ refName ++ " with " ++ itemName ++ "."
+    updateMap ref
+    placePlayerOnMap
 
 -- This is for the can of tuna, which can be opened but not closed.
 -- If a mechanic of being opened and closed, like a drawer, is ever

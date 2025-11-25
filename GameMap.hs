@@ -20,8 +20,18 @@ updateMap ref = do
   maybeRegion <- getRegion ref
   when (isJust maybeRegion) $ do
     let region = fromJust maybeRegion
+    locked <- not <$> getIsUnlocked ref
     updates <- getMapData ref
-    updateMapWith region updates
+    let updates' = if locked && updates /= []
+                   then makeLockedChar (head updates) : tail updates
+                   else updates
+    updateMapWith region updates'
+  where
+    makeLockedChar :: (Int,Int,Char) -> (Int,Int,Char)
+    makeLockedChar (x,y,c)
+      | c == '-' || c == '|' = (x,y,'+')
+      | c == '/' || c == '\\' || c == '<' || c == '>' = (x,y,'X')
+      | otherwise = (x,y,c)
 
 -- Also called from move
 placePlayerOnMap :: Game ()
