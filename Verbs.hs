@@ -5,6 +5,7 @@ module Verbs(Verb(..), doVerb, setGuards, setDefaults,
 import Data.Maybe
 import Data.List
 import Control.Monad
+import Control.Monad.Extra
 import Control.Monad.State
 import qualified Data.Map.Strict as M
 
@@ -21,27 +22,23 @@ data Verb = Blank
           deriving Show
 
 doVerb :: Verb -> Game ()
-doVerb Blank = do
-  debug <- getDebug
-  when debug $ msg $ "Executing " ++ show Blank
+doVerb Blank =
+  whenM getDebug $ msg $ "Executing " ++ show Blank
 
 doVerb (Verb0 name) = do
-  debug <- getDebug
-  when debug $ msg $ "Executing " ++ show (Verb0 name)
+  whenM getDebug $ msg $ "Executing " ++ show (Verb0 name)
   action <- getVerb0 name
   action
 
 doVerb (Verb1 name ref) = do
-  debug <- getDebug
-  when debug $ msg $ "Executing " ++ show (Verb1 name ref)
+  whenM getDebug $ msg $ "Executing " ++ show (Verb1 name ref)
   g <- getGuard1 name ref
   g
   action <- getVerb1 name ref
   action
 
 doVerb (Verb2 verb dobj prep iobj) = do
-  debug <- getDebug
-  when debug $ msg $ "Executing " ++ show (Verb2 verb dobj prep iobj)
+  whenM getDebug $ msg $ "Executing " ++ show (Verb2 verb dobj prep iobj)
   g <- getGuard2 verb dobj prep
   g iobj
   action <- getVerb2 verb dobj prep
@@ -83,9 +80,8 @@ ultimateDefaultGuard2 verb dobj prep iobj = do
 getGuard1 :: String -> Ref -> Game (Game ())
 getGuard1 name ref = do
   m <- getGuard1Map ref
-  debug <- getDebug
   n <- qualifiedName ref
-  when debug $ msg $ "Guard1 keys for " ++ n ++ ": " ++ show (M.keys m)
+  whenM getDebug $ msg $ "Guard1 keys for " ++ n ++ ": " ++ show (M.keys m)
   d <- getDefaultGuard1 name
   return $ M.findWithDefault (d ref) name m
 
@@ -104,9 +100,8 @@ clearGuard1 name ref = do
 getGuard2 :: String -> Ref -> String -> Game (Ref -> Game ())
 getGuard2 verb dobj prep = do
   m <- getGuard2Map dobj
-  debug <- getDebug
   n <- qualifiedName dobj
-  when debug $ msg $ "Guard2 keys for " ++ n ++ ": " ++ show (M.keys m)
+  whenM getDebug $ msg $ "Guard2 keys for " ++ n ++ ": " ++ show (M.keys m)
   d <- getDefaultGuard2 verb prep
   return $ M.findWithDefault (d dobj) (verb, prep) m
 
@@ -165,8 +160,7 @@ getTakeGuard ref = do
   stopIfNotObject verb ref
   stopIfInInventory verb ref
   -- ref is either in the room, or in an open container
-  inContainer <- isInOpenContainer ref
-  when inContainer $ do
+  whenM (isInOpenContainer ref) $ do
     -- replace command with "get ref from container"
     Just container <- getLocation ref
     name <- qualifiedName container
@@ -188,9 +182,8 @@ goGuard ref = do
   stopIfRoom verb ref
   stopIfInRoom verb ref
   stopIfInOpenContainer verb ref
-  locked <- getIsLocked ref
   name <- qualifiedName ref
-  when locked $ stop $ "The door going " ++ name ++ " is locked."
+  whenM (getIsLocked ref) $ stop $ "The door going " ++ name ++ " is locked."
 
 searchGuard :: Ref -> Game ()
 searchGuard ref = do
@@ -231,8 +224,7 @@ lockGuard ref key = do
     capitalize name ++ " isn\'t a container."
   -- ref is either an exit or an accessible container
   -- make sure ref is unlocked
-  isLocked <- getIsLocked ref
-  when (isLocked) $ stop $ capitalize name ++ " is already locked."
+  whenM (getIsLocked ref) $ stop $ capitalize name ++ " is already locked."
   -- ref is either an unlocked exit or an unlocked, accessible container
   stopIfNotInInventory "lock with" key
   -- key is in the inventory
@@ -268,8 +260,7 @@ unlockGuard ref key = do
     capitalize name ++ " isn\'t a container."
   -- ref is either an exit or an accessible container
   -- make sure ref is locked
-  isUnlocked <- getIsUnlocked ref
-  when (isUnlocked) $ stop $ capitalize name ++ " isn\'t locked."
+  whenM (getIsUnlocked ref) $ stop $ capitalize name ++ " isn\'t locked."
   -- ref is either a locked exit or a locked, accessible container
   stopIfNotInInventory "unlock with" key
   -- key is in the inventory
@@ -402,10 +393,9 @@ defaultGo ref = do
   doVerb $ Verb0 "look"
 
 defaultInspect ref = do
-  debug <- getDebug
-  unless debug $ stop $ "This command is only available in debug mode."
-  exists <- ifExists ref
-  unless exists $ stop $ "There is nothing with Ref " ++ show ref ++ "."
+  unlessM getDebug $ stop $ "This command is only available in debug mode."
+  unlessM (ifExists ref) $ stop $ "There is nothing with Ref " ++
+    show ref ++ "."
   name <- getName ref
   msg $ "Name: " ++ show name
   article <- getArticle ref
@@ -429,13 +419,13 @@ defaultInspect ref = do
   isLocked <- getIsLocked ref
   msg $ "isLocked: " ++ show isLocked
   m1 <- getVerb1Map ref
-  when debug $ msg $ "Verb1 keys: " ++ show (M.keys m1)
+  msg $ "Verb1 keys: " ++ show (M.keys m1)
   m2 <- getVerb2Map ref
-  when debug $ msg $ "Verb2 keys: " ++ show (M.keys m2)
+  msg $ "Verb2 keys: " ++ show (M.keys m2)
   g1 <- getGuard1Map ref
-  when debug $ msg $ "Guard1 keys: " ++ show (M.keys g1)
+  msg $ "Guard1 keys: " ++ show (M.keys g1)
   g2 <- getGuard2Map ref
-  when debug $ msg $ "Guard2 keys: " ++ show (M.keys g2)
+  msg $ "Guard2 keys: " ++ show (M.keys g2)
 
 defaultLook :: Ref -> Game ()
 defaultLook ref = do
@@ -497,10 +487,9 @@ defaultSearch ref = do
   msg $ "You look everywhere in " ++ name ++ " but don\'t find anything."
 
 defaultTeleport ref = do
-  debug <- getDebug
-  unless debug $ stop $ "This command is only available in debug mode."
-  exists <- ifExists ref
-  unless exists $ stop $ "There is nothing with Ref " ++ show ref ++ "."
+  unlessM getDebug $ stop $ "This command is only available in debug mode."
+  unlessM (ifExists ref) $ stop $ "There is nothing with Ref " ++
+    show ref ++ "."
   player <- getPlayer
   move player ref
   doVerb $ Verb0 "look"

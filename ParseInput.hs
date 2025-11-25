@@ -2,6 +2,7 @@ module ParseInput(handleInput, visibleRefs, allNames, parseWords) where
 
 import Prelude hiding (Word)
 import Control.Monad
+import Control.Monad.Extra
 import Text.Parsec
 import Text.Parsec.Pos
 import Data.List
@@ -294,15 +295,14 @@ handleInput input = do
   let inputLowercase = toLowerString input
       inputWords = words inputLowercase
       inputWithPositions = zipWith (,) [1..] inputWords
-  flag <- getDebug
-  when flag $ msg $ "Parsing " ++ show inputWords
+  whenM getDebug $ msg $ "Parsing " ++ show inputWords
   refs <- visibleRefs
-  when flag $ msg "Noun list:"
+  whenM getDebug $ msg "Noun list:"
   allTokensWithRefs <- concat <$> mapM tokensWithRef refs
   let nouns = longestFirst allTokensWithRefs
       longestFirst = sortOn (negate . length . fst)
       result = runParser parseLine nouns "" inputWithPositions
-  when flag $ msg $ "Result: " ++ show result
+  whenM getDebug $ msg $ "Result: " ++ show result
   case result of
     Left err -> printError input err
     Right verb -> doVerb verb
@@ -310,8 +310,7 @@ handleInput input = do
 tokensWithRef :: Ref -> Game [([Word],Ref)]
 tokensWithRef ref = do
   names <- allNames ref
-  flag <- getDebug
-  when flag $ msg $ "Ref " ++ show ref ++ ": " ++ show names
+  whenM getDebug $ msg $ "Ref " ++ show ref ++ ": " ++ show names
   let allNamesLowercase = map toLowerString names
   return $ map (\str -> (words str,ref)) allNamesLowercase
 

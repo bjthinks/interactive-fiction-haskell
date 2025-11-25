@@ -2,6 +2,7 @@ module Actions where
 
 import Data.Maybe
 import Control.Monad
+import Control.Monad.Extra
 import Defs
 import Categories
 import GameMap
@@ -31,8 +32,7 @@ move ref destination = do
   -- Change object's location to new one
   setLocation ref $ Just destination
   -- Update the map
-  flag <- isPlayer ref
-  when flag $ do
+  whenM (isPlayer ref) $ do
     mapM_ updateMap source -- mapM on a "Maybe a"
     if isJust source then do
       sourceExits <- getExits $ fromJust source
@@ -76,8 +76,7 @@ setUnlockedDescription2 ref description = do
   setVerb2 "unlock" ref "with" $ \key -> do
     action key
     setDescription2 ref description
-  unlocked <- getIsUnlocked ref
-  when unlocked $ setDescription2 ref description
+  whenM (getIsUnlocked ref) $ setDescription2 ref description
 
 setLockedDescription2 :: Ref -> String -> Game ()
 setLockedDescription2 ref description = do
@@ -85,8 +84,7 @@ setLockedDescription2 ref description = do
   setVerb2 "lock" ref "with" $ \key -> do
     action key
     setDescription2 ref description
-  locked <- getIsLocked ref
-  when locked $ setDescription2 ref description
+  whenM (getIsLocked ref) $ setDescription2 ref description
 
 makeLocked :: Ref -> Ref -> Game ()
 makeLocked ref key = do

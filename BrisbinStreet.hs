@@ -9,6 +9,7 @@ import Actions
 import Verbs
 import GameMap
 import Control.Monad
+import Control.Monad.Extra
 import Data.Maybe
 
 buildWorld :: Game ()
@@ -93,8 +94,7 @@ buildWorld = do
     "This looks like the key to Granny\'s front door."
   makeLocked enterHouse frontDoorKey
   beforeGo exitHouse $ do
-    isLocked <- getIsLocked enterHouse
-    when isLocked $ do
+    whenM (getIsLocked enterHouse) $ do
       msg $ "With a satisfying click, you undo the deadbolt. Now you can " ++
         "come back into the house using either door."
       setIsLocked enterHouse False

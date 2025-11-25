@@ -5,6 +5,7 @@ import Control.Monad.State
 import Control.Monad.Writer
 import Data.Maybe
 import Control.Monad
+import Control.Monad.Extra
 import Control.Monad.Trans.Maybe
 import Data.Array.Unboxed
 
@@ -274,9 +275,8 @@ setDefaultVerb1 name action = do
 getVerb1 :: String -> Ref -> Game (Game ())
 getVerb1 name ref = do
   m <- getVerb1Map ref
-  debug <- getDebug
   n <- qualifiedName ref
-  when debug $ msg $ "Verb1 keys for " ++ n ++ ": " ++ show (M.keys m)
+  whenM getDebug $ msg $ "Verb1 keys for " ++ n ++ ": " ++ show (M.keys m)
   d <- getDefaultVerb1 name
   return $ M.findWithDefault (d ref) name m
 
@@ -314,9 +314,8 @@ setDefaultVerb2 verb prep action = do
 getVerb2 :: String -> Ref -> String -> Game (Ref -> Game ())
 getVerb2 verb dobj prep = do
   m <- getVerb2Map dobj
-  debug <- getDebug
   n <- qualifiedName dobj
-  when debug $ msg $ "Verb2 keys for " ++ n ++ ": " ++ show (M.keys m)
+  whenM getDebug $ msg $ "Verb2 keys for " ++ n ++ ": " ++ show (M.keys m)
   d <- getDefaultVerb2 verb prep
   return $ M.findWithDefault (d dobj) (verb, prep) m
 

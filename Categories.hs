@@ -1,6 +1,7 @@
 module Categories where
 
 import Control.Monad
+import Control.Monad.Extra
 import Data.Char
 
 import Defs
@@ -84,51 +85,44 @@ isExit ref = elem ref <$> getCurrentRoomExits
 -- Stop functions for use in doVerb
 
 stopIfPlayer :: String -> Ref -> Game ()
-stopIfPlayer verb ref = do
-  flag <- isPlayer ref
-  -- name <- qualifiedName ref
-  when flag $ stop $ "You can\'t " ++ verb ++ " yourself."
+stopIfPlayer verb ref =
+  whenM (isPlayer ref) $ stop $ "You can\'t " ++ verb ++ " yourself."
 
 stopIfInInventory :: String -> Ref -> Game ()
-stopIfInInventory verb ref = do
-  flag <- isInInventory ref
-  -- name <- qualifiedName ref
-  when flag $ stop $ "You can\'t " ++ verb ++ " something you are holding."
+stopIfInInventory verb ref =
+  whenM (isInInventory ref) $ stop $ "You can\'t " ++ verb ++
+    " something you are holding."
 
 stopIfRoom :: String -> Ref -> Game ()
 stopIfRoom verb ref = do
-  flag <- isCurrentRoom ref
   name <- qualifiedName ref
-  when flag $ stop $ "You can\'t " ++ verb ++ " " ++ name ++ "."
+  whenM (isCurrentRoom ref) $ stop $ "You can\'t " ++ verb ++
+    " " ++ name ++ "."
 
 stopIfInRoom :: String -> Ref -> Game ()
 stopIfInRoom verb ref = do
-  flag <- isInRoom ref
-  -- name <- qualifiedName ref
-  when flag $ stop $ "You can\'t " ++ verb ++ " an object in your room."
+  whenM (isInRoom ref) $ stop $ "You can\'t " ++ verb ++
+    " an object in your room."
 
 stopIfInOpenContainer :: String -> Ref -> Game ()
 stopIfInOpenContainer verb ref = do
-  flag <- isInOpenContainer ref
-  -- name <- qualifiedName ref
-  when flag $ stop $ "You can\'t " ++ verb ++ " something in a container."
+  whenM (isInOpenContainer ref) $ stop $ "You can\'t " ++ verb ++
+    " something in a container."
 
 stopIfExit :: String -> Ref -> Game ()
 stopIfExit verb ref = do
-  flag <- isExit ref
   name <- qualifiedName ref
-  when flag $ stop $ "You can\'t " ++ verb ++ " " ++ name ++ ", which is " ++
-    "a way to go."
+  whenM (isExit ref) $ stop $ "You can\'t " ++ verb ++
+    " " ++ name ++ ", which is " ++ "a way to go."
 
 -- Additional stop functions
 
 stopIfNotOpenContainer :: Ref -> Game ()
 stopIfNotOpenContainer ref = do
   name <- qualifiedName ref
-  container <- getIsContainer ref
-  unless container $ stop $ capitalize name ++ " is not a container."
-  unlocked <- getIsUnlocked ref
-  unless unlocked $ stop $ capitalize name ++ " is locked."
+  unlessM (getIsContainer ref) $ stop $ capitalize name ++
+    " is not a container."
+  unlessM (getIsUnlocked ref) $ stop $ capitalize name ++ " is locked."
 
 stopIfNotObject :: String -> Ref -> Game ()
 stopIfNotObject verb ref = do
