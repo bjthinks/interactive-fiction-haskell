@@ -1405,6 +1405,6 @@ buildWorld = do
   setVerb1 "water the grass with" sprinkler useSprinkler
 
   move player brisbin
-  setMaxScore 155
+  setMaxScore 160
 
   return ()
