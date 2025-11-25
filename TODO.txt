@@ -16,4 +16,3 @@ pull book
 
 Consider making room names bold in the (implicit or explicit) look
 command.
-Work on locked doors displaying a + or X
