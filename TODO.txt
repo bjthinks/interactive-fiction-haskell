@@ -12,6 +12,7 @@ get ants
 enter dollhouse
 go dollhouse
 feed squirrel
+pull book
 
 Consider making room names bold in the (implicit or explicit) look
 command.

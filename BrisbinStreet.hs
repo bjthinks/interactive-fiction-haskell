@@ -894,7 +894,9 @@ buildWorld = do
     "home -- you can see their webs covering the upper shelves of the " ++
     "bookcases. One red book stands out from the rest, as if it has been " ++
     "pulled out several inches."
-  mapRoom hhReadingRoom 5 (2,4)
+  setRegion hhReadingRoom $ Just 5
+  setMapData hhReadingRoom [(2,4,'*'),(2,3,' ')]
+
   newExitOnMap "east" hhFoyer hhReadingRoom 5 (1,4)
   newExitOnMap "west" hhReadingRoom hhFoyer 5 (1,4)
   book <- newObject hhReadingRoom "book" $
@@ -980,7 +982,8 @@ buildWorld = do
     "floor and countertops. There is no food anywhere to be seen, and the " ++
     "fridge is standing open and completely empty. You watch your step " ++
     "very carefully as you pass through this room."
-  mapRoom hhKitchen 5 (0,0)
+  setRegion hhKitchen $ Just 5
+  setMapData hhKitchen [(0,0,'*'),(1,0,' ')]
   kitchenEntrance <- newExitOnMap "south" hhDiningRoom hhKitchen 5 (0,1)
   addAliases kitchenEntrance ["door", "the door"]
   makeLocked kitchenEntrance skullKey
@@ -1358,12 +1361,14 @@ buildWorld = do
         connect staircaseEntrance hhKitchen hhStaircase
         setVerb1 "get" book onGetBook2
         setVerb1 "use" book onGetBook2
+        move player hhReadingRoom -- fix map
       onGetBook2 = do
         getBookMessage
         disconnect staircaseEntrance
         connect bathroomEntrance hhReadingRoom hhBathroom
         setVerb1 "get" book onGetBook1
         setVerb1 "use" book onGetBook1
+        move player hhReadingRoom -- fix map
       getBookMessage = msg $
         "You try to pick up the red book, but it appears to be attached " ++
         "to some kind of mechanism. You hear walls moving, and the floor " ++
