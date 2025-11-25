@@ -95,7 +95,8 @@ buildWorld = do
   beforeGo exitHouse $ do
     isLocked <- getIsLocked enterHouse
     when isLocked $ do
-      msg "You unlock the front door before exiting."
+      msg $ "With a satisfying click, you undo the deadbolt. Now you can " ++
+        "come back into the house using either door."
       setIsLocked enterHouse False
   setDescription2 living "It\'s hot and muggy in here."
   airConditioner <- newObject living "air conditioner" $
