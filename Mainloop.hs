@@ -64,7 +64,7 @@ mainloop ref = do
       filename = drop 5 line
   if (command == "save " && filename /= "") then do
     let hist = reverse $ commandHistory oldState
-    liftIO $ output Green $ "Saving game to filename " ++ filename ++ "."
+    liftIO $ output Green $ "Saving game to filename " ++ filename ++ ".\n"
     liftIO $ writeFile filename $ unlines hist
     mainloop ref
     else if command == "load " && filename /= "" then do
