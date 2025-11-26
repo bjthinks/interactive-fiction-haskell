@@ -1,6 +1,7 @@
 module GameMap where
 
 import Control.Monad
+import Control.Monad.Extra
 import Control.Monad.Writer
 import Data.Maybe
 import Data.Array.IArray
@@ -17,9 +18,7 @@ mapRoom ref region (x,y) = do
 -- the player is moved from one location to another
 updateMap :: Ref -> Game ()
 updateMap ref = do
-  maybeRegion <- getRegion ref
-  when (isJust maybeRegion) $ do
-    let region = fromJust maybeRegion
+  whenJustM (getRegion ref) $ \region -> do
     locked <- not <$> getIsUnlocked ref
     updates <- getMapData ref
     let updates' = if locked && updates /= []
@@ -37,11 +36,9 @@ updateMap ref = do
 placePlayerOnMap :: Game ()
 placePlayerOnMap = do
   currentRoom <- getCurrentRoom
-  maybeRegion <- getRegion currentRoom
-  when (isJust maybeRegion) $ do
+  whenJustM (getRegion currentRoom) $ \region -> do
     roomData <- getMapData currentRoom
-    let region = fromJust maybeRegion
-        playerData = if roomData /= []
+    let playerData = if roomData /= []
           then [setChar '@' $ head roomData]
           else []
     updateMapWith region playerData
@@ -54,8 +51,7 @@ updateMapWith region updates' = do
   let updates = makeUpdates updates'
   when (updates /= []) $ do
     -- allocate and/or resize map properly
-    maybeMap <- getMap region
-    when (isNothing maybeMap) $ do
+    whenM (isNothing <$> getMap region) $ do
       let firstUpdateLoc = fst $ head updates
           blankMap = listArray (firstUpdateLoc,firstUpdateLoc) $ repeat ' '
       setMap region blankMap
@@ -86,9 +82,9 @@ printMap = do
   maybeRegion <- getRegion room
   when (isNothing maybeRegion) noMap
   let region = fromJust maybeRegion
-  mm <- getMap region
-  when (isNothing mm) noMap
-  let m = fromJust mm
+  maybeMap <- getMap region
+  when (isNothing maybeMap) noMap
+  let m = fromJust maybeMap
   let ((xmin,ymin),(xmax,ymax)) = bounds m
   msg $ setSGRCode [SetConsoleIntensity BoldIntensity,
                     SetColor Foreground Vivid Red]

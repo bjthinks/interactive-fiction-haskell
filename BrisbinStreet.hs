@@ -286,7 +286,7 @@ buildWorld = do
     maybeDollhouseLoc <- getLocation dollhouse
     let failUseDollhouse = stop $ "Something has gone wrong. You can\'t " ++
           "use the dollhouse now."
-    when (maybeDollhouseLoc == Nothing) failUseDollhouse
+    when (isNothing maybeDollhouseLoc) failUseDollhouse
     let dollhouseLoc = fromJust maybeDollhouseLoc
     when (dollhouseLoc == player) $ stop "Please drop the dollhouse first."
     if playerLoc == dollhouse then do

@@ -2,7 +2,6 @@ module Verbs(Verb(..), doVerb, setGuards, setDefaults,
             getGuard1, setGuard1, clearGuard1,
             getGuard2, setGuard2, clearGuard2) where
 
-import Data.Maybe
 import Data.List
 import Control.Monad
 import Control.Monad.Extra
@@ -438,9 +437,8 @@ defaultLook ref = do
   when (desc /= "" || desc2 /= "") $ msg $
     if desc == "" then desc2 else if desc2 == "" then desc else
       desc ++ ' ' : desc2
-  path <- getPath ref
-  when (isJust path) $ do
-    let (src,dest) = fromJust path
+  whenJustM (getPath ref) $ \path -> do
+    let (src,dest) = path
     srcName <- qualifiedName src
     destName <- qualifiedName dest
     let pathStr = "This is a way to go from " ++ srcName ++ " to " ++

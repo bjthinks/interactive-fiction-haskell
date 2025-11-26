@@ -1,6 +1,5 @@
 module Actions where
 
-import Data.Maybe
 import Control.Monad
 import Control.Monad.Extra
 import Defs
@@ -9,10 +8,8 @@ import GameMap
 
 moveNowhere :: Ref -> Game ()
 moveNowhere ref = do
-  maybeLoc <- getLocation ref
-  when (isJust maybeLoc) $ do
+  whenJustM (getLocation ref) $ \loc -> do
     -- Remove ref from location's contents
-    let loc = fromJust maybeLoc
     locContents <- getContents' loc
     let newContents = filter (/= ref) locContents
     setContents loc newContents
@@ -23,7 +20,7 @@ move :: Ref -> Ref -> Game ()
 move ref destination = do
   when (ref == destination) $ error
     "Fatal error: attempt to move item inside itself"
-  source <- getLocation ref
+  maybeSource <- getLocation ref
   -- Get rid of any prior presence in another location
   moveNowhere ref
   -- Add ref to destination's contents
@@ -33,11 +30,10 @@ move ref destination = do
   setLocation ref $ Just destination
   -- Update the map
   whenM (isPlayer ref) $ do
-    mapM_ updateMap source -- mapM on a "Maybe a"
-    if isJust source then do
-      sourceExits <- getExits $ fromJust source
+    whenJust maybeSource $ \source -> do
+      updateMap source
+      sourceExits <- getExits source
       mapM_ updateMap sourceExits
-      else return ()
     updateMap destination
     destinationExits <- getExits destination
     mapM_ updateMap destinationExits
@@ -53,9 +49,8 @@ makeCreature _ = return ()
 
 disconnect :: Ref -> Game ()
 disconnect exit = do
-  maybePath <- getPath exit
-  when (isJust maybePath) $ do
-    let (src,_) = fromJust maybePath
+  whenJustM (getPath exit) $ \path -> do
+    let src = fst path
     srcExits <- getExits src
     setExits src $ filter (/= exit) srcExits
     setPath exit Nothing
