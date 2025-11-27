@@ -91,6 +91,7 @@ alias1 "examine" = "look"
 alias1 "l" = "look"
 alias1 "look at" = "look"
 alias1 "move" = "go"
+alias1 "pick up" = "get"
 alias1 "put all into" = "put all in"
 alias1 "take" = "get"
 alias1 "take all from" = "get all from"
@@ -104,6 +105,7 @@ alias1Words =
   , "l"
   , "look at"
   , "move"
+  , "pick up"
   , "put all into"
   , "take"
   , "take all from"
@@ -179,6 +181,7 @@ parseLine =
   verb1 "move"                 |||
   verb1 "open"                 |||
   verb1 "pet"                  |||
+  verb1 "pick up"              |||
   verb1 "play with"            |||
   verb1 "put all in"           |||
   verb1 "put all into"         |||
