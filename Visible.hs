@@ -73,14 +73,14 @@ isCurrentRoom :: Ref -> Game Bool
 isCurrentRoom ref = (== ref) <$> getCurrentRoom
 
 -- Excludes player
-isInRoom :: Ref -> Game Bool
-isInRoom ref = elem ref <$> getCurrentRoomContents
+isInCurrentRoom :: Ref -> Game Bool
+isInCurrentRoom ref = elem ref <$> getCurrentRoomContents
 
 isInOpenContainer :: Ref -> Game Bool
 isInOpenContainer ref = elem ref <$> getThingsInOpenContainers
 
-isExit :: Ref -> Game Bool
-isExit ref = elem ref <$> getCurrentRoomExits
+isCurrentRoomExit :: Ref -> Game Bool
+isCurrentRoomExit ref = elem ref <$> getCurrentRoomExits
 
 -- Stop functions for use in doVerb
 
@@ -101,7 +101,7 @@ stopIfRoom verb ref = do
 
 stopIfInRoom :: String -> Ref -> Game ()
 stopIfInRoom verb ref = do
-  whenM (isInRoom ref) $ stop $ "You can\'t " ++ verb ++
+  whenM (isInCurrentRoom ref) $ stop $ "You can\'t " ++ verb ++
     " an object in your room."
 
 stopIfInOpenContainer :: String -> Ref -> Game ()
@@ -112,7 +112,7 @@ stopIfInOpenContainer verb ref = do
 stopIfExit :: String -> Ref -> Game ()
 stopIfExit verb ref = do
   name <- qualifiedName ref
-  whenM (isExit ref) $ stop $ "You can\'t " ++ verb ++
+  whenM (isCurrentRoomExit ref) $ stop $ "You can\'t " ++ verb ++
     " " ++ name ++ ", which is " ++ "a way to go."
 
 -- Additional stop functions
@@ -133,7 +133,7 @@ stopIfNotObject verb ref = do
 stopIfNotInInventory :: String -> Ref -> Game ()
 stopIfNotInInventory verb ref = do
   stopIfNotObject verb ref
-  inRoom <- isInRoom ref
+  inRoom <- isInCurrentRoom ref
   inContainer <- isInOpenContainer ref
   name <- qualifiedName ref
   when (inRoom || inContainer) $ stop $

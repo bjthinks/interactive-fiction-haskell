@@ -89,7 +89,7 @@ makeLocked ref key = do
     -- key is in the inventory
     refName <- qualifiedName ref
     itemName <- qualifiedName item
-    exit <- isExit ref
+    exit <- isCurrentRoomExit ref
     let doorGoing = if exit then "the door going " else ""
     unless (item == key) $ stop $ capitalize itemName ++
       " is not the right item to lock " ++ doorGoing ++ refName ++ "."
@@ -103,7 +103,7 @@ makeLocked ref key = do
     -- key is in the inventory
     refName <- qualifiedName ref
     itemName <- qualifiedName item
-    exit <- isExit ref
+    exit <- isCurrentRoomExit ref
     let doorGoing = if exit then "the door going " else ""
     unless (item == key) $ stop $ capitalize itemName ++
       " is not the right item to unlock " ++ doorGoing ++ refName ++ "."

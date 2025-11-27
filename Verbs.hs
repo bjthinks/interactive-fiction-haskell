@@ -217,7 +217,7 @@ lockGuard ref key = do
   stopIfInOpenContainer verb ref
   -- ref is an exit, in the room, or in the inventory
   name <- qualifiedName ref
-  exit <- isExit ref
+  exit <- isCurrentRoomExit ref
   container <- getIsContainer ref
   when (not exit && not container) $ stop $
     capitalize name ++ " isn\'t a container."
@@ -253,7 +253,7 @@ unlockGuard ref key = do
   stopIfInOpenContainer verb ref
   -- ref is an exit, in the room, or in the inventory
   name <- qualifiedName ref
-  exit <- isExit ref
+  exit <- isCurrentRoomExit ref
   container <- getIsContainer ref
   when (not exit && not container) $ stop $
     capitalize name ++ " isn\'t a container."
