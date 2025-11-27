@@ -456,8 +456,8 @@ buildWorld = do
     msg $ "After looking around to make sure " ++
       "nobody is watching, you take a big swig of whiskey from one of the " ++
       "bottles. You feel your brain getting very foggy..."
-    st <- get
-    put st { gameMaps = M.empty }
+    gameState <- get
+    put gameState { gameMaps = M.empty }
     whenJustM (getLocation player) $ \loc ->
       move player loc -- Re-map the current room
 
