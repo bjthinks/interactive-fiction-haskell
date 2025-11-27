@@ -1221,8 +1221,8 @@ buildWorld = do
     "The hood and slippers have magically transformed into a complete, " ++
     "head-to-toe bunny costume! It has big, pink ears, a cute button nose, " ++
     "black whiskers, two big front teeth, arms, legs, and a torso with a " ++
-    "white underbelly, and, of course, slipper feet. Maybe you should wear " ++
-    "it for Halloween!"
+    "white underbelly, slipper feet, and, of course, a big, white puffy " ++
+    "tail. Maybe you should wear it for Halloween!"
   moveNowhere bunnyCostume
   let butlerDialogue = do
         hoodLoc <- getLocation bunnyHood
