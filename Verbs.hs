@@ -306,13 +306,13 @@ doDropAll :: Game ()
 doDropAll = do
   thingsToDrop <- getInventory
   when (thingsToDrop == []) $ stop "You\'re not carrying anything."
-  mapM_ (doVerb . Verb1 "drop") thingsToDrop
+  mapM_ (catch . doVerb . Verb1 "drop") thingsToDrop
 
 doGetAll :: Game ()
 doGetAll = do
   thingsToGet <- getCurrentRoomContents -- excludes player
   when (thingsToGet == []) $ stop "There isn\'t anything to get."
-  mapM_ (doVerb . Verb1 "get") thingsToGet
+  mapM_ (catch . doVerb . Verb1 "get") thingsToGet
 
 doHelp :: Game ()
 doHelp = do
