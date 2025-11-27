@@ -86,7 +86,11 @@ startup = do
   setGuards
   buildWorld
   doVerb $ Verb0 "look"
-  msg "Type help for a list of commands."
+  msg $ "Tab completion is available. " ++
+    "Press the Tab key to see what words the game recognizes. If you " ++
+    "haven\'t played before, please start by going north and exploring " ++
+    "Granny\'s House, which functions as a starting area. You can also " ++
+    "use the help command, but the help is mostly not written yet."
 
 doStartup :: (GameState, String)
 doStartup = execGame startup startState
