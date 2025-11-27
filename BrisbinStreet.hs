@@ -10,7 +10,9 @@ import Verbs
 import GameMap
 import Control.Monad
 import Control.Monad.Extra
+import Control.Monad.State
 import Data.Maybe
+import qualified Data.Map.Strict as M
 
 buildWorld :: Game ()
 buildWorld = do
@@ -450,8 +452,14 @@ buildWorld = do
   addAliases spirits ["alcohol", "whiskey", "booze", "liquor"]
   setVerb1 "get" spirits $ msg $ "As you are underage, you don't think " ++
     "you should be walking around with opened liquor bottles."
-  setVerb1 "drink" spirits $ msg $ "An eight year old boy such as yourself " ++
-    "should not be drinking booze."
+  setVerb1 "drink" spirits $ do
+    msg $ "After looking around to make sure " ++
+      "nobody is watching, you take a big swig of whiskey from one of the " ++
+      "bottles. You feel your brain getting very foggy..."
+    st <- get
+    put st { gameMaps = M.empty }
+    whenJustM (getLocation player) $ \loc ->
+      move player loc -- Re-map the current room
 
   barLight <- newObject basementBar "light" $ "This is a small round light " ++
     "mounted on the far wall. The word BAR is on its globe in large, ornate " ++
