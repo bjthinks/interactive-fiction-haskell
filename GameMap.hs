@@ -7,7 +7,7 @@ import Data.Maybe
 import Data.Array.IArray
 import System.Console.ANSI
 import Defs
-import Categories
+import Visible
 
 mapRoom :: Ref -> Region -> (Int,Int) -> Game ()
 mapRoom ref region (x,y) = do

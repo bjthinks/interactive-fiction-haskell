@@ -1,4 +1,4 @@
-module Categories where
+module Visible where
 
 import Control.Monad
 import Control.Monad.Extra

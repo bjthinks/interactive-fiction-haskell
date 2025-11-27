@@ -3,7 +3,7 @@ module BrisbinStreet (buildWorld) where
 
 import Defs
 import Things
-import Categories
+import Visible
 import Score
 import Actions
 import Verbs

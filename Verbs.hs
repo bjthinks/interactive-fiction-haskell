@@ -9,7 +9,7 @@ import Control.Monad.State
 import qualified Data.Map.Strict as M
 
 import Defs
-import Categories
+import Visible
 import Actions
 import Score
 import GameMap

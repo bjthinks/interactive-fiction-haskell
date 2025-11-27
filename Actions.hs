@@ -3,7 +3,7 @@ module Actions where
 import Control.Monad
 import Control.Monad.Extra
 import Defs
-import Categories
+import Visible
 import GameMap
 
 moveNowhere :: Ref -> Game ()

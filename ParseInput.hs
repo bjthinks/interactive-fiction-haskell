@@ -9,7 +9,7 @@ import Data.List
 import Data.Char
 import Text.Read
 import Defs
-import Categories
+import Visible
 import Verbs
 
 type Word = String
