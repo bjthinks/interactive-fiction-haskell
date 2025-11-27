@@ -18,7 +18,7 @@ buildWorld = do
   brisbin <- newRoom "Brisbin Street" $
     "You are in the middle of Brisbin Street. The street continues to the " ++
     "west and east. To the north is Granny\'s House, and to the south is " ++
-    "Nick\'s house."
+    "Nick\'s House."
   mapRoom brisbin 1 (4,3)
   setArticle brisbin ""
 
@@ -45,7 +45,7 @@ buildWorld = do
   frontYard <- newRoom "Granny\'s front yard" $
     "The grass has many holes in it where squirrels have been " ++
     "digging. There is a concrete path connecting the street to the south " ++
-    "and the driveway to the northwest. Granny\'s house is north and the " ++
+    "and the driveway to the northwest. Granny\'s House is north and the " ++
     "side yard is northeast. There are a pine tree and two white oak trees " ++
     "in the yard. A squirrel watches you nervously from one of the oak trees."
   mapRoom frontYard 1 (4,5)
@@ -263,7 +263,7 @@ buildWorld = do
   mapRoom childBedroom 2 (7,3)
   newExitOnMap "west" childBedroom hallway 2 (6,3)
   newExitOnMap "east" hallway childBedroom 2 (6,3)
-  dollhouse <- newObject childBedroom "Gabby\'s dollhouse" $
+  dollhouse <- newObject childBedroom "Gabby\'s Dollhouse" $
     "This dollhouse is pink and blue, and looks like a giant cat. There " ++
     "are three floors connected by an elevator, with one room on each side " ++
     "of the elevator on each floor. Everything inside the dollhouse looks " ++
@@ -505,11 +505,11 @@ buildWorld = do
     msg "9. Cool the house"
     msg "10. Play with a toy"
     msg "11. Play a game of hide and seek"
-    msg $ "Finally, you must solve the mystery of the Haunted House."
+    msg $ "Finally, you must solve the mystery of the haunted house."
 
   upstairs <- newRoom "Upstairs" $
     "This finished room spans the whole east-west length of Granny\'s " ++
-    "house. There are windows at each end, and a door to the south. The " ++
+    "House. There are windows at each end, and a door to the south. The " ++
     "room is used for storage. There are many large pieces of furniture " ++
     "and boxes filling up most of the space, with only narrow paths to " ++
     "walk along."
@@ -675,7 +675,7 @@ buildWorld = do
 
   sideYard <- newRoom "side yard" $
     "This narrow bit of property runs along the east side of Granny\'s " ++
-    "house. There is a window unit air conditioner sticking out of the " ++
+    "House. There is a window unit air conditioner sticking out of the " ++
     "house, and a lightning rod and a TV antenna have been installed with " ++
     "corresponding wires running up to the roof. The front yard is " ++
     "southwest and the backyard is northwest."
@@ -690,7 +690,7 @@ buildWorld = do
 
   nickYard <- newRoom "Nick\'s yard" $
     "This house is in a very poor state of disrepair. It is green, like " ++
-    "Granny\'s house, but could use a coat of paint, to say the least. " ++
+    "Granny\'s House, but could use a coat of paint, to say the least. " ++
     "The lawn is in serious need of weeding. There is a paper wasp nest " ++
     "out of reach, on the outside of the second floor."
   mapRoom nickYard 1 (4,1)
@@ -699,8 +699,8 @@ buildWorld = do
   newExitOnMap "south" brisbin nickYard 1 (4,2)
 
   eastBrisbin <- newRoom "east Brisbin Street" $
-    "This is the east end of the block. Mike\'s house is north, and " ++
-    "Justin\'s house is south."
+    "This is the east end of the block. Mike\'s House is north, and " ++
+    "Justin\'s House is south."
   mapRoom eastBrisbin 1 (8,3)
   setArticle eastBrisbin ""
   eastFromBrisbin <- newExit "east" brisbin eastBrisbin
@@ -711,7 +711,7 @@ buildWorld = do
   setMapData westFromEastBrisbin [(6,3,'-'),(7,3,'-')]
 
   mikeYard <- newRoom "Mike\'s yard" $
-    "Mike\'s house is large and L-shaped. The driveway goes around the " ++
+    "Mike\'s House is large and L-shaped. The driveway goes around the " ++
     "house to the adjacent avenue. There is a planter in the shape of " ++
     "an old-fashioned well with petunias growing out of it, and you also " ++
     "see a flower bed next to the house. A garage stands at the back of " ++
@@ -754,7 +754,7 @@ buildWorld = do
     "Misty runs in joyous clockwise circles around your feet."
 
   justinYard <- newRoom "Justin\'s yard" $
-    "You stand in front of Justin\'s house. It is a large home with a " ++
+    "You stand in front of Justin\'s House. It is a large home with a " ++
     "noticable addition and multiple floors. There is a crabapple tree " ++
     "here."
   mapRoom justinYard 1 (8,1)
@@ -1094,7 +1094,7 @@ buildWorld = do
         msg $ "You throw the holy water at the huge ghost, and it breaks " ++
           "on impact. The huge ghost is covered in water, and rapidly " ++
           "dissolves! You have defeated it!"
-        addPoints 20 "defeating the boss of the Haunted House"
+        addPoints 20 "defeating the boss of the haunted house"
         moveNowhere boss
         moveNowhere flask
         moveNowhere ghosts
