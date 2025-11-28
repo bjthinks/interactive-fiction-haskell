@@ -194,10 +194,9 @@ buildWorld = do
     moveNowhere apple
     addPoints 5 "tasting an apple"
   banana <- newObject kitchen "banana" "The bottom half of a banana."
-  setVerb1 "eat" banana $ do
-    msg "The half banana tastes great and is surprisingly filling."
-    moveNowhere banana
-    addPoints 5 "finishing a banana"
+  setVerb1 "eat" banana $ msg $
+    "The banana looks very appealing, but you have a strange feeling " ++
+    "there is a more deserving creature who wants this."
   orange <- newObject kitchen "orange" "A large seedless navel orange."
   setVerb1 "eat" orange $ msg "Oranges don\'t agree with you."
 
@@ -504,15 +503,16 @@ buildWorld = do
     msg "Ways to Earn Points:"
     msg "1. Learn some math"
     msg "2. Pet a bunny"
-    msg "3. Water the grass"
-    msg "4. Feed the squirrel"
-    msg "5. Eat something"
-    msg "6. Become a pyromaniac"
-    msg "7. Help a doll"
-    msg "8. Become an exterminator"
-    msg "9. Cool the house"
-    msg "10. Play with a toy"
-    msg "11. Play a game of hide and seek"
+    msg "3. Feed a bunny"
+    msg "4. Water the grass"
+    msg "5. Feed the squirrel"
+    msg "6. Eat something"
+    msg "7. Become a pyromaniac"
+    msg "8. Help a doll"
+    msg "9. Become an exterminator"
+    msg "10. Cool the house"
+    msg "11. Play with a toy"
+    msg "12. Play a game of hide and seek"
     msg $ "Finally, you must solve the mystery of the haunted house."
 
   upstairs <- newRoom "Upstairs" $
@@ -760,6 +760,14 @@ buildWorld = do
     setVerb1 "pet" misty happyMisty
   setVerb1 "play with" misty $ msg
     "Misty runs in joyous clockwise circles around your feet."
+  let feedMisty = do
+        msg "Misty nibbles on the banana happily. It must be her favorite food!"
+        moveNowhere banana
+        addPoints 5 "feeding a bunny"
+  setVerb2 "give" banana "to" $ \creature -> do
+    if creature /= misty
+      then cant2 "give" banana "to" creature
+      else feedMisty
 
   justinYard <- newRoom "Justin\'s yard" $
     "You stand in front of Justin\'s House. It is a large home with a " ++

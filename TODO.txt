@@ -13,6 +13,8 @@ enter dollhouse
 go dollhouse
 feed squirrel
 pull book
+feed misty the banana!!!
+feed squirrel the acorns
 
 Consider making room names bold in the (implicit or explicit) look
 command.
