@@ -69,15 +69,16 @@ verb1Words =
   , "move"
   , "open"
   , "pet"
+  -- "pick up" is missing, mystery to solve
   , "play with"
   , "put all in"
   , "put all into"
   , "read"
   , "search"
-  , "talk"
-  , "talk to"
   , "take"
   , "take all from"
+  , "talk"
+  , "talk to"
   , "throw"
   , "turn off"
   , "turn on"
@@ -231,76 +232,11 @@ implicitGo = do
 
 parseLine :: MyParser Verb
 parseLine =
-  verb0 "debug off"       |||
-  verb0 "debug on"        |||
-  verb0 "drop all"        |||
-  verb0 "exit"            |||
-  verb0 "get all"         |||
-  verb0 "help"            |||
-  verb0 "i"               |||
-  verb0 "inventory"       |||
-  verb0 "l"               |||
-  verb0 "look"            |||
-  verb0 "map"             |||
-  verb0 "quit"            |||
-  verb0 "score"           |||
-  verb0 "search"          |||
-  verb0 "take all"        |||
-  verb0 "wait"            |||
-  verb0 "water grass"     |||
-  verb0 "water the grass" |||
-
-  verb1 "close"                |||
-  verb1 "drink"                |||
-  verb1 "drop"                 |||
-  verb1 "eat"                  |||
-  verb1 "examine"              |||
-  verb1 "fill"                 |||
-  verb1 "find"                 |||
-  verb1 "get"                  |||
-  verb1 "get all from"         |||
-  verb1 "go"                   |||
-  verb1 "l"                    |||
-  verb1 "light"                |||
-  verb1 "lock"                 |||
-  verb1 "look"                 |||
-  verb1 "look at"              |||
-  verb1 "move"                 |||
-  verb1 "open"                 |||
-  verb1 "pet"                  |||
-  verb1 "pick up"              |||
-  verb1 "play with"            |||
-  verb1 "put all in"           |||
-  verb1 "put all into"         |||
-  verb1 "read"                 |||
-  verb1 "search"               |||
-  verb1 "talk"                 |||
-  verb1 "talk to"              |||
-  verb1 "take"                 |||
-  verb1 "take all from"        |||
-  verb1 "throw"                |||
-  verb1 "turn off"             |||
-  verb1 "turn on"              |||
-  verb1 "unlock"               |||
-  verb1 "use"                  |||
-  verb1 "water grass with"     |||
-  verb1 "water the grass with" |||
-
-  verb2 "burn" "with"    |||
-  verb2 "close" "with"   |||
-  verb2 "combine" "with" |||
-  verb2 "get" "from"     |||
-  verb2 "give" "to"      |||
-  verb2 "light" "with"   |||
-  verb2 "lock" "with"    |||
-  verb2 "open" "with"    |||
-  verb2 "put" "in"       |||
-  verb2 "put" "into"     |||
-  verb2 "take" "from"    |||
-  verb2 "throw" "at"     |||
-  verb2 "use" "on"       |||
-  verb2 "unlock" "with"  |||
-
+  verb0 "debug off" |||
+  verb0 "debug on"  |||
+  foldr1 (|||) (map verb0 verb0Words) |||
+  foldr1 (|||) (map verb1 verb1Words) |||
+  foldr1 (|||) (map (uncurry verb2) verb2Words) |||
   debug "inspect"  |||
   debug "teleport" |||
   implicitGo |||
