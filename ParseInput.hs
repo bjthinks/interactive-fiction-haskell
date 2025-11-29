@@ -12,6 +12,88 @@ import Defs
 import Visible
 import Verbs
 
+verb0Words :: [String]
+verb0Words =
+  [ "drop all"
+  , "exit"
+  , "get all"
+  , "help"
+  , "i"
+  , "inventory"
+  , "l"
+  , "look"
+  , "map"
+  , "quit"
+  , "score"
+  , "search"
+  , "take all"
+  , "wait"
+  , "water grass"
+  , "water the grass"
+  ]
+
+verb1Words :: [String]
+verb1Words =
+  [ "close"
+  , "drink"
+  , "drop"
+  , "eat"
+  , "examine"
+  , "fill"
+  , "find"
+  , "get"
+  , "get all from"
+  , "go"
+  , "l"
+  , "light"
+  , "lock"
+  , "look"
+  , "look at"
+  , "move"
+  , "open"
+  , "pet"
+  , "play with"
+  , "put all in"
+  , "put all into"
+  , "read"
+  , "search"
+  , "talk"
+  , "talk to"
+  , "take"
+  , "take all from"
+  , "throw"
+  , "turn off"
+  , "turn on"
+  , "unlock"
+  , "use"
+  , "water grass with"
+  , "water the grass with"
+  ]
+
+verb2Words :: [(String,String)]
+verb2Words =
+  [ ("burn","with")
+  , ("close","with")
+  , ("combine","with")
+  , ("get","from")
+  , ("give","to")
+  , ("light","with")
+  , ("lock","with")
+  , ("open","with")
+  , ("put","in")
+  , ("put","into")
+  , ("take","from")
+  , ("throw","at")
+  , ("use","on")
+  , ("unlock","with")
+  ]
+
+-- This is used for tab completion
+verbWords :: [String]
+verbWords = verb0Words ++ verb1Words ++ concat (map pairToList verb2Words)
+  where
+    pairToList (x,y) = [x,y]
+
 type Word = String
 type Token = (Int, Word) -- (position, word)
 
@@ -218,76 +300,6 @@ parseLine =
   debug "teleport" |||
   implicitGo |||
   (eof >> return Blank)
-
-verbWords :: [String]
-verbWords =
-  [ "drop all"
-  , "exit"
-  , "get all"
-  , "help"
-  , "i"
-  , "inventory"
-  , "l"
-  , "look"
-  , "map"
-  , "quit"
-  , "score"
-  , "search"
-  , "take all"
-  , "wait"
-  , "water grass"
-  , "water the grass"
-
-  , "close"
-  , "drink"
-  , "drop"
-  , "eat"
-  , "examine"
-  , "fill"
-  , "find"
-  , "get"
-  , "get all from"
-  , "go"
-  , "l"
-  , "light"
-  , "lock"
-  , "look"
-  , "look at"
-  , "move"
-  , "open"
-  , "pet"
-  , "play with"
-  , "put all in"
-  , "put all into"
-  , "read"
-  , "search"
-  , "talk"
-  , "talk to"
-  , "take"
-  , "take all from"
-  , "throw"
-  , "turn off"
-  , "turn on"
-  , "unlock"
-  , "use"
-  , "water grass with"
-  , "water the grass with"
-
-  , "burn with"
-  , "close with"
-  , "combine with"
-  , "get from"
-  , "give to"
-  , "light with"
-  , "lock with"
-  , "open with"
-  , "put in"
-  , "put into"
-  , "take from"
-  , "throw at"
-  , "use on"
-  , "unlock with"
-  ]
 
 parseWords = sort $ concat $ map words $
   alias0Words ++ alias1Words ++ alias2Words ++ verbWords
