@@ -32,6 +32,23 @@ verb0Words =
   , "water the grass"
   ]
 
+alias0 :: String -> String
+alias0 "i" = "inventory"
+alias0 "l" = "look"
+alias0 "quit" = "exit"
+alias0 "take all" = "get all"
+alias0 "water grass" = "water the grass"
+alias0 x = x
+
+alias0Words :: [String]
+alias0Words =
+  [ "i"
+  , "l"
+  , "quit"
+  , "take all"
+  , "water grass"
+  ]
+
 verb1Words :: [String]
 verb1Words =
   [ "close"
@@ -70,6 +87,33 @@ verb1Words =
   , "water the grass with"
   ]
 
+alias1 :: String -> String
+alias1 "examine" = "look"
+alias1 "l" = "look"
+alias1 "look at" = "look"
+alias1 "move" = "go"
+alias1 "pick up" = "get"
+alias1 "put all into" = "put all in"
+alias1 "take" = "get"
+alias1 "take all from" = "get all from"
+alias1 "talk" = "talk to"
+alias1 "water grass with" = "water the grass with"
+alias1 x = x
+
+alias1Words :: [String]
+alias1Words =
+  [ "examine"
+  , "l"
+  , "look at"
+  , "move"
+  , "pick up"
+  , "put all into"
+  , "take"
+  , "take all from"
+  , "talk"
+  , "water grass with"
+  ]
+
 verb2Words :: [(String,String)]
 verb2Words =
   [ ("burn","with")
@@ -88,11 +132,29 @@ verb2Words =
   , ("unlock","with")
   ]
 
--- This is used for tab completion
+alias2 :: String -> String -> (String, String)
+alias2 "close" "with" = ("lock", "with")
+alias2 "put" "into" = ("put", "in")
+alias2 "take" "from" = ("get", "from")
+alias2 verb prep = (verb, prep)
+
+alias2Words :: [String]
+alias2Words =
+  [ "close with"
+  , "put into"
+  , "take from"
+  ]
+
 verbWords :: [String]
 verbWords = verb0Words ++ verb1Words ++ concat (map pairToList verb2Words)
   where
     pairToList (x,y) = [x,y]
+
+-- This is used for tab completion
+parseWords = sort $ concat $ map words $
+  alias0Words ++ alias1Words ++ alias2Words ++ verbWords
+
+--------------------------------------------------------------------------------
 
 type Word = String
 type Token = (Int, Word) -- (position, word)
@@ -137,23 +199,6 @@ verb0 name = do
   eof
   return $ Verb0 (alias0 name)
 
-alias0 :: String -> String
-alias0 "i" = "inventory"
-alias0 "l" = "look"
-alias0 "quit" = "exit"
-alias0 "take all" = "get all"
-alias0 "water grass" = "water the grass"
-alias0 x = x
-
-alias0Words :: [String]
-alias0Words =
-  [ "i"
-  , "l"
-  , "quit"
-  , "take all"
-  , "water grass"
-  ]
-
 verb1 :: String -> MyParser Verb
 verb1 name = do
   matchTokens $ words name
@@ -168,33 +213,6 @@ debug name = do
   eof
   return $ Verb1 (alias1 name) ref
 
-alias1 :: String -> String
-alias1 "examine" = "look"
-alias1 "l" = "look"
-alias1 "look at" = "look"
-alias1 "move" = "go"
-alias1 "pick up" = "get"
-alias1 "put all into" = "put all in"
-alias1 "take" = "get"
-alias1 "take all from" = "get all from"
-alias1 "talk" = "talk to"
-alias1 "water grass with" = "water the grass with"
-alias1 x = x
-
-alias1Words :: [String]
-alias1Words =
-  [ "examine"
-  , "l"
-  , "look at"
-  , "move"
-  , "pick up"
-  , "put all into"
-  , "take"
-  , "take all from"
-  , "talk"
-  , "water grass with"
-  ]
-
 verb2 :: String -> String -> MyParser Verb
 verb2 verb prep = do
   matchTokens $ words verb
@@ -204,19 +222,6 @@ verb2 verb prep = do
   eof
   let (verb', prep') = alias2 verb prep
   return $ Verb2 verb' dobj prep' iobj
-
-alias2 :: String -> String -> (String, String)
-alias2 "close" "with" = ("lock", "with")
-alias2 "put" "into" = ("put", "in")
-alias2 "take" "from" = ("get", "from")
-alias2 verb prep = (verb, prep)
-
-alias2Words :: [String]
-alias2Words =
-  [ "close with"
-  , "put into"
-  , "take from"
-  ]
 
 implicitGo :: MyParser Verb
 implicitGo = do
@@ -300,9 +305,6 @@ parseLine =
   debug "teleport" |||
   implicitGo |||
   (eof >> return Blank)
-
-parseWords = sort $ concat $ map words $
-  alias0Words ++ alias1Words ++ alias2Words ++ verbWords
 
 handleInput :: String -> Game ()
 handleInput input = do
