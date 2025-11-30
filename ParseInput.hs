@@ -42,70 +42,46 @@ verb1Words =
   , "drink"
   , "drop"
   , "eat"
-  , "examine"
   , "fill"
   , "find"
   , "get"
   , "get all from"
   , "go"
-  , "l"
   , "light"
   , "lock"
   , "look"
-  , "look at"
-  , "move"
   , "open"
   , "pet"
-  , "pick up"
   , "play with"
   , "put all in"
-  , "put all into"
   , "read"
   , "search"
-  , "take"
-  , "take all from"
-  , "talk"
   , "talk to"
   , "throw"
   , "turn off"
   , "turn on"
   , "unlock"
   , "use"
-  , "water grass with"
   , "water the grass with"
-  ]
+  ] ++ map fst alias1Words
 
-alias1 :: String -> String
-alias1 "examine" = "look"
-alias1 "l" = "look"
-alias1 "look at" = "look"
-alias1 "move" = "go"
-alias1 "pick up" = "get"
-alias1 "put all into" = "put all in"
-alias1 "take" = "get"
-alias1 "take all from" = "get all from"
-alias1 "talk" = "talk to"
-alias1 "water grass with" = "water the grass with"
-alias1 x = x
-
-alias1Words :: [String]
+alias1Words :: [(String,String)]
 alias1Words =
-  [ "examine"
-  , "l"
-  , "look at"
-  , "move"
-  , "pick up"
-  , "put all into"
-  , "take"
-  , "take all from"
-  , "talk"
-  , "water grass with"
+  [ ("examine","look")
+  , ("l","look")
+  , ("look at","look")
+  , ("move","go")
+  , ("pick up","get")
+  , ("put all into","put all in")
+  , ("take","get")
+  , ("take all from","get all from")
+  , ("talk","talk to")
+  , ("water grass with","water the grass with")
   ]
 
 verb2Words :: [(String,String)]
 verb2Words =
   [ ("burn","with")
-  , ("close","with")
   , ("combine","with")
   , ("get","from")
   , ("give","to")
@@ -113,36 +89,25 @@ verb2Words =
   , ("lock","with")
   , ("open","with")
   , ("put","in")
-  , ("put","into")
-  , ("take","from")
   , ("throw","at")
   , ("use","on")
   , ("unlock","with")
-  ]
+  ] ++ map fst alias2Words
 
-alias2 :: String -> String -> (String, String)
-alias2 "close" "with" = ("lock", "with")
-alias2 "put" "into" = ("put", "in")
-alias2 "take" "from" = ("get", "from")
-alias2 verb prep = (verb, prep)
-
-alias2Words :: [String]
+alias2Words :: [((String,String),(String,String))]
 alias2Words =
-  [ "close with"
-  , "put into"
-  , "take from"
+  [ (("close","with"),("lock","with"))
+  , (("put","into"),("put","in"))
+  , (("take","from"),("get","from"))
   ]
 
-verbWords :: [String]
-verbWords = verb0Words ++ verb1Words ++ concat (map pairToList verb2Words)
-  where
-    pairToList (x,y) = [x,y]
+--------------------------------------------------------------------------------
 
 -- This is used for tab completion
 parseWords = sort $ concat $ map words $
-  map fst alias0Words ++ alias1Words ++ alias2Words ++ verbWords
-
---------------------------------------------------------------------------------
+  verb0Words ++ verb1Words ++ concat (map toList verb2Words)
+  where
+    toList (a,b) = [a,b]
 
 type Word = String
 type Token = (Int, Word) -- (position, word)
@@ -197,6 +162,9 @@ verb1 name = do
   eof
   return $ Verb1 (alias1 name) ref
 
+alias1 :: String -> String
+alias1 input = maybe input id $ lookup input alias1Words
+
 debug :: String -> MyParser Verb
 debug name = do
   matchTokens $ words name
@@ -211,8 +179,11 @@ verb2 verb prep = do
   matchTokens $ words prep
   iobj <- noun
   eof
-  let (verb', prep') = alias2 verb prep
+  let (verb', prep') = alias2 (verb,prep)
   return $ Verb2 verb' dobj prep' iobj
+
+alias2 :: (String,String) -> (String,String)
+alias2 input = maybe input id $ lookup input alias2Words
 
 implicitGo :: MyParser Verb
 implicitGo = do
