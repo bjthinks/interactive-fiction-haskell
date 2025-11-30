@@ -18,35 +18,22 @@ verb0Words =
   , "exit"
   , "get all"
   , "help"
-  , "i"
   , "inventory"
-  , "l"
   , "look"
   , "map"
-  , "quit"
   , "score"
   , "search"
-  , "take all"
   , "wait"
-  , "water grass"
   , "water the grass"
-  ]
+  ] ++ map fst alias0Words
 
-alias0 :: String -> String
-alias0 "i" = "inventory"
-alias0 "l" = "look"
-alias0 "quit" = "exit"
-alias0 "take all" = "get all"
-alias0 "water grass" = "water the grass"
-alias0 x = x
-
-alias0Words :: [String]
+alias0Words :: [(String,String)]
 alias0Words =
-  [ "i"
-  , "l"
-  , "quit"
-  , "take all"
-  , "water grass"
+  [ ("i","inventory")
+  , ("l","look")
+  , ("quit","exit")
+  , ("take all","get all")
+  , ("water grass","water the grass")
   ]
 
 verb1Words :: [String]
@@ -153,7 +140,7 @@ verbWords = verb0Words ++ verb1Words ++ concat (map pairToList verb2Words)
 
 -- This is used for tab completion
 parseWords = sort $ concat $ map words $
-  alias0Words ++ alias1Words ++ alias2Words ++ verbWords
+  map fst alias0Words ++ alias1Words ++ alias2Words ++ verbWords
 
 --------------------------------------------------------------------------------
 
@@ -199,6 +186,9 @@ verb0 name = do
   matchTokens $ words name
   eof
   return $ Verb0 (alias0 name)
+
+alias0 :: String -> String
+alias0 input = maybe input id $ lookup input alias0Words
 
 verb1 :: String -> MyParser Verb
 verb1 name = do
