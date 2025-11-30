@@ -35,6 +35,7 @@ data Thing = Thing {
 
 data GameState = GameState {
   things :: M.Map Ref Thing,
+  it :: Maybe Ref,
   verb0Map :: M.Map String (Game ()),
   defaultVerb1Map :: M.Map String (Ref -> Game ()),
   defaultVerb2Map :: M.Map (String,String) (Ref -> Ref -> Game ()),
@@ -52,6 +53,7 @@ data GameState = GameState {
 
 startState = GameState {
   things = M.empty,
+  it = Nothing,
   verb0Map = M.empty,
   defaultVerb1Map = M.empty,
   defaultVerb2Map = M.empty,
@@ -165,6 +167,14 @@ setMap region gameMap = do
 
 getThing :: Ref -> Game Thing
 getThing ref = (fromJust . M.lookup ref . things) <$> get
+
+getIt :: Game (Maybe Ref)
+getIt = it <$> get
+
+setIt :: Maybe Ref -> Game ()
+setIt mref = do
+  st <- get
+  put st { it = mref }
 
 -- Used by debug mode commands only
 ifExists :: Ref -> Game Bool

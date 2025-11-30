@@ -6,6 +6,7 @@ import Control.Monad.Extra
 import Text.Parsec
 import Text.Parsec.Pos
 import Data.List
+import Data.Maybe
 import Data.Char
 import Text.Read
 import Defs
@@ -213,13 +214,22 @@ handleInput input = do
   refs <- visibleRefs
   whenM getDebug $ msg "Noun list:"
   allTokensWithRefs <- concat <$> mapM tokensWithRef refs
-  let nouns = longestFirst allTokensWithRefs
+  maybeIt <- getIt
+  let allTokensWithRefs' = if isJust maybeIt && fromJust maybeIt `elem` refs
+                           then (["it"],fromJust maybeIt) : allTokensWithRefs
+                           else allTokensWithRefs
+  let nouns = longestFirst allTokensWithRefs'
       longestFirst = sortOn (negate . length . fst)
       result = runParser parseLine nouns "" inputWithPositions
   whenM getDebug $ msg $ "Result: " ++ show result
   case result of
     Left err -> printError input err
-    Right verb -> doVerb verb
+    Right verb -> do
+      case verb of
+        Verb1 _ ref -> setIt $ Just ref
+        Verb2 _ ref _ _ -> setIt $ Just ref
+        _ -> setIt Nothing
+      doVerb verb
 
 tokensWithRef :: Ref -> Game [([Word],Ref)]
 tokensWithRef ref = do

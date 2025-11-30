@@ -340,7 +340,7 @@ doLook :: Game ()
 doLook = do
   catch printMap
   ref <- getCurrentRoom
-  doVerb (Verb1 "look" ref)
+  doVerb $ Verb1 "look" ref
 
 doScore :: Game ()
 doScore = do
