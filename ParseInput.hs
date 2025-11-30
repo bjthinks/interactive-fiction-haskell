@@ -69,7 +69,7 @@ verb1Words =
   , "move"
   , "open"
   , "pet"
-  -- "pick up" is missing, mystery to solve
+  , "pick up"
   , "play with"
   , "put all in"
   , "put all into"
