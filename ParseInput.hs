@@ -214,11 +214,7 @@ handleInput input = do
   refs <- visibleRefs
   whenM getDebug $ msg "Noun list:"
   allTokensWithRefs <- concat <$> mapM tokensWithRef refs
-  maybeIt <- getIt
-  let allTokensWithRefs' = if isJust maybeIt && fromJust maybeIt `elem` refs
-                           then (["it"],fromJust maybeIt) : allTokensWithRefs
-                           else allTokensWithRefs
-  let nouns = longestFirst allTokensWithRefs'
+  let nouns = longestFirst allTokensWithRefs
       longestFirst = sortOn (negate . length . fst)
       result = runParser parseLine nouns "" inputWithPositions
   whenM getDebug $ msg $ "Result: " ++ show result
@@ -269,7 +265,8 @@ allNames ref = do
   name <- getName ref
   aliases <- getAliases ref
   let prefixes = if article == "" then [""] else ["", article]
-  return $ do
+  maybeIt <- getIt
+  return $ map (const "it") (filter (==ref) (maybeToList maybeIt)) ++ do
     p <- prefixes
     n <- name : aliases
     return $ if p == "" then n else p ++ ' ' : n

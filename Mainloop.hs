@@ -9,7 +9,6 @@ import Control.Monad.State
 import Control.Monad.Writer
 import Data.IORef
 import Data.List
-import Data.Maybe
 import Defs
 import ParseInput
 import Verbs
@@ -107,11 +106,9 @@ visibleWords :: Game [String]
 visibleWords = do
   refs <- visibleRefs
   visibleNames <- mapM allNames refs
-  maybeIt <- getIt
   let flatNames = concat visibleNames
       flatWords = concat $ map words flatNames
-      wordsWithIt = if isJust maybeIt then "it" : flatWords else flatWords
-      uniqueWords = uniq $ sort $ wordsWithIt ++ parseWords
+      uniqueWords = uniq $ sort $ flatWords ++ parseWords
   return uniqueWords
 
 visibleWords' :: GameState -> [String]
