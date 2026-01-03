@@ -2,7 +2,7 @@ module GameMap where
 
 import Control.Monad
 import Control.Monad.Extra
-import Control.Monad.Writer
+import Control.Monad.Writer.Strict
 import Data.Maybe
 import Data.Array.IArray
 import System.Console.ANSI

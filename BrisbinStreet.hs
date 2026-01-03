@@ -10,7 +10,7 @@ import Verbs
 import GameMap
 import Control.Monad
 import Control.Monad.Extra
-import Control.Monad.State
+import Control.Monad.State.Strict
 import Data.Maybe
 import qualified Data.Map.Strict as M
 

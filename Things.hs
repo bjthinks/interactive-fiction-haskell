@@ -2,7 +2,7 @@ module Things(newPlayer, newRoom, newObject, newExit, newExitOnMap) where
 
 import Defs
 import Actions
-import Control.Monad.State
+import Control.Monad.State.Strict
 import qualified Data.Map.Strict as M
 
 newThing :: Game Ref

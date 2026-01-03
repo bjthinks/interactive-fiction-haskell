@@ -5,7 +5,7 @@ module Verbs(Verb(..), doVerb, setGuards, setDefaults,
 import Data.List
 import Control.Monad
 import Control.Monad.Extra
-import Control.Monad.State
+import Control.Monad.State.Strict
 import qualified Data.Map.Strict as M
 
 import Defs

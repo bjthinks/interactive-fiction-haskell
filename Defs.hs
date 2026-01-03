@@ -1,8 +1,8 @@
 module Defs where
 
 import qualified Data.Map.Strict as M
-import Control.Monad.State
-import Control.Monad.Writer
+import Control.Monad.State.Strict
+import Control.Monad.Writer.Strict
 import Data.Maybe
 import Control.Monad
 import Control.Monad.Extra

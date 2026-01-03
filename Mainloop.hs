@@ -5,8 +5,8 @@ import System.Console.Terminal.Size
 import System.Console.ANSI
 import Control.Monad
 import Control.Monad.Trans.Maybe
-import Control.Monad.State
-import Control.Monad.Writer
+import Control.Monad.State.Strict
+import Control.Monad.Writer.Strict
 import Data.IORef
 import Data.List
 import Defs
