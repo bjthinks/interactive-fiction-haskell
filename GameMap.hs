@@ -1,5 +1,6 @@
 module GameMap where
 
+import Control.Lens
 import Control.Monad
 import Control.Monad.Extra
 import Control.Monad.Writer.Strict
@@ -51,18 +52,18 @@ updateMapWith region updates' = do
   let updates = makeUpdates updates'
   when (updates /= []) $ do
     -- allocate and/or resize map properly
-    whenM (isNothing <$> getMap region) $ do
+    whenM (isNothing <$> use (gameMaps . at region)) $ do
       let firstUpdateLoc = fst $ head updates
           blankMap = listArray (firstUpdateLoc,firstUpdateLoc) $ repeat ' '
-      setMap region blankMap
-    oldMap <- fromJust <$> getMap region
+      gameMaps . at region ?= blankMap
+    oldMap <- fromJust <$> use (gameMaps . at region)
     let oldSize = bounds oldMap
         updateSize = boundsOfUpdates $ map fst updates
         newSize = unionSizes oldSize updateSize
         resizedMap = listArray newSize $ repeat ' '
     let updatedMap = if newSize == oldSize then oldMap // updates
           else resizedMap // (assocs oldMap ++ updates)
-    setMap region updatedMap
+    gameMaps . at region ?= updatedMap
   where
     makeUpdates :: [(Int,Int,Char)] -> [((Int,Int),Char)]
     makeUpdates = map (\(x,y,c) -> ((x,y),c))
@@ -82,7 +83,7 @@ printMap = do
   maybeRegion <- getRegion room
   when (isNothing maybeRegion) noMap
   let region = fromJust maybeRegion
-  maybeMap <- getMap region
+  maybeMap <- use (gameMaps . at region)
   when (isNothing maybeMap) noMap
   let m = fromJust maybeMap
   let ((xmin,ymin),(xmax,ymax)) = bounds m

@@ -123,29 +123,12 @@ addHistory h = do
   hs <- use commandHistory
   commandHistory .= h:hs -- reverse order
 
-getMap :: Region -> Game (Maybe GameMap)
-getMap region = do
-  m <- use gameMaps
-  return $ M.lookup region m
-
-setMap :: Region -> GameMap -> Game ()
-setMap region gameMap = do
-  m <- use gameMaps
-  gameMaps .= M.insert region gameMap m
-
-getThing :: Ref -> Game Thing
-getThing ref = do
-  ts <- use things
-  return $ fromJust $ M.lookup ref ts
-
 -- Used by debug mode commands only
 ifExists :: Ref -> Game Bool
-ifExists ref = do
-  ts <- use things
-  return $ isJust $ M.lookup ref ts
+ifExists ref = isJust <$> use (things . at ref)
 
 getProperty :: (Thing -> a) -> Ref -> Game a
-getProperty property = fmap property . getThing
+getProperty property = fmap property . (\ref -> uses things (M.! ref))
 
 getName         = getProperty thingName
 getArticle      = getProperty thingArticle
@@ -168,15 +151,10 @@ getMapData      = getProperty thingMapData
 getIsUnlocked :: Ref -> Game Bool
 getIsUnlocked = fmap not . getIsLocked
 
-setThing :: Ref -> Thing -> Game ()
-setThing ref thing = do
-  ts <- use things
-  things .= M.insert ref thing ts
-
 setProperty :: (Thing -> a -> Thing) -> Ref -> a -> Game ()
 setProperty updater ref value = do
-  thing <- getThing ref
-  setThing ref $ updater thing value
+  thing <- uses things (M.! ref)
+  things . at ref ?= updater thing value
 
 setName         = setProperty (\t v -> t { thingName = v })
 setArticle      = setProperty (\t v -> t { thingArticle = v })
@@ -218,15 +196,11 @@ debugName ref = do
   return $ name ++ " (Ref: " ++ show ref ++ ")"
 
 getVerb0 :: String -> Game (Game ())
-getVerb0 name = do
-  m <- use verb0Map
-  let d = stop "I don\'t understand what you typed."
-  return $ M.findWithDefault d name m
+getVerb0 name = fromMaybe defaultAction <$> use (verb0Map . at name)
+  where defaultAction = stop "I don\'t understand what you typed."
 
 setVerb0 :: String -> Game () -> Game ()
-setVerb0 name action = do
-  m <- use verb0Map
-  verb0Map .= M.insert name action m
+setVerb0 name action = verb0Map . at name ?= action
 
 cant :: String -> Ref -> Game ()
 cant verb ref = do
@@ -234,15 +208,11 @@ cant verb ref = do
   stop $ "You can\'t " ++ verb ++ ' ' : name ++ "."
 
 getDefaultVerb1 :: String -> Game (Ref -> Game ())
-getDefaultVerb1 name = do
-  m <- use defaultVerb1Map
-  let d = cant name
-  return $ M.findWithDefault d name m
+getDefaultVerb1 name =
+  fromMaybe (cant name) <$> use (defaultVerb1Map . at name)
 
 setDefaultVerb1 :: String -> (Ref -> Game ()) -> Game ()
-setDefaultVerb1 name action = do
-  m <- use defaultVerb1Map
-  defaultVerb1Map .= M.insert name action m
+setDefaultVerb1 name action = defaultVerb1Map . at name ?= action
 
 getVerb1 :: String -> Ref -> Game (Game ())
 getVerb1 name ref = do
@@ -273,15 +243,13 @@ cant2 verb dobj prep iobj = do
     ' ' : iobjName ++ "."
 
 getDefaultVerb2 :: String -> String -> Game (Ref -> Ref -> Game ())
-getDefaultVerb2 verb prep = do
-  m <- use defaultVerb2Map
-  let d = flip (cant2 verb) prep
-  return $ M.findWithDefault d (verb, prep) m
+getDefaultVerb2 verb prep =
+  fromMaybe defaultAction <$> use (defaultVerb2Map . at (verb, prep))
+  where defaultAction = flip (cant2 verb) prep
 
 setDefaultVerb2 :: String -> String -> (Ref -> Ref -> Game ()) -> Game ()
-setDefaultVerb2 verb prep action = do
-  m <- use defaultVerb2Map
-  defaultVerb2Map .= M.insert (verb, prep) action m
+setDefaultVerb2 verb prep action =
+  defaultVerb2Map . at (verb, prep) ?= action
 
 getVerb2 :: String -> Ref -> String -> Game (Ref -> Game ())
 getVerb2 verb dobj prep = do

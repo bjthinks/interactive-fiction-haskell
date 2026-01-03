@@ -3,6 +3,7 @@ module Verbs(Verb(..), doVerb, setGuards, setDefaults,
             getGuard2, setGuard2, clearGuard2) where
 
 import Data.List
+import Data.Maybe
 import Control.Lens
 import Control.Monad
 import Control.Monad.Extra
@@ -48,31 +49,26 @@ doVerb (Verb2 verb dobj prep iobj) = do
 -- This uses a function in Categories.hs, so it can't be in Defs.hs or the
 -- module imports would form a cycle
 getDefaultGuard1 :: String -> Game (Ref -> Game ())
-getDefaultGuard1 name = do
-  m <- use defaultGuard1Map
-  let d = stopIfNotAccessible name
-  return $ M.findWithDefault d name m
+getDefaultGuard1 name =
+  fromMaybe defaultAction <$> use (defaultGuard1Map . at name)
+  where defaultAction = stopIfNotAccessible name
 
 setDefaultGuard1 :: String -> (Ref -> Game ()) -> Game ()
-setDefaultGuard1 name action = do
-  m <- use defaultGuard1Map
-  defaultGuard1Map .= M.insert name action m
+setDefaultGuard1 name action = defaultGuard1Map . at name ?= action
 
 getDefaultGuard2 :: String -> String -> Game (Ref -> Ref -> Game ())
-getDefaultGuard2 verb prep = do
-  m <- use defaultGuard2Map
-  let d = flip (ultimateDefaultGuard2 verb) prep
-  return $ M.findWithDefault d (verb, prep) m
+getDefaultGuard2 verb prep =
+  fromMaybe defaultAction <$> use (defaultGuard2Map . at (verb, prep))
+  where defaultAction = flip (ultimateDefaultGuard2 verb) prep
 
 setDefaultGuard2 :: String -> String -> (Ref -> Ref -> Game ()) -> Game ()
-setDefaultGuard2 verb prep action = do
-  m <- use defaultGuard2Map
-  defaultGuard2Map .= M.insert (verb, prep) action m
+setDefaultGuard2 verb prep action =
+  defaultGuard2Map . at (verb, prep) ?= action
 
 ultimateDefaultGuard2 :: String -> Ref -> String -> Ref -> Game ()
 ultimateDefaultGuard2 verb dobj prep iobj = do
   stopIfNotAccessible verb dobj
-  stopIfNotAccessible (verb ++ ' ' : prep) iobj
+  stopIfNotAccessible (verb ++ " " ++ prep) iobj
 
 getGuard1 :: String -> Ref -> Game (Game ())
 getGuard1 name ref = do
