@@ -3,6 +3,7 @@ module Main(main) where
 import System.Console.Haskeline
 import System.Console.Terminal.Size
 import System.Console.ANSI
+import Control.Lens
 import Control.Monad
 import Control.Monad.Trans.Maybe
 import Control.Monad.State.Strict
@@ -38,9 +39,9 @@ processDelayedActions input = process [] [] input
 takeTurn :: String -> GameState -> (GameState, String)
 takeTurn line oldState =
   let (newState, response) = execGame (handleInput line) oldState
-      (nows, laters) = processDelayedActions $ _delayedActions newState
+      (nows, laters) = processDelayedActions $ newState ^. delayedActions
       nowsWithFailureCaught = map catch nows
-      newState2 = newState { _delayedActions = laters }
+      newState2 = newState & delayedActions .~ laters
       (newState3, response2) =
                   execGame (sequence nowsWithFailureCaught) newState2
   in (newState3, response ++ response2)
@@ -63,7 +64,7 @@ mainloop ref = do
   let command = take 5 line
       filename = drop 5 line
   if (command == "save " && filename /= "") then do
-    let hist = reverse $ _commandHistory oldState
+    let hist = reverse $ oldState ^. commandHistory
     liftIO $ output Green $ "Saving game to filename " ++ filename ++ ".\n"
     liftIO $ writeFile filename $ unlines hist
     mainloop ref
@@ -78,7 +79,7 @@ mainloop ref = do
     let (newState, response) = takeTurn line oldState
     liftIO $ output Green response
     liftIO $ writeIORef ref newState
-    when (_keepPlaying newState) (mainloop ref)
+    when (newState ^. keepPlaying) (mainloop ref)
 
 startup :: Game ()
 startup = do
