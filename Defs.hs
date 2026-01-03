@@ -47,25 +47,25 @@ type Region = Int
 type GameMap = UArray (Int,Int) Char
 
 data Thing = Thing {
-  thingName :: String,
-  thingArticle :: String,
-  thingAliases :: [String],
-  thingDescription :: String,
-  thingDescription2 :: String,
+  _thingName :: String,
+  _thingArticle :: String,
+  _thingAliases :: [String],
+  _thingDescription :: String,
+  _thingDescription2 :: String,
   -- Typically, rooms have no location, but objects do
-  thingLocation :: Maybe Ref,
-  thingContents :: [Ref],
+  _thingLocation :: Maybe Ref,
+  _thingContents :: [Ref],
   -- Typically, exits go somewhere, but other things don't
-  thingExits :: [Ref],
-  thingPath :: Maybe (Ref,Ref),
-  thingIsContainer :: Bool,
-  thingIsLocked :: Bool,
-  thingVerb1Map :: M.Map String (Game ()),
-  thingVerb2Map :: M.Map (String,String) (Ref -> Game ()),
-  thingGuard1Map :: M.Map String (Game ()),
-  thingGuard2Map :: M.Map (String,String) (Ref -> Game ()),
-  thingRegion :: Maybe Region,
-  thingMapData :: [(Int,Int,Char)]
+  _thingExits :: [Ref],
+  _thingPath :: Maybe (Ref,Ref),
+  _thingIsContainer :: Bool,
+  _thingIsLocked :: Bool,
+  _verb1Map :: M.Map String (Game ()),
+  _verb2Map :: M.Map (String,String) (Ref -> Game ()),
+  _guard1Map :: M.Map String (Game ()),
+  _guard2Map :: M.Map (String,String) (Ref -> Game ()),
+  _thingRegion :: Maybe Region,
+  _mapData :: [(Int,Int,Char)]
   }
 
 data GameState = GameState {
@@ -86,6 +86,7 @@ data GameState = GameState {
   _commandHistory :: [String], -- stored in reverse order
   _gameMaps :: M.Map Region GameMap }
 
+$(makeLenses ''Thing)
 $(makeLenses ''GameState)
 
 startState = GameState {
@@ -130,23 +131,23 @@ ifExists ref = isJust <$> use (things . at ref)
 getProperty :: (Thing -> a) -> Ref -> Game a
 getProperty property = fmap property . (\ref -> uses things (M.! ref))
 
-getName         = getProperty thingName
-getArticle      = getProperty thingArticle
-getAliases      = getProperty thingAliases
-getDescription  = getProperty thingDescription
-getDescription2 = getProperty thingDescription2
-getLocation     = getProperty thingLocation
-getContents'    = getProperty thingContents
-getExits        = getProperty thingExits
-getPath         = getProperty thingPath
-getIsContainer  = getProperty thingIsContainer
-getIsLocked     = getProperty thingIsLocked
-getVerb1Map     = getProperty thingVerb1Map
-getVerb2Map     = getProperty thingVerb2Map
-getGuard1Map    = getProperty thingGuard1Map
-getGuard2Map    = getProperty thingGuard2Map
-getRegion       = getProperty thingRegion
-getMapData      = getProperty thingMapData
+getName         = getProperty _thingName
+getArticle      = getProperty _thingArticle
+getAliases      = getProperty _thingAliases
+getDescription  = getProperty _thingDescription
+getDescription2 = getProperty _thingDescription2
+getLocation     = getProperty _thingLocation
+getContents'    = getProperty _thingContents
+getExits        = getProperty _thingExits
+getPath         = getProperty _thingPath
+getIsContainer  = getProperty _thingIsContainer
+getIsLocked     = getProperty _thingIsLocked
+getVerb1Map     = getProperty _verb1Map
+getVerb2Map     = getProperty _verb2Map
+getGuard1Map    = getProperty _guard1Map
+getGuard2Map    = getProperty _guard2Map
+getRegion       = getProperty _thingRegion
+getMapData      = getProperty _mapData
 
 getIsUnlocked :: Ref -> Game Bool
 getIsUnlocked = fmap not . getIsLocked
@@ -156,30 +157,30 @@ setProperty updater ref value = do
   thing <- uses things (M.! ref)
   things . at ref ?= updater thing value
 
-setName         = setProperty (\t v -> t { thingName = v })
-setArticle      = setProperty (\t v -> t { thingArticle = v })
+setName         = setProperty (\t v -> t { _thingName = v })
+setArticle      = setProperty (\t v -> t { _thingArticle = v })
 -- setAliases is not exported to avoid bugs where aliases are overwritten
-setDescription  = setProperty (\t v -> t { thingDescription = v })
-setDescription2 = setProperty (\t v -> t { thingDescription2 = v })
-setLocation     = setProperty (\t v -> t { thingLocation = v })
-setContents     = setProperty (\t v -> t { thingContents = v })
-setExits        = setProperty (\t v -> t { thingExits = v })
-setPath         = setProperty (\t v -> t { thingPath = v })
-setIsContainer  = setProperty (\t v -> t { thingIsContainer = v })
-setIsLocked     = setProperty (\t v -> t { thingIsLocked = v })
-setVerb1Map     = setProperty (\t v -> t { thingVerb1Map = v })
-setVerb2Map     = setProperty (\t v -> t { thingVerb2Map = v })
-setGuard1Map    = setProperty (\t v -> t { thingGuard1Map = v })
-setGuard2Map    = setProperty (\t v -> t { thingGuard2Map = v })
-setRegion       = setProperty (\t v -> t { thingRegion = v })
-setMapData      = setProperty (\t v -> t { thingMapData = v })
+setDescription  = setProperty (\t v -> t { _thingDescription = v })
+setDescription2 = setProperty (\t v -> t { _thingDescription2 = v })
+setLocation     = setProperty (\t v -> t { _thingLocation = v })
+setContents     = setProperty (\t v -> t { _thingContents = v })
+setExits        = setProperty (\t v -> t { _thingExits = v })
+setPath         = setProperty (\t v -> t { _thingPath = v })
+setIsContainer  = setProperty (\t v -> t { _thingIsContainer = v })
+setIsLocked     = setProperty (\t v -> t { _thingIsLocked = v })
+setVerb1Map     = setProperty (\t v -> t { _verb1Map = v })
+setVerb2Map     = setProperty (\t v -> t { _verb2Map = v })
+setGuard1Map    = setProperty (\t v -> t { _guard1Map = v })
+setGuard2Map    = setProperty (\t v -> t { _guard2Map = v })
+setRegion       = setProperty (\t v -> t { _thingRegion = v })
+setMapData      = setProperty (\t v -> t { _mapData = v })
 
 addAlias :: Ref -> String -> Game ()
 addAlias ref alias = do
   existingAliases <- getAliases ref
   setAliases ref (alias:existingAliases)
     where
-      setAliases = setProperty (\t v -> t { thingAliases = v })
+      setAliases = setProperty (\t v -> t { _thingAliases = v })
 
 addAliases :: Ref -> [String] -> Game ()
 addAliases ref = mapM_ $ addAlias ref

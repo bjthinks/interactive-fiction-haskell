@@ -15,23 +15,23 @@ newThing = do
 
 defaultThing :: Thing
 defaultThing = Thing {
-  thingName = "",
-  thingArticle = "",
-  thingAliases = [],
-  thingDescription = "",
-  thingDescription2 = "",
-  thingLocation = Nothing,
-  thingContents = [],
-  thingExits = [],
-  thingPath = Nothing,
-  thingIsContainer = False,
-  thingIsLocked = False,
-  thingVerb1Map = M.empty,
-  thingVerb2Map = M.empty,
-  thingGuard1Map = M.empty,
-  thingGuard2Map = M.empty,
-  thingRegion = Nothing,
-  thingMapData = []
+  _thingName = "",
+  _thingArticle = "",
+  _thingAliases = [],
+  _thingDescription = "",
+  _thingDescription2 = "",
+  _thingLocation = Nothing,
+  _thingContents = [],
+  _thingExits = [],
+  _thingPath = Nothing,
+  _thingIsContainer = False,
+  _thingIsLocked = False,
+  _verb1Map = M.empty,
+  _verb2Map = M.empty,
+  _guard1Map = M.empty,
+  _guard2Map = M.empty,
+  _thingRegion = Nothing,
+  _mapData = []
   }
 
 -- Here are the exported functions
