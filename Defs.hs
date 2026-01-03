@@ -1,6 +1,7 @@
 module Defs where
 
 import qualified Data.Map.Strict as M
+import Control.Lens
 import Control.Monad.State.Strict
 import Control.Monad.Writer.Strict
 import Data.Maybe
@@ -10,64 +11,6 @@ import Control.Monad.Trans.Maybe
 import Data.Array.Unboxed
 
 type Ref = Int
-
-data Thing = Thing {
-  thingName :: String,
-  thingArticle :: String,
-  thingAliases :: [String],
-  thingDescription :: String,
-  thingDescription2 :: String,
-  -- Typically, rooms have no location, but objects do
-  thingLocation :: Maybe Ref,
-  thingContents :: [Ref],
-  -- Typically, exits go somewhere, but other things don't
-  thingExits :: [Ref],
-  thingPath :: Maybe (Ref,Ref),
-  thingIsContainer :: Bool,
-  thingIsLocked :: Bool,
-  thingVerb1Map :: M.Map String (Game ()),
-  thingVerb2Map :: M.Map (String,String) (Ref -> Game ()),
-  thingGuard1Map :: M.Map String (Game ()),
-  thingGuard2Map :: M.Map (String,String) (Ref -> Game ()),
-  thingRegion :: Maybe Region,
-  thingMapData :: [(Int,Int,Char)]
-  }
-
-data GameState = GameState {
-  things :: M.Map Ref Thing,
-  it :: Maybe Ref,
-  verb0Map :: M.Map String (Game ()),
-  defaultVerb1Map :: M.Map String (Ref -> Game ()),
-  defaultVerb2Map :: M.Map (String,String) (Ref -> Ref -> Game ()),
-  defaultGuard1Map :: M.Map String (Ref -> Game ()),
-  defaultGuard2Map :: M.Map (String, String) (Ref -> Ref -> Game ()),
-  nextThing :: Ref,
-  maybePlayer :: Maybe Ref,
-  delayedActions :: [(Int, Game ())],
-  score :: Int,
-  maxScore :: Int,
-  keepPlaying :: Bool,
-  debugFlag :: Bool,
-  commandHistory :: [String], -- stored in reverse order
-  gameMaps :: M.Map Region GameMap }
-
-startState = GameState {
-  things = M.empty,
-  it = Nothing,
-  verb0Map = M.empty,
-  defaultVerb1Map = M.empty,
-  defaultVerb2Map = M.empty,
-  defaultGuard1Map = M.empty,
-  defaultGuard2Map = M.empty,
-  nextThing = 0,
-  maybePlayer = Nothing,
-  delayedActions = [],
-  score = 0,
-  maxScore = 0,
-  keepPlaying = True,
-  debugFlag = False,
-  commandHistory = [],
-  gameMaps = M.empty }
 
 {-
   The monad Game a is used very heavily in this program. It is a combination
@@ -103,25 +46,81 @@ stop str = msg str >> mzero
 type Region = Int
 type GameMap = UArray (Int,Int) Char
 
+data Thing = Thing {
+  thingName :: String,
+  thingArticle :: String,
+  thingAliases :: [String],
+  thingDescription :: String,
+  thingDescription2 :: String,
+  -- Typically, rooms have no location, but objects do
+  thingLocation :: Maybe Ref,
+  thingContents :: [Ref],
+  -- Typically, exits go somewhere, but other things don't
+  thingExits :: [Ref],
+  thingPath :: Maybe (Ref,Ref),
+  thingIsContainer :: Bool,
+  thingIsLocked :: Bool,
+  thingVerb1Map :: M.Map String (Game ()),
+  thingVerb2Map :: M.Map (String,String) (Ref -> Game ()),
+  thingGuard1Map :: M.Map String (Game ()),
+  thingGuard2Map :: M.Map (String,String) (Ref -> Game ()),
+  thingRegion :: Maybe Region,
+  thingMapData :: [(Int,Int,Char)]
+  }
+
+data GameState = GameState {
+  _things :: M.Map Ref Thing,
+  _it :: Maybe Ref,
+  _verb0Map :: M.Map String (Game ()),
+  _defaultVerb1Map :: M.Map String (Ref -> Game ()),
+  _defaultVerb2Map :: M.Map (String,String) (Ref -> Ref -> Game ()),
+  _defaultGuard1Map :: M.Map String (Ref -> Game ()),
+  _defaultGuard2Map :: M.Map (String, String) (Ref -> Ref -> Game ()),
+  _nextThing :: Ref,
+  _maybePlayer :: Maybe Ref,
+  _delayedActions :: [(Int, Game ())],
+  _score :: Int,
+  _maxScore :: Int,
+  _keepPlaying :: Bool,
+  _debugFlag :: Bool,
+  _commandHistory :: [String], -- stored in reverse order
+  _gameMaps :: M.Map Region GameMap }
+
+$(makeLenses ''GameState)
+
+startState = GameState {
+  _things = M.empty,
+  _it = Nothing,
+  _verb0Map = M.empty,
+  _defaultVerb1Map = M.empty,
+  _defaultVerb2Map = M.empty,
+  _defaultGuard1Map = M.empty,
+  _defaultGuard2Map = M.empty,
+  _nextThing = 0,
+  _maybePlayer = Nothing,
+  _delayedActions = [],
+  _score = 0,
+  _maxScore = 0,
+  _keepPlaying = True,
+  _debugFlag = False,
+  _commandHistory = [],
+  _gameMaps = M.empty }
+
 getPlayer :: Game Ref
 getPlayer = do
-  mp <- maybePlayer <$> get
+  mp <- use maybePlayer
   case mp of
     Just player -> return player
     Nothing -> error "Internal error: player not set"
 
 setPlayer :: Ref -> Game ()
-setPlayer player = do
-  st <- get
-  put $ st { maybePlayer = Just player }
+setPlayer player = maybePlayer .= Just player
 
 getDelayedActions :: Game [(Int, Game ())]
-getDelayedActions = delayedActions <$> get
+getDelayedActions = use delayedActions
 
 setDelayedActions :: [(Int, Game ())] -> Game ()
-setDelayedActions actions = do
-  st <- get
-  put $ st { delayedActions = actions }
+setDelayedActions actions = delayedActions .= actions
 
 queueAction :: Int -> Game () -> Game ()
 queueAction turns action = do
@@ -129,56 +128,51 @@ queueAction turns action = do
   setDelayedActions $ (turns, action) : actions
 
 stopPlaying :: Game ()
-stopPlaying = do
-  st <- get
-  put $ st { keepPlaying = False }
+stopPlaying = keepPlaying .= False
 
 getDebug :: Game Bool
-getDebug = debugFlag <$> get
+getDebug = use debugFlag
 
 setDebug :: Bool -> Game ()
-setDebug flag = do
-  st <- get
-  put $ st { debugFlag = flag }
+setDebug flag = debugFlag .= flag
 
 getHistory :: Game [String]
-getHistory = commandHistory <$> get
+getHistory = use commandHistory
 
 setHistory :: [String] -> Game ()
-setHistory hist = do
-  st <- get
-  put st { commandHistory = hist }
+setHistory hist = commandHistory .= hist
 
 addHistory :: String -> Game ()
 addHistory h = do
-  hs <- getHistory
-  setHistory $ h:hs -- reverse order
+  hs <- use commandHistory
+  commandHistory .= h:hs -- reverse order
 
 getMap :: Region -> Game (Maybe GameMap)
 getMap region = do
-  m <- gameMaps <$> get
+  m <- use gameMaps
   return $ M.lookup region m
 
 setMap :: Region -> GameMap -> Game ()
 setMap region gameMap = do
-  st <- get
-  let m' = M.insert region gameMap $ gameMaps st
-  put st { gameMaps = m' }
+  m <- use gameMaps
+  gameMaps .= M.insert region gameMap m
 
 getThing :: Ref -> Game Thing
-getThing ref = (fromJust . M.lookup ref . things) <$> get
+getThing ref = do
+  ts <- use things
+  return $ fromJust $ M.lookup ref ts
 
 getIt :: Game (Maybe Ref)
-getIt = it <$> get
+getIt = use it
 
 setIt :: Maybe Ref -> Game ()
-setIt mref = do
-  st <- get
-  put st { it = mref }
+setIt mref = it .= mref
 
 -- Used by debug mode commands only
 ifExists :: Ref -> Game Bool
-ifExists ref = (isJust . M.lookup ref . things) <$> get
+ifExists ref = do
+  ts <- use things
+  return $ isJust $ M.lookup ref ts
 
 getProperty :: (Thing -> a) -> Ref -> Game a
 getProperty property = fmap property . getThing
@@ -206,8 +200,8 @@ getIsUnlocked = fmap not . getIsLocked
 
 setThing :: Ref -> Thing -> Game ()
 setThing ref thing = do
-  st <- get
-  put $ st { things = M.insert ref thing (things st) }
+  ts <- use things
+  things .= M.insert ref thing ts
 
 setProperty :: (Thing -> a -> Thing) -> Ref -> a -> Game ()
 setProperty updater ref value = do
@@ -255,15 +249,14 @@ debugName ref = do
 
 getVerb0 :: String -> Game (Game ())
 getVerb0 name = do
-  m <- verb0Map <$> get
+  m <- use verb0Map
   let d = stop "I don\'t understand what you typed."
   return $ M.findWithDefault d name m
 
 setVerb0 :: String -> Game () -> Game ()
 setVerb0 name action = do
-  st <- get
-  let m' = M.insert name action $ verb0Map st
-  put st { verb0Map = m' }
+  m <- use verb0Map
+  verb0Map .= M.insert name action m
 
 cant :: String -> Ref -> Game ()
 cant verb ref = do
@@ -272,15 +265,14 @@ cant verb ref = do
 
 getDefaultVerb1 :: String -> Game (Ref -> Game ())
 getDefaultVerb1 name = do
-  m <- defaultVerb1Map <$> get
+  m <- use defaultVerb1Map
   let d = cant name
   return $ M.findWithDefault d name m
 
 setDefaultVerb1 :: String -> (Ref -> Game ()) -> Game ()
 setDefaultVerb1 name action = do
-  st <- get
-  let m' = M.insert name action $ defaultVerb1Map st
-  put $ st { defaultVerb1Map = m' }
+  m <- use defaultVerb1Map
+  defaultVerb1Map .= M.insert name action m
 
 getVerb1 :: String -> Ref -> Game (Game ())
 getVerb1 name ref = do
@@ -311,15 +303,14 @@ cant2 verb dobj prep iobj = do
 
 getDefaultVerb2 :: String -> String -> Game (Ref -> Ref -> Game ())
 getDefaultVerb2 verb prep = do
-  m <- defaultVerb2Map <$> get
+  m <- use defaultVerb2Map
   let d = flip (cant2 verb) prep
   return $ M.findWithDefault d (verb, prep) m
 
 setDefaultVerb2 :: String -> String -> (Ref -> Ref -> Game ()) -> Game ()
 setDefaultVerb2 verb prep action = do
-  st <- get
-  let m' = M.insert (verb, prep) action $ defaultVerb2Map st
-  put $ st { defaultVerb2Map = m' }
+  m <- use defaultVerb2Map
+  defaultVerb2Map .= M.insert (verb, prep) action m
 
 getVerb2 :: String -> Ref -> String -> Game (Ref -> Game ())
 getVerb2 verb dobj prep = do

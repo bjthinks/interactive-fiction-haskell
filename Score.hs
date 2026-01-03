@@ -1,8 +1,8 @@
 module Score where
 
 import Defs
+import Control.Lens
 import Control.Monad
-import Control.Monad.State.Strict
 
 addPoints :: Int -> String -> Game ()
 addPoints points reason = do
@@ -14,24 +14,16 @@ addPoints points reason = do
   maybeShowWinMessage
 
 getScore :: Game Int
-getScore = do
-  st <- get
-  return $ score st
+getScore = use score
 
 setScore :: Int -> Game ()
-setScore points = do
-  st <- get
-  put $ st { score = points }
+setScore points = score .= points
 
 getMaxScore :: Game Int
-getMaxScore = do
-  st <- get
-  return $ maxScore st
+getMaxScore = use maxScore
 
 setMaxScore :: Int -> Game ()
-setMaxScore points = do
-  st <- get
-  put $ st { maxScore = points }
+setMaxScore points = maxScore .= points
 
 maybeShowWinMessage :: Game ()
 maybeShowWinMessage = do

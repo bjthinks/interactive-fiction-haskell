@@ -3,9 +3,9 @@ module Verbs(Verb(..), doVerb, setGuards, setDefaults,
             getGuard2, setGuard2, clearGuard2) where
 
 import Data.List
+import Control.Lens
 import Control.Monad
 import Control.Monad.Extra
-import Control.Monad.State.Strict
 import qualified Data.Map.Strict as M
 
 import Defs
@@ -49,27 +49,25 @@ doVerb (Verb2 verb dobj prep iobj) = do
 -- module imports would form a cycle
 getDefaultGuard1 :: String -> Game (Ref -> Game ())
 getDefaultGuard1 name = do
-  m <- defaultGuard1Map <$> get
+  m <- use defaultGuard1Map
   let d = stopIfNotAccessible name
   return $ M.findWithDefault d name m
 
 setDefaultGuard1 :: String -> (Ref -> Game ()) -> Game ()
 setDefaultGuard1 name action = do
-  st <- get
-  let m' = M.insert name action (defaultGuard1Map st)
-  put $ st { defaultGuard1Map = m' }
+  m <- use defaultGuard1Map
+  defaultGuard1Map .= M.insert name action m
 
 getDefaultGuard2 :: String -> String -> Game (Ref -> Ref -> Game ())
 getDefaultGuard2 verb prep = do
-  m <- defaultGuard2Map <$> get
+  m <- use defaultGuard2Map
   let d = flip (ultimateDefaultGuard2 verb) prep
   return $ M.findWithDefault d (verb, prep) m
 
 setDefaultGuard2 :: String -> String -> (Ref -> Ref -> Game ()) -> Game ()
 setDefaultGuard2 verb prep action = do
-  st <- get
-  let m' = M.insert (verb, prep) action (defaultGuard2Map st)
-  put $ st { defaultGuard2Map = m' }
+  m <- use defaultGuard2Map
+  defaultGuard2Map .= M.insert (verb, prep) action m
 
 ultimateDefaultGuard2 :: String -> Ref -> String -> Ref -> Game ()
 ultimateDefaultGuard2 verb dobj prep iobj = do

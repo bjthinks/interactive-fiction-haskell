@@ -38,9 +38,9 @@ processDelayedActions input = process [] [] input
 takeTurn :: String -> GameState -> (GameState, String)
 takeTurn line oldState =
   let (newState, response) = execGame (handleInput line) oldState
-      (nows, laters) = processDelayedActions $ delayedActions newState
+      (nows, laters) = processDelayedActions $ _delayedActions newState
       nowsWithFailureCaught = map catch nows
-      newState2 = newState { delayedActions = laters }
+      newState2 = newState { _delayedActions = laters }
       (newState3, response2) =
                   execGame (sequence nowsWithFailureCaught) newState2
   in (newState3, response ++ response2)
@@ -63,7 +63,7 @@ mainloop ref = do
   let command = take 5 line
       filename = drop 5 line
   if (command == "save " && filename /= "") then do
-    let hist = reverse $ commandHistory oldState
+    let hist = reverse $ _commandHistory oldState
     liftIO $ output Green $ "Saving game to filename " ++ filename ++ ".\n"
     liftIO $ writeFile filename $ unlines hist
     mainloop ref
@@ -78,7 +78,7 @@ mainloop ref = do
     let (newState, response) = takeTurn line oldState
     liftIO $ output Green response
     liftIO $ writeIORef ref newState
-    when (keepPlaying newState) (mainloop ref)
+    when (_keepPlaying newState) (mainloop ref)
 
 startup :: Game ()
 startup = do

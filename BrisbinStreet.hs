@@ -8,9 +8,9 @@ import Score
 import Actions
 import Verbs
 import GameMap
+import Control.Lens
 import Control.Monad
 import Control.Monad.Extra
-import Control.Monad.State.Strict
 import Data.Maybe
 import qualified Data.Map.Strict as M
 
@@ -455,8 +455,7 @@ buildWorld = do
     msg $ "After looking around to make sure " ++
       "nobody is watching, you take a big swig of whiskey from one of the " ++
       "bottles. You feel your brain getting very foggy..."
-    gameState <- get
-    put gameState { gameMaps = M.empty }
+    gameMaps .= M.empty
     whenJustM (getLocation player) $ \loc ->
       move player loc -- Re-map the current room
 

@@ -2,17 +2,15 @@ module Things(newPlayer, newRoom, newObject, newExit, newExitOnMap) where
 
 import Defs
 import Actions
-import Control.Monad.State.Strict
+import Control.Lens
 import qualified Data.Map.Strict as M
 
 newThing :: Game Ref
 newThing = do
-  oldState <- get
-  let ref = nextThing oldState
-      newState = oldState {
-        things = M.insert ref defaultThing (things oldState),
-        nextThing = ref + 1 }
-  put newState
+  ref <- use nextThing
+  nextThing .= ref + 1
+  m <- use things
+  things .= M.insert ref defaultThing m
   return ref
 
 defaultThing :: Thing
@@ -87,8 +85,8 @@ newExit name src dest = do
       autoAliases _ = []
 
 newExitOnMap :: String -> Ref -> Ref -> Region -> (Int,Int) -> Game Ref
-newExitOnMap name from to region (x,y) = do
-  ref <- newExit name from to
+newExitOnMap name src dest region (x,y) = do
+  ref <- newExit name src dest
   setRegion ref $ Just region
   setMapData ref [(x,y,characterOfExit name)]
   return ref
