@@ -1,6 +1,7 @@
 module ParseInput(handleInput, visibleRefs, allNames, parseWords) where
 
 import Prelude hiding (Word)
+import Control.Lens
 import Control.Monad
 import Control.Monad.Extra
 import Text.Parsec
@@ -166,8 +167,8 @@ verb1 name = do
 alias1 :: String -> String
 alias1 input = maybe input id $ lookup input alias1Words
 
-debug :: String -> MyParser Verb
-debug name = do
+debugVerb1 :: String -> MyParser Verb
+debugVerb1 name = do
   matchTokens $ words name
   ref <- parseRef
   eof
@@ -199,8 +200,8 @@ parseLine =
   foldr1 (|||) (map verb0 verb0Words) |||
   foldr1 (|||) (map verb1 verb1Words) |||
   foldr1 (|||) (map (uncurry verb2) verb2Words) |||
-  debug "inspect"  |||
-  debug "teleport" |||
+  debugVerb1 "inspect"  |||
+  debugVerb1 "teleport" |||
   implicitGo |||
   (eof >> return Blank)
 
@@ -210,27 +211,27 @@ handleInput input = do
   let inputLowercase = toLowerString input
       inputWords = words inputLowercase
       inputWithPositions = zipWith (,) [1..] inputWords
-  whenM getDebug $ msg $ "Parsing " ++ show inputWords
+  whenM (use debug) $ msg $ "Parsing " ++ show inputWords
   refs <- visibleRefs
-  whenM getDebug $ msg "Noun list:"
+  whenM (use debug) $ msg "Noun list:"
   allTokensWithRefs <- concat <$> mapM tokensWithRef refs
   let nouns = longestFirst allTokensWithRefs
       longestFirst = sortOn (negate . length . fst)
       result = runParser parseLine nouns "" inputWithPositions
-  whenM getDebug $ msg $ "Result: " ++ show result
+  whenM (use debug) $ msg $ "Result: " ++ show result
   case result of
     Left err -> printError input err
     Right verb -> do
       case verb of
-        Verb1 _ ref -> setIt $ Just ref
-        Verb2 _ ref _ _ -> setIt $ Just ref
-        _ -> setIt Nothing
+        Verb1 _ ref -> it .= Just ref
+        Verb2 _ ref _ _ -> it .= Just ref
+        _ -> it .= Nothing
       doVerb verb
 
 tokensWithRef :: Ref -> Game [([Word],Ref)]
 tokensWithRef ref = do
   names <- allNames ref
-  whenM getDebug $ msg $ "Ref " ++ show ref ++ ": " ++ show names
+  whenM (use debug) $ msg $ "Ref " ++ show ref ++ ": " ++ show names
   let allNamesLowercase = map toLowerString names
   return $ map (\str -> (words str,ref)) allNamesLowercase
 
@@ -265,7 +266,7 @@ allNames ref = do
   name <- getName ref
   aliases <- getAliases ref
   let prefixes = if article == "" then [""] else ["", article]
-  maybeIt <- getIt
+  maybeIt <- use it
   return $ map (const "it") (filter (==ref) (maybeToList maybeIt)) ++ do
     p <- prefixes
     n <- name : aliases

@@ -41,7 +41,7 @@ newPlayer name desc = do
   ref <- newThing
   setName ref name
   setDescription ref desc
-  setPlayer ref
+  maybePlayer .= Just ref
   makeContainer ref
   return ref
 

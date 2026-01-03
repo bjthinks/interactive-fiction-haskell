@@ -22,22 +22,22 @@ data Verb = Blank
 
 doVerb :: Verb -> Game ()
 doVerb Blank =
-  whenM getDebug $ msg $ "Executing " ++ show Blank
+  whenM (use debug) $ msg $ "Executing " ++ show Blank
 
 doVerb (Verb0 name) = do
-  whenM getDebug $ msg $ "Executing " ++ show (Verb0 name)
+  whenM (use debug) $ msg $ "Executing " ++ show (Verb0 name)
   action <- getVerb0 name
   action
 
 doVerb (Verb1 name ref) = do
-  whenM getDebug $ msg $ "Executing " ++ show (Verb1 name ref)
+  whenM (use debug) $ msg $ "Executing " ++ show (Verb1 name ref)
   g <- getGuard1 name ref
   g
   action <- getVerb1 name ref
   action
 
 doVerb (Verb2 verb dobj prep iobj) = do
-  whenM getDebug $ msg $ "Executing " ++ show (Verb2 verb dobj prep iobj)
+  whenM (use debug) $ msg $ "Executing " ++ show (Verb2 verb dobj prep iobj)
   g <- getGuard2 verb dobj prep
   g iobj
   action <- getVerb2 verb dobj prep
@@ -78,7 +78,7 @@ getGuard1 :: String -> Ref -> Game (Game ())
 getGuard1 name ref = do
   m <- getGuard1Map ref
   n <- qualifiedName ref
-  whenM getDebug $ msg $ "Guard1 keys for " ++ n ++ ": " ++ show (M.keys m)
+  whenM (use debug) $ msg $ "Guard1 keys for " ++ n ++ ": " ++ show (M.keys m)
   d <- getDefaultGuard1 name
   return $ M.findWithDefault (d ref) name m
 
@@ -98,7 +98,7 @@ getGuard2 :: String -> Ref -> String -> Game (Ref -> Game ())
 getGuard2 verb dobj prep = do
   m <- getGuard2Map dobj
   n <- qualifiedName dobj
-  whenM getDebug $ msg $ "Guard2 keys for " ++ n ++ ": " ++ show (M.keys m)
+  whenM (use debug) $ msg $ "Guard2 keys for " ++ n ++ ": " ++ show (M.keys m)
   d <- getDefaultGuard2 verb prep
   return $ M.findWithDefault (d dobj) (verb, prep) m
 
@@ -267,7 +267,7 @@ setDefaults = do
   setVerb0 "debug off" $ doDebug False
   setVerb0 "debug on" $ doDebug True
   setVerb0 "drop all" doDropAll
-  setVerb0 "exit" stopPlaying
+  setVerb0 "exit" $ keepPlaying .= False
   setVerb0 "get all" doGetAll
   setVerb0 "help" doHelp
   setVerb0 "inventory" doInventory
@@ -297,7 +297,7 @@ setDefaults = do
 
 doDebug :: Bool -> Game ()
 doDebug flag = do
-  setDebug flag
+  debug .= flag
   msg $ "Debug mode is " ++ (if flag then "on" else "off") ++ "."
 
 doDropAll :: Game ()
@@ -342,8 +342,8 @@ doLook = do
 
 doScore :: Game ()
 doScore = do
-  points <- getScore
-  maxPoints <- getMaxScore
+  points <- use score
+  maxPoints <- use maxScore
   msg $ "Your score is " ++ show points ++ " out of a maximum of " ++
     show maxPoints ++ "."
   maybeShowWinMessage
@@ -390,7 +390,7 @@ defaultGo ref = do
   doVerb $ Verb0 "look"
 
 defaultInspect ref = do
-  unlessM getDebug $ stop $ "This command is only available in debug mode."
+  unlessM (use debug) $ stop $ "This command is only available in debug mode."
   unlessM (ifExists ref) $ stop $ "There is nothing with Ref " ++
     show ref ++ "."
   name <- getName ref
@@ -426,8 +426,8 @@ defaultInspect ref = do
 
 defaultLook :: Ref -> Game ()
 defaultLook ref = do
-  debug <- getDebug
-  let myName = if debug then debugName else getName
+  d <- use debug
+  let myName = if d then debugName else getName
   name <- myName ref
   msg $ capitalize name
   desc <- getDescription ref
@@ -483,7 +483,7 @@ defaultSearch ref = do
   msg $ "You look everywhere in " ++ name ++ " but don\'t find anything."
 
 defaultTeleport ref = do
-  unlessM getDebug $ stop $ "This command is only available in debug mode."
+  unlessM (use debug) $ stop $ "This command is only available in debug mode."
   unlessM (ifExists ref) $ stop $ "There is nothing with Ref " ++
     show ref ++ "."
   player <- getPlayer

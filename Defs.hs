@@ -82,7 +82,7 @@ data GameState = GameState {
   _score :: Int,
   _maxScore :: Int,
   _keepPlaying :: Bool,
-  _debugFlag :: Bool,
+  _debug :: Bool,
   _commandHistory :: [String], -- stored in reverse order
   _gameMaps :: M.Map Region GameMap }
 
@@ -102,7 +102,7 @@ startState = GameState {
   _score = 0,
   _maxScore = 0,
   _keepPlaying = True,
-  _debugFlag = False,
+  _debug = False,
   _commandHistory = [],
   _gameMaps = M.empty }
 
@@ -113,34 +113,10 @@ getPlayer = do
     Just player -> return player
     Nothing -> error "Internal error: player not set"
 
-setPlayer :: Ref -> Game ()
-setPlayer player = maybePlayer .= Just player
-
-getDelayedActions :: Game [(Int, Game ())]
-getDelayedActions = use delayedActions
-
-setDelayedActions :: [(Int, Game ())] -> Game ()
-setDelayedActions actions = delayedActions .= actions
-
 queueAction :: Int -> Game () -> Game ()
 queueAction turns action = do
-  actions <- getDelayedActions
-  setDelayedActions $ (turns, action) : actions
-
-stopPlaying :: Game ()
-stopPlaying = keepPlaying .= False
-
-getDebug :: Game Bool
-getDebug = use debugFlag
-
-setDebug :: Bool -> Game ()
-setDebug flag = debugFlag .= flag
-
-getHistory :: Game [String]
-getHistory = use commandHistory
-
-setHistory :: [String] -> Game ()
-setHistory hist = commandHistory .= hist
+  actions <- use delayedActions
+  delayedActions .= (turns, action) : actions
 
 addHistory :: String -> Game ()
 addHistory h = do
@@ -161,12 +137,6 @@ getThing :: Ref -> Game Thing
 getThing ref = do
   ts <- use things
   return $ fromJust $ M.lookup ref ts
-
-getIt :: Game (Maybe Ref)
-getIt = use it
-
-setIt :: Maybe Ref -> Game ()
-setIt mref = it .= mref
 
 -- Used by debug mode commands only
 ifExists :: Ref -> Game Bool
@@ -278,7 +248,8 @@ getVerb1 :: String -> Ref -> Game (Game ())
 getVerb1 name ref = do
   m <- getVerb1Map ref
   n <- qualifiedName ref
-  whenM getDebug $ msg $ "Verb1 keys for " ++ n ++ ": " ++ show (M.keys m)
+  whenM (use debug) $
+    msg $ "Verb1 keys for " ++ n ++ ": " ++ show (M.keys m)
   d <- getDefaultVerb1 name
   return $ M.findWithDefault (d ref) name m
 
@@ -316,7 +287,8 @@ getVerb2 :: String -> Ref -> String -> Game (Ref -> Game ())
 getVerb2 verb dobj prep = do
   m <- getVerb2Map dobj
   n <- qualifiedName dobj
-  whenM getDebug $ msg $ "Verb2 keys for " ++ n ++ ": " ++ show (M.keys m)
+  whenM (use debug) $
+    msg $ "Verb2 keys for " ++ n ++ ": " ++ show (M.keys m)
   d <- getDefaultVerb2 verb prep
   return $ M.findWithDefault (d dobj) (verb, prep) m
 
