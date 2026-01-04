@@ -167,11 +167,6 @@ getMapData      r = fromJust <$> preuse (things . ix r . mapData)
 getIsUnlocked :: Ref -> Game Bool
 getIsUnlocked = fmap not . getIsLocked
 
-setProperty :: (Thing -> a -> Thing) -> Ref -> a -> Game ()
-setProperty updater ref value = do
-  thing <- uses things (M.! ref)
-  things . at ref ?= updater thing value
-
 setName         :: Ref -> String -> Game ()
 setArticle      :: Ref -> String -> Game ()
 -- setAliases is not exported to avoid bugs where aliases are overwritten
@@ -207,7 +202,6 @@ setGuard1Map    r v = things . ix r . guard1Map .= v
 setGuard2Map    r v = things . ix r . guard2Map .= v
 setRegion       r v = things . ix r . thingRegion .= v
 setMapData      r v = things . ix r . mapData .= v
-
 
 addAlias :: Ref -> String -> Game ()
 addAlias ref alias = do
