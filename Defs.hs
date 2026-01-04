@@ -128,26 +128,41 @@ addHistory h = do
 ifExists :: Ref -> Game Bool
 ifExists ref = isJust <$> use (things . at ref)
 
-getProperty :: (Thing -> a) -> Ref -> Game a
-getProperty property = fmap property . (\ref -> uses things (M.! ref))
+getName         :: Ref -> Game String
+getArticle      :: Ref -> Game String
+getAliases      :: Ref -> Game [String]
+getDescription  :: Ref -> Game String
+getDescription2 :: Ref -> Game String
+getLocation     :: Ref -> Game (Maybe Ref)
+getContents'    :: Ref -> Game [Ref]
+getExits        :: Ref -> Game [Ref]
+getPath         :: Ref -> Game (Maybe (Ref, Ref))
+getIsContainer  :: Ref -> Game Bool
+getIsLocked     :: Ref -> Game Bool
+getVerb1Map     :: Ref -> Game (M.Map String (Game ()))
+getVerb2Map     :: Ref -> Game (M.Map (String, String) (Ref -> Game ()))
+getGuard1Map    :: Ref -> Game (M.Map String (Game ()))
+getGuard2Map    :: Ref -> Game (M.Map (String, String) (Ref -> Game ()))
+getRegion       :: Ref -> Game (Maybe Region)
+getMapData      :: Ref -> Game [(Int, Int, Char)]
 
-getName         = getProperty _thingName
-getArticle      = getProperty _thingArticle
-getAliases      = getProperty _thingAliases
-getDescription  = getProperty _thingDescription
-getDescription2 = getProperty _thingDescription2
-getLocation     = getProperty _thingLocation
-getContents'    = getProperty _thingContents
-getExits        = getProperty _thingExits
-getPath         = getProperty _thingPath
-getIsContainer  = getProperty _thingIsContainer
-getIsLocked     = getProperty _thingIsLocked
-getVerb1Map     = getProperty _verb1Map
-getVerb2Map     = getProperty _verb2Map
-getGuard1Map    = getProperty _guard1Map
-getGuard2Map    = getProperty _guard2Map
-getRegion       = getProperty _thingRegion
-getMapData      = getProperty _mapData
+getName         r = fromJust <$> preuse (things . ix r . thingName)
+getArticle      r = fromJust <$> preuse (things . ix r . thingArticle)
+getAliases      r = fromJust <$> preuse (things . ix r . thingAliases)
+getDescription  r = fromJust <$> preuse (things . ix r . thingDescription)
+getDescription2 r = fromJust <$> preuse (things . ix r . thingDescription2)
+getLocation     r = fromJust <$> preuse (things . ix r . thingLocation)
+getContents'    r = fromJust <$> preuse (things . ix r . thingContents)
+getExits        r = fromJust <$> preuse (things . ix r . thingExits)
+getPath         r = fromJust <$> preuse (things . ix r . thingPath)
+getIsContainer  r = fromJust <$> preuse (things . ix r . thingIsContainer)
+getIsLocked     r = fromJust <$> preuse (things . ix r . thingIsLocked)
+getVerb1Map     r = fromJust <$> preuse (things . ix r . verb1Map)
+getVerb2Map     r = fromJust <$> preuse (things . ix r . verb2Map)
+getGuard1Map    r = fromJust <$> preuse (things . ix r . guard1Map)
+getGuard2Map    r = fromJust <$> preuse (things . ix r . guard2Map)
+getRegion       r = fromJust <$> preuse (things . ix r . thingRegion)
+getMapData      r = fromJust <$> preuse (things . ix r . mapData)
 
 getIsUnlocked :: Ref -> Game Bool
 getIsUnlocked = fmap not . getIsLocked
@@ -157,30 +172,50 @@ setProperty updater ref value = do
   thing <- uses things (M.! ref)
   things . at ref ?= updater thing value
 
-setName         = setProperty (\t v -> t { _thingName = v })
-setArticle      = setProperty (\t v -> t { _thingArticle = v })
+setName         :: Ref -> String -> Game ()
+setArticle      :: Ref -> String -> Game ()
 -- setAliases is not exported to avoid bugs where aliases are overwritten
-setDescription  = setProperty (\t v -> t { _thingDescription = v })
-setDescription2 = setProperty (\t v -> t { _thingDescription2 = v })
-setLocation     = setProperty (\t v -> t { _thingLocation = v })
-setContents     = setProperty (\t v -> t { _thingContents = v })
-setExits        = setProperty (\t v -> t { _thingExits = v })
-setPath         = setProperty (\t v -> t { _thingPath = v })
-setIsContainer  = setProperty (\t v -> t { _thingIsContainer = v })
-setIsLocked     = setProperty (\t v -> t { _thingIsLocked = v })
-setVerb1Map     = setProperty (\t v -> t { _verb1Map = v })
-setVerb2Map     = setProperty (\t v -> t { _verb2Map = v })
-setGuard1Map    = setProperty (\t v -> t { _guard1Map = v })
-setGuard2Map    = setProperty (\t v -> t { _guard2Map = v })
-setRegion       = setProperty (\t v -> t { _thingRegion = v })
-setMapData      = setProperty (\t v -> t { _mapData = v })
+setDescription  :: Ref -> String -> Game ()
+setDescription2 :: Ref -> String -> Game ()
+setLocation     :: Ref -> Maybe Ref -> Game ()
+setContents     :: Ref -> [Ref] -> Game ()
+setExits        :: Ref -> [Ref] -> Game ()
+setPath         :: Ref -> Maybe (Ref, Ref) -> Game ()
+setIsContainer  :: Ref -> Bool -> Game ()
+setIsLocked     :: Ref -> Bool -> Game ()
+setVerb1Map     :: Ref -> M.Map String (Game ()) -> Game ()
+setVerb2Map     :: Ref -> M.Map (String, String) (Ref -> Game ()) -> Game ()
+setGuard1Map    :: Ref -> M.Map String (Game ()) -> Game ()
+setGuard2Map    :: Ref -> M.Map (String, String) (Ref -> Game ()) -> Game ()
+setRegion       :: Ref -> Maybe Region -> Game ()
+setMapData      :: Ref -> [(Int, Int, Char)] -> Game ()
+
+setName         r v = things . ix r . thingName .= v
+setArticle      r v = things . ix r . thingArticle .= v
+-- setAliases is not exported to avoid bugs where aliases are overwritten
+setDescription  r v = things . ix r . thingDescription .= v
+setDescription2 r v = things . ix r . thingDescription2 .= v
+setLocation     r v = things . ix r . thingLocation .= v
+setContents     r v = things . ix r . thingContents .= v
+setExits        r v = things . ix r . thingExits .= v
+setPath         r v = things . ix r . thingPath .= v
+setIsContainer  r v = things . ix r . thingIsContainer .= v
+setIsLocked     r v = things . ix r . thingIsLocked .= v
+setVerb1Map     r v = things . ix r . verb1Map .= v
+setVerb2Map     r v = things . ix r . verb2Map .= v
+setGuard1Map    r v = things . ix r . guard1Map .= v
+setGuard2Map    r v = things . ix r . guard2Map .= v
+setRegion       r v = things . ix r . thingRegion .= v
+setMapData      r v = things . ix r . mapData .= v
+
 
 addAlias :: Ref -> String -> Game ()
 addAlias ref alias = do
   existingAliases <- getAliases ref
   setAliases ref (alias:existingAliases)
-    where
-      setAliases = setProperty (\t v -> t { _thingAliases = v })
+  where
+    setAliases :: Ref -> [String] -> Game ()
+    setAliases r v = things . ix r . thingAliases .= v
 
 addAliases :: Ref -> [String] -> Game ()
 addAliases ref = mapM_ $ addAlias ref
