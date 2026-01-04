@@ -16,3 +16,7 @@ feed squirrel the acorns
 
 Consider making room names bold in the (implicit or explicit) look
 command.
+
+Look at
+git diff 4e6c8beaeb981551c97c52514b0e3280567795d8 06340e4c264f111607853be82b9c0cf0a058718d
+and restore the deleted functions?
