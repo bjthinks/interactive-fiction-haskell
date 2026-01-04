@@ -270,4 +270,4 @@ allNames ref = do
   return $ map (const "it") (filter (==ref) (maybeToList maybeIt)) ++ do
     p <- prefixes
     n <- name : aliases
-    return $ if p == "" then n else p ++ ' ' : n
+    return $ if p == "" then n else p ++ " " ++ n

@@ -218,7 +218,7 @@ qualifiedName :: Ref -> Game String
 qualifiedName ref = do
   article <- getArticle ref
   name <- getName ref
-  return $ if article == "" then name else article ++ ' ' : name
+  return $ if article == "" then name else article ++ " " ++ name
 
 debugName :: Ref -> Game String
 debugName ref = do
@@ -235,7 +235,7 @@ setVerb0 name action = verb0Map . at name ?= action
 cant :: String -> Ref -> Game ()
 cant verb ref = do
   name <- qualifiedName ref
-  stop $ "You can\'t " ++ verb ++ ' ' : name ++ "."
+  stop $ "You can\'t " ++ verb ++ " " ++ name ++ "."
 
 getDefaultVerb1 :: String -> Game (Ref -> Game ())
 getDefaultVerb1 name =
@@ -269,8 +269,8 @@ cant2 :: String -> Ref -> String -> Ref -> Game ()
 cant2 verb dobj prep iobj = do
   dobjName <- qualifiedName dobj
   iobjName <- qualifiedName iobj
-  stop $ "You can\'t " ++ verb ++ ' ' : dobjName ++ ' ' : prep ++
-    ' ' : iobjName ++ "."
+  stop $ "You can\'t " ++ verb ++ " " ++ dobjName ++ " " ++ prep ++
+    " " ++ iobjName ++ "."
 
 getDefaultVerb2 :: String -> String -> Game (Ref -> Ref -> Game ())
 getDefaultVerb2 verb prep =

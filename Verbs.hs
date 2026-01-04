@@ -430,7 +430,7 @@ defaultLook ref = do
   desc2 <- getDescription2 ref
   when (desc /= "" || desc2 /= "") $ msg $
     if desc == "" then desc2 else if desc2 == "" then desc else
-      desc ++ ' ' : desc2
+      desc ++ " " ++ desc2
   whenJustM (getPath ref) $ \path -> do
     let (src,dest) = path
     srcName <- qualifiedName src
