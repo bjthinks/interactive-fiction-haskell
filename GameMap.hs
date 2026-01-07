@@ -1,11 +1,11 @@
 module GameMap where
 
-import Control.Lens
 import Control.Monad
 import Control.Monad.Extra
 import Control.Monad.Writer.Strict
 import Data.Maybe
 import Data.Array.IArray
+import Lens.Micro.Platform
 import System.Console.ANSI
 import Defs
 import Visible

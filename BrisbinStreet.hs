@@ -8,11 +8,11 @@ import Score
 import Actions
 import Verbs
 import GameMap
-import Control.Lens
 import Control.Monad
 import Control.Monad.Extra
 import Data.Maybe
 import qualified Data.Map.Strict as M
+import Lens.Micro.Platform
 
 buildWorld :: Game ()
 buildWorld = do

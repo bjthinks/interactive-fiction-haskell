@@ -3,13 +3,13 @@ module Main(main) where
 import System.Console.Haskeline
 import System.Console.Terminal.Size
 import System.Console.ANSI
-import Control.Lens
 import Control.Monad
 import Control.Monad.Trans.Maybe
 import Control.Monad.State.Strict
 import Control.Monad.Writer.Strict
 import Data.IORef
 import Data.List
+import Lens.Micro.Platform
 import Defs
 import ParseInput
 import Verbs

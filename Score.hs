@@ -1,8 +1,8 @@
 module Score where
 
 import Defs
-import Control.Lens
 import Control.Monad
+import Lens.Micro.Platform
 
 addPoints :: Int -> String -> Game ()
 addPoints points reason = do

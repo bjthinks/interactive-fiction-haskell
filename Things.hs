@@ -1,9 +1,9 @@
 module Things(newPlayer, newRoom, newObject, newExit, newExitOnMap) where
 
+import qualified Data.Map.Strict as M
+import Lens.Micro.Platform
 import Defs
 import Actions
-import Control.Lens
-import qualified Data.Map.Strict as M
 
 newThing :: Game Ref
 newThing = do

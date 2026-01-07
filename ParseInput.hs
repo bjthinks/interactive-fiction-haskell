@@ -1,7 +1,6 @@
 module ParseInput(handleInput, visibleRefs, allNames, parseWords) where
 
 import Prelude hiding (Word)
-import Control.Lens
 import Control.Monad
 import Control.Monad.Extra
 import Text.Parsec
@@ -9,6 +8,7 @@ import Text.Parsec.Pos
 import Data.List
 import Data.Maybe
 import Data.Char
+import Lens.Micro.Platform
 import Text.Read
 import Defs
 import Visible
